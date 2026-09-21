@@ -1,0 +1,80 @@
+{
+  "description": "ES modules, dynamic imports, npm and bundlers.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the difference between default and named exports?",
+      "answer": "A module can have one default export imported with any name, plus many named exports imported with their exact names in braces.\n\ncode:\nexport default class User {}\nexport const VERSION = '1.0';\n// import User, { VERSION } from './user.js';\n\nreal example:\nTest configs frequently default-export the config object and name-export helpers and constants."
+    },
+    {
+      "id": 2,
+      "question": "How do you import a default export and a named export together?",
+      "answer": "Combine them in one import statement: the default name first, then named exports inside braces.\n\ncode:\nimport LoginPage, { buildUser } from './login.js';\n\nreal example:\nPage object files default-export the class while exporting test data builders as named exports."
+    },
+    {
+      "id": 3,
+      "question": "What is the difference between import and require?",
+      "answer": "import is the ES module syntax with static analysis and top-level await, while require is CommonJS, synchronous and resolved at runtime.\n\ncode:\nimport fs from 'node:fs';           // ESM\n// const fs = require('node:fs');   // CommonJS\n\nreal example:\nPlaywright config files support both, but ESM-only packages force import while legacy packages may need require."
+    },
+    {
+      "id": 4,
+      "question": "What is a package.json and what is its role?",
+      "answer": "package.json is the manifest for a Node project, defining name, version, scripts, and dependencies so npm and frameworks know how to run the project.\n\ncode:\n{\n  \"name\": \"web-tests\",\n  \"scripts\": { \"test\": \"playwright test\" },\n  \"dependencies\": { \"@playwright/test\": \"^1.40.0\" }\n}\n\nreal example:\nCI pipelines run npm ci then npm test, which reads scripts and installed versions straight from package.json."
+    },
+    {
+      "id": 5,
+      "question": "What is the difference between dependencies and devDependencies?",
+      "answer": "dependencies are needed to run the app in production, while devDependencies are tools for development such as test runners, linters, and bundlers.\n\ncode:\nnpm install --save-dev playwright\nnpm install axios\n\nreal example:\nPlaywright, Cypress, and Jest belong in devDependencies because they never ship in the production runtime bundle."
+    },
+    {
+      "id": 6,
+      "question": "What is node_modules and why should it not be committed?",
+      "answer": "node_modules holds installed packages at every dependency and is regenerated from package-lock.json, so it is gitignored to keep repos small and reproducible.\n\ncode:\nnode_modules/\n\nreal example:\nTeams run npm ci in CI which wipes and reinstalls from the lockfile, guaranteeing byte-for-byte identical dependency trees."
+    },
+    {
+      "id": 7,
+      "question": "What is the difference between npm install and npm ci?",
+      "answer": "npm install reads package.json and may update the lockfile, while npm ci installs exactly the versions pinned in package-lock.json and fails if they do not match.\n\ncode:\nnpm ci\n\nreal example:\nCI uses npm ci because it is faster and gives exact versions, eliminating works-on-my-machine flakiness."
+    },
+    {
+      "id": 8,
+      "question": "What is npx and how is it different from npm?",
+      "answer": "npx runs a package binary without installing it globally, downloading and caching it on demand or using the local project version.\n\ncode:\nnpx playwright install\nnpx cypress open\n\nreal example:\nHelping a teammate run the exact local test runner without global installs is the primary npx job."
+    },
+    {
+      "id": 9,
+      "question": "What are npm scripts and how are they used?",
+      "answer": "npm scripts are commands defined in package.json under scripts, run through npm run name to share and standardize workflow commands.\n\ncode:\n\"scripts\": {\n  \"test\": \"playwright test\",\n  \"test:headed\": \"playwright test --headed\"\n}\n\nreal example:\nUsers type npm run test:headed in CI manifests instead of remembering long runner flags."
+    },
+    {
+      "id": 10,
+      "question": "What is a bundler and why do browsers need one?",
+      "answer": "A bundler like webpack, Vite, or esbuild combines many modules into fewer files browsers can load fast, handling imports, plugins, and assets.\n\ncode:\nnpx vite build\n\nreal example:\nTesting the built bundle means running the production build because dev servers serve modules differently than the bundled output."
+    },
+    {
+      "id": 11,
+      "question": "What is tree shaking?",
+      "answer": "Tree shaking removes unused exports from the final bundle by static analysis, keeping only code that is actually imported.\n\ncode:\nimport { onlyUsed } from './utils.js';\n\nreal example:\nBundle-size checks and load budgets depend on tree shaking keeping third-party helpers that are never called out of the shipped file."
+    },
+    {
+      "id": 12,
+      "question": "What is a dynamic import and when would you use it?",
+      "answer": "Dynamic import loads a module on demand with import(expression), returning a promise, useful for heavy features that are not needed at startup.\n\ncode:\nconst { chart } = await import('./heavy-chart.js');\nchart.render();\n\nreal example:\nLazy-loaded modules only exist on the page after the import resolves, which changes what an automation scan sees at load time."
+    },
+    {
+      "id": 13,
+      "question": "Why does import order matter for side-effect modules?",
+      "answer": "Side-effect imports run their top-level code on load, so ordering determines when global patches, styles, or polyfills apply.\n\ncode:\nimport './styles.css';\nimport './polyfills.js';\n\nreal example:\nInjecting a mock module before the app entry point in test setups mirrors this ordering behavior to override globals early."
+    },
+    {
+      "id": 14,
+      "question": "What is the difference between ESM and CommonJS module systems?",
+      "answer": "ESM is the modern standard with static imports and async loading, while CommonJS is Node's older synchronous system with require and module.exports.\n\ncode:\n// ESM\nimport x from './x.js';\nexport default x;\n// CommonJS\nconst x = require('./x');\nmodule.exports = x;\n\nreal example:\nSome testing tools are CommonJS-only, so team configs sometimes choose .cjs extensions to keep one consistent system."
+    },
+    {
+      "id": 15,
+      "question": "Why does the package.json type field matter for modules?",
+      "answer": "The type field marks a package as module or commonjs, which decides whether .js files interpret import/export or require syntax.\n\ncode:\n\"type\": \"module\"\n\nreal example:\nSetting type module lets playwright.config.js use import directly, while omitting it forces CommonJS require in the same file."
+    }
+  ]
+}

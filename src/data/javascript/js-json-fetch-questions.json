@@ -1,0 +1,80 @@
+{
+  "description": "JSON parsing/serialization and the fetch API.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does JSON.parse do and when does it throw?",
+      "answer": "JSON.parse converts a JSON string into a JavaScript value. It throws a SyntaxError when the input is not valid JSON, including trailing commas or single quotes.\n\ncode:\nconst user = JSON.parse('{\"name\": \"Ana\"}');\nconsole.log(user.name);  // Ana\n\nreal example:\nParsing a response body validates the server returned real JSON; a broken payload produces a SyntaxError you can catch and assert on."
+    },
+    {
+      "id": 2,
+      "question": "What does JSON.stringify do and what can it not encode?",
+      "answer": "JSON.stringify converts a JavaScript value into a JSON string. It omits functions, undefined, and symbols, and it throws on circular references or BigInt values.\n\ncode:\nconst s = JSON.stringify({ name: 'Ana', fn: () => {} });\nconsole.log(s);  // {\"name\":\"Ana\"}\n\nreal example:\nSending API fixtures logs the wrapped object, and knowing functions are dropped explains surprising payloads in captured requests."
+    },
+    {
+      "id": 3,
+      "question": "How do you handle circular structures when serializing?",
+      "answer": "JSON.stringify throws TypeError: Converting circular structure to JSON. You must break the cycle or replace the deeply nested fields before serializing.\n\ncode:\nconst obj = { a: {} };\nobj.a.self = obj;\n// JSON.stringify(obj);  // throws\n\nreal example:\nPlaywright page objects sometimes hold references to the browser context; only send plain data objects when logging or posting them."
+    },
+    {
+      "id": 4,
+      "question": "What is the replacer argument in JSON.stringify?",
+      "answer": "The replacer is a function or array that filters or transforms values during serialization, which can hide sensitive fields.\n\ncode:\nconst data = { user: 'Ana', token: 'secret' };\nconst safe = JSON.stringify(data, (key, value) =>\n  key === 'token' ? undefined : value\n);\nconsole.log(safe);  // {\"user\":\"Ana\"}\n\nreal example:\nLogging request payloads while stripping passwords or tokens avoids leaking secrets into CI logs."
+    },
+    {
+      "id": 5,
+      "question": "What is the reviver argument in JSON.parse?",
+      "answer": "The reviver function transforms each parsed key-value pair, often converting date strings back into Date objects after parsing.\n\ncode:\nconst text = '{\"created\": \"2026-01-01T00:00:00Z\"}';\nconst obj = JSON.parse(text, (k, v) =>\n  k === 'created' ? new Date(v) : v\n);\nconsole.log(obj.created instanceof Date);  // true\n\nreal example:\nReviving timestamps lets tests assert date ordering directly instead of comparing ISO strings."
+    },
+    {
+      "id": 6,
+      "question": "How do you make a GET request with the fetch API?",
+      "answer": "fetch(url) defaults to a GET request and returns a promise that resolves to a Response object. Call res.json() to read the body.\n\ncode:\nconst res = await fetch('https://api.test.com/users');\nconst users = await res.json();\nconsole.log(users[0].name);\n\nreal example:\nAPI smoke tests use fetch against a real backend, with assertions on res.status and the parsed body."
+    },
+    {
+      "id": 7,
+      "question": "How do you send a POST request with a JSON body using fetch?",
+      "answer": "Pass an options object with method, headers, and a body stringified with JSON.stringify so the server receives proper JSON content.\n\ncode:\nconst res = await fetch('https://api.test.com/login', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ user: 'admin', pass: 'secret' }),\n});\n\nreal example:\nAuth setup before UI steps posts a login request to create an authenticated session the browser then reuses."
+    },
+    {
+      "id": 8,
+      "question": "Why must you convert the body with JSON.stringify before sending?",
+      "answer": "The fetch body must be a string, blob, form data, or similar. Passing an object directly causes a TypeError, so objects become JSON text first.\n\ncode:\n// fetch(url, { body: {a:1} })  // TypeError\nfetch(url, { body: JSON.stringify({ a: 1 }) });\n\nreal example:\nA common first bug in API tests is forgetting stringify, which crashes immediately with an unhelpful type error."
+    },
+    {
+      "id": 9,
+      "question": "How do you check the HTTP status code from a fetch response?",
+      "answer": "The Response object exposes res.status and res.ok, where ok is true for status 200-299. fetch does not reject on 4xx or 5xx.\n\ncode:\nconst res = await fetch(url);\nconsole.log(res.status, res.ok);\nif (!res.ok) throw new Error(`HTTP ${res.status}`);\n\nreal example:\nAssertions like expect(res.status).toBe(200) work because fetch resolved even though a 404 is an error response."
+    },
+    {
+      "id": 10,
+      "question": "What is the difference between res.json() and res.text()?",
+      "answer": "res.json() parses the body as JSON and returns the resulting value, while res.text() returns the raw body as a string. Both return promises and consume the response body.\n\ncode:\nconst data = await res.json();\nconst raw = await res.text();\n\nreal example:\nWhen a server returns an HTML error page, res.json() throws but res.text() lets you assert on the message inside it."
+    },
+    {
+      "id": 11,
+      "question": "What happens when a fetch request itself fails, such as a network error?",
+      "answer": "fetch rejects with a TypeError only on network-level failures such as DNS errors or connection refused. HTTP errors still resolve, so you must check status yourself.\n\ncode:\ntry {\n  const res = await fetch('http://localhost:9999');\n} catch (err) {\n  console.log('network failure', err);\n}\n\nreal example:\nWrapping API calls in try/catch turns connection refused into a readable test failure instead of a generic crash."
+    },
+    {
+      "id": 12,
+      "question": "How do you add a timeout to a fetch request?",
+      "answer": "Use an AbortController with AbortSignal.timeout, which rejects the request after the configured milliseconds.\n\ncode:\nconst res = await fetch(url, {\n  signal: AbortSignal.timeout(5000),\n});\n\nreal example:\nHanging endpoint calls in CI stall entire suites; a 10-second abort turns the delay into a quick, actionable failure."
+    },
+    {
+      "id": 13,
+      "question": "How do you read response headers from a fetch response?",
+      "answer": "res.headers is a Headers object; use get or has to read specific header values.\n\ncode:\nconst res = await fetch(url);\nconsole.log(res.headers.get('content-type'));\n\nreal example:\nAsserting security headers like cache-control or content-type in API tests is done via the headers object."
+    },
+    {
+      "id": 14,
+      "question": "How do you parallelize multiple API calls in a test?",
+      "answer": "Collect fetch promises in an array and await Promise.all, which runs them concurrently and returns results in order.\n\ncode:\nconst results = await Promise.all([\n  fetch('/a'),\n  fetch('/b'),\n]);\nconst data = await Promise.all(results.map(r => r.json()));\n\nreal example:\nChecking health of several endpoints before a suite starts finishes in the time of the slowest call instead of the sum."
+    },
+    {
+      "id": 15,
+      "question": "How does Playwright's request API compare to using fetch directly?",
+      "answer": "Playwright request contexts reuse the browser's cookies and add retries, and the playwright library request fixture defaults to the baseURL automatically.\n\ncode:\nconst res = await request.get('/api/orders', {\n  headers: { Authorization: `Bearer ${token}` },\n});\nconst body = await res.json();\n\nreal example:\nUI tests that also call the API keep cookies in sync by using the built-in Playwright request fixture instead of raw fetch."
+    }
+  ]
+}

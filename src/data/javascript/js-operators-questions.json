@@ -1,0 +1,80 @@
+{
+  "description": "Operators and type conversions in JavaScript.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the difference between == and === in JavaScript?",
+      "answer": "The loose equality == converts both sides to the same type before comparing, while strict equality === requires matching type and value. Strict equality is the safer default and what most matchers such as Jest toBe use internally.\n\ncode:\nconsole.log('10' == 10);   // true\nconsole.log('10' === 10);  // false\n\nreal example:\nPlaywright text assertions compare strings, so a number expected value must be converted to a string first, otherwise strict equality fails."
+    },
+    {
+      "id": 2,
+      "question": "What does '1' + 2 evaluate to in JavaScript?",
+      "answer": "The plus operator prefers string concatenation when either operand is a string, so '1' + 2 produces the string '12'.\n\ncode:\nconsole.log('1' + 2);  // '12'\n\nreal example:\nBuilding a URL by joining a base string with a number can silently produce the wrong endpoint, so convert numbers explicitly with String() or template literals."
+    },
+    {
+      "id": 3,
+      "question": "Why does '10' - 2 produce 8 while '10' + 2 produces '102'?",
+      "answer": "The minus operator always forces numeric conversion, so '10' - 2 is 8. The plus operator concatenates when a string is involved, producing '102'.\n\ncode:\nconsole.log('10' - 2);  // 8\nconsole.log('10' + 2);  // '102'\n\nreal example:\nArithmetic on values scraped from a page usually works, but concatenation sneaks in strings, so parse before doing math that involves the plus operator."
+    },
+    {
+      "id": 4,
+      "question": "What is the result of '10' < '9' with both sides as strings?",
+      "answer": "It is true because relational comparison on strings compares character by character by Unicode code point, and '1' is less than '9'.\n\ncode:\nconsole.log('10' < '9');  // true\n\nreal example:\nSorting version strings or numeric columns as raw text produces wrong order; convert to numbers with Number() or subtract inside a comparator before sorting."
+    },
+    {
+      "id": 5,
+      "question": "What does the unary plus operator do?",
+      "answer": "The unary plus attempts to convert its operand to a number. It is a shorthand for Number() but can look confusing in expressions.\n\ncode:\nconst n = +'3';\nconsole.log(n);           // 3\nconsole.log(+'12px');    // NaN\n\nreal example:\nAssigning + to the text of a price element converts it to a number for assertable arithmetic, as long as the text has no trailing characters."
+    },
+    {
+      "id": 6,
+      "question": "How do short-circuit && and || behave?",
+      "answer": "The && operator returns the first falsy operand or the last value if all are truthy. The || operator returns the first truthy operand or the last value if all are falsy. Neither evaluates the remaining operands once it has decided.\n\ncode:\nconst name = user?.name || 'guest';\nconst ok = isAuth && isAdmin;\n\nreal example:\nA config fallback like const baseURL = process.env.URL || 'http://localhost:3000' gives a repeatable test default whenever the variable is unset."
+    },
+    {
+      "id": 7,
+      "question": "What is the nullish coalescing operator ?? and how does it differ from ||?",
+      "answer": "The ?? operator falls back only when the left side is null or undefined. The || operator falls back for any falsy value including 0, empty string, and false.\n\ncode:\nconst a = 0 ?? 'fallback';     // 0\nconst b = 0 || 'fallback';     // 'fallback'\n\nreal example:\nWhen a config value of 0 is meaningful, such as a wait time in seconds, use ?? so an explicit 0 is not replaced by the default."
+    },
+    {
+      "id": 8,
+      "question": "What does Boolean('0') return and why?",
+      "answer": "Boolean('0') returns true because '0' is a non-empty string, and all non-empty strings are truthy regardless of content.\n\ncode:\nconsole.log(Boolean('0'));  // true\nconsole.log(Boolean(0));    // false\n\nreal example:\nChecking if a form field has a value with if (inputValue) wrongly treats the string '0' as present, which is correct here, but be careful when the field legitimately holds the number 0."
+    },
+    {
+      "id": 9,
+      "question": "What is type coercion and when does it cause bugs?",
+      "answer": "Type coercion is the automatic conversion of values when operators mix types. It causes bugs because the developer's intent rarely matches the conversion rule, for example relational operators converting strings to numbers.\n\ncode:\nconsole.log('10' - 5);   // 5\nconsole.log('10' * 2);   // 20\n\nreal example:\nAssertions comparing an API number against UI text fail when one side coerces; convert both sides to the same type first."
+    },
+    {
+      "id": 10,
+      "question": "What does the remainder operator % do?",
+      "answer": "It returns the remainder after division, not the quotient. It is useful for checking divisibility and cycling through ranges.\n\ncode:\nconsole.log(10 % 3);   // 1\nconsole.log(6 % 2);    // 0\n\nreal example:\nLooping over test users with users[i % users.length] rotates through the array infinitely without going out of bounds."
+    },
+    {
+      "id": 11,
+      "question": "What is the difference between ++i and i++?",
+      "answer": "Both increment i by one. ++i returns the value after incrementing, while i++ returns the value before incrementing.\n\ncode:\nlet a = 1;\nconsole.log(++a);  // 2\nlet b = 1;\nconsole.log(b++);  // 1\nconsole.log(b);    // 2\n\nreal example:\nIn retry loops the difference rarely matters, but avoiding the prefix-postfix distinction keeps test helper code obvious and review-friendly."
+    },
+    {
+      "id": 12,
+      "question": "How do you convert a value to a string, a number, and a boolean explicitly?",
+      "answer": "Use String(value), Number(value), and Boolean(value). These constructor-style conversions make intent clear compared to relying on implicit coercion.\n\ncode:\nconst s = String(42);\nconst n = Number('42');\nconst b = Boolean(1);\n\nreal example:\nSerializing a test ID with String(id) before placing it in a dynamic selector guarantees a clean match against DOM attributes."
+    },
+    {
+      "id": 13,
+      "question": "What is the difference between parseInt and Number for parsing strings?",
+      "answer": "Number parses the whole string and returns NaN on any invalid character, while parseInt reads leading digits and ignores trailing text. parseInt also needs a radix for old-style code.\n\ncode:\nconsole.log(parseInt('42px', 10));  // 42\nconsole.log(Number('42px'));        // NaN\n\nreal example:\nCSS-like text such as 'width: 100px' is parsed with parseInt to extract 100, while strict JSON numbers use Number."
+    },
+    {
+      "id": 14,
+      "question": "What is the exponentiation operator and how is it different from Math.pow?",
+      "answer": "The exponentiation operator ** is shorthand for raising a base to a power, equivalent to Math.pow(base, exp). It is available in ES2016 and later.\n\ncode:\nconsole.log(2 ** 3);          // 8\nconsole.log(Math.pow(2, 3));  // 8\n\nreal example:\nCalculating two-percent growth over multiple retry rounds in a load-test calculation is more readable with ** than nested Math.pow calls."
+    },
+    {
+      "id": 15,
+      "question": "What is the result of comparing [] == false?",
+      "answer": "It is true. The loose equality coerces both sides: the empty array converts to the string '', then to 0, and false also converts to 0.\n\ncode:\nconsole.log([] == false);  // true\nconsole.log([] === false); // false\n\nreal example:\nThis is a classic trap that causes confusing assertion failures; always use strict equality in test asserts so no hidden coercion happens."
+    }
+  ]
+}

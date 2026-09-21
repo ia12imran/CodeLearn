@@ -1,0 +1,80 @@
+{
+  "description": "Classes, inheritance and prototypal inheritance.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "How do you define a class and instantiate it?",
+      "answer": "A class uses the class keyword with a constructor that runs on new. Methods defined in the body are shared across all instances.\n\ncode:\nclass User {\n  constructor(name) {\n    this.name = name;\n  }\n  greet() { return 'Hi ' + this.name; }\n}\nconst u = new User('Ana');\nconsole.log(u.greet());  // Hi Ana\n\nreal example:\nPage Object Models model each page as a class instantiated per test with the page handle."
+    },
+    {
+      "id": 2,
+      "question": "What does the constructor do and can it be omitted?",
+      "answer": "The constructor initializes instance fields and runs automatically when new is called. If omitted, an empty constructor is added by default.\n\ncode:\nclass Greeter {}\nconsole.log(new Greeter());  // works, no error\n\nreal example:\nStateless helper classes with no constructor still instantiate cleanly and share their methods."
+    },
+    {
+      "id": 3,
+      "question": "What is the this keyword inside class methods?",
+      "answer": "this refers to the instance the method is called on, unless the method is detached and called bare, which loses the binding. Arrow class fields capture this at creation.\n\ncode:\nclass Counter {\n  n = 0;\n  inc() { this.n++; }\n}\nconst c = new Counter();\nc.inc();\nconsole.log(c.n);  // 1\n\nreal example:\nPassing a page object method into an event handler requires the arrow or bind, because a bare reference loses this."
+    },
+    {
+      "id": 4,
+      "question": "What is inheritance and how do you extend a class?",
+      "answer": "Inheritance lets a subclass reuse and specialize a base class using the extends keyword, and super calls the base constructor or methods.\n\ncode:\nclass BasePage {\n  constructor(page) { this.page = page; }\n  goto(path) { return this.page.goto(path); }\n}\nclass LoginPage extends BasePage {\n  constructor(page) { super(page); }\n  async login(u, p) { await this.page.fill('#user', u); }\n}\n\nreal example:\nA shared BasePage with navigation and common helpers reduces duplication across page object classes."
+    },
+    {
+      "id": 5,
+      "question": "What does the super keyword do in a subclass?",
+      "answer": "super calls the parent constructor or a parent method. Without super(), a derived class cannot initialize and throws when instantiated.\n\ncode:\nclass A { constructor() { console.log('A'); } }\nclass B extends A { constructor() {\n  super();\n  console.log('B');\n} }\nnew B();  // A then B\n\nreal example:\nSubclassed page objects call super(page) first so the base locators exist before the subclass adds its own."
+    },
+    {
+      "id": 6,
+      "question": "What are static methods and properties?",
+      "answer": "Static members belong to the class itself rather than instances and are called through the class name, often used for factories and constants.\n\ncode:\nclass Config {\n  static DEFAULT_TIMEOUT = 5000;\n  static create() { return new Config(); }\n}\nconsole.log(Config.DEFAULT_TIMEOUT);  // 5000\n\nreal example:\nStatic factory methods like User.fromApi(json) parse API responses into clean test objects."
+    },
+    {
+      "id": 7,
+      "question": "What are getters and setters in a class?",
+      "answer": "Getters and setters expose a computed accessor, so reading and writing a property runs methods instead of touching a field directly.\n\ncode:\nclass Cart {\n  _items = [];\n  get count() { return this._items.length; }\n  add(item) { this._items.push(item); }\n}\nconst c = new Cart();\nc.add('x');\nconsole.log(c.count);  // 1\n\nreal example:\nA summary getter on a page object returns the total so assertions read naturally as page.summary."
+    },
+    {
+      "id": 8,
+      "question": "How does instanceof work?",
+      "answer": "instanceof checks whether an object's prototype chain includes a given constructor, which verifies a value was created by a class or its ancestors.\n\ncode:\nclass User {}\nconsole.log(new User() instanceof User);  // true\nconsole.log([] instanceof Object);        // true\n\nreal example:\nAssertions like expect(body).toBeInstanceOf(Array) guard that an API returned the expected collection shape."
+    },
+    {
+      "id": 9,
+      "question": "What is prototypal inheritance?",
+      "answer": "Prototypal inheritance means objects inherit from other objects through a hidden [[Prototype]] chain, and classes are syntax sugar over this mechanism.\n\ncode:\nconst base = { greet() { return 'hi'; } };\nconst child = Object.create(base);\nconsole.log(child.greet());  // hi\n\nreal example:\nUnderstanding that locators and browsers resolve shared methods up the prototype chain explains why them.locator works everywhere."
+    },
+    {
+      "id": 10,
+      "question": "How do you access an object's prototype and create one?",
+      "answer": "Object.getPrototypeOf reads the prototype, and Object.create establishes a custom prototype for a new object.\n\ncode:\nconst parent = { x: 1 };\nconst child = Object.create(parent);\nconsole.log(Object.getPrototypeOf(child) === parent);  // true\n\nreal example:\nFramework internals use Object.create for lightweight suffix objects, but test code normally sticks to classes."
+    },
+    {
+      "id": 11,
+      "question": "What is the difference between a class method and a class field?",
+      "answer": "A method lives on the prototype and is shared, while a class field like count = 0 is created per instance. Fields can also be arrow functions bound to the instance.\n\ncode:\nclass C {\n  method() {}\n  field = 1;\n}\nconst a = new C();\nconst b = new C();\nconsole.log(a.field);  // 1\n\nreal example:\nPer-test instance state belongs in fields so parallel tests never share mutable counters between page objects."
+    },
+    {
+      "id": 12,
+      "question": "How do you make a property truly private in a class?",
+      "answer": "Use the hash prefix syntax #field, which is enforced by the language and inaccessible outside the class, unlike underscore conventions.\n\ncode:\nclass Wallet {\n  #balance = 0;\n  deposit(n) { this.#balance += n; }\n}\n// wallet.#balance  // SyntaxError outside the class\n\nreal example:\nPrivate state in page objects prevents tests from tampering with internal cache fields accidentally."
+    },
+    {
+      "id": 13,
+      "question": "What is method overriding in a subclass?",
+      "answer": "Overriding means redefining a parent method in the subclass, and you can call the original with super.methodName to extend behavior.\n\ncode:\nclass B extends A {\n  greet() {\n    return super.greet() + '!extra';\n  }\n}\n\nreal example:\nA checkout page overrides the base waitUntilLoaded to also wait for the payment iframe, then calls super for the shared part."
+    },
+    {
+      "id": 14,
+      "question": "How are classes different from constructor functions?",
+      "answer": "Classes are a cleaner syntax with strict mode, no hoisting, and you must call them with new. Constructor functions are older and more permissive.\n\ncode:\nfunction OldUser(name) { this.name = name; }\nclass NewUser {}\n// NewUser();  // TypeError: Class constructor cannot be invoked without 'new'\n\nreal example:\nModern test frameworks use classes for page objects, while legacy suites may still show constructor-function helpers."
+    },
+    {
+      "id": 15,
+      "question": "How would you model a Page Object with a class in Playwright?",
+      "answer": "Pass the page into the constructor, store it, and expose high-level methods that wrap locator actions so individual tests stay short.\n\ncode:\nclass LoginPage {\n  constructor(page) { this.page = page; }\n  async login(username, password) {\n    await this.page.getByLabel('Username').fill(username);\n    await this.page.getByRole('button', { name: 'Login' }).click();\n  }\n}\n\nreal example:\nEach Playwright test creates the page object, calls login, and asserts on the result without touching raw selectors."
+    }
+  ]
+}

@@ -3,15 +3,18 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Code2, Search, Lightbulb, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
-import { practiceExercises } from "@/data/practice-exercises";
+import { getPracticeExercises, LANG_META, Language } from "@/data/index";
 import ClientOnly from "@/components/ClientOnly";
 
 const CodeEditor = dynamic(() => import("@/components/CodeEditor"), { ssr: false });
 
-const topics = ["All", ...Array.from(new Set(practiceExercises.map((e) => e.topic)))];
-const levels = ["All", "Easy", "Medium", "Hard"] as const;
+export default function PracticeClient({ lang }: { lang: Language }) {
+  const practiceExercises = getPracticeExercises(lang);
+  const label = LANG_META[lang].label;
 
-export default function PracticePage() {
+  const topics = ["All", ...Array.from(new Set(practiceExercises.map((e) => e.topic)))];
+  const levels = ["All", "Easy", "Medium", "Hard"] as const;
+
   const [selected, setSelected] = useState(0);
   const [selectedTopic, setSelectedTopic] = useState("All");
   const [selectedLevel, setSelectedLevel] = useState("All");
@@ -36,7 +39,7 @@ export default function PracticePage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Practice Code</h1>
           <p className="text-sm text-gray-500">
-            {practiceExercises.length} coding challenges to strengthen your Python skills.
+            {practiceExercises.length} coding challenges to strengthen your {label} skills.
           </p>
         </div>
       </div>
@@ -102,7 +105,7 @@ export default function PracticePage() {
               <div className="space-y-0.5 p-2">
                 {filtered.map((ex, idx) => (
                   <button
-                    key={idx}
+                    key={`${ex.topic}-${ex.title}`}
                     type="button"
                     onClick={() => { setSelected(idx); setShowSolution(false); }}
                     className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition cursor-pointer ${
@@ -136,9 +139,13 @@ export default function PracticePage() {
           </div>
         </div>
 
-        {/* Editor */}
+        {/* Editor panel */}
         <div className="flex-1 min-w-0">
-          {exercise && (
+          {filtered.length === 0 ? (
+            <div className="bg-white border border-gray-200 rounded-2xl p-10 text-center text-gray-500">
+              No exercises found. Try adjusting your filters.
+            </div>
+          ) : exercise && (
             <>
               <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-6">
                 <div className="flex items-center justify-between mb-2">
@@ -153,7 +160,7 @@ export default function PracticePage() {
                     {exercise.level}
                   </span>
                 </div>
-                <p className="text-gray-500 mb-4">{exercise.description}</p>
+                <p className="text-gray-500 mb-4 whitespace-pre-line">{exercise.description}</p>
                 <div className="flex items-center gap-2 text-xs text-gray-400">
                   <span className="px-2 py-0.5 bg-gray-100 rounded-full">{exercise.topic}</span>
                 </div>
@@ -166,7 +173,7 @@ export default function PracticePage() {
                   </div>
                 }
               >
-                <CodeEditor key={exercise.title} initialCode={exercise.starter} height="450px" />
+                <CodeEditor key={`${lang}-${exercise.title}`} initialCode={exercise.starter} height="450px" language={lang} />
               </ClientOnly>
 
               <div className="mt-4">

@@ -1,0 +1,80 @@
+{
+  "description": "Map, Set and other ES6 collections.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is a Map and how does it differ from a plain object?",
+      "answer": "A Map is a key-value collection that accepts any key type, preserves insertion order, and provides clean methods. Plain objects only accept string and symbol keys and inherit prototype properties.\n\ncode:\nconst m = new Map();\nm.set('user', 'Ana');\nm.set(1, 'number key');\nconsole.log(m.get('user'));  // Ana\n\nreal example:\nMapping response status codes to enums is safer in a Map because numeric keys behave predictably."
+    },
+    {
+      "id": 2,
+      "question": "What are the main methods on a Map?",
+      "answer": "A Map supports set, get, has, delete, clear, and the size property. It is iterated with for...of and supports forEach.\n\ncode:\nconst m = new Map([['a', 1]]);\nm.set('b', 2);\nconsole.log(m.has('a'));  // true\nconsole.log(m.size);      // 2\nm.delete('a');\n\nreal example:\nTracking per-request assertions with a Map keyed by URL lets a test verify each endpoint result individually."
+    },
+    {
+      "id": 3,
+      "question": "How do you iterate over a Map?",
+      "answer": "destructuring with for...of yields key-value pairs, and the keys, values, and entries methods return iterators.\n\ncode:\nconst m = new Map([['x', 1], ['y', 2]]);\nfor (const [key, value] of m) {\n  console.log(key, value);\n}\n\nreal example:\nIterating config maps in a test data setup prints each case name and payload for easy debugging of failures."
+    },
+    {
+      "id": 4,
+      "question": "When should you choose a Map over an object?",
+      "answer": "Choose a Map when keys are not strings, when inserts happen frequently, when insertion order matters, or when you need easy size and deletion semantics.\n\ncode:\nconst cache = new Map();\nuserIds.forEach((id, i) => cache.set(id, i));\n\nreal example:\nCaching unique request timestamps by id benefits from Map's clean has and delete that objects lack natively."
+    },
+    {
+      "id": 5,
+      "question": "What is a Set and what is it used for?",
+      "answer": "A Set holds unique values of any type and ignores duplicates. Adding an existing value keeps a single copy.\n\ncode:\nconst s = new Set([1, 2, 2, 3]);\nconsole.log([...s]);  // [1, 2, 3]\n\nreal example:\nDeduplicating an array of order ids before counting them uses a Set, turning a list into unique values in one line."
+    },
+    {
+      "id": 6,
+      "question": "What are the main methods on a Set?",
+      "answer": "Set provides add, has, delete, clear, and the size property, plus iteration in insertion order.\n\ncode:\nconst s = new Set();\ns.add('a');\nconsole.log(s.has('a'));  // true\nconsole.log(s.size);      // 1\n\nreal example:\nUniqueness assertions like expecting no duplicate currencies in a response use a Set to compare lengths."
+    },
+    {
+      "id": 7,
+      "question": "How do you convert a Set back to an array?",
+      "answer": "Use the spread operator or Array.from, both of which produce an array of the Set values in insertion order.\n\ncode:\nconst s = new Set([1, 1, 2]);\nconsole.log([...s]);       // [1, 2]\nconsole.log(Array.from(s)); // [1, 2]\n\nreal example:\nExtracting unique roles from a user response then asserting the sorted array keeps results deterministic."
+    },
+    {
+      "id": 8,
+      "question": "What is the difference between a Set and an array?",
+      "answer": "A Set only stores each value once, provides O(1) has checks, and does not support indexing or accessing by position. Arrays keep duplicates and allow index access.\n\ncode:\nconst arr = [1, 1, 2];\nconst set = new Set(arr);\nconsole.log(set.has(2));  // true (O(1) lookups)\n\nreal example:\nFor membership checks on large test datasets, a Set is faster than scanning an array with includes."
+    },
+    {
+      "id": 9,
+      "question": "How do you remove duplicates from an array while preserving order?",
+      "answer": "Pass the array to a Set then spread it back; since Set iteration preserves insertion order, the deduplicated array keeps the order.\n\ncode:\nconst unique = [...new Set([3, 1, 3, 2, 1])];\nconsole.log(unique);  // [3, 1, 2]\n\nreal example:\nRemoving duplicate tags from a metadata array before sending it to an API prevents validation rejects."
+    },
+    {
+      "id": 10,
+      "question": "What is the difference between a Map and a WeakMap?",
+      "answer": "A WeakMap only accepts object keys and holds weak references, so it does not prevent garbage collection. It has no size property and no iteration.\n\ncode:\nconst wm = new WeakMap();\nlet obj = { id: 1 };\nwm.set(obj, 'payload');\nobj = null;  // entry can be collected\n\nreal example:\nWeakMap is useful for attaching private per-object state in libraries, but test code generally prefers a regular Map for inspectability."
+    },
+    {
+      "id": 11,
+      "question": "What is the difference between a Set and a WeakSet?",
+      "answer": "A WeakSet holds only object values with weak references, meaning it cannot hold primitives, has no size or iteration, and allows garbage collection of its objects.\n\ncode:\nconst ws = new WeakSet();\nlet obj = {};\nws.add(obj);\nconsole.log(ws.has(obj));  // true\n\nreal example:\nMarking DOM elements as visited in memory-sensitive scrapers uses WeakSet so removed nodes free memory automatically."
+    },
+    {
+      "id": 12,
+      "question": "How do you find the union of two arrays using a Set?",
+      "answer": "Concatenate both arrays and pass the result into a Set, then spread it back to get all unique values from both.\n\ncode:\nconst a = [1, 2, 3];\nconst b = [3, 4];\nconsole.log([...new Set([...a, ...b])]);  // [1, 2, 3, 4]\n\nreal example:\nMerging permitted groups from two sources into one uniquified list drives the expected-permission assertion."
+    },
+    {
+      "id": 13,
+      "question": "How do you compute the difference between two sets of strings?",
+      "answer": "Filter one array for values the other Set does not have, using the Set's fast has check as the predicate.\n\ncode:\nconst expected = new Set(['a', 'b']);\nconst actual = ['a'];\nconst missing = expected.values();\n[...expected].filter(x => !actual.includes(x));  // ['b']\n\nreal example:\nComparing a required-fields Set against keys actually present in a response surfaces which fields are missing in assertions."
+    },
+    {
+      "id": 14,
+      "question": "Why is key order guaranteed in a Map but not for object keys?",
+      "answer": "A Map always iterates in insertion order. Object key order follows the spec: integer-like string keys sort first, then other strings in insertion order, then symbols.\n\ncode:\nconst m = new Map([[1, 'a'], ['x', 'b']]);\nconsole.log([...m.keys()]);  // [1, 'x'] insertion order\n\nreal example:\nWhen payload ordering matters for a probe request, a Map preserves the exact sequence objects cannot guarantee."
+    },
+    {
+      "id": 15,
+      "question": "How do you initialize a Map and a Set with data in one line?",
+      "answer": "Both constructors accept an iterable: Map takes key-value pairs, and Set takes values directly.\n\ncode:\nconst m = new Map([['a', 1], ['b', 2]]);\nconst s = new Set(['red', 'green']);\n\nreal example:\nBuilding collections from API fixture arrays in a single line keeps test setup compact and reviewable."
+    }
+  ]
+}

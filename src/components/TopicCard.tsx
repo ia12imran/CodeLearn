@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { Topic } from "@/data/types";
+import { Language } from "@/data/index";
 import {
   Rocket, Code, Type, Calculator, GitBranch, List,
   FunctionSquare, BookOpen, Box, AlertTriangle, FileText, Puzzle,
+  Sparkles,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
@@ -20,6 +22,8 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; className?: s
   "alert-triangle": AlertTriangle,
   "file-text": FileText,
   puzzle: Puzzle,
+  "layout-grid": Sparkles,
+  sparkles: Sparkles,
 };
 
 const levelBadge: Record<string, { bg: string; text: string }> = {
@@ -28,13 +32,13 @@ const levelBadge: Record<string, { bg: string; text: string }> = {
   advanced: { bg: "bg-rose-100", text: "text-rose-700" },
 };
 
-export default function TopicCard({ topic }: { topic: Topic }) {
+export default function TopicCard({ topic, language = "python" }: { topic: Topic; language?: Language }) {
   const Icon = iconMap[topic.icon] || Code;
   const badge = levelBadge[topic.level] || levelBadge.beginner;
 
   return (
     <Link
-      href={`/learn/${topic.slug}/${topic.lessons[0].slug}`}
+      href={`/${language}/learn/${topic.slug}/${topic.lessons[0].slug}`}
       className="block group border border-gray-200 rounded-2xl p-5 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-200 bg-white"
     >
       <div className="flex items-start gap-4">

@@ -1,0 +1,75 @@
+{
+  "description": "Objects, destructuring and optional chaining.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "How do you create an object and read its properties?",
+      "answer": "Objects are created with curly braces and read with dot notation for known keys or bracket notation for dynamic keys.\n\ncode:\nconst user = { name: 'Ana', age: 30 };\nconsole.log(user.name);\nconst key = 'age';\nconsole.log(user[key]);  // 30\n\nreal example:\nReading fields off an API response like res.body.checkout.total is nothing more than chained dot notation."
+    },
+    {
+      "id": 2,
+      "question": "How do you add or update a property on an existing object?",
+      "answer": "Assign to the property with dot or bracket notation. Assigning to a new key adds it, and to an existing key overwrites it.\n\ncode:\nconst user = {};\nuser.name = 'Ana';\nuser['age'] = 30;\nconsole.log(user);  // { name: 'Ana', age: 30 }\n\nreal example:\nMerging runtime data into a base request body by assignment keeps API fixtures flexible per test."
+    },
+    {
+      "id": 3,
+      "question": "How do you list the keys, values, and entries of an object?",
+      "answer": "Object.keys returns an array of keys, Object.values returns the values, and Object.entries returns pairs as arrays.\n\ncode:\nconst cfg = { retries: 2, tag: 'smoke' };\nconsole.log(Object.keys(cfg));    // ['retries', 'tag']\nconsole.log(Object.values(cfg));  // [2, 'smoke']\nconsole.log(Object.entries(cfg)); // [['retries', 2], ['tag', 'smoke']]\n\nreal example:\nWrapping a config in Object.entries lets a test iterate flags as pairs and assert every known setting in one loop."
+    },
+    {
+      "id": 4,
+      "question": "How do you check if an object has a property?",
+      "answer": "Use the in operator, hasOwnProperty, or Object.hasOwn to check for a key regardless of its value, since the value could be undefined.\n\ncode:\nconst user = { name: 'Ana' };\nconsole.log('name' in user);            // true\nconsole.log(Object.hasOwn(user, 'x'));  // false\n\nreal example:\nValidating that a login response includes a token before reading it avoids accessing a missing field."
+    },
+    {
+      "id": 5,
+      "question": "How does the spread operator copy and merge objects?",
+      "answer": "Spreading an object copies its enumerable properties into a new object, so spread order decides which keys win when merging.\n\ncode:\nconst base = { browser: 'chromium', headless: true };\nconst override = { headless: false };\nconst config = { ...base, ...override };\nconsole.log(config);  // { browser: 'chromium', headless: false }\n\nreal example:\nMerging default launch options with per-test overrides keeps shared config clean."
+    },
+    {
+      "id": 6,
+      "question": "What is object destructuring and how do you rename keys?",
+      "answer": "Destructuring unpacks properties into variables, and renaming uses key: newName syntax.\n\ncode:\nconst user = { name: 'Ana', age: 30 };\nconst { name: userName, age } = user;\nconsole.log(userName, age);  // Ana 30\n\nreal example:\nPulling response fields into local names like const { data: payload } = res avoids later dot-chaining."
+    },
+    {
+      "id": 7,
+      "question": "How do you provide default values during destructuring?",
+      "answer": "Defaults apply when the property is undefined, written as { missing = defaultValue }, and they do not apply when the value is null.\n\ncode:\nconst cfg = {}\nconst { timeout = 5000 } = cfg;\nconsole.log(timeout);  // 5000\n\nreal example:\nReading an optional field like total from a response while defaulting to 0 lets assertions run without crashes."
+    },
+    {
+      "id": 8,
+      "question": "What is the rest pattern in destructuring?",
+      "answer": "The rest pattern collects remaining properties into a new object using ... in a destructuring assignment.\n\ncode:\nconst { name, ...details } = { name: 'Ana', age: 30, role: 'admin' };\nconsole.log(name);     // Ana\nconsole.log(details);  // { age: 30, role: 'admin' }\n\nreal example:\nOmitting a password field from a logged user object before asserting it keeps secrets out of output."
+    },
+    {
+      "id": 9,
+      "question": "What is optional chaining and how does it prevent errors?",
+      "answer": "Optional chaining with ?. returns undefined instead of throwing when a property in the chain is null or undefined.\n\ncode:\nconst res = {};\nconsole.log(res.body?.user?.name);  // undefined, no error\n\nreal example:\nReading nested API data like data.items[0]?.total skips fragile guard checks."
+    },
+    {
+      "id": 10,
+      "question": "When does optional chaining stop and what does ?.() do?",
+      "answer": "Optional chaining short-circuits the rest of the chain at the first null or undefined. The ?.() form checks a function exists before calling it.\n\ncode:\nconst cb = null;\ncb?.();  // no error\n\nreal example:\nCalling an optional teardown hook only when a fixture defined it keeps cleanup robust."
+    },
+    {
+      "id": 11,
+      "question": "What is the difference between shallow and deep copy?",
+      "answer": "A shallow copy duplicates the top level but shares nested objects by reference, while a deep copy replicates all nested levels.\n\ncode:\nconst a = { x: { y: 1 } };\nconst shallow = { ...a };\nshallow.x.y = 2;\nconsole.log(a.x.y);  // 2\n\nreal example:\nCopying test config with nested objects silently shares them, causing cross-test mutation."
+    },
+    {
+      "id": 12,
+      "question": "How do you deep copy an object in plain JavaScript?",
+      "answer": "structuredClone is the modern deep copy, while JSON.parse(JSON.stringify(obj)) works for JSON-safe values.\n\ncode:\nconst copy = structuredClone(original);\nconst jsonCopy = JSON.parse(JSON.stringify(original));\n\nreal example:\nCloning payload fixtures before mutating keeps the original test data intact across runs."
+    },
+    {
+      "id": 13,
+      "question": "What are computed property names in object literals?",
+      "answer": "Computed property names use square brackets inside the literal so the key is evaluated as an expression at creation time.\n\ncode:\nconst key = 'role'\nconst obj = { [key]: 'admin' };\nconsole.log(obj.role);  // admin\n\nreal example:\nMapping environment variables into a test config object uses computed keys for dynamic settings."
+    },
+    {
+      "id": 14,
+      "question": "How do object methods and the this keyword interact?",
+      "answer": "A method defined in an object gets this bound to the object when called as obj.method(), but the binding is lost when the method is passed as a bare reference.\n\ncode:\nconst counter = {\n  n: 0,\n  inc() { this.n++; }\n};\ncounter.inc();\nconsole.log(counter.n);  // 1\n\nreal example:\nPlaywright page objects rely on this staying bound inside methods, so arrow wrappers are used in callbacks."
+    }
+  ]
+}

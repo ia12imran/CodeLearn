@@ -1,4 +1,4 @@
-import { QuizQuestion } from "./types";
+import { QuizQuestion } from "../types";
 
 // Additional quiz questions for each lesson
 // Format: topicSlug/lessonSlug -> extra questions

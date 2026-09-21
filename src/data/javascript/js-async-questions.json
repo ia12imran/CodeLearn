@@ -1,0 +1,85 @@
+{
+  "description": "Promises, async/await and the event loop.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What are the three states of a Promise?",
+      "answer": "A promise is pending, fulfilled, or rejected. Once it settles into fulfilled or rejected, it stays in that state permanently.\n\ncode:\nconst p = new Promise((resolve, reject) => {\n  setTimeout(() => resolve('done'), 100);\n});\nconsole.log(p);  // pending at first\n\nreal example:\nPlaywright actions return promises that are pending until the browser answers, which is why awaiting them keeps state deterministic."
+    },
+    {
+      "id": 2,
+      "question": "What is the purpose of then, catch, and finally on a promise?",
+      "answer": "then handles the fulfilled value, catch handles the rejection, and finally runs cleanup regardless of the outcome while passing the result through.\n\ncode:\nconst result = await fetch(url)\n  .then(res => res.json())\n  .catch(err => { throw new Error('fetch failed: ' + err); })\n  .finally(() => cleanup());\n\nreal example:\nMaking test setup that always closes a resource uses finally so failures still run post-test cleanup."
+    },
+    {
+      "id": 3,
+      "question": "Why is Promise.all useful and what happens on rejection?",
+      "answer": "Promise.all resolves with an array of values when every promise fulfills, and rejects as soon as any single promise rejects, discarding the rest.\n\ncode:\nconst [a, b] = await Promise.all([fetch('/a'), fetch('/b')]);\n\nreal example:\nLoading two independent checkout endpoints in parallel cuts test time, and the earliest failure stops the suite early."
+    },
+    {
+      "id": 4,
+      "question": "What is the difference between Promise.allSettled and Promise.all?",
+      "answer": "allSettled waits for every promise and reports each result as fulfilled or rejected, while all rejects immediately on the first failure.\n\ncode:\nconst results = await Promise.allSettled(urls.map(u => fetch(u)));\nresults.forEach(r => console.log(r.status));\n\nreal example:\nA multi-endpoint health check wants to log every failure, so allSettled is the right choice instead of all."
+    },
+    {
+      "id": 5,
+      "question": "What does Promise.race do?",
+      "answer": "Promise.race settles as soon as the first promise settles, returning its value or reason while ignoring every other promise's outcome.\n\ncode:\nconst winner = await Promise.race([\n  request(),\n  timeout(5000),\n]);\n\nreal example:\nCapping a slow request with a timeout promise via race gives a quick failure instead of an endless client hang."
+    },
+    {
+      "id": 6,
+      "question": "What is async/await and how does it improve on promise chains?",
+      "answer": "async/await makes promise-based code read like synchronous code. An async function returns a promise, and await unwraps a promise's value without nested callbacks.\n\ncode:\nasync function getUser() {\n  const res = await fetch('/user');\n  return res.json();\n}\n\nreal example:\nEvery Playwright test step such as page.click and expect is awaited, which is why test bodies are marked async."
+    },
+    {
+      "id": 7,
+      "question": "What happens when you await a non-promise value?",
+      "answer": "await always returns the value directly for non-promises, wrapping it into an already-resolved promise internally. It adds no delay for plain values.\n\ncode:\nconst x = await 42;\nconsole.log(x);  // 42\n\nreal example:\nHelpers that sometimes return a promise and sometimes a plain value stay usable with await either way, which simplifies fixture functions."
+    },
+    {
+      "id": 8,
+      "question": "How do you catch errors thrown inside an async function?",
+      "answer": "Wrap the awaited calls in try/catch, since an async function returns a rejected promise that the surrounding await or catch handles.\n\ncode:\nasync function run() {\n  try {\n    await riskyCall();\n  } catch (err) {\n    console.log('recovered:', err.message);\n  }\n}\n\nreal example:\nRetry logic catches transient network errors on login and retries a bounded number of times instead of failing instantly."
+    },
+    {
+      "id": 9,
+      "question": "What is the event loop in JavaScript?",
+      "answer": "The event loop is the mechanism that processes the call stack and the message queue, running JavaScript's single thread while letting async callbacks execute in order.\n\ncode:\nconsole.log('start');\nsetTimeout(() => console.log('timeout'), 0);\nconsole.log('end');  // start, end, timeout\n\nreal example:\nKnowing that timers run after the current script explains why an immediate check after page.click still needs an await."
+    },
+    {
+      "id": 10,
+      "question": "What is the difference between a microtask and a macrotask?",
+      "answer": "Microtasks such as promise callbacks run before the next macrotask such as setTimeout or an event handler. Between macrotasks the microtask queue is fully drained.\n\ncode:\nPromise.resolve().then(() => console.log('micro'));\nsetTimeout(() => console.log('macro'), 0);\nconsole.log('sync');  // sync, micro, macro\n\nreal example:\nThe ordering sync, then promise, then timer explains surprising log sequences and flaky timeout assumptions in tests."
+    },
+    {
+      "id": 11,
+      "question": "Why do promises run before setTimeout callbacks?",
+      "answer": "Promise reactions are microtasks drained until empty right after the current synchronous code, while setTimeout callbacks are macrotasks scheduled for later task turns.\n\ncode:\nPromise.resolve().then(() => console.log(1));\nsetTimeout(() => console.log(2), 0);  // 1 then 2\n\nreal example:\nWaiting for a promise result before polling a timeout interval only holds for the microtask drain, not the entire task."
+    },
+    {
+      "id": 12,
+      "question": "What is callback-based toPromise conversion and how is it done?",
+      "answer": "Wrapping a callback-style function inside a Promise executor converts it to a promise API where resolve and reject are called by the callback.\n\ncode:\nfunction wait(ms) {\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\nawait wait(1000);\n\nreal example:\nCustom poll helpers in Playwright use this pattern to await arbitrary conditions after a delay."
+    },
+    {
+      "id": 13,
+      "question": "What does awaiting inside a loop do differently from Promise.all?",
+      "answer": "Awaited sequentially, each iteration waits for the previous promise, running one by one. Promise.all runs all promises concurrently and waits for all to finish.\n\ncode:\nfor (const url of urls) await fetch(url);      // sequential\nawait Promise.all(urls.map(u => fetch(u)));    // parallel\n\nreal example:\nCreating one-by-one test records stays sequential to respect API rate limits, while read-only checks parallelize."
+    },
+    {
+      "id": 14,
+      "question": "How do you convert an array of promises into their values cleanly?",
+      "answer": "Map the workload to promises, then await Promise.all or Promise.allSettled; the results array lines up with the input order.\n\ncode:\nconst totals = await Promise.all(\n  orders.map(o => getTotal(o.id))\n);\n\nreal example:\nFetching product details for a list of ids returns values in the same order, making per-index assertions simple."
+    },
+    {
+      "id": 15,
+      "question": "What is the best practice for handling unhandled promise rejections?",
+      "answer": "Always attach catch or await the promise so rejections are observed. Unhandled rejections crash or warn loudly in Node and CI test runners.\n\ncode:\nconst p = risky();\np.catch(err => console.error('handled', err));\n// or: await p;\n\nreal example:\nPlaywright reports unhandled errors as test failures, so route request failures must be awaited or caught to keep logs clean."
+    },
+    {
+      "id": 16,
+      "question": "Why do you need await for waits in Playwright rather than fixed sleep?",
+      "answer": "Playwright auto-waits for the actionability of elements with built-in retries, so awaiting locator methods handles slow renders without arbitrary sleeps.\n\ncode:\nawait page.getByRole('button', { name: 'Submit' }).click();\n\nreal example:\nReplacing page.waitForTimeout(3000) with expect(locator).toBeVisible() removes flaky fixed sleeps and speeds the whole suite."
+    }
+  ]
+}

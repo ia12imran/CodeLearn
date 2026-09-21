@@ -1,0 +1,80 @@
+{
+  "description": "Regular expressions for test assertions.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "How do you create a regular expression in JavaScript?",
+      "answer": "Use a regex literal between slashes without quotes, or the RegExp constructor when the pattern is built dynamically.\n\ncode:\nconst id = /^[A-Z]{3}-\\d{4}$/;\nconst dynamic = new RegExp('order-' + number);\n\nreal example:\nPlaywright selectors accept regex like page.getByText(/In stock/i) for flexible text matching."
+    },
+    {
+      "id": 2,
+      "question": "What does the test method do on a regex?",
+      "answer": "The test method returns true when the pattern matches anywhere in the string and false otherwise.\n\ncode:\nconsole.log(/\\d+/.test('price 42'));  // true\nconsole.log(/\\d+/.test('abc'));       // false\n\nreal example:\nAsserting a response body matches an expected shape uses regex.test on values before deeper extraction."
+    },
+    {
+      "id": 3,
+      "question": "What is the difference between test, exec, and match?",
+      "answer": "test returns a boolean, exec returns detailed match arrays with capture groups, and match is the string method that does the same for the string.\n\ncode:\nconst m = /(\\d+)-(\\d+)/.exec('order-12-45');\nconsole.log(m[1]);   // 12\nconsole.log('12-45'.match(/(\\d+)/)[1]);  // 12\n\nreal example:\nExtracting the id from a URL route with exec gives the integer group used in a follow-up API request."
+    },
+    {
+      "id": 4,
+      "question": "What do the g, i, and m flags do?",
+      "answer": "g makes the search global so match returns all occurrences, i makes matching case-insensitive, and m makes ^ and $ match per line instead of the whole string.\n\ncode:\nconsole.log('a b a'.match(/a/g).length);  // 2\nconsole.log(/login/i.test('LOGIN'));      // true\n\nreal example:\nCase-insensitive text equality in Cypress like expect(text).to.match(/successfully/i) ignores case and punctuation variance."
+    },
+    {
+      "id": 5,
+      "question": "What do anchors ^ and $ mean in a regex?",
+      "answer": "^ anchors the match to the start of the string and $ anchors it to the end, so /^abc$/ matches exactly abc and nothing longer.\n\ncode:\nconsole.log(/^done$/.test('done'));    // true\nconsole.log(/^done$/.test('done!'));   // false\n\nreal example:\nEnforcing exact status text like successful login uses anchors so partial matches never pass an assertion."
+    },
+    {
+      "id": 6,
+      "question": "What are character classes such as \\d, \\w, and \\s?",
+      "answer": "\\d matches any digit, \\w any word character, and \\s any whitespace. Their uppercase forms match the negation.\n\ncode:\nconst re = /^\\w{3}\\d{2}$/;\nconsole.log(re.test('abc12'));  // true\n\nreal example:\nValidating phone and zip formats before posting to an API uses character classes in the pattern."
+    },
+    {
+      "id": 7,
+      "question": "How do quantifiers like *, +, and ? work?",
+      "answer": "* matches zero or more, + matches one or more, and ? matches zero or one of the preceding token, controlling repetition by default greedily.\n\ncode:\nconsole.log(/a+/.test(''));        // false\nconsole.log(/a*/.test(''));        // true\nconsole.log(/colou?r/.test('color')); // true\n\nreal example:\nTax and currency parsing tolerances like optional spaces or decimal parts rely on ? quantifiers."
+    },
+    {
+      "id": 8,
+      "question": "What is a capture group and how do you use it?",
+      "answer": "A capture group is a parenthesized part of the pattern that is stored separately, accessible by index from exec or match results.\n\ncode:\nconst m = 'order-5533'.match(/order-(\\d+)/);\nconsole.log(m[1]);  // 5533\n\nreal example:\nExtracting a numeric order id from confirmation text then using it in a database lookup is a classic capture-group task."
+    },
+    {
+      "id": 9,
+      "question": "How do you replace text using a regex?",
+      "answer": "Pass a regex to replace, optionally with the g flag for all occurrences, and reference capture groups with $1 and friends.\n\ncode:\nconsole.log('2026-01-05'.replace(/(\\d{4})-(\\d{2})-(\\d{2})/, '$3/$2/$1'));\n// 05/01/2026\n\nreal example:\nNormalizing date formats scraped from varying locales before comparison is done with a regex replace."
+    },
+    {
+      "id": 10,
+      "question": "What is the difference between the literal and the RegExp constructor?",
+      "answer": "The literal /pattern/ is static and compiled once, while new RegExp('pattern') builds from a string, which is necessary for patterns generated at runtime.\n\ncode:\nconst prefix = 'product-';\nconst re = new RegExp('^' + prefix + '\\\\d+$');\nconsole.log(re.test('product-42'));  // true\nconsole.log(re.test('product-abc')); // false\n\nreal example:\nBuilding a validator for dynamic prefixes keeps the pattern parametrized while escaping user-provided search terms prevents regex injection."
+    },
+    {
+      "id": 11,
+      "question": "How do you use a regex in a Playwright assertion?",
+      "answer": "Playwright matchers accept regex where strings are expected, so text, attribute, and URL checks support patterns.\n\ncode:\nawait expect(page).toHaveURL(/\\/checkout\\?step=\\d+/);\nawait expect(page.getByText(/order confirmed/i)).toBeVisible();\n\nreal example:\nAsserting a redirect URL pattern instead of an exact URL keeps assertions stable across query param order."
+    },
+    {
+      "id": 12,
+      "question": "What does a lookahead like (?=...) do?",
+      "answer": "A lookahead asserts that the pattern inside exists ahead without including it in the match, enabling complex password and format validations.\n\ncode:\nconst strong = /^(?=.*[A-Z])(?=.*\\d).+$/;\nconsole.log(strong.test('Ab1'));  // true\n\nreal example:\nSignup form validation checks (uppercase plus digit) are commonly encoded as lookaheads asserted by the test."
+    },
+    {
+      "id": 13,
+      "question": "What does the . (dot) match and how do you match a literal dot?",
+      "answer": "The dot matches any single character except a newline by default. To match an actual dot or any metacharacter literally, escape it with a backslash.\n\ncode:\nconsole.log(/a.b/.test('acb'));  // true\nconsole.log(/a\\.b/.test('a.b')); // true\n\nreal example:\nParsing version strings like 1.2.3 requires escaped dots, otherwise any character wrongly satisfies the pattern."
+    },
+    {
+      "id": 14,
+      "question": "How do you create a regex to match an email address?",
+      "answer": "A practical pattern uses character classes and escaped symbols, though perfect RFC email validation in one line is unrealistic.\n\ncode:\nconst email = /^[\\w.+-]+@[\\w-]+\\.[\\w.]+$/;\nconsole.log(email.test('user+test@example.com'));  // true\n\nreal example:\nAsserting server responses contain valid email addresses uses the same pattern to reject obvious malformed values."
+    },
+    {
+      "id": 15,
+      "question": "Why is the global flag required for matchAll or replace all?",
+      "answer": "matchAll and global replace operate across the entire string, so an inner regex without g matches only the first occurrence.\n\ncode:\nconst all = 'a1b2'.matchAll(/\\d/g);\nconsole.log([...all].map(m => m[0]));  // ['1', '2']\n\nreal example:\nCounting occurrences of a tag in raw HTML uses a global regex; relying on non-global patterns under-counts matches in tests."
+    }
+  ]
+}

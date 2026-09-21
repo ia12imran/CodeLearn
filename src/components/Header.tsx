@@ -4,24 +4,26 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BookOpen, Bot, Code2, FlaskConical, Home, Menu, X } from "lucide-react";
-
-const navLinks = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/learn/intro/what-is-python", label: "Learn", icon: BookOpen },
-  { href: "/practice", label: "Practice", icon: Code2 },
-  { href: "/automation", label: "Python Automation", icon: Bot },
-  { href: "/quiz", label: "Quiz", icon: FlaskConical },
-];
+import { LANGUAGES, isLanguage, getFirstLessonHref, LANG_META } from "@/data/index";
 
 export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    if (href.startsWith("/learn")) return pathname.startsWith("/learn");
-    return pathname === href;
-  };
+  const parts = pathname.split("/");
+  const rawLang = parts[1];
+  const lang = isLanguage(rawLang) ? rawLang : null;
+  const base = lang ?? "python";
+
+  const navLinks = [
+    { href: "/", label: "Home", icon: Home, match: (p: string) => p === "/" },
+    { href: getFirstLessonHref(base), label: "Learn", icon: BookOpen, match: (p: string) => p.startsWith(`/${base}/learn`) },
+    { href: `/${base}/practice`, label: "Practice", icon: Code2, match: (p: string) => p === `/${base}/practice` },
+    { href: `/${base}/automation`, label: `${LANG_META[base].label} Automation`, icon: Bot, match: (p: string) => p === `/${base}/automation` },
+    { href: `/${base}/quiz`, label: "Quiz", icon: FlaskConical, match: (p: string) => p === `/${base}/quiz` },
+  ];
+
+  const isActive = (match: (p: string) => boolean) => match(pathname);
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
@@ -36,7 +38,7 @@ export default function Header() {
               </svg>
             </div>
             <span className="text-lg font-bold text-gray-900 hidden sm:block">
-              Py<span className="text-blue-600">Learn</span>
+              Code<span className="text-blue-600">Learn</span>
             </span>
           </Link>
 
@@ -44,10 +46,10 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
               const Icon = link.icon;
-              const active = isActive(link.href);
+              const active = isActive(link.match);
               return (
                 <Link
-                  key={link.href}
+                  key={link.label}
                   href={link.href}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition ${
                     active
@@ -62,6 +64,30 @@ export default function Header() {
             })}
           </nav>
 
+          {/* Language switcher */}
+          <div className="hidden md:flex items-center gap-1 bg-gray-100 rounded-full p-1">
+            {LANGUAGES.map((l) => {
+              const active = lang === l;
+              const color =
+                l === "python"
+                  ? active
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-600 hover:text-blue-700"
+                  : active
+                    ? "bg-yellow-500 text-yellow-950"
+                    : "text-gray-600 hover:text-yellow-700";
+              return (
+                <Link
+                  key={l}
+                  href={`/${l}`}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition ${color}`}
+                >
+                  {l === "python" ? "🐍 Python" : "⚡ JavaScript"}
+                </Link>
+              );
+            })}
+          </div>
+
           {/* Mobile menu button */}
           <button
             type="button"
@@ -75,12 +101,35 @@ export default function Header() {
         {/* Mobile Nav */}
         {mobileOpen && (
           <nav className="md:hidden pb-3 border-t border-gray-100 pt-2">
+            <div className="flex items-center gap-1 bg-gray-100 rounded-full p-1 mb-2 mx-1">
+              {LANGUAGES.map((l) => {
+                const active = lang === l;
+                const color =
+                  l === "python"
+                    ? active
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-600"
+                    : active
+                      ? "bg-yellow-500 text-yellow-950"
+                      : "text-gray-600";
+                return (
+                  <Link
+                    key={l}
+                    href={`/${l}`}
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex-1 text-center px-3 py-1.5 rounded-full text-xs font-semibold transition ${color}`}
+                  >
+                    {l === "python" ? "🐍 Python" : "⚡ JavaScript"}
+                  </Link>
+                );
+              })}
+            </div>
             {navLinks.map((link) => {
               const Icon = link.icon;
-              const active = isActive(link.href);
+              const active = isActive(link.match);
               return (
                 <Link
-                  key={link.href}
+                  key={link.label}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
                   className={`flex items-center gap-2.5 px-4 py-2.5 text-sm rounded-lg mx-1 ${

@@ -1,0 +1,85 @@
+{
+  "description": "Cross-topic questions automation testers are asked.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the difference between == and === and which should test assertions use?",
+      "answer": "The loose equality == coerces types before comparing, while strict === requires both type and value to match. Automated assertions should use strict equality so a string and a number never match accidentally.\n\ncode:\nconsole.log('42' == 42);   // true\nconsole.log('42' === 42);  // false\n\nreal example:\nPlaywright text matchers compare strings, so converting page text to numbers before toBe comparisons follows the strict-equality rule."
+    },
+    {
+      "id": 2,
+      "question": "What is a flaky test and how do you reduce it in JavaScript automation?",
+      "answer": "A flaky test passes and fails intermittently, usually from timing, ordering, or environment issues. Reduce it with auto-waiting, deterministic selectors, isolated test data, and no fixed sleeps.\n\ncode:\nawait expect(page.getByRole('button', { name: 'Save' })).toBeVisible();\nawait page.getByRole('button', { name: 'Save' }).click();\n\nreal example:\nReplacing page.waitForTimeout(2000) with Playwright actionability waits removes the most common fixed-delay flakiness in UI suites."
+    },
+    {
+      "id": 3,
+      "question": "Why should you prefer data-testid selectors over CSS classes in tests?",
+      "answer": "Data attributes like data-testid are stable contracts between tests and developers, while class names change for styling and break selectors silently.\n\ncode:\npage.getByTestId('checkout-button').click();\n// vs a brittle ,class list like  .btn-primary.rounded\n\nreal example:\nTeams agree that test hooks use data-testid so refactors of CSS never degrade the E2E suite."
+    },
+    {
+      "id": 4,
+      "question": "What is the difference between wait and auto-wait in Playwright?",
+      "answer": "Auto-wait means actions retry until the element is actionable within the timeout, checking visibility, stability, and enabled state. Manual waits only sleep or poll once without retry guarantees.\n\ncode:\nawait page.getByRole('button').click();  // auto-waits\n\nreal example:\nAuto-wait turns a slow-loading modal into a passing test, while page.waitForTimeout can let clicks land before a re-render simply breaks the canvas."
+    },
+    {
+      "id": 5,
+      "question": "How do you handle a popup dialog that appears during a test?",
+      "answer": "Register listeners before the trigger so the dialog event is captured, then dismiss or accept it, otherwise the browser throws unhandled-dialog errors.\n\ncode:\npage.on('dialog', dialog => dialog.accept());\nawait page.getByRole('button', { name: 'Delete' }).click();\n\nreal example:\nConfirming a native alert before clicking the destructive button prevents the mid-click dialog from hanging the action."
+    },
+    {
+      "id": 6,
+      "question": "What is the event loop and how does it relate to async test code?",
+      "answer": "The event loop coordinates the single-threaded call stack, microtask queue, and macrotask queue so promises and timers run in order. Test awaits compose on it to keep steps ordered.\n\ncode:\nsetTimeout(() => console.log('later'), 0);\nconsole.log('first');  // first, later\n\nreal example:\nPromise callbacks run before timeout callbacks, which is why an await for a promise result reliably precedes a setTimeout-based poll."
+    },
+    {
+      "id": 7,
+      "question": "What is the difference between Promise.all and Promise.allSettled in test setup?",
+      "answer": "Promise.all rejects at the first failure and returns values on full success, while allSettled always resolves with per-promise status so you can inspect every outcome.\n\ncode:\nconst results = await Promise.allSettled(\n  endpoints.map(url => fetchStatus(url))\n);\n\nreal example:\nSetup that seeds accounts wants to fail fast with all, while a health-check report wants every endpoint's status via allSettled."
+    },
+    {
+      "id": 8,
+      "question": "Why is the page object model a preferred pattern in UI automation?",
+      "answer": "The page object model centralizes selectors and actions for a page in one class, so tests read like business steps and selector changes update in one place.\n\ncode:\nclass LoginPage {\n  constructor(page) { this.page = page; }\n  async login(user, pass) {\n    await this.page.getByLabel('Username').fill(user);\n    await this.page.getByRole('button', { name: 'Sign in' }).click();\n  }\n}\n\nreal example:\nA renaming of the sign-in button updates LoginPage once instead of across every spec that logs in."
+    },
+    {
+      "id": 9,
+      "question": "How do you test an API response before testing the UI that uses it?",
+      "answer": "Send the request with the request fixture or fetch, assert the status and body shape, then drive the UI and compare the rendered result against that contract.\n\ncode:\nconst res = await request.get('/api/config');\nexpect(res.status()).toBe(200);\nexpect(Number(res.body.featureFlags.length)).toBeGreaterThan(0);\n\nreal example:\nIf the API returns total count in the body, the UI total must equal that number, so a single source of truth reduces conflicting expectations."
+    },
+    {
+      "id": 10,
+      "question": "What is JSON.parse wrap in a try/catch and why is it important?",
+      "answer": "JSON.parse throws a SyntaxError for malformed input, so wrapping it lets you report a clean message instead of a raw parser crash that hides the real contract violation.\n\ncode:\ntry {\n  const data = JSON.parse(responseBody);\n} catch {\n  throw new Error('Server returned invalid JSON');\n}\n\nreal example:\nA server-side error page returned as HTML triggers JSON.parse to throw, and the try/catch turns it into an explicit assertion failure."
+    },
+    {
+      "id": 11,
+      "question": "How do you share setup across many JavaScript tests?",
+      "answer": "Test frameworks provide hooks: beforeEach and beforeAll in Jest and Vitest, or Playwright fixtures that inject fresh state per test.\n\ncode:\nbeforeEach(() => {\n  localStorage.clear();\n});\n\nreal example:\nPlaywright uses fixtures like const test = base.extend({ user: async ({}, use) => {...} }) so every test gets isolated data."
+    },
+    {
+      "id": 12,
+      "question": "What is the difference between a unit test and an end-to-end test?",
+      "answer": "A unit test isolates one function or module with mocks and runs in milliseconds, while an E2E test runs the full browser stack and verifies real user flows end to end.\n\ncode:\n// unit: expect(calculateTax(100)).toBe(10);\n// e2e: await page.goto('/checkout'); await expect(page).toHaveText('$110');\n\nreal example:\nTeams cover pricing with unit tests on the calculator and a thin E2E layer that confirms the string actually renders on the checkout page."
+    },
+    {
+      "id": 13,
+      "question": "What is meant by a retry policy and how does it apply to automation?",
+      "answer": "A retry policy reruns a failed test a bounded number of times to filter transient infrastructure flakes, configured in the test runner rather than inside the test logic.\n\ncode:\ndefineConfig({\n  retries: process.env.CI ? 2 : 0,\n});\n\nreal example:\nCI flakiness from slow first-load requests drops when Playwright retries failed specs, while local development stays fast with zero retries."
+    },
+    {
+      "id": 14,
+      "question": "What does console.error do and where should error logging live in tests?",
+      "answer": "console.error prints a stack to stderr, and uncaught console errors in a browser session are often asserted as page errors in E2E frameworks.\n\ncode:\npage.on('pageerror', (err) => {\n  console.error('page threw:', err.message);\n});\n\nreal example:\nListening to pageerror catches silent script failures that break flows, even when the visible assertion alone passes."
+    },
+    {
+      "id": 15,
+      "question": "What is the significance of a lockfile such as package-lock.json in CI?",
+      "answer": "A lockfile pins exact indirect dependency versions, so npm ci installs the identical tree everywhere and CI results stay reproducible between machines.\n\ncode:\nnpm ci\nnpx playwright test\n\nreal example:\nCI fails rarely when a lockfile exists because version drift between developer laptops and the pipeline disappears."
+    },
+    {
+      "id": 16,
+      "question": "What happens when you evaluate code inside page.evaluate and how do you return values?",
+      "answer": "page.evaluate runs a function in the browser context and serializes its return value back to Node, enabling checks on browser-only state like window.cookies or local geometry.\n\ncode:\nconst width = await page.evaluate(() => {\n  return window.innerWidth;\n});\nconsole.log(width);\n\nreal example:\nAsserting a responsive breakpoint applies measures layout with evaluate, then compares the returned width against the expected design value."
+    }
+  ]
+}

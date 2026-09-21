@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PyLearn - Learn Python Programming",
-  description: "Learn Python with interactive lessons, practice code, and quick tests. Free and beginner-friendly.",
+  title: "CodeLearn - Learn Python & JavaScript",
+  description: "Learn Python and JavaScript with interactive lessons, live code editors, hands-on practice, and quick quizzes. Free and beginner-friendly.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="flex-1">{children}</main>
         <footer className="border-t border-gray-200 bg-white py-6 text-center text-xs text-gray-400">
           <div className="max-w-7xl mx-auto px-4">
-            Built for Python learners. Inspired by W3Schools & SoloLearn.
+            Built for Python &amp; JavaScript learners. Inspired by W3Schools &amp; SoloLearn.
           </div>
         </footer>
       </body>

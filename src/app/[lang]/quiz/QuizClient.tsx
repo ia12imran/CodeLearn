@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { topics } from "@/data/topics";
-import { extraQuiz } from "@/data/extra-quiz";
+import { getTopics, getExtraQuiz, getQuestionSectionModule, LANG_META, Language } from "@/data/index";
 import { QuizQuestion, QAQuestion } from "@/data/types";
 import Quiz from "@/components/Quiz";
 import QAQuiz from "@/components/QAQuiz";
@@ -17,37 +16,48 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-function getQuizByTopic(topicSlug: string): QuizQuestion[] {
-  const topic = topics.find((t) => t.slug === topicSlug);
-  if (!topic) return [];
-  return topic.lessons.flatMap((l) => [...l.quiz, ...(extraQuiz[`${topicSlug}/${l.slug}`] || [])]);
-}
+const qaSectionLists: Record<Language, { key: string; label: string; count: number; gradient: string }[]> = {
+  python: [
+    { key: "basic_syntax", label: "1. Syntax", count: 100, gradient: "from-blue-500 to-indigo-600" },
+    { key: "variables", label: "2. Variables", count: 100, gradient: "from-emerald-500 to-teal-600" },
+    { key: "data_types", label: "3. Data Types", count: 150, gradient: "from-orange-500 to-amber-600" },
+    { key: "string_basics", label: "4. String Basics", count: 200, gradient: "from-pink-500 to-rose-600" },
+    { key: "string_methods", label: "5. String Methods", count: 200, gradient: "from-fuchsia-500 to-purple-600" },
+    { key: "string_formatting", label: "6. String Formatting", count: 100, gradient: "from-cyan-500 to-blue-600" },
+    { key: "operator_arithmetic", label: "7. Arithmetic Operators", count: 200, gradient: "from-amber-500 to-yellow-600" },
+    { key: "operator_comparison", label: "8. Comparison Operators", count: 200, gradient: "from-red-500 to-orange-600" },
+    { key: "operator_logical", label: "9. Logical Operators", count: 100, gradient: "from-slate-500 to-gray-700" },
+    { key: "dictionaries", label: "10. Dictionaries", count: 500, gradient: "from-violet-500 to-purple-700" },
+    { key: "oop_classes_basics", label: "11. Classes & Objects", count: 100, gradient: "from-indigo-500 to-violet-700" },
+    { key: "oop_inheritance", label: "12. Inheritance", count: 100, gradient: "from-teal-500 to-cyan-700" },
+    { key: "error_handling", label: "13. Error Handling", count: 100, gradient: "from-red-500 to-rose-600" },
+    { key: "file_handling", label: "14. File Handling", count: 300, gradient: "from-amber-600 to-orange-700" },
+  ],
+  javascript: [
+    { key: "js_basics", label: "1. JS Basics", count: 15, gradient: "from-blue-500 to-indigo-600" },
+    { key: "js_operators", label: "2. Operators & Types", count: 15, gradient: "from-amber-500 to-yellow-600" },
+    { key: "js_control_flow", label: "3. Control Flow", count: 15, gradient: "from-red-500 to-orange-600" },
+    { key: "js_strings", label: "4. Strings", count: 15, gradient: "from-pink-500 to-rose-600" },
+    { key: "js_functions", label: "5. Functions & Scope", count: 16, gradient: "from-emerald-500 to-teal-600" },
+    { key: "js_arrays", label: "6. Arrays", count: 16, gradient: "from-cyan-500 to-blue-600" },
+    { key: "js_objects", label: "7. Objects & ES6", count: 15, gradient: "from-violet-500 to-purple-700" },
+    { key: "js_map_set", label: "8. Map & Set", count: 15, gradient: "from-fuchsia-500 to-purple-600" },
+    { key: "js_json_fetch", label: "9. JSON & Fetch", count: 15, gradient: "from-teal-500 to-cyan-700" },
+    { key: "js_async", label: "10. Async JS", count: 16, gradient: "from-slate-500 to-gray-700" },
+    { key: "js_classes", label: "11. Classes & Prototypes", count: 15, gradient: "from-indigo-500 to-violet-700" },
+    { key: "js_dom", label: "12. DOM & Events", count: 16, gradient: "from-orange-500 to-amber-600" },
+    { key: "js_modules", label: "13. Modules & Tooling", count: 15, gradient: "from-blue-600 to-indigo-700" },
+    { key: "js_regex", label: "14. Regex & Advanced", count: 15, gradient: "from-green-600 to-emerald-800" },
+    { key: "js_interview", label: "15. Interview Prep", count: 16, gradient: "from-rose-600 to-red-800" },
+  ],
+};
 
-function getMixedQuiz(count: number): QuizQuestion[] {
-  const allQuestions = topics.flatMap((t) =>
-    t.lessons.flatMap((l) => [...l.quiz, ...(extraQuiz[`${t.slug}/${l.slug}`] || [])])
-  );
-  return shuffleArray(allQuestions).slice(0, count);
-}
+export default function QuizClient({ lang }: { lang: Language }) {
+  const label = LANG_META[lang].label;
+  const topics = getTopics(lang);
+  const extraQuiz = getExtraQuiz(lang);
+  const qaSections = qaSectionLists[lang];
 
-const qaSections = [
-  { key: "basic_syntax", label: "1. Syntax", count: 100, gradient: "from-blue-500 to-indigo-600" },
-  { key: "variables", label: "2. Variables", count: 100, gradient: "from-emerald-500 to-teal-600" },
-  { key: "data_types", label: "3. Data Types", count: 150, gradient: "from-orange-500 to-amber-600" },
-  { key: "string_basics", label: "4. String Basics", count: 200, gradient: "from-pink-500 to-rose-600" },
-  { key: "string_methods", label: "5. String Methods", count: 200, gradient: "from-fuchsia-500 to-purple-600" },
-  { key: "string_formatting", label: "6. String Formatting", count: 100, gradient: "from-cyan-500 to-blue-600" },
-  { key: "operator_arithmetic", label: "7. Arithmetic Operators", count: 200, gradient: "from-amber-500 to-yellow-600" },
-  { key: "operator_comparison", label: "8. Comparison Operators", count: 200, gradient: "from-red-500 to-orange-600" },
-  { key: "operator_logical", label: "9. Logical Operators", count: 100, gradient: "from-slate-500 to-gray-700" },
-  { key: "dictionaries", label: "10. Dictionaries", count: 500, gradient: "from-violet-500 to-purple-700" },
-  { key: "oop_classes_basics", label: "11. Classes & Objects", count: 100, gradient: "from-indigo-500 to-violet-700" },
-  { key: "oop_inheritance", label: "12. Inheritance", count: 100, gradient: "from-teal-500 to-cyan-700" },
-  { key: "error_handling", label: "13. Error Handling", count: 100, gradient: "from-red-500 to-rose-600" },
-  { key: "file_handling", label: "14. File Handling", count: 300, gradient: "from-amber-600 to-orange-700" },
-];
-
-export default function QuizPage() {
   const [mode, setMode] = useState<"select" | "quiz" | "qa">("select");
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
   const [quizKey, setQuizKey] = useState(0);
@@ -56,22 +66,35 @@ export default function QuizPage() {
   const [loadingSection, setLoadingSection] = useState<string | null>(null);
   const [qaError, setQaError] = useState<string | null>(null);
 
+  const getQuizByTopic = (topicSlug: string): QuizQuestion[] => {
+    const topic = topics.find((t) => t.slug === topicSlug);
+    if (!topic) return [];
+    return topic.lessons.flatMap((l) => [...l.quiz, ...(extraQuiz[`${topicSlug}/${l.slug}`] || [])]);
+  };
+
+  const getMixedQuiz = (count: number): QuizQuestion[] => {
+    const allQuestions = topics.flatMap((t) =>
+      t.lessons.flatMap((l) => [...l.quiz, ...(extraQuiz[`${t.slug}/${l.slug}`] || [])])
+    );
+    return shuffleArray(allQuestions).slice(0, count);
+  };
+
   const startQuiz = (questions: QuizQuestion[]) => {
     setQuizQuestions(shuffleArray(questions));
     setQuizKey((k) => k + 1);
     setMode("quiz");
   };
 
-  const startQaQuiz = async (sectionKey: string, label: string) => {
+  const startQaQuiz = async (sectionKey: string, qaLabelValue: string) => {
     setLoadingSection(sectionKey);
     setQaError(null);
     try {
-      const m = await import("@/data/question-sections");
+      const m = await getQuestionSectionModule(lang)();
       const section = m.getSection(sectionKey);
       const questions = section?.questions ?? [];
       if (questions.length === 0) throw new Error("Section not found");
       setQaQuestions(questions);
-      setQaLabel(label);
+      setQaLabel(qaLabelValue);
       setMode("qa");
     } catch (err) {
       setQaError(err instanceof Error ? err.message : "Something went wrong");
@@ -95,7 +118,7 @@ export default function QuizPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Quick Test</h1>
           <p className="text-sm text-gray-500">
-            {totalQuestions} quiz &amp; Q&amp;A questions. Test your Python knowledge.
+            {totalQuestions} quiz &amp; Q&amp;A questions. Test your {label} knowledge.
           </p>
         </div>
       </div>
@@ -113,14 +136,14 @@ export default function QuizPage() {
                 <Shuffle size={28} />
               </div>
               <div>
-                <h2 className="text-xl font-bold mb-1">Mixed Python Quiz</h2>
+                <h2 className="text-xl font-bold mb-1">Mixed {label} Quiz</h2>
                 <p className="text-purple-100">20 random questions from all topics. The ultimate challenge!</p>
               </div>
             </div>
           </button>
 
-          {/* Python Syntax Q&A */}
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Python Syntax Q&amp;A</h2>
+          {/* Syntax Q&A */}
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">{label} Syntax Q&amp;A</h2>
           <div className="grid sm:grid-cols-3 gap-4 mb-10">
             {qaSections.map((sec) => (
               <button

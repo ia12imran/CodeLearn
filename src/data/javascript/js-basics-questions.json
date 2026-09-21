@@ -1,0 +1,80 @@
+{
+  "description": "Core JavaScript syntax, variables and data types.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the difference between let, const, and var?",
+      "answer": "const declarations cannot be reassigned, let can be reassigned, and both are block-scoped. var is function-scoped, hoisted with an undefined value, and behaves unpredictably inside loops.\n\ncode:\nlet count = 5;\ncount = 6;\nconst name = 'playwright';\nvar legacy = 'avoid me';\n\nreal example:\nIn Playwright tests, use const for locators like const submitButton = page.getByRole('button', { name: 'Submit' }) and let only for values you genuinely reassign."
+    },
+    {
+      "id": 2,
+      "question": "What are the primitive data types in JavaScript?",
+      "answer": "The seven primitives are string, number, boolean, undefined, null, symbol, and bigint. Everything else, including arrays and functions, is an object.\n\ncode:\nconsole.log(typeof 'text');  // string\nconsole.log(typeof 42);      // number\n\nreal example:\nAn API response field you read in a Jest assertion is always one of these primitives, so checking typeof before comparing avoids surprise failures."
+    },
+    {
+      "id": 3,
+      "question": "What is the difference between null and undefined?",
+      "answer": "undefined means a variable has been declared but not assigned a value. null is an intentional assignment meaning no value. undefined is its own type, while typeof null incorrectly returns object.\n\ncode:\nlet a;\nconsole.log(a);        // undefined\nconst b = null;\nconsole.log(b);        // null\n\nreal example:\nWhen an API omits a field, JSON.parse gives undefined; when it sends a literal null, you get null. Assertions such as expect(res.body.user).toBeNull() rely on telling them apart."
+    },
+    {
+      "id": 4,
+      "question": "What does typeof null return and why is it surprising?",
+      "answer": "typeof null returns the string 'object', which is a long-standing bug from the original implementation. null is not actually an object.\n\ncode:\nconsole.log(typeof null);  // 'object'\n\nreal example:\nDo not trust typeof for null checks; use a strict comparison like value === null instead, which is what you need before reading properties of optional API fields."
+    },
+    {
+      "id": 5,
+      "question": "What is NaN and how do you check for it?",
+      "answer": "NaN means Not a Number and is produced by failed numeric conversions such as Number('abc'). It is the only value not equal to itself, so you must use Number.isNaN() or the global isNaN() to test for it.\n\ncode:\nconsole.log(Number('12px'));  // NaN\nconsole.log(Number.isNaN(Number('12px')));  // true\n\nreal example:\nWhen parsing price text scraped from a page, guard with Number.isNaN so a conversion failure produces a clear assertion message instead of a silent bad compare."
+    },
+    {
+      "id": 6,
+      "question": "What is hoisting in JavaScript?",
+      "answer": "Hoisting moves variable and function declarations to the top of their scope at compile time. var declarations are hoisted with value undefined, while let and const are hoisted into a temporal dead zone and throw if used before the declaration line.\n\ncode:\nconsole.log(x);  // undefined, not an error\nvar x = 5;\n\nreal example:\nIn test files, function declarations like describe and beforeEach hoist cleanly, but always define helper functions before calling them to keep results predictable."
+    },
+    {
+      "id": 7,
+      "question": "Which values are falsy in JavaScript?",
+      "answer": "There are exactly six falsy values: false, 0, '' (empty string), null, undefined, and NaN. Everything else is truthy, including '0' and 'false' as strings.\n\ncode:\nif ('0') { console.log('truthy'); }   // runs\nif (0) { console.log('no'); }         // skipped\n\nreal example:\nA filter like rows.filter(row => row.name) silently drops rows whose name is an empty string, so check for undefined explicitly instead of relying on truthiness."
+    },
+    {
+      "id": 8,
+      "question": "What is the result of typeof [] and typeof function(){}?",
+      "answer": "Both return 'object' and 'function' respectively. Arrays are objects under the hood, and functions are callable objects.\n\ncode:\nconsole.log(typeof []);     // 'object'\nconsole.log(typeof function(){});  // 'function'\n\nreal example:\nUse Array.isArray() instead of typeof when validating JSON payload fields in tests, because typeof would accept any object as an array."
+    },
+    {
+      "id": 9,
+      "question": "What does the Number.isInteger() method do?",
+      "answer": "It returns true only when the argument is a number with no fractional part. Unlike a global check with parseInt, it rejects strings and Infinity.\n\ncode:\nconsole.log(Number.isInteger(42));    // true\nconsole.log(Number.isInteger(42.5));  // false\n\nreal example:\nAfter summing API prices, assert Number.isInteger(total) when the contract promises whole-number values such as item counts in a cart."
+    },
+    {
+      "id": 10,
+      "question": "How do you convert a string to a number safely?",
+      "answer": "Use Number(value) for strict parsing, or parseInt/parseFloat for lenient parsing that tolerates trailing text. Number('12px') gives NaN while parseInt('12px') gives 12.\n\ncode:\nconst a = Number('12.5');\nconst b = parseFloat('12.5 USD');\n\nreal example:\nUI text like '3 items' must be parsed with parseInt before comparing to an integer, or the assertion fails even though the value is correct."
+    },
+    {
+      "id": 11,
+      "question": "Why is 0.1 + 0.2 not equal to 0.3?",
+      "answer": "JavaScript numbers use binary floating point, so decimals cannot always be represented exactly. The sum computes to 0.30000000000000004 instead of 0.3.\n\ncode:\nconsole.log(0.1 + 0.2);  // 0.30000000000000004\n\nreal example:\nWhen asserting totals from a cart API, round first with parseFloat(total.toFixed(2)) or compare with a tolerance like expect(Math.abs(actual - expected)).toBeLessThan(0.001)."
+    },
+    {
+      "id": 12,
+      "question": "What is dynamic typing in JavaScript?",
+      "answer": "A variable can change type at runtime because JavaScript infers type from the assigned value. The same variable can hold a string and then a number without any redeclaration.\n\ncode:\nlet x = 'hello';\nx = 42;\nconsole.log(x);  // 42\n\nreal example:\nAutomation config read from an environment variable arrives as a string even if it looks numeric, so convert it explicitly before using it in a numeric assertion."
+    },
+    {
+      "id": 13,
+      "question": "What naming rules apply to JavaScript variables?",
+      "answer": "Names must start with a letter, underscore, or dollar sign, cannot contain spaces or hyphens, and cannot be reserved words. The convention is camelCase for variables and SCREAMING_SNAKE_CASE for constants.\n\ncode:\nconst firstName = 'Ana';\nconst MAX_TIMEOUT = 5000;\n\nreal example:\nPlaywright locators stored as const variables follow the same naming rules, which keeps test code readable and free of lint errors."
+    },
+    {
+      "id": 14,
+      "question": "What does it mean that const does not freeze an object?",
+      "answer": "const prevents reassignment of the binding, but the object it points to can still be mutated. Properties can be added or changed even on a const object.\n\ncode:\nconst user = { name: 'Ana' };\nuser.name = 'Bob';\nconsole.log(user.name);  // 'Bob'\n\nreal example:\nA const test config object can be mutated by shared helper code, which is why tests must clone it with a spread before changing fields."
+    },
+    {
+      "id": 15,
+      "question": "What is the difference between assigning a primitive and an object to another variable?",
+      "answer": "Primitives are copied by value, so the two variables are independent. Objects are assigned by reference, so both variables point to the same object and mutations are shared.\n\ncode:\nlet a = 5;\nlet b = a;\nb = 6;\nconsole.log(a);  // 5\nconst obj = { n: 1 };\nconst ref = obj;\nref.n = 2;\nconsole.log(obj.n);  // 2\n\nreal example:\nBuilding test data with const payload = basePayload then editing fields mutates the shared base for every test, causing order-dependent flaky tests."
+    }
+  ]
+}

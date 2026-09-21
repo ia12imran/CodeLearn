@@ -1,0 +1,85 @@
+{
+  "description": "Arrays, map/filter/reduce and the key methods.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is the difference between push and unshift?",
+      "answer": "push adds one or more elements to the end of an array, while unshift adds them to the beginning. Both mutate the original array and return the new length.\n\ncode:\nconst arr = [2];\narr.push(3);\narr.unshift(1);\nconsole.log(arr);  // [1, 2, 3]\n\nreal example:\nBuilding an ordered list of test steps by appending with push keeps the execution order natural and easy to assert."
+    },
+    {
+      "id": 2,
+      "question": "What is the difference between pop and shift?",
+      "answer": "pop removes and returns the last element, and shift removes and returns the first element. Both mutate the array in place.\n\ncode:\nconst arr = [1, 2, 3];\nconsole.log(arr.pop());   // 3\nconsole.log(arr.shift()); // 1\nconsole.log(arr);         // [2]\n\nreal example:\nMaintaining an undo stack in test helpers with pop mirrors a last-in-first-out history of UI actions."
+    },
+    {
+      "id": 3,
+      "question": "What does splice do and how is it different from slice?",
+      "answer": "splice mutates the array, adding or removing elements at an index, and returns the removed elements. slice returns a new non-mutating copy of a range.\n\ncode:\nconst a = [1, 2, 3, 4];\nconsole.log(a.splice(1, 2));  // [2, 3]\nconsole.log(a);               // [1, 4]\nconst b = [1, 2, 3, 4];\nconsole.log(b.slice(1, 3));   // [2, 3]\nconsole.log(b);               // [1, 2, 3, 4]\n\nreal example:\nRemoving a test item from a shared fixture array uses splice, while previewing a subset safely uses slice."
+    },
+    {
+      "id": 4,
+      "question": "How do you copy an array without sharing a reference?",
+      "answer": "Use the spread operator [...arr] or slice(). Both create a new array so later mutations of the copy do not affect the original.\n\ncode:\nconst original = [1, 2];\nconst copy = [...original];\ncopy.push(3);\nconsole.log(original);  // [1, 2]\n\nreal example:\nSorting a locator result set with [...items].sort() keeps the original DOM order intact for other assertions."
+    },
+    {
+      "id": 5,
+      "question": "What does map return and when should you use it?",
+      "answer": "map transforms every element with a callback and returns a new array of the same length. Use it when you need the transformed result, not just side effects.\n\ncode:\nconst ids = ['b1', 'b2'].map(id => `#${id}`);\nconsole.log(ids);  // ['#b1', '#b2']\n\nreal example:\nMapping API user objects to names or ids turns a bulk response into an assertable list of string values."
+    },
+    {
+      "id": 6,
+      "question": "What does filter return and how do you chain it with map?",
+      "answer": "filter returns a new array with only elements where the callback returns true, and it can be chained with map to select then transform.\n\ncode:\nconst users = [{ name: 'Ana', active: true }, { name: 'Bob', active: false }];\nconst names = users.filter(u => u.active).map(u => u.name);\nconsole.log(names);  // ['Ana']\n\nreal example:\nSelecting only enabled test users from a fixture list before running the deposit check avoids false failures on disabled accounts."
+    },
+    {
+      "id": 7,
+      "question": "What is the difference between find and filter?",
+      "answer": "find returns the first element matching the predicate, or undefined when none match. filter returns an array of all matching elements.\n\ncode:\nconst nums = [4, 7, 9];\nconsole.log(nums.find(n => n > 5));  // 7\nconsole.log(nums.filter(n => n > 5)); // [7, 9]\n\nreal example:\nLooking up a single user by id with find, then asserting properties on it, is the standard API response pattern."
+    },
+    {
+      "id": 8,
+      "question": "What do some and every return?",
+      "answer": "some returns true if at least one element passes the predicate, and every returns true only if all elements pass. Both short-circuit early and return booleans.\n\ncode:\nconst scores = [90, 99, 100];\nconsole.log(scores.some(s => s < 95));   // true\nconsole.log(scores.every(s => s >= 90));  // true\n\nreal example:\nAudit style assertions like expect(rows.every(r => r.invoice)).toBe(true) verify a whole table column in one expression."
+    },
+    {
+      "id": 9,
+      "question": "What does reduce do and how does its accumulator work?",
+      "answer": "reduce folds an array into a single value using a callback and an initial accumulator. The callback's return becomes the accumulator for the next step.\n\ncode:\nconst total = [10, 20, 5].reduce((sum, n) => sum + n, 0);\nconsole.log(total);  // 35\n\nreal example:\nCounting test results by status with reduce builds an object like { passed: 12, failed: 2 } for the summary report."
+    },
+    {
+      "id": 10,
+      "question": "Why is the initial value important in reduce?",
+      "answer": "Without an initial value, reduce uses the first element as the accumulator and starts from the second element. For some callbacks, such as summing with addition, the result can differ or error on empty arrays.\n\ncode:\nconsole.log([].reduce((a, b) => a + b));  // TypeError: empty array\nconsole.log([] .reduce((a, b) => a + b, 0));  // 0\n\nreal example:\nAlways pass 0 or an expected object as the seed so group-by counters behave identically when a query returns zero rows."
+    },
+    {
+      "id": 11,
+      "question": "What is the difference between forEach and map?",
+      "answer": "forEach runs a callback for each element and returns undefined, while map builds and returns a new array of callback results. Use map when you need the result.\n\ncode:\nconst result = [1, 2].forEach(n => n * 2);\nconsole.log(result);  // undefined\n\nreal example:\nLogging each request from a list is a forEach job, but producing an array of request bodies for assertions needs map."
+    },
+    {
+      "id": 12,
+      "question": "How does sort behave by default and how do you sort numbers?",
+      "answer": "Default sort converts elements to strings and sorts lexicographically, so 10 comes before 2. Numeric sorting requires a comparator like (a, b) => a - b.\n\ncode:\nconsole.log([10, 2, 1].sort());             // [1, 10, 2]\nconsole.log([10, 2, 1].sort((a, b) => a - b)); // [1, 2, 10]\n\nreal example:\nSorting API pagination numbers or timestamps needs an explicit comparator, otherwise assertions on ordering fail mysteriously."
+    },
+    {
+      "id": 13,
+      "question": "What does includes do on an array?",
+      "answer": "includes checks whether an array contains a given primitive value using strict equality and returns a boolean.\n\ncode:\nconsole.log(['admin', 'editor'].includes('admin'));  // true\n\nreal example:\nAsserting that a permissions array returned by an API contains the expected role is a one-line role-based test."
+    },
+    {
+      "id": 14,
+      "question": "What is the difference between indexOf and findIndex?",
+      "answer": "indexOf finds the position of a primitive value by equality, while findIndex finds the position of the first element matching a predicate function. Both return -1 when nothing matches.\n\ncode:\nconst items = [{ id: 3 }, { id: 7 }];\nconsole.log(items.findIndex(x => x.id === 7));  // 1\n\nreal example:\nUpdating or removing the row that matches a predicate requires its index, which findIndex supplies."
+    },
+    {
+      "id": 15,
+      "question": "What does flat do and what does it mean to flatten nested arrays?",
+      "answer": "flat concatenates nested arrays up to a given depth into a single-level array, returning a new array without mutating the input.\n\ncode:\nconsole.log([[1, 2], [3, [4]]].flat(2));  // [1, 2, 3, 4]\n\nreal example:\nFlattening paginated API responses into one flat list of records makes counting total items across pages trivial."
+    },
+    {
+      "id": 16,
+      "question": "How do you check if an array is empty before processing it?",
+      "answer": "Compare against .length or use the truthiness of the array itself, since an empty array is truthy but has length 0.\n\ncode:\nconst rows = [];\nif (rows.length === 0) console.log('no data');\n\nreal example:\nGuard a for...of over locator results with a length check so a missing table does not silently promise and then fail later assertions."
+    }
+  ]
+}

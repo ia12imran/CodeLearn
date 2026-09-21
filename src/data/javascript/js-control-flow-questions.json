@@ -1,0 +1,80 @@
+{
+  "description": "Conditionals and loops for test logic.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "How does an if / else if / else chain decide which branch runs?",
+      "answer": "JavaScript evaluates conditions top to bottom and runs the first block whose condition is truthy. Once one branch runs, the rest of the chain is skipped, and if none match, the else block runs.\n\ncode:\nconst status = 200;\nif (status >= 500) console.log('server error');\nelse if (status === 404) console.log('not found');\nelse console.log('ok');\n\nreal example:\nMapping HTTP status codes to readable failure messages in API tests keeps assertion output meaningful instead of a raw number."
+    },
+    {
+      "id": 2,
+      "question": "What is the ternary operator and when should you use it?",
+      "answer": "The ternary operator condition ? a : b evaluates to a when the condition is truthy and b otherwise. Use it for short assignments, but prefer if/else when the logic is longer than one line.\n\ncode:\nconst expected = page.isVisible() ? 'visible' : 'hidden';\n\nreal example:\nBuilding per-browser config with const headed = process.env.CI ? false : true keeps one-liner branching readable inside Playwright projects."
+    },
+    {
+      "id": 3,
+      "question": "What happens when a switch case block has no break statement?",
+      "answer": "Execution falls through to the next case until a break or the end of the switch is reached, even if the later conditions do not match.\n\ncode:\nconst x = 2;\nswitch (x) {\n  case 1: console.log('one');\n  case 2: console.log('two');\n  default: console.log('fallthrough');\n}\n\nreal example:\nForgetting break in a browser-detection switch in shared test setup runs every case after the match, causing double execution and flaky state."
+    },
+    {
+      "id": 4,
+      "question": "How does the for loop with let differ from one with var in terms of iteration variables?",
+      "answer": "The let keyword creates a fresh binding for each iteration, so callbacks capture each loop value correctly. With var there is one shared binding, so callbacks see the final value.\n\ncode:\nfor (let i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 0);  // 0 1 2\n}\nfor (var j = 0; j < 3; j++) {\n  setTimeout(() => console.log(j), 0);  // 3 3 3\n}\n\nreal example:\nRegistering multiple page.waitForEvent callbacks in a loop requires let so each callback checks the correct network request."
+    },
+    {
+      "id": 5,
+      "question": "What is the purpose of break and continue in loops?",
+      "answer": "break exits the loop immediately, while continue skips the rest of the current iteration and moves to the next one.\n\ncode:\nfor (const n of [1, 2, 3, 4]) {\n  if (n === 2) continue;\n  if (n === 4) break;\n  console.log(n);  // 1 3\n}\n\nreal example:\nIterating test users you can skip disabled fixtures with continue and stop scanning once the target user is found with break."
+    },
+    {
+      "id": 6,
+      "question": "What is the difference between for...of and for...in?",
+      "answer": "for...of iterates over values of arrays, strings, and other iterables. for...in iterates over enumerable property keys of an object, and it is not meant for array iteration.\n\ncode:\nconst arr = ['a', 'b'];\nfor (const v of arr) console.log(v);            // a b\nconst obj = { a: 1, b: 2 };\nfor (const k in obj) console.log(k, obj[k]);    // a 1 b 2\n\nreal example:\nUse for...of to walk page locator results from page.locator('.row').all() so each element is handled by value, never by accidental property key."
+    },
+    {
+      "id": 7,
+      "question": "How many times does a do...while loop run at minimum?",
+      "answer": "A do...while loop always runs its body at least once because the condition is checked after the first iteration.\n\ncode:\nlet i = 0;\ndo {\n  console.log(i);\n  i++;\n} while (i < 3);\n\nreal example:\nAccepting at least one click attempt in a UI before checking a condition, such as dismissing a welcome modal, matches the guarantee of running once."
+    },
+    {
+      "id": 8,
+      "question": "Why is checking if (count) risky when count could be 0?",
+      "answer": "Zero is falsy, so if (count) treats a legitimate zero as an empty or missing value. The block is skipped even though 0 might be a valid state.\n\ncode:\nconst cartCount = 0;\nif (cartCount) {\n  console.log('has items');\n} else {\n  console.log('no items');  // runs\n}\n\nreal example:\nAsserting cart behavior with if (count) would skip zero-item scenarios; compare explicitly with count === 0 when zero matters."
+    },
+    {
+      "id": 9,
+      "question": "What does a while loop do when its condition never becomes falsy?",
+      "answer": "It loops forever, which freezes or crashes the test process. The condition must eventually evaluate to false, or you need an explicit break.\n\ncode:\n// let i = 0;\n// while (true) { i++; }  // infinite loop\n\nreal example:\nCustom wait loops such as waiting for an element to disappear must include a timeout and break, otherwise a missing element hangs the suite."
+    },
+    {
+      "id": 10,
+      "question": "How do you loop over both keys and values of an object?",
+      "answer": "Use Object.entries() to get an array of [key, value] pairs, then destructure them in a for...of loop.\n\ncode:\nconst config = { retries: 2, timeout: 5000 };\nfor (const [key, value] of Object.entries(config)) {\n  console.log(key, value);\n}\n\nreal example:\nPrinting or asserting every entry in an API payload before sending it keeps dynamic request data visible in test logs."
+    },
+    {
+      "id": 11,
+      "question": "What is short-circuit evaluation in conditionals?",
+      "answer": "In an && chain, evaluation stops at the first falsy value; in an || chain, it stops at the first truthy value. Later branches never run once the result is decided.\n\ncode:\nconst user = login() && fetchProfile();\nconst fallback = env.RUN || 'local';\n\nreal example:\nGuarding with element && element.textContent avoids errors on null locator results while making sure the text extraction only runs when the element exists."
+    },
+    {
+      "id": 12,
+      "question": "What is the purpose of labeled statements with break?",
+      "answer": "A label renames a loop so break and continue can target an outer loop instead of only the innermost one.\n\ncode:\nouter: for (const a of [1, 2]) {\n  for (const b of [1, 2]) {\n    if (b === 2) break outer;\n    console.log(a, b);\n  }\n}\n\nreal example:\nScanning a matrix of test environments for the first failing combination and stopping all looping is cleaner with a named outer label."
+    },
+    {
+      "id": 13,
+      "question": "How do you iterate over the characters of a string?",
+      "answer": "A for...of loop visits each character by value, including emoji, while indexing by position can split surrogate pairs.\n\ncode:\nfor (const ch of 'abc') {\n  console.log(ch);  // a b c\n}\n\nreal example:\nValidating that every character of an order code is a digit uses a for...of loop over the code string before asserting against the alphanumeric rule."
+    },
+    {
+      "id": 14,
+      "question": "What is the difference between a for loop and forEach on an array?",
+      "answer": "The for loop can use break and continue and control the index. forEach calls a callback for every element and cannot be stopped early except by throwing.\n\ncode:\nfor (const [i, item] of arr.entries()) {\n  if (i > 2) break;\n}\narr.forEach((item, i) => console.log(i, item));\n\nreal example:\nUse a for...of loop when scanning locator lists and stopping on the first failing row; forEach would need an exception to stop."
+    },
+    {
+      "id": 15,
+      "question": "What does an empty condition in a for loop mean such as for (;;)?",
+      "answer": "All three clauses are optional, so for (;;) has an always-true condition and loops forever until a break, return, or exception exits it.\n\ncode:\nlet i = 0;\nfor (;;) {\n  i++;\n  if (i === 3) break;\n}\n\nreal example:\nRetry helpers sometimes use for (;;) as a deliberate infinite loop guarded by a count limit and break, making the exit logic explicit."
+    }
+  ]
+}

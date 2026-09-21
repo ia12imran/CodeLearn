@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { topics, getNextLesson } from "@/data/topics";
-import { extraQuiz } from "@/data/extra-quiz";
+import { getTopics, getTopicBySlug, getLessonBySlug, getNextLesson, getExtraQuiz, getQuestionSectionModule, isLanguage, Language } from "@/data/index";
 import { markLessonComplete, isLessonComplete } from "@/lib/progress";
 import Sidebar from "@/components/Sidebar";
 import Quiz from "@/components/Quiz";
@@ -27,47 +25,8 @@ function EditorPlaceholder({ height }: { height: number }) {
   );
 }
 
-export default function LearnPage() {
-  const params = useParams();
-  const topicSlug = (params.slug as string) || "";
-  const lessonSlug = (params.lesson as string) || "";
-
-  const topic = topics.find((t) => t.slug === topicSlug);
-  const lesson = topic?.lessons.find((l) => l.slug === lessonSlug);
-
-  if (!topic || !lesson) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Lesson not found</h2>
-          <Link href="/" className="text-blue-600 hover:underline">
-            Go home
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  return <LessonView key={`${topicSlug}/${lessonSlug}`} topicSlug={topicSlug} lessonSlug={lessonSlug} />;
-}
-
-function LessonView({ topicSlug, lessonSlug }: { topicSlug: string; lessonSlug: string }) {
-  const topic = topics.find((t) => t.slug === topicSlug)!;
-  const lesson = topic.lessons.find((l) => l.slug === lessonSlug)!;
-  const [activeTab, setActiveTab] = useState<"learn" | "practice" | "quiz">("learn");
-  const [completed, setCompleted] = useState(false);
-  const [quizScore, setQuizScore] = useState<number | null>(null);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- read persisted progress from localStorage once on mount
-    setCompleted(isLessonComplete(topicSlug, lessonSlug));
-  }, [topicSlug, lessonSlug]);
-
-  const next = getNextLesson(topicSlug, lessonSlug);
-  const nextHref = next ? `/learn/${next.topicSlug}/${next.lessonSlug}` : null;
-  const lessonQuiz = [...(lesson.quiz || []), ...(extraQuiz[`${topicSlug}/${lessonSlug}`] || [])];
-
-  const qaSectionKeyMap: Record<string, string> = {
+const qaSectionKeyMap: Record<Language, Record<string, string>> = {
+  python: {
     "syntax/basic-syntax": "basic_syntax",
     "syntax/variables": "variables",
     "syntax/data-types": "data_types",
@@ -89,8 +48,104 @@ function LessonView({ topicSlug, lessonSlug }: { topicSlug: string; lessonSlug: 
     "oop/inheritance": "oop_inheritance",
     "error-handling/try-except": "error_handling",
     "file-handling/file-operations": "file_handling",
-  };
-  const qaSectionKey = qaSectionKeyMap[`${topicSlug}/${lessonSlug}`] || null;
+  },
+  javascript: {
+    "basics/variables": "js_basics",
+    "basics/data-types": "js_basics",
+    "basics/operators": "js_operators",
+    "basics/type-conversions": "js_operators",
+    "control-flow/if-else": "js_control_flow",
+    "control-flow/loops-iteration": "js_control_flow",
+    "strings/string-basics": "js_strings",
+    "strings/string-methods": "js_strings",
+    "strings/template-literals": "js_strings",
+    "functions/function-basics": "js_functions",
+    "functions/arrow-functions": "js_functions",
+    "functions/lexical-scope-closures": "js_functions",
+    "functions/callbacks": "js_functions",
+    "arrays/array-basics": "js_arrays",
+    "arrays/advanced-arrays": "js_arrays",
+    "arrays/reduce": "js_arrays",
+    "objects/object-basics": "js_objects",
+    "objects/destructuring": "js_objects",
+    "objects/optional-chaining-nullish": "js_objects",
+    "objects/map-set": "js_map_set",
+    "objects/arrays-of-objects": "js_objects",
+    "async/async-basics": "js_async",
+    "async/promises": "js_async",
+    "async/async-await": "js_async",
+    "async/fetch-apis": "js_json_fetch",
+    "async/event-loop": "js_async",
+    "classes/class-basics": "js_classes",
+    "classes/class-inheritance": "js_classes",
+    "classes/prototypal-inheritance": "js_classes",
+    "classes/json": "js_json_fetch",
+    "dom/dom-basics": "js_dom",
+    "dom/dom-selection": "js_dom",
+    "dom/dom-manipulation": "js_dom",
+    "dom/events": "js_dom",
+    "dom/forms": "js_dom",
+    "dom/window-object": "js_dom",
+    "modules/modules": "js_modules",
+    "modules/dynamic-imports": "js_modules",
+    "modules/package-managers": "js_modules",
+    "modules/module-bundlers": "js_modules",
+    "modules/ecmascript": "js_modules",
+    "advanced/regex-intro": "js_regex",
+    "advanced/generators": "js_regex",
+    "advanced/legacy-var": "js_interview",
+    "advanced/legacy-topics": "js_interview",
+    "advanced/interview-prep": "js_interview",
+  },
+};
+
+export default function LearnPageClient({ lang, slug, lesson }: { lang: string; slug: string; lesson: string }) {
+  const language: Language = isLanguage(lang) ? lang : "python";
+
+  const topic = getTopicBySlug(language, slug);
+  const foundLesson = getLessonBySlug(language, slug, lesson);
+
+  if (!topic || !foundLesson) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Lesson not found</h2>
+          <Link href={`/${language}`} className="text-blue-600 hover:underline">
+            Go home
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <LessonView
+      key={`${language}/${slug}/${lesson}`}
+      language={language}
+      topicSlug={slug}
+      lessonSlug={lesson}
+    />
+  );
+}
+
+function LessonView({ language, topicSlug, lessonSlug }: { language: Language; topicSlug: string; lessonSlug: string }) {
+  const topics = getTopics(language);
+  const topic = getTopicBySlug(language, topicSlug)!;
+  const lesson = getLessonBySlug(language, topicSlug, lessonSlug)!;
+  const [activeTab, setActiveTab] = useState<"learn" | "practice" | "quiz">("learn");
+  const [completed, setCompleted] = useState(false);
+  const [quizScore, setQuizScore] = useState<number | null>(null);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read persisted progress from localStorage once on mount
+    setCompleted(isLessonComplete(language, topicSlug, lessonSlug));
+  }, [language, topicSlug, lessonSlug]);
+
+  const next = getNextLesson(language, topicSlug, lessonSlug);
+  const nextHref = next ? `/${language}/learn/${next.topicSlug}/${next.lessonSlug}` : null;
+  const lessonQuiz = [...(lesson.quiz || []), ...(getExtraQuiz(language)[`${topicSlug}/${lessonSlug}`] || [])];
+
+  const qaSectionKey = qaSectionKeyMap[language][`${topicSlug}/${lessonSlug}`] || null;
 
   const [qaQuestions, setQaQuestions] = useState<QAQuestion[]>([]);
   const [qaLoading, setQaLoading] = useState(Boolean(qaSectionKey));
@@ -98,9 +153,9 @@ function LessonView({ topicSlug, lessonSlug }: { topicSlug: string; lessonSlug: 
   useEffect(() => {
     if (!qaSectionKey) return;
     let cancelled = false;
-    import("@/data/question-sections")
+    getQuestionSectionModule(language)()
       .then((m) => {
-        const section = m.getSection(qaSectionKey!);
+        const section = m.getSection(qaSectionKey);
         if (!cancelled) setQaQuestions(section?.questions ?? []);
       })
       .catch(() => {
@@ -112,24 +167,24 @@ function LessonView({ topicSlug, lessonSlug }: { topicSlug: string; lessonSlug: 
     return () => {
       cancelled = true;
     };
-  }, [qaSectionKey]);
+  }, [language, qaSectionKey]);
 
   const handleMarkComplete = () => {
-    markLessonComplete(topicSlug, lessonSlug);
+    markLessonComplete(language, topicSlug, lessonSlug);
     setCompleted(true);
   };
 
   const handleQuizComplete = (score: number) => {
     setQuizScore(score);
     if (score >= 70) {
-      markLessonComplete(topicSlug, lessonSlug);
+      markLessonComplete(language, topicSlug, lessonSlug);
       setCompleted(true);
     }
   };
 
   const lessonIndex = topic.lessons.findIndex((l) => l.slug === lessonSlug);
   const prevLesson = lessonIndex > 0 ? topic.lessons[lessonIndex - 1] : null;
-  const prevHref = prevLesson ? `/learn/${topicSlug}/${prevLesson.slug}` : null;
+  const prevHref = prevLesson ? `/${language}/learn/${topicSlug}/${prevLesson.slug}` : null;
 
   const renderedContent = lesson.content
     .replace(/```(\w+)?\n/g, "")
@@ -138,7 +193,7 @@ function LessonView({ topicSlug, lessonSlug }: { topicSlug: string; lessonSlug: 
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)]">
-      <Sidebar currentTopic={topicSlug} currentLesson={lessonSlug} />
+      <Sidebar currentTopic={topicSlug} currentLesson={lessonSlug} language={language} />
 
       <div className="flex-1 min-w-0">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
@@ -230,7 +285,7 @@ function LessonView({ topicSlug, lessonSlug }: { topicSlug: string; lessonSlug: 
               {/* Code example */}
               <h2 className="text-xl font-semibold text-gray-900 mb-3">Try It Yourself</h2>
               <ClientOnly fallback={<EditorPlaceholder height={350} />}>
-                <CodeEditor key={`learn-${lessonSlug}`} initialCode={lesson.codeExample} height="350px" />
+                <CodeEditor key={`learn-${lessonSlug}`} initialCode={lesson.codeExample} height="350px" language={language} />
               </ClientOnly>
 
               {/* Mark complete */}
@@ -272,14 +327,14 @@ function LessonView({ topicSlug, lessonSlug }: { topicSlug: string; lessonSlug: 
                 <div className="mb-10">
                   <h2 className="text-lg font-semibold text-gray-900 mb-3">Practice Questions & Answers</h2>
                   <p className="text-gray-500 mb-6">
-                    Answer each question by writing and running your Python code. Use Previous/Next to navigate.
+                    Answer each question by writing and running your code. Use Previous/Next to navigate.
                   </p>
                   {qaLoading ? (
                     <div className="bg-white border border-gray-200 rounded-2xl p-10 text-center text-gray-500">
                       Loading questions...
                     </div>
                   ) : qaQuestions.length > 0 ? (
-                    <PracticeQA questions={qaQuestions} />
+                    <PracticeQA questions={qaQuestions} language={language} />
                   ) : (
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-amber-700 text-sm">
                       Practice questions are temporarily unavailable. Please try again later.

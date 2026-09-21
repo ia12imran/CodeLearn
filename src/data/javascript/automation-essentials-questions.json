@@ -1,0 +1,364 @@
+{
+  "automation_javascript_essentials": [
+    {
+      "id": 1,
+      "priority": "MUST KNOW",
+      "topic": "string includes",
+      "question": "How do you check if a string contains a substring in JavaScript? What does 'Welcome' include?",
+      "simple_solution": "const message = 'Welcome to the dashboard';\nconsole.log(message.includes('dashboard'));\nconsole.log(message.includes('Dashboard'));\nconsole.log(message.toLowerCase().includes('dashboard'));",
+      "why_for_automation": "Success and error messages retrieved from the UI are often checked with includes. Case sensitivity mistakes are the classic cause of flaky message assertions.",
+      "key_takeaway": "Use String.prototype.includes for substring checks, and normalize case before asserting if needed."
+    },
+    {
+      "id": 2,
+      "priority": "MUST KNOW",
+      "topic": "string trim",
+      "question": "Why should you trim text read from the UI? Show how trim, trimStart, and trimEnd behave.",
+      "simple_solution": "const raw = '  Mr. Smith  ';\nconsole.log('[' + raw.trim() + ']');\nconsole.log('[' + raw.trimStart() + ']');\nconsole.log('[' + raw.trimEnd() + ']');",
+      "why_for_automation": "Web text often has hidden whitespace from styling and layout. Trimming before comparison stops false assertion failures that have nothing to do with the product.",
+      "key_takeaway": "Trim extracted element text before asserting on it."
+    },
+    {
+      "id": 3,
+      "priority": "MUST KNOW",
+      "topic": "string replace",
+      "question": "How does String.prototype.replace work, and when would you need a global regex replace?",
+      "simple_solution": "const path = 'users/42/transactions/42';\nconsole.log(path.replace('42', 'X'));\nconsole.log(path.replace(/42/g, 'X'));",
+      "why_for_automation": "Replacing IDs and placeholders in dynamic URLs and JSON templates is routine in API testing. A non-global replace only swaps the first occurrence, which is easy to forget.",
+      "key_takeaway": "Use a global regex like /42/g to replace every occurrence."
+    },
+    {
+      "id": 4,
+      "priority": "MUST KNOW",
+      "topic": "string split",
+      "question": "How does split work? Convert 'a,b,c' into an array and back into a string.",
+      "simple_solution": "const csv = 'red,green,blue';\nconst colors = csv.split(',');\nconsole.log(colors.join(' | '));\nconsole.log(colors.length);",
+      "why_for_automation": "Parsing CSV exports, tag lists, and delimited data from the UI starts with split. Knowing the reshape with join lets you normalize formats before asserting.",
+      "key_takeaway": "split turns a string into an array and join turns an array back into a string."
+    },
+    {
+      "id": 5,
+      "priority": "MUST KNOW",
+      "topic": "template literals",
+      "question": "How do you build dynamic strings for URLs and assertions without messy concatenation?",
+      "simple_solution": "const base = 'https://api.example.com';\nconst id = 42;\nconst url = base + '/users/' + id + '/profile';\nconsole.log(url);\nconst greeting = 'Hello, user ' + id + '!';\nconsole.log(greeting);",
+      "why_for_automation": "Dynamic selectors, URLs, and expected messages are built from runtime values in nearly every test. Readable strings keep failing assertions easy to diagnose.",
+      "key_takeaway": "Compose dynamic strings by concatenating a template with the changing values."
+    },
+    {
+      "id": 6,
+      "priority": "MUST KNOW",
+      "topic": "destructuring API responses",
+      "question": "How do you destructure fields from an API response object? What happens if a field is missing?",
+      "simple_solution": "const response = { status: 200, body: { id: 7, name: 'Ada', active: true } };\nconst { status, body } = response;\nconst { name } = body;\nconsole.log(status);\nconsole.log(name);",
+      "why_for_automation": "Test code pulls specific fields out of JSON responses to use in assertions and setup data. Destructuring keeps those reads concise and intention-revealing.",
+      "key_takeaway": "Destructuring lets you pull response fields into named variables in one line."
+    },
+    {
+      "id": 7,
+      "priority": "MUST KNOW",
+      "topic": "arrays of objects",
+      "question": "How do you find a specific user object in an array of users? Show find and filter in action.",
+      "simple_solution": "const users = [\n  { id: 1, name: 'Sam' },\n  { id: 2, name: 'Kim' },\n  { id: 3, name: 'Jo' }\n];\nconst target = users.find(function (u) {\n  return u.id === 2;\n});\nconst startingWithK = users.filter(function (u) {\n  return u.name.startsWith('K');\n});\nconsole.log(target.name);\nconsole.log(startingWithK.length);",
+      "why_for_automation": "Test data sets are arrays of objects, and finding the record for a given id is constant work. find returns one object while filter returns all matches.",
+      "key_takeaway": "find returns the first matching object; filter returns an array of every match."
+    },
+    {
+      "id": 8,
+      "priority": "MUST KNOW",
+      "topic": "fetch and status codes",
+      "question": "How do you make an HTTP request with fetch and assert the status code?",
+      "simple_solution": "async function check() {\n  const res = await fetch('https://jsonplaceholder.typicode.com/users/1');\n  console.log('status ' + res.status);\n  if (res.ok) {\n    const data = await res.json();\n    console.log(data.name);\n  } else {\n    console.log('request failed');\n  }\n}\ncheck();",
+      "why_for_automation": "Asserting exact status codes (200, 201, 404) before trusting response bodies is the backbone of API contract checks. Note fetch only rejects on network errors, not on HTTP error statuses.",
+      "key_takeaway": "Check res.status explicitly because fetch resolves even for 4xx and 5xx responses."
+    },
+    {
+      "id": 9,
+      "priority": "MUST KNOW",
+      "topic": "async test helpers",
+      "question": "Why do test helpers that retry or wait need to be async functions? Write a simple async wait helper.",
+      "simple_solution": "function delay(ms) {\n  return new Promise(function (resolve) {\n    setTimeout(resolve, ms);\n  });\n}\nasync function waitFor(condition, timeoutMs) {\n  const start = Date.now();\n  while (Date.now() - start < timeoutMs) {\n    if (condition()) {\n      return true;\n    }\n    await delay(50);\n  }\n  return false;\n}\nasync function run() {\n  const ok = await waitFor(function () {\n    return true;\n  }, 1000);\n  console.log('condition met: ' + ok);\n}\nrun();",
+      "why_for_automation": "Elements and APIs appear asynchronously, so helpers must await between retries instead of blocking the thread. A polling wait helper models how real frameworks like Playwright behave.",
+      "key_takeaway": "Asynchronous waits poll an external condition on the event loop rather than sleeping blindly."
+    },
+    {
+      "id": 10,
+      "priority": "MUST KNOW",
+      "topic": "element waits",
+      "question": "What is 'wait for element' conceptually and how would you implement a simple one?",
+      "simple_solution": "async function waitForText(query, target, timeoutMs) {\n  const start = Date.now();\n  while (Date.now() - start < timeoutMs) {\n    const el = document.querySelector(query);\n    if (el && el.textContent.includes(target)) {\n      return true;\n    }\n    await new Promise(function (r) {\n      setTimeout(r, 50);\n    });\n  }\n  return false;\n}\nwaitForText('h1', 'Done').then(function (ok) {\n  console.log('element reached expected state: ' + ok);\n});",
+      "why_for_automation": "Page loads and async updates race with assertion time, so tests must poll for a condition instead of asserting immediately. This mirrors the auto-waiting built into modern frameworks.",
+      "key_takeaway": "Elastic waits poll until a condition holds rather than failing on the first attempt."
+    },
+    {
+      "id": 11,
+      "priority": "MUST KNOW",
+      "topic": "selecting elements",
+      "question": "Write a reusable function that returns one element or null, accepting either an id or a CSS selector.",
+      "simple_solution": "function getEl(selector) {\n  if (selector.startsWith('#')) {\n    return document.getElementById(selector.slice(1));\n  }\n  return document.querySelector(selector);\n}\ndocument.body.innerHTML = '<div id=\"app\"></div><p class=\"note\">x</p>';\nconsole.log(getEl('#app') !== null);\nconsole.log(getEl('.note') !== null);\nconsole.log(getEl('.missing') === null);",
+      "why_for_automation": "Element location is the first step of any UI action. A single helper centralizes how selectors are resolved so all tests follow the same convention.",
+      "key_takeaway": "Wrap DOM lookup in a helper so selectors are resolved consistently everywhere."
+    },
+    {
+      "id": 12,
+      "priority": "MUST KNOW",
+      "topic": "error handling try/catch",
+      "question": "How do you make a test fail with a clear message when something goes wrong inside an async step?",
+      "simple_solution": "async function riskyStep() {\n  throw new Error('element not clickable');\n}\nasync function run() {\n  try {\n    await riskyStep();\n  } catch (err) {\n    console.log('test step failed with: ' + err.message);\n  }\n}\nrun();",
+      "why_for_automation": "Awaiting inside try/catch captures the real error and lets tests log a human-readable failure instead of a raw stack trace. Good messages make failing suites debuggable quickly.",
+      "key_takeaway": "Wrap each async action in try/catch so failures surface with an actionable message."
+    },
+    {
+      "id": 13,
+      "priority": "HIGH VALUE",
+      "topic": "forms and dropdown text",
+      "question": "How would you get the visible text of the selected option in a select element?",
+      "simple_solution": "document.body.innerHTML = '<select id=\"country\">' +\n  '<option selected value=\"us\">United States</option>' +\n  '<option value=\"ca\">Canada</option></select>';\nconst select = document.getElementById('country');\nconst selected = select.options[select.selectedIndex];\nconsole.log(selected.textContent);\nconsole.log(selected.value);",
+      "why_for_automation": "Tests validate that dropdowns show the expected label, not just the value attribute. Reading selectedOptions plus textContent is the reliable way to assert the visible choice.",
+      "key_takeaway": "Read selectedOptions[0].textContent to assert on visible dropdown labels."
+    },
+    {
+      "id": 14,
+      "priority": "HIGH VALUE",
+      "topic": "JSON payload building",
+      "question": "How do you build a JSON payload for a POST request and dynamically change a field per test?",
+      "simple_solution": "function buildUser(overrides) {\n  const base = { name: 'Default', role: 'admin', active: true };\n  return Object.assign({}, base, overrides);\n}\nconst payload = buildUser({ name: 'Zoe', active: false });\nconsole.log(JSON.stringify(payload));",
+      "why_for_automation": "Test fixtures need small variations for different scenarios, and spreading defaults with overrides avoids repeating whole objects. Later assertions can then compare the JSON body exactly.",
+      "key_takeaway": "Merge default payload fields with per-test overrides to keep request bodies DRY."
+    },
+    {
+      "id": 15,
+      "priority": "HIGH VALUE",
+      "topic": "regex email validation",
+      "question": "Write a simple regex to validate an email address and explain a common test-value pitfall.",
+      "simple_solution": "const pattern = /^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/;\nconsole.log(pattern.test('ada@lovelace.dev'));\nconsole.log(pattern.test('not-an-email'));",
+      "why_for_automation": "Form validation suites need an agreed regex so tests assert against the same rule the app uses. Keep the regex simple; checking the format is enough, real delivery is webmail's job.",
+      "key_takeaway": "Use a pragmatic email regex that catches obvious invalid inputs without over-restricting."
+    },
+    {
+      "id": 16,
+      "priority": "HIGH VALUE",
+      "topic": "regex date format",
+      "question": "How do you validate and normalize a date string like YYYY-MM-DD?",
+      "simple_solution": "const raw = '2026-09-21';\nconst parts = raw.split('-');\nconst valid = parts.length === 3 && !isNaN(Date.parse(raw));\nconsole.log('valid date: ' + valid);\nconsole.log('year: ' + parts[0] + ', month: ' + parts[1] + ', day: ' + parts[2]);",
+      "why_for_automation": "Scheduling tests and asserting audit timestamps requires parsing dates returned by the API. Splitting on the separator and validating with Date.parse is a fast sanity check.",
+      "key_takeaway": "Validate date strings by splitting the parts and checking they parse into a real date."
+    },
+    {
+      "id": 17,
+      "priority": "HIGH VALUE",
+      "topic": "map/set dedupe",
+      "question": "How do you deduplicate a list of values with a Set and count occurrences with a Map?",
+      "simple_solution": "const ids = [1, 2, 2, 3, 3, 3];\nconst unique = [...new Set(ids)];\nconsole.log(unique.sort().join(','));\nconst counts = new Map();\nids.forEach(function (id) {\n  counts.set(id, (counts.get(id) || 0) + 1);\n});\ncounts.forEach(function (count, id) {\n  console.log('id ' + id + ' appears ' + count + ' times');\n});",
+      "why_for_automation": "Returned APIs often repeat entities across pages, and tests must confirm uniqueness. Set removes duplicates while Map tallies occurrences for frequency assertions.",
+      "key_takeaway": "Set dedupes collections and Map is perfect for counting value frequencies."
+    },
+    {
+      "id": 18,
+      "priority": "HIGH VALUE",
+      "topic": "generators lazy data",
+      "question": "What is a generator and how can it produce test data lazily?",
+      "simple_solution": "function* makeNames() {\n  yield 'user-a';\n  yield 'user-b';\n  yield 'user-c';\n}\nconst gen = makeNames();\nconsole.log(gen.next().value);\nconsole.log(gen.next().value);\nconsole.log(gen.next().done);",
+      "why_for_automation": "Generators give each test run a fresh, lazily-produced value without precomputing huge arrays. They are handy for unique usernames in data-driven test loops.",
+      "key_takeaway": "Generators yield values one at a time, producing test data only when requested."
+    },
+    {
+      "id": 19,
+      "priority": "HIGH VALUE",
+      "topic": "page object pattern with classes",
+      "question": "How does a class-based page object encapsulate selectors and actions?",
+      "simple_solution": "class LoginPage {\n  constructor() {\n    this.username = '#username';\n    this.password = '#password';\n    this.submit = 'button[type=submit]';\n  }\n  url() {\n    return '/login';\n  }\n  fill(selector, value) {\n    const el = document.querySelector(selector);\n    if (el) {\n      el.value = value;\n    }\n    return this;\n  }\n  submitForm() {\n    const btn = document.querySelector(this.submit);\n    return btn !== null;\n  }\n}\nconst page = new LoginPage();\npage.fill(page.username, 'admin');\nconsole.log(page.url());\nconsole.log('submit present: ' + page.submitForm());",
+      "why_for_automation": "Page objects centralize selectors and flows so UI changes are fixed in one place, not in a hundred tests. Fluent methods also make test scenarios read like a spec.",
+      "key_takeaway": "Classes group selectors and actions for one page, so locator changes stay contained."
+    },
+    {
+      "id": 20,
+      "priority": "HIGH VALUE",
+      "topic": "browser console logs",
+      "question": "How do you capture and assert on browser console errors during a test?",
+      "simple_solution": "const errors = [];\nconst originalError = console.error;\nconsole.error = function (msg) {\n  errors.push(String(msg));\n  originalError.apply(console, arguments);\n};\nconsole.error('network 500');\nconsole.error('script failed');\nconsole.log('captured errors: ' + errors.length);\nconsole.log(errors[0]);",
+      "why_for_automation": "Client-side errors often break pages without failing normal element checks. Swapping console.error with a collector lets a test fail the suite when the app logs JS errors.",
+      "key_takeaway": "Patch console.error to collect messages and assert the app logs no errors."
+    },
+    {
+      "id": 21,
+      "priority": "HIGH VALUE",
+      "topic": "timers in tests",
+      "question": "How can setTimeout-based behavior make tests slow or flaky, and how would you make it testable?",
+      "simple_solution": "function schedule(work, delayMs) {\n  return new Promise(function (resolve) {\n    setTimeout(function () {\n      work();\n      resolve();\n    }, delayMs);\n  });\n}\nasync function run() {\n  let ran = false;\n  await schedule(function () {\n    ran = true;\n  }, 10);\n  console.log('callback ran: ' + ran);\n}\nrun();",
+      "why_for_automation": "Toast pops, debounced saves, and auto-refreshes make tests wait on real clock time. Extracting delays into configurable helpers or injected clocks keeps suites fast and deterministic.",
+      "key_takeaway": "Abstract timeout delays into injectable values so tests do not sleep on production timings."
+    },
+    {
+      "id": 22,
+      "priority": "HIGH VALUE",
+      "topic": "localStorage",
+      "question": "How do you set, read, and clear localStorage before a test run?",
+      "simple_solution": "localStorage.setItem('token', 'abc123');\nconsole.log(localStorage.getItem('token'));\nconsole.log(localStorage.length);\nlocalStorage.removeItem('token');\nconsole.log(localStorage.getItem('token') === null);",
+      "why_for_automation": "Auth flows and feature flags are often driven by localStorage. Clearing it between tests prevents state leakage across test cases.",
+      "key_takeaway": "Reset localStorage before each test so prior runs cannot affect authentication state."
+    },
+    {
+      "id": 23,
+      "priority": "HIGH VALUE",
+      "topic": "query params building",
+      "question": "How do you build a query string from an object reliably, escaping special characters?",
+      "simple_solution": "const params = { page: 2, q: 'a & b', lang: 'en' };\nconst qs = Object.keys(params).map(function (key) {\n  return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);\n}).join('&');\nconsole.log(qs);",
+      "why_for_automation": "Filtered list pages rely on query parameters, and unescaped values corrupt requests. Building the string with encodeURIComponent gives assertions a stable URL to compare.",
+      "key_takeaway": "Always encode both keys and values when constructing URL query strings."
+    },
+    {
+      "id": 24,
+      "priority": "HIGH VALUE",
+      "topic": "array sorting for assertions",
+      "question": "Why should you sort before comparing unordered lists from the UI or API?",
+      "simple_solution": "const api = ['banana', 'apple', 'cherry'];\nconst ui = ['apple', 'cherry', 'banana'];\nconst sorted = function (a, b) {\n  return a.localeCompare(b);\n};\nconsole.log(JSON.stringify([...api].sort(sorted)) === JSON.stringify([...ui].sort(sorted)));",
+      "why_for_automation": "Grids and APIs rarely return rows in the same order every time. Sorting both sides before comparison removes order noise from the assertion.",
+      "key_takeaway": "Sort both compared arrays first when element order is not part of the contract."
+    },
+    {
+      "id": 25,
+      "priority": "HIGH VALUE",
+      "topic": "random data and uniqueness",
+      "question": "How do you generate a unique value for each test run to avoid colliding with previous data?",
+      "simple_solution": "function uniqueEmail(prefix) {\n  return prefix + '.' + Date.now() + '@example.com';\n}\nconsole.log(uniqueEmail('tester'));\nconsole.log(uniqueEmail('tester'));",
+      "why_for_automation": "Re-running the same suite must not fail because a username already exists from the last run. Stamping values with a timestamp makes every run's data independent.",
+      "key_takeaway": "Suffix generated data with Date.now() or a counter to keep test inputs unique."
+    },
+    {
+      "id": 26,
+      "priority": "MEDIUM",
+      "topic": "reducer for test totals",
+      "question": "Use reduce to total up prices from an order containing an array of line items.",
+      "simple_solution": "const order = [\n  { item: 'apple', price: 1.5 },\n  { item: 'bread', price: 2.0 },\n  { item: 'milk', price: 3.25 }\n];\nconst total = order.reduce(function (acc, line) {\n  return acc + line.price;\n}, 0);\nconsole.log('order total: ' + total.toFixed(2));",
+      "why_for_automation": "Order summary assertions on the UI can be cross-checked against a recomputed total from the API. reduce keeps that tear-down to one expression.",
+      "key_takeaway": "Reduce line items to a grand total and compare it with the value shown in the UI."
+    },
+    {
+      "id": 27,
+      "priority": "MEDIUM",
+      "topic": "every/some assertions",
+      "question": "How do every and some help validate entire datasets or responses?",
+      "simple_solution": "const statuses = [200, 200, 404];\nconsole.log(statuses.every(function (s) {\n  return s === 200;\n}));\nconsole.log(statuses.some(function (s) {\n  return s === 404;\n}));",
+      "why_for_automation": "Tests often need to prove that all API calls succeeded or that at least one error happened. every checks the whole collection while some checks for a single match.",
+      "key_takeaway": "every asserts all items pass, some asserts at least one passes."
+    },
+    {
+      "id": 28,
+      "priority": "MEDIUM",
+      "topic": "flattening responses",
+      "question": "How do you flatten a list of lists, for example pages of user objects, into one array?",
+      "simple_solution": "const pages = [\n  [ { id: 1 }, { id: 2 } ],\n  [ { id: 3 } ],\n  []\n];\nconst flat = pages.flat();\nconsole.log('items after flatten: ' + flat.length);\nconsole.log(flat[2].id);",
+      "why_for_automation": "Pagination and related-resource calls return nested arrays. Flattening produces one clean collection to dedupe, count, and assert on.",
+      "key_takeaway": "Array.prototype.flat merges nested arrays into a single flat list for assertions."
+    },
+    {
+      "id": 29,
+      "priority": "MEDIUM",
+      "topic": "stale elements",
+      "question": "Why do element references go stale and what should you do instead of caching them?",
+      "simple_solution": "function fresh(selector) {\n  const el = document.querySelector(selector);\n  return el ? el.textContent : null;\n}\ndocument.body.innerHTML = '<div id=\"x\">v1</div>';\nconsole.log(fresh('#x'));\ndocument.body.innerHTML = '<div id=\"x\">v2</div>';\nconst cached = document.querySelector('#x');\nconsole.log('fresh read gets re-rendered value: ' + fresh('#x'));",
+      "why_for_automation": "Single-page apps re-render DOM nodes, so a cached element from earlier points at a detached node. Re-querying right before the action avoids stale element failures.",
+      "key_takeaway": "Re-fetch elements at use time instead of caching references across re-renders."
+    },
+    {
+      "id": 30,
+      "priority": "MEDIUM",
+      "topic": "timeouts constants",
+      "question": "Where should timeout values live and how do you avoid magic numbers in waits?",
+      "simple_solution": "const TIMEOUTS = Object.freeze({\n  short: 1000,\n  medium: 5000,\n  long: 10000\n});\nfunction pick(kind) {\n  return TIMEOUTS[kind] || TIMEOUTS.medium;\n}\nconsole.log('waiting for ' + pick('short') + 'ms');\nconsole.log('unknown kind falls back to ' + pick('nope') + 'ms');",
+      "why_for_automation": "A single object of timeout tiers makes flaky timing tunable from one file instead of scattered numbers. Object.freeze stops accidental mutation at runtime.",
+      "key_takeaway": "Centralize timeout tiers in one frozen constants object and reuse them everywhere."
+    },
+    {
+      "id": 31,
+      "priority": "HIGH VALUE",
+      "topic": "environment variables",
+      "question": "How do you read environment variables so tests run against different base URLs?",
+      "simple_solution": "function baseUrl() {\n  return process.env.BASE_URL || 'https://staging.example.com';\n}\nconsole.log('running against ' + baseUrl());",
+      "why_for_automation": "The same suite must run on local, staging, and production without code edits. Reading the URL from env keeps the runner configuration-driven.",
+      "key_takeaway": "Resolve base URLs from environment variables with a sane default fallback."
+    },
+    {
+      "id": 32,
+      "priority": "MEDIUM",
+      "topic": "chaining assertions",
+      "question": "How do you compose several related checks into one assertion style without repeating the subject?",
+      "simple_solution": "function expectResponse(res) {\n  return {\n    toHaveStatus: function (expected) {\n      const ok = res.status === expected;\n      console.log('status ' + res.status + ' equals ' + expected + ': ' + ok);\n      return this;\n    },\n    toBeJson: function () {\n      const ok = typeof res.json === 'object' && res.json !== null;\n      console.log('body is JSON object: ' + ok);\n      return this;\n    }\n  };\n}\nexpectResponse({ status: 200, json: { id: 1 } })\n  .toHaveStatus(200)\n  .toBeJson();",
+      "why_for_automation": "Assertion chains read fluently and keep each check small and composable. This mirrors the fluent matcher APIs provided by Jest and Playwright.",
+      "key_takeaway": "Chain small fluent assertions so related checks read as one coherent expectation."
+    },
+    {
+      "id": 33,
+      "priority": "MEDIUM",
+      "topic": "event listeners in tests",
+      "question": "Why should you attach and remove event listeners symmetrically in UI test code?",
+      "simple_solution": "const target = { clicks: 0 };\nfunction onClick() {\n  target.clicks = target.clicks + 1;\n}\ntarget.add = function () {\n  this.handler = onClick;\n};\ntarget.remove = function () {\n  this.handler = null;\n};\ntarget.add();\nif (target.handler) {\n  target.clicks = target.clicks + 1;\n}\ntarget.remove();\nconsole.log('clicks tracked: ' + target.clicks);\nconsole.log('handler removed: ' + (target.handler === null));",
+      "why_for_automation": "Intercepting clicks or network events in tests must be cleaned up afterward. Leaving listeners attached can leak state into the next test and cause order-dependent failures.",
+      "key_takeaway": "Clean up every listener you attach so tests stay isolated from each other."
+    },
+    {
+      "id": 34,
+      "priority": "LOW",
+      "topic": "data attributes",
+      "question": "Why are data-* attributes preferred over styling classes for stable test selectors?",
+      "simple_solution": "function byTestId(id) {\n  return '[data-testid=\"' + id + '\"]';\n}\nconst selector = byTestId('save-button');\nconsole.log(selector);",
+      "why_for_automation": "Class names and CSS selectors change with redesigns and CSS purging, breaking tests. A dedicated data-testid hook communicates intent and survives style refactors.",
+      "key_takeaway": "Prefer data-testid hooks over classes so locators are stable across styling changes."
+    },
+    {
+      "id": 35,
+      "priority": "MEDIUM",
+      "topic": "screenshots and logs",
+      "question": "How would you collect structured diagnostic info when a step fails, such as URL, title, and last error?",
+      "simple_solution": "function diagnostics(err, url, title) {\n  return {\n    url: url,\n    title: title,\n    error: err instanceof Error ? err.message : err\n  };\n}\nconst info = diagnostics(new Error('timeout'), '/checkout', 'Cart');\nconsole.log(JSON.stringify(info));",
+      "why_for_automation": "Failed runs are only debuggable if they capture context automatically. Bagging the URL, page title, and error message turns a red test into an actionable report.",
+      "key_takeaway": "Capture page URL, title, and the error together so every failure has context."
+    },
+    {
+      "id": 36,
+      "priority": "MEDIUM",
+      "topic": "mock response interception",
+      "question": "How does intercepting a network response before it reaches the page keep tests repeatable?",
+      "simple_solution": "function intercept(route, fake) {\n  return {\n    route: route,\n    respondWith: function () {\n      return JSON.stringify(fake);\n    }\n  };\n}\nconst stub = intercept('/users', { users: [{ id: 1, name: 'Stub' }] });\nconsole.log('intercepted ' + stub.route + ' with ' + stub.respondWith());",
+      "why_for_automation": "Live backends are slow and change data arbitrarily, destabilizing tests. Stubbing the response makes assertions deterministic and independent of external services.",
+      "key_takeaway": "Intercept and stub network responses to get determinism in UI tests."
+    },
+    {
+      "id": 37,
+      "priority": "MEDIUM",
+      "topic": "retry logic",
+      "question": "How do you retry a flaky network call a set number of times before giving up?",
+      "simple_solution": "async function withRetry(fn, attempts) {\n  let lastError = null;\n  for (let i = 1; i <= attempts; i++) {\n    try {\n      return await fn();\n    } catch (err) {\n      lastError = err;\n    }\n  }\n  throw lastError;\n}\nasync function run() {\n  let tries = 0;\n  const value = await withRetry(async function () {\n    tries = tries + 1;\n    if (tries < 3) {\n      throw new Error('temporary 502');\n    }\n    return 'healthy';\n  }, 5);\n  console.log('succeeded after ' + tries + ' tries with value ' + value);\n}\nrun();",
+      "why_for_automation": "Transient 502s and connection resets are not product bugs. Polite retries with a cap make suites stable while still failing loudly when the outage is real.",
+      "key_takeaway": "Wrap flaky helpers in bounded retry logic that surfaces the last raw error."
+    },
+    {
+      "id": 38,
+      "priority": "LOW",
+      "topic": "array buffer vs JSON",
+      "question": "What does res.json() do under the hood and when would you instead read the raw text?",
+      "simple_solution": "async function inspect(res) {\n  const text = await res.text();\n  console.log('raw body length: ' + text.length);\n  const parsed = JSON.parse(text);\n  console.log('parsed body has id: ' + parsed.id);\n}\ninspect({ text: function () {\n  return Promise.resolve('{\"id\":7}');\n} });",
+      "why_for_automation": "Debugging invalid JSON responses is easier when you read the raw text first. Inspect text for empty bodies or error pages before assuming a parse failure is your bug.",
+      "key_takeaway": "Read the raw response text when a parse fails so you can see the actual body."
+    },
+    {
+      "id": 39,
+      "priority": "LOW",
+      "topic": "Object.keys/values",
+      "question": "How do Object.keys and Object.values help verify the shape of an API response?",
+      "simple_solution": "const user = { id: 1, name: 'Ada', active: true };\nconsole.log(Object.keys(user).join(','));\nconsole.log(Object.values(user).every(function (v) {\n  return v !== undefined;\n}));",
+      "why_for_automation": "Schema drift breaks clients silently, so tests assert both keys and values. Checking that every expected key is present is a lightweight contract test.",
+      "key_takeaway": "Object.keys tells you the response schema and Object.values lets you check content."
+    },
+    {
+      "id": 40,
+      "priority": "LOW",
+      "topic": "mocking dates",
+      "question": "How can tests that depend on the current date be made deterministic?",
+      "simple_solution": "const OriginalDate = Date;\nclass FixedDate extends OriginalDate {\n  constructor() {\n    super(2026, 0, 15);\n  }\n  static now() {\n    return new OriginalDate(2026, 0, 15).getTime();\n  }\n}\nconst realNow = Date.now();\nDate = FixedDate;\nconsole.log(Date.now() === new OriginalDate(2026, 0, 15).getTime());\nDate = OriginalDate;\nconsole.log('restored real time: ' + (Date.now() === realNow));",
+      "why_for_automation": "Dashboards with 'today', 'last 30 days', and age badges shift results daily and break snapshots. Injecting a fixed clock freezes that behavior for reproducible runs.",
+      "key_takeaway": "Swap the Date implementation or seed data with fixed timestamps to make time-based tests stable."
+    }
+  ]
+}

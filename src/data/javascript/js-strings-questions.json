@@ -1,0 +1,80 @@
+{
+  "description": "String methods and template literals.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "How do you get the length of a string?",
+      "answer": "The length property returns the number of UTF-16 code units in the string, which matches the visible character count for most text.\n\ncode:\nconsole.log('playwright'.length);  // 10\n\nreal example:\nTruncating long failure messages in test reporters by checking .length before slicing keeps logs readable without hard crashes."
+    },
+    {
+      "id": 2,
+      "question": "What is the difference between indexOf and includes on a string?",
+      "answer": "includes returns a boolean for whether the substring exists, while indexOf returns the first position or -1 when not found.\n\ncode:\nconsole.log('video/invoice'.includes('invoice'));  // true\nconsole.log('video/invoice'.indexOf('invoice'));   // 6\n\nreal example:\nAsserting that a redirect URL contains the expected route with expect(url).toContain('/checkout') is a common Playwright pattern."
+    },
+    {
+      "id": 3,
+      "question": "What does slice do and how does it differ from substring?",
+      "answer": "slice returns a portion of the string by start and end index. Both treat negative arguments as counting from the end, but substring clamps negatives to 0, making slice more predictable.\n\ncode:\nconsole.log('trader'.slice(1, 4));   // ra\nconsole.log('trader'.slice(-2));     // er\n\nreal example:\nExtracting a slug from a URL segment with slice keeps the parsing deterministic even when the segment length varies."
+    },
+    {
+      "id": 4,
+      "question": "Why should you always call trim() on text scraped from a page?",
+      "answer": "trim removes leading and trailing whitespace, and scraped text often contains newlines or padding. Comparing untrimmed text causes assertions to fail on invisible characters.\n\ncode:\nconst text = '  Login  ';\nconsole.log(text.trim());  // 'Login'\n\nreal example:\nPlaywright assertions like await expect(page.getByText('Login')).toBeVisible() can fail because textContent includes formatting whitespace that trim() removes."
+    },
+    {
+      "id": 5,
+      "question": "How do you convert a string to uppercase or lowercase?",
+      "answer": "Use toUpperCase() or toLowerCase(), both of which return new strings because strings are immutable.\n\ncode:\nconsole.log('login'.toUpperCase());  // 'LOGIN'\nconsole.log('LOGIN'.toLowerCase());  // 'login'\n\nreal example:\nCase-insensitive assertions normalize both sides with toLowerCase() before comparing user-facing text like country names or error messages."
+    },
+    {
+      "id": 6,
+      "question": "What does split do and what does join do?",
+      "answer": "split divides a string into an array by a separator, and join merges an array back into a string with a separator.\n\ncode:\nconst parts = 'a,b,c'.split(',');\nconsole.log(parts);                 // ['a','b','c']\nconsole.log(parts.join('-'));       // 'a-b-c'\n\nreal example:\nParsing a comma-separated tags header or building CSV test fixtures are both natural split and join workflows."
+    },
+    {
+      "id": 7,
+      "question": "What is the difference between replace and replaceAll?",
+      "answer": "replace substitutes only the first match, while replaceAll substitutes every match. Passing a regex with the global flag also replaces all matches.\n\ncode:\nconsole.log('a-b-a'.replace('-', '_'));      // 'a_b-a'\nconsole.log('a-b-a'.replaceAll('-', '_'));   // 'a_b_a'\n\nreal example:\nSanitizing an API ID that may contain multiple dashes with replaceAll prevents partial replacements from breaking downstream selectors."
+    },
+    {
+      "id": 8,
+      "question": "How do template literals interpolate values?",
+      "answer": "Template literals use backticks and embed values with ${expression}, where any JavaScript expression is evaluated and converted to a string.\n\ncode:\nconst name = 'Ana';\nconsole.log(`Hello, ${name}!`);  // Hello, Ana!\n\nreal example:\nBuilding dynamic locators like page.getByText(`Order #${orderId}`) reads far better than string concatenation with plus signs."
+    },
+    {
+      "id": 9,
+      "question": "How do you check if a string starts or ends with a given substring?",
+      "answer": "Use startsWith and endsWith, which return booleans and are case-sensitive by default.\n\ncode:\nconst url = 'https://api.test.com/v1';\nconsole.log(url.startsWith('https://'));  // true\nconsole.log(url.endsWith('/v1'));         // true\n\nreal example:\nValidating API base URLs and env-specific endpoints before tests hit them avoids sending requests to the wrong host."
+    },
+    {
+      "id": 10,
+      "question": "What does padStart do?",
+      "answer": "padStart fills the beginning of a string with a filler until it reaches a target length, which is useful for padding ids and timestamps.\n\ncode:\nconsole.log('42'.padStart(5, '0'));  // '00042'\n\nreal example:\nGenerating deterministic test order numbers with fixed digit counts keeps parallel test data readable in dashboards."
+    },
+    {
+      "id": 11,
+      "question": "Are strings mutable or immutable in JavaScript?",
+      "answer": "Strings are immutable. Every string method that changes content returns a brand-new string, and the original value stays untouched.\n\ncode:\nconst s = 'hello';\nconst u = s.toUpperCase();\nconsole.log(s);  // 'hello'\nconsole.log(u);  // 'HELLO'\n\nreal example:\nWhen storing original page text and a transformed copy, immutability guarantees the asserted original is never corrupted by transforms."
+    },
+    {
+      "id": 12,
+      "question": "What is the difference between charAt and bracket indexing?",
+      "answer": "charAt('hello'.charAt(0)) returns the character or an empty string when out of range, while bracket indexing returns undefined for missing positions.\n\ncode:\nconsole.log('hello'.charAt(9));  // ''\nconsole.log('hello'[9]);         // undefined\n\nreal example:\nBracket indexing that returns undefined is a common source of hidden bugs when assertion messages interpolate a missing character."
+    },
+    {
+      "id": 13,
+      "question": "How do you write multi-line strings without escape sequences?",
+      "answer": "Template literals with backticks preserve real newlines, so you can write multi-line text directly without escaping newline characters.\n\ncode:\nconst message = `Line one\nLine two`;\nconsole.log(message);\n\nreal example:\nMulti-line request bodies and SQL fixtures in tests stay readable, which helps code review catch wrong assertions faster."
+    },
+    {
+      "id": 14,
+      "question": "What is the difference between innerText and textContent reminders for scraped text?",
+      "answer": "textContent returns every text node including hidden elements and preserves whitespace, while innerText reflects what is visually rendered. Automation scrapers almost always want the trimmed textContent.\n\ncode:\nconst node = document.getElementById('total');\nconst raw = node.textContent.trim();\n\nreal example:\nCypress text assertions use .invoke('text') which reads textContent, so comparing against innerText expectations produces mismatches."
+    },
+    {
+      "id": 15,
+      "question": "How do you convert a string to an array of characters?",
+      "answer": "Use split('') with an empty separator, or the Array.from() function which also handles unicode correctly.\n\ncode:\nconsole.log('abc'.split(''));    // ['a','b','c']\nconsole.log(Array.from('abc')); // ['a','b','c']\n\nreal example:\nReversing a code and checking it against an expected layout uses character arrays that make each digit individually assertable."
+    }
+  ]
+}

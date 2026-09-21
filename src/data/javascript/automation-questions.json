@@ -1,0 +1,148 @@
+{
+  "automation_testing_javascript_questions": [
+    {
+      "id": 1,
+      "priority": "MUST KNOW",
+      "topic": "== vs ===",
+      "question": "What is the difference between == and === in JavaScript? What does 5 == '5' and 5 === '5' print?",
+      "simple_solution": "console.log(5 == '5');\nconsole.log(5 === '5');\nconsole.log(null == undefined);\nconsole.log(null === undefined);",
+      "why_for_automation": "Assertions in test frameworks rely on strict equality. If you use == on values from a UI, type coercion can hide real bugs, for example a numeric string being compared to a number.",
+      "key_takeaway": "Always prefer === for strict comparison in assertions; == performs type coercion."
+    },
+    {
+      "id": 2,
+      "priority": "MUST KNOW",
+      "topic": "let/const/var",
+      "question": "What is the difference between var, let, and const? Which one do you prefer in test code?",
+      "simple_solution": "var a = 1;\nlet b = 2;\nconst c = 3;\nif (true) {\n  var a = 10;\n  let b = 20;\n}\nconsole.log(a);\nconsole.log(b);\nconsole.log(c);",
+      "why_for_automation": "Test scripts often declare stored page data and assertions. Using const for values that should not change (like selectors) prevents accidental reassignment that causes flaky tests.",
+      "key_takeaway": "var is function-scoped, let/const are block-scoped, and const should be the default in test code."
+    },
+    {
+      "id": 3,
+      "priority": "MUST KNOW",
+      "topic": "truthy/falsy",
+      "question": "Which values are falsy in JavaScript? What does the following code print?",
+      "simple_solution": "const falsy = [false, 0, '', null, undefined, NaN];\nfalsy.forEach(function (v) {\n  console.log(v + ' is ' + Boolean(v));\n});\nif ([]) {\n  console.log('empty array is truthy');\n}\nif ({}) {\n  console.log('empty object is truthy');\n}",
+      "why_for_automation": "Conditional waits and assertions often check for element presence. Knowing that 0, '', null, and undefined are falsy prevents writing misleading truthiness checks in test logic.",
+      "key_takeaway": "Only false, 0, '', null, undefined, and NaN are falsy; empty arrays and objects are truthy."
+    },
+    {
+      "id": 4,
+      "priority": "MUST KNOW",
+      "topic": "closures",
+      "question": "What is a closure? What does this code print and why?",
+      "simple_solution": "function outer() {\n  let count = 0;\n  return function inner() {\n    count = count + 1;\n    return count;\n  };\n}\nconst counter = outer();\ncounter();\ncounter();\nconsole.log(counter());",
+      "why_for_automation": "Closures are how modules and page objects keep private state without polluting globals. A helper that remembers a call count helps track how many times a selector-based action ran.",
+      "key_takeaway": "A closure is a function that remembers the variables from the scope where it was created."
+    },
+    {
+      "id": 5,
+      "priority": "MUST KNOW",
+      "topic": "event loop ordering",
+      "question": "What is the order of console logs in this code: console.log, setTimeout, Promise?\nIn what order do you see A, B, C, D?",
+      "simple_solution": "console.log('A');\nsetTimeout(function () {\n  console.log('B');\n}, 0);\nPromise.resolve().then(function () {\n  console.log('C');\n});\nconsole.log('D');",
+      "why_for_automation": "Synchronizing on network responses and element states depends on understanding that promises (microtasks) run before timers (macrotasks). Test wait logic behaves predictably when you know this order.",
+      "key_takeaway": "Sync code runs first, then microtasks (promises), then timers."
+    },
+    {
+      "id": 6,
+      "priority": "MUST KNOW",
+      "topic": "promises vs async/await",
+      "question": "How do promises relate to async/await? Convert Promise.resolve().then(...) to async/await.",
+      "simple_solution": "async function demo() {\n  const value = await Promise.resolve(42);\n  console.log('awaited ' + value);\n}\ndemo().then(function () {\n  console.log('promise chain finished');\n});",
+      "why_for_automation": "Playwright and Cypress test code is full of awaited interactions like clicking and waiting. async/await makes async test helpers read like synchronous steps and keeps failures easier to debug.",
+      "key_takeaway": "async/await is syntactic sugar over promises and is the standard for readable test code."
+    },
+    {
+      "id": 7,
+      "priority": "MUST KNOW",
+      "topic": "Promise.all",
+      "question": "What does Promise.all do? What happens if one promise rejects?",
+      "simple_solution": "const p1 = Promise.resolve(10);\nconst p2 = Promise.resolve(20);\nPromise.all([p1, p2]).then(function (results) {\n  console.log(results.join(','));\n}).catch(function (err) {\n  console.log('failed ' + err);\n});",
+      "why_for_automation": "Promise.all lets tests issue multiple independent network calls in parallel, cutting test runtime. It rejects fast on the first failure, which shows up clearly in test output.",
+      "key_takeaway": "Promise.all settles with all results, or rejects with the first error encountered."
+    },
+    {
+      "id": 8,
+      "priority": "HIGH VALUE",
+      "topic": ".map/.filter/reduce",
+      "question": "When would you use map, filter, and reduce? Show how to double, filter even, then sum an array.",
+      "simple_solution": "const nums = [1, 2, 3, 4, 5];\nconst doubled = nums.map(function (n) {\n  return n * 2;\n});\nconst evens = nums.filter(function (n) {\n  return n % 2 === 0;\n});\nconst total = nums.reduce(function (acc, n) {\n  return acc + n;\n}, 0);\nconsole.log(doubled.join(','));\nconsole.log(evens.join(','));\nconsole.log(total);",
+      "why_for_automation": "Extracting values from API responses or grids uses map/filter. reduce is handy for totals when validating order summaries and totals in UI tests.",
+      "key_takeaway": "map transforms, filter selects, and reduce aggregates array data."
+    },
+    {
+      "id": 9,
+      "priority": "HIGH VALUE",
+      "topic": "spread copy vs reference",
+      "question": "Why does copying an array with spread still share nested references? Show the difference between a shallow and a deep copy.",
+      "simple_solution": "const original = { user: { name: 'Sam' }, tags: ['a'] };\nconst shallow = { ...original };\nshallow.user.name = 'Kim';\nconst deep = JSON.parse(JSON.stringify(original));\ndeep.user.name = 'Jo';\nconsole.log(original.user.name);\nconsole.log(shallow.user.name);\nconsole.log(deep.user.name);",
+      "why_for_automation": "Test data often gets cloned before mutation so the original dataset stays reusable. Confusing shallow and deep copies silently corrupts shared test fixtures.",
+      "key_takeaway": "Spread copies only the top level; nested objects remain shared references."
+    },
+    {
+      "id": 10,
+      "priority": "HIGH VALUE",
+      "topic": "JSON.parse/stringify",
+      "question": "How do you convert between JSON text and JavaScript objects? What could make JSON.parse throw?",
+      "simple_solution": "const person = { name: 'Ana', age: 30 };\nconst json = JSON.stringify(person);\nconsole.log(json);\nconst back = JSON.parse(json);\nconsole.log(back.name);",
+      "why_for_automation": "API tests serialize request bodies with stringify and deserialize responses with parse. A parse error often means the response was not valid JSON, which is a real product bug.",
+      "key_takeaway": "stringify converts JS to JSON text and parse converts JSON text back to JS; invalid JSON throws."
+    },
+    {
+      "id": 11,
+      "priority": "HIGH VALUE",
+      "topic": "typeof null",
+      "question": "What does typeof null return and why is this surprising? How should you correctly check for null?",
+      "simple_solution": "console.log(typeof null);\nconst x = null;\nif (x === null) {\n  console.log('x is genuinely null');\n}\nconst y = {};\nif (y === null) {\n  console.log('never printed');\n} else {\n  console.log('y is not null');\n}",
+      "why_for_automation": "Element and response checks frequently compare against null with optional chaining. Relying on typeof null would misclassify values and break null guards.",
+      "key_takeaway": "typeof null is 'object', so compare against null directly with ===."
+    },
+    {
+      "id": 12,
+      "priority": "HIGH VALUE",
+      "topic": "hoisting",
+      "question": "What is hoisting? What prints here and why?",
+      "simple_solution": "console.log(hoisted());\nfunction hoisted() {\n  return 'function hoisted';\n}\nconsole.log(typeof notHoisted);\nvar notHoisted = 'set later';",
+      "why_for_automation": "Downloading and sharing test helper files means you rely on function declarations being available even before they are defined in the file. It also explains confusing errors when using var before assignment.",
+      "key_takeaway": "Function declarations are fully hoisted; var declarations are hoisted but not initialized."
+    },
+    {
+      "id": 13,
+      "priority": "MEDIUM",
+      "topic": "optional chaining/nullish",
+      "question": "What do optional chaining (?.) and nullish coalescing (??) do? What is the difference between ?? and ||?",
+      "simple_solution": "const config = { timeout: 0, retries: null };\nconsole.log(config.timeout ?? 3000);\nconsole.log(config.timeout || 3000);\nconsole.log(config.retries ?? 5);\nconsole.log(config.missing?.deep ?? 'not found');",
+      "why_for_automation": "API responses are nested and sometimes missing fields. Optional chaining avoids TypeError crashes in assertions, and ?? preserves meaningful falsy values like 0.",
+      "key_takeaway": "?. safely accesses nested props, ?? falls back only on null/undefined whereas || falls back on any falsy value."
+    },
+    {
+      "id": 14,
+      "priority": "MEDIUM",
+      "topic": "array reference mutability",
+      "question": "If you pass an array to a function and mutate it, does the caller see the change? Why?",
+      "simple_solution": "function addItem(items) {\n  items.push('new');\n}\nconst list = ['a', 'b'];\naddItem(list);\nconsole.log(list.join(','));\nconst copy = [...list];\ncopy.push('c2');\nconsole.log(list.length);\nconsole.log(copy.length);",
+      "why_for_automation": "Test fixtures stored in shared arrays are passed to helpers. If a helper pushes into that array, later tests inherit mutated data, causing order-dependent failures.",
+      "key_takeaway": "Arrays are passed by reference, so mutating the parameter mutates the original."
+    },
+    {
+      "id": 15,
+      "priority": "MEDIUM",
+      "topic": "pagination loops",
+      "question": "How would you loop through paginated API responses, fetching pages until an end condition is reached?",
+      "simple_solution": "function fetchPage(page) {\n  if (page > 3) {\n    return Promise.resolve([]);\n  }\n  return Promise.resolve([{ page: page, item: 'row' + page }]);\n}\nasync function collectAll() {\n  let page = 1;\n  const all = [];\n  while (true) {\n    const batch = await fetchPage(page);\n    if (batch.length === 0) {\n      break;\n    }\n    all.push(...batch);\n    page = page + 1;\n  }\n  console.log('total pages fetched: ' + (page - 1));\n  console.log('total rows: ' + all.length);\n}\ncollectAll();",
+      "why_for_automation": "Recovering every record from a paginated endpoint is a common setup step, so loops must respect an end condition. A while loop with an explicit break mirrors real fetch-and-then-loops.",
+      "key_takeaway": "Use a while loop that breaks on an empty page to drain paginated endpoints safely."
+    },
+    {
+      "id": 16,
+      "priority": "LOW",
+      "topic": "DOM querySelector",
+      "question": "What is the difference between querySelector, querySelectorAll, and getElementById? What does each return?",
+      "simple_solution": "document.body.innerHTML = '<div id=\"app\"><p class=\"msg\">hi</p></div>';\nconst byId = document.getElementById('app');\nconst first = document.querySelector('.msg');\nconst all = document.querySelectorAll('.msg');\nconsole.log(byId.tagName);\nconsole.log(first.textContent);\nconsole.log(all.length);",
+      "why_for_automation": "Selectors are the core of locating elements. Knowing that getElementById returns one element or null while querySelectorAll returns a NodeList explains the .length checks in webdriver-style scripts.",
+      "key_takeaway": "getElementById returns one element, querySelector returns the first match, querySelectorAll returns a NodeList."
+    }
+  ]
+}

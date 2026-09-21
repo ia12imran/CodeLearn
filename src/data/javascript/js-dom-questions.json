@@ -1,0 +1,85 @@
+{
+  "description": "DOM selection, manipulation, events, forms and window.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "How do you select a single element in the DOM?",
+      "answer": "Use querySelector with a CSS selector for the first match, or getElementById when the element has an id.\n\ncode:\nconst button = document.querySelector('#submit');\nconst title = document.getElementById('page-title');\n\nreal example:\nPlaywright locators mirror this with page.locator('#submit'), selecting the same elements the page DOM exposes."
+    },
+    {
+      "id": 2,
+      "question": "How do you select multiple elements in the DOM?",
+      "answer": "querySelectorAll returns a static NodeList of all matches, which you can convert to an array with Array.from or spread.\n\ncode:\nconst rows = document.querySelectorAll('.table-row');\nconst list = [...rows];\nconsole.log(list.length);\n\nreal example:\nCounting rows after a table re-renders uses querySelectorAll length, the same dataset Playwright count() asserts."
+    },
+    {
+      "id": 3,
+      "question": "What is the difference between textContent, innerText, and innerHTML?",
+      "answer": "textContent returns all text including hidden nodes and preserves whitespace. innerText reflects only rendered visible text. innerHTML returns the raw markup including tags.\n\ncode:\nconst el = document.querySelector('#box');\nconsole.log(el.textContent);  // plain text\nconsole.log(el.innerHTML);    // includes HTML tags\n\nreal example:\nScraped assertion text should use textContent and trim rather than innerHTML, which returns markup that breaks string comparisons."
+    },
+    {
+      "id": 4,
+      "question": "How do you create an element and add it to the page?",
+      "answer": "Create with createElement, fill its properties, then attach with appendChild or insertBefore.\n\ncode:\nconst li = document.createElement('li');\nli.textContent = 'New item';\ndocument.querySelector('#list').appendChild(li);\n\nreal example:\nInjected overlay helpers built for test-only UI reuse this exact create and append pattern."
+    },
+    {
+      "id": 5,
+      "question": "How do you listen for events on an element?",
+      "answer": "Use addEventListener with the event type and a callback, allowing multiple listeners on the same element.\n\ncode:\nconst btn = document.querySelector('#pay');\nbtn.addEventListener('click', () => console.log('clicked'));\n\nreal example:\nPlaywright exposes page.on for page events, which is a similar listener pattern for requests and dialogs."
+    },
+    {
+      "id": 6,
+      "question": "What is the event object and what fields are commonly used?",
+      "answer": "The event object carries details about the event, such as target, currentTarget, and properties like key or which button was pressed.\n\ncode:\nbtn.addEventListener('click', (event) => {\n  console.log(event.target.id);\n});\n\nreal example:\nForm submit handlers read event.target to reach the input values without extra querying."
+    },
+    {
+      "id": 7,
+      "question": "What is event delegation and why is it useful?",
+      "answer": "Event delegation attaches one listener to a parent and catches events from children via bubbling, which works for dynamically added elements and needs fewer listeners.\n\ncode:\ndocument.querySelector('#list').addEventListener('click', (e) => {\n  if (e.target.closest('li')) console.log('row clicked');\n});\n\nreal example:\nTesting row clicks in tables that re-render pagination is stable when a single delegated listener handles all rows."
+    },
+    {
+      "id": 8,
+      "question": "What is event bubbling and how do you stop it?",
+      "answer": "Bubbling propagates an event from the target up through its ancestors. Stopping it prevents parent handlers from running using stopPropagation.\n\ncode:\nchild.addEventListener('click', (e) => e.stopPropagation());\n\nreal example:\nA modal close button that should not trigger the row click underneath needs stopPropagation on its handler."
+    },
+    {
+      "id": 9,
+      "question": "How do you read a form input value in JavaScript?",
+      "answer": "Access the input element and read its value property, which gives the current user-entered text for text, textarea, and select fields.\n\ncode:\nconst email = document.querySelector('#email').value;\nconsole.log(email);\n\nreal example:\nPlaywright fill then assertions read the same value property when verifying what the user typed."
+    },
+    {
+      "id": 10,
+      "question": "How do you set the value of an input programmatically?",
+      "answer": "Assign the input's value property, and for controlled frameworks also dispatch an input event so the app sees the change.\n\ncode:\nconst input = document.querySelector('#name');\ninput.value = 'Ana';\ninput.dispatchEvent(new Event('input', { bubbles: true }));\n\nreal example:\nSetting a value directly bypasses user event paths, which is why React apps need the dispatched event for state to update."
+    },
+    {
+      "id": 11,
+      "question": "What does window.location give you and how do you read the URL parts?",
+      "answer": "window.location exposes href, pathname, host, search, and hash for the current page, enabling URL-based assertions.\n\ncode:\nconsole.log(window.location.pathname);\nconsole.log(window.location.search);\n\nreal example:\nAsserting a redirect landed on /checkout?step=1 reads location.pathname and search after an expected navigation."
+    },
+    {
+      "id": 12,
+      "question": "How do you navigate or reload a page with the window API?",
+      "answer": "Assign to window.location.href, call window.location.reload(), or use location.assign for a push of a new URL.\n\ncode:\nwindow.location.href = '/orders';\nwindow.location.reload();\n\nreal example:\nA hard refresh helper before a stability check reloads the page to reset transient UI state."
+    },
+    {
+      "id": 13,
+      "question": "What is the difference between a cookie and localStorage data?",
+      "answer": "localStorage stores larger string data per origin that persists and is sent to no server, while cookies are small name-value pairs automatically sent with requests.\n\ncode:\nlocalStorage.setItem('token', 'abc');\nconst t = localStorage.getItem('token');\ndocument.cookie = 'session=xyz; path=/';  // web server cookies\n\nreal example:\nUI auth filters grant access client-side via localStorage, but the same token is not available to API requests unless sent as a header."
+    },
+    {
+      "id": 14,
+      "question": "How do you schedule code to run after the page finishes loading?",
+      "answer": "Listen for the DOMContentLoaded event on document, or window.load when all resources including images finish loading.\n\ncode:\ndocument.addEventListener('DOMContentLoaded', () => {\n  console.log('tree ready');\n});\n\nreal example:\nAnalytics and feature flags initialized on DOMContentLoaded explain why automated clicks sometimes race early-start listeners."
+    },
+    {
+      "id": 15,
+      "question": "What does stopPropagation vs preventDefault do differently?",
+      "answer": "preventDefault cancels the default browser action like a form submit or link navigation. stopPropagation stops the event from bubbling to ancestors.\n\ncode:\nform.addEventListener('submit', (e) => {\n  e.preventDefault();  // stop the page reload\n  doValidation();\n});\n\nreal example:\nSingle-page apps intercept form submits this way; accidental native submit causes page reloads that break Playwright waits."
+    },
+    {
+      "id": 16,
+      "question": "How do you detect when a CDN script finishes executing or fails?",
+      "answer": "Attach load and error event listeners during script injection, then observe window state changes after the resource loads.\n\ncode:\nasync function loadScript(src) {\n  return new Promise((resolve, reject) => {\n    const s = document.createElement('script');\n    s.src = src;\n    s.onload = resolve;\n    s.onerror = () => reject(new Error('cdn failed'));\n    document.head.appendChild(s);\n  });\n}\n\nreal example:\nWaiting for an analytics SDK script before asserting its API avoids null-pointer flaky failures in dependency checks."
+    }
+  ]
+}

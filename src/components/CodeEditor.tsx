@@ -5,12 +5,14 @@ import { EditorView, keymap, lineNumbers, highlightActiveLine, highlightActiveLi
 import { EditorState } from "@codemirror/state";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { python } from "@codemirror/lang-python";
+import { javascript } from "@codemirror/lang-javascript";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { bracketMatching, foldGutter, indentOnInput } from "@codemirror/language";
 import { autocompletion, closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
 import { searchKeymap, highlightSelectionMatches } from "@codemirror/search";
 import { lintKeymap } from "@codemirror/lint";
 import { Play, Loader2, RotateCcw, Copy, Check } from "lucide-react";
+import { Language } from "@/data/index";
 
 interface CodeEditorProps {
   initialCode: string;
@@ -18,23 +20,46 @@ interface CodeEditorProps {
   onRun?: (code: string) => void;
   readOnly?: boolean;
   autoFocus?: boolean;
+  language?: Language;
 }
 
-export default function CodeEditor({ initialCode, height = "300px", onRun, readOnly = false, autoFocus = false }: CodeEditorProps) {
+function formatValue(value: unknown): string {
+  if (value === undefined) return "undefined";
+  if (value === null) return "null";
+  if (typeof value === "string") return value;
+  if (typeof value === "object") {
+    try {
+      return JSON.stringify(value);
+    } catch {
+      return String(value);
+    }
+  }
+  if (typeof value === "symbol") return value.toString();
+  return String(value);
+}
+
+export default function CodeEditor({ initialCode, height = "300px", onRun, readOnly = false, autoFocus = false, language = "python" }: CodeEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
   const [output, setOutput] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const [copied, setCopied] = useState(false);
   const initialCodeRef = useRef(initialCode);
+  const languageRef = useRef(language);
 
   useEffect(() => {
     initialCodeRef.current = initialCode;
   }, [initialCode]);
 
+  useEffect(() => {
+    languageRef.current = language;
+  }, [language]);
+
   // Create editor once
   useEffect(() => {
     if (!editorRef.current) return;
+
+    const langExtension = languageRef.current === "javascript" ? javascript() : python();
 
     const state = EditorState.create({
       doc: initialCodeRef.current,
@@ -50,7 +75,7 @@ export default function CodeEditor({ initialCode, height = "300px", onRun, readO
         highlightActiveLine(),
         highlightSelectionMatches(),
         keymap.of([...closeBracketsKeymap, ...defaultKeymap, ...searchKeymap, ...historyKeymap, ...lintKeymap]),
-        python(),
+        langExtension,
         oneDark,
         EditorView.theme({
           "&": { height },
@@ -99,13 +124,40 @@ export default function CodeEditor({ initialCode, height = "300px", onRun, readO
     setOutput("");
   };
 
-  const handleRun = async () => {
-    if (onRun) {
-      onRun(getCode());
-      return;
-    }
+  const runJavaScript = async () => {
+    const logs: string[] = [];
+    const original = {
+      log: console.log,
+      info: console.info,
+      warn: console.warn,
+      error: console.error,
+    };
 
-    setIsRunning(true);
+    const push = (...args: unknown[]) => logs.push(args.map(formatValue).join(" "));
+    console.log = push;
+    console.info = push;
+    console.warn = push;
+    console.error = push;
+
+    try {
+      const code = getCode();
+      // Run inside an async function so top-level `await` works (fetch/async examples).
+      const wrapped = new Function('"use strict"; return (async () => {\n' + code + "\n})();");
+      await wrapped();
+      setOutput(logs.join("\n") || "(no output)");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      const lastLine = msg.split("\n").filter(Boolean).slice(-1)[0] || msg;
+      setOutput(logs.length > 0 ? logs.join("\n") + `\n\n⚠️ ${lastLine}` : `⚠️ ${lastLine}`);
+    } finally {
+      console.log = original.log;
+      console.info = original.info;
+      console.warn = original.warn;
+      console.error = original.error;
+    }
+  };
+
+  const runPython = async () => {
     setOutput("Loading Python runtime...");
 
     try {
@@ -157,9 +209,31 @@ __result
       const pythonError = msg.includes("Traceback") ? msg.split("\n").slice(-3).join("\n") : msg;
       setOutput(pythonError);
     }
-
-    setIsRunning(false);
   };
+
+  const handleRun = async () => {
+    if (onRun) {
+      onRun(getCode());
+      return;
+    }
+
+    setIsRunning(true);
+
+    try {
+      if (languageRef.current === "javascript") {
+        await runJavaScript();
+      } else {
+        await runPython();
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setOutput(msg);
+    } finally {
+      setIsRunning(false);
+    }
+  };
+
+  const fileName = language === "javascript" ? "main.js" : "main.py";
 
   return (
     <div className="rounded-xl border border-gray-700 overflow-hidden bg-[#282c34] relative z-0">
@@ -171,7 +245,7 @@ __result
             <span className="w-3 h-3 rounded-full bg-yellow-500/90 inline-block" />
             <span className="w-3 h-3 rounded-full bg-green-500/90 inline-block" />
           </div>
-          <span className="text-xs text-gray-400 ml-2 font-mono">main.py</span>
+          <span className="text-xs text-gray-400 ml-2 font-mono">{fileName}</span>
         </div>
         <div className="flex items-center gap-1">
           <button

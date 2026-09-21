@@ -2,17 +2,27 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import automationQuestions from "@/data/automation-questions.json";
-import automationEssentialsQuestions from "@/data/automation-essentials-questions.json";
+import pythonAutomationQuestions from "@/data/python/automation-questions.json";
+import pythonAutomationEssentialsQuestions from "@/data/python/automation-essentials-questions.json";
+import jsAutomationQuestions from "@/data/javascript/automation-questions.json";
+import jsAutomationEssentialsQuestions from "@/data/javascript/automation-essentials-questions.json";
 import type { AutomationQuestion } from "@/data/types";
+import { LANG_META, Language } from "@/data/index";
 import { Bot, Eye, EyeOff, Sparkles, Lightbulb, Search } from "lucide-react";
 
 const CodeEditor = dynamic(() => import("@/components/CodeEditor"), { ssr: false });
 
-const questions: AutomationQuestion[] = [
-  ...(automationQuestions.automation_testing_python_questions as AutomationQuestion[]),
-  ...(automationEssentialsQuestions.automation_python_essentials as AutomationQuestion[]),
-];
+const questionsByLang: Record<Language, AutomationQuestion[]> = {
+  python: [
+    ...(pythonAutomationQuestions.automation_testing_python_questions as AutomationQuestion[]),
+    ...(pythonAutomationEssentialsQuestions.automation_python_essentials as AutomationQuestion[]),
+  ],
+  javascript: [
+    ...(jsAutomationQuestions.automation_testing_javascript_questions as AutomationQuestion[]),
+    ...(jsAutomationEssentialsQuestions.automation_javascript_essentials as AutomationQuestion[]),
+  ],
+};
+
 const priorities = ["All", "MUST KNOW", "HIGH VALUE", "MEDIUM", "LOW"] as const;
 
 function EditorPlaceholder() {
@@ -23,7 +33,7 @@ function EditorPlaceholder() {
   );
 }
 
-function QuestionCard({ q }: { q: AutomationQuestion }) {
+function QuestionCard({ q, language }: { q: AutomationQuestion; language: Language }) {
   const [revealed, setRevealed] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -68,7 +78,16 @@ function QuestionCard({ q }: { q: AutomationQuestion }) {
         {/* Code editor */}
         <div>
           {mounted ? (
-            <CodeEditor key={q.id} initialCode={`# Question ${q.id}: ${q.topic}\n# Write and run your Python code below\n`} height="160px" />
+            <CodeEditor
+              key={`${language}-${q.id}`}
+              initialCode={
+                language === "javascript"
+                  ? `// Question ${q.id}: ${q.topic}\n// Write and run your JavaScript code below\n`
+                  : `# Question ${q.id}: ${q.topic}\n# Write and run your Python code below\n`
+              }
+              height="160px"
+              language={language}
+            />
           ) : (
             <EditorPlaceholder />
           )}
@@ -126,9 +145,12 @@ function QuestionCard({ q }: { q: AutomationQuestion }) {
   );
 }
 
-export default function AutomationPage() {
+export default function AutomationClient({ lang }: { lang: Language }) {
   const [filter, setFilter] = useState<(typeof priorities)[number]>("All");
   const [search, setSearch] = useState("");
+
+  const questions = questionsByLang[lang];
+  const label = LANG_META[lang].label;
 
   const mustKnow = questions.filter((q) => q.priority === "MUST KNOW").length;
   const highValue = questions.filter((q) => q.priority === "HIGH VALUE").length;
@@ -151,9 +173,9 @@ export default function AutomationPage() {
           <Bot size={20} className="text-cyan-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Python for Automation Testing</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{label} for Automation Testing</h1>
           <p className="text-sm text-gray-500">
-            {questions.length} interview-style Q&amp;A on the Python concepts every automation tester must know.
+            {questions.length} interview-style Q&amp;A on the {label} concepts every automation tester must know.
           </p>
         </div>
       </div>
@@ -225,7 +247,7 @@ export default function AutomationPage() {
           </div>
         )}
         {filtered.map((q) => (
-          <QuestionCard key={`${q.id}-${q.topic}`} q={q} />
+          <QuestionCard key={`${lang}-${q.id}-${q.topic}`} q={q} language={lang} />
         ))}
       </div>
     </div>

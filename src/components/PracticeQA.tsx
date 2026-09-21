@@ -75,9 +75,10 @@ function EditorPlaceholder({ height }: { height: number }) {
 
 interface PracticeQAProps {
   questions: QAQuestion[];
+  language?: "python" | "javascript";
 }
 
-function QuestionEditor({ q }: { q: QAQuestion }) {
+function QuestionEditor({ q, language = "python" }: { q: QAQuestion; language?: "python" | "javascript" }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -85,13 +86,16 @@ function QuestionEditor({ q }: { q: QAQuestion }) {
     setMounted(true);
   }, []);
 
-  const initialCode = `# Question ${q.id}\n# Write and run your Python code below\n`;
+  const initialCode =
+    language === "javascript"
+      ? `// Question ${q.id}\n// Write and run your JavaScript code below\n`
+      : `# Question ${q.id}\n# Write and run your Python code below\n`;
 
   if (!mounted) return <EditorPlaceholder height={210} />;
-  return <CodeEditor key={q.id} initialCode={initialCode} height="160px" />;
+  return <CodeEditor key={`${q.id}-${language}`} initialCode={initialCode} height="160px" language={language} />;
 }
 
-export default function PracticeQA({ questions }: PracticeQAProps) {
+export default function PracticeQA({ questions, language = "python" }: PracticeQAProps) {
   const [current, setCurrent] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [jumpInput, setJumpInput] = useState("");
@@ -160,7 +164,7 @@ export default function PracticeQA({ questions }: PracticeQAProps) {
 
       {/* Code editor to write and run code */}
       <div className="mt-4">
-        <QuestionEditor q={q} />
+        <QuestionEditor q={q} language={language} />
       </div>
 
       {/* Answer */}

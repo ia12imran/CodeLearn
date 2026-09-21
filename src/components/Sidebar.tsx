@@ -1,24 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { topics } from "@/data/topics";
+import { getTopics, getFirstLessonHref, Language, LANG_META } from "@/data/index";
 import { getProgress } from "@/lib/progress";
 import { useEffect, useState } from "react";
 import { ChevronRight, ChevronDown, CheckCircle2, FlaskConical, Code2, Bot } from "lucide-react";
 
-export default function Sidebar({ currentTopic, currentLesson }: { currentTopic: string; currentLesson: string }) {
+export default function Sidebar({ currentTopic, currentLesson, language = "python" }: { currentTopic: string; currentLesson: string; language?: Language }) {
   const [progress, setProgress] = useState<Record<string, boolean>>({});
   const [expanded, setExpanded] = useState<Record<string, boolean>>({ [currentTopic]: true });
+  const topics = getTopics(language);
 
   useEffect(() => {
-    const p = getProgress();
+    const p = getProgress(language);
     const map: Record<string, boolean> = {};
     p.completedLessons.forEach((key) => {
       map[key] = true;
     });
     // eslint-disable-next-line react-hooks/set-state-in-effect -- sync client-side progress from localStorage on mount
     setProgress(map);
-  }, []);
+  }, [language]);
 
   return (
     <aside
@@ -28,21 +29,28 @@ export default function Sidebar({ currentTopic, currentLesson }: { currentTopic:
       <div className="p-4">
         <div className="mb-4 space-y-2">
           <Link
-            href="/practice"
+            href={getFirstLessonHref(language)}
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50 rounded-lg transition"
+          >
+            <ChevronRight size={16} />
+            {LANG_META[language].label} Home
+          </Link>
+          <Link
+            href={`/${language}/practice`}
             className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-700 hover:bg-green-50 rounded-lg transition"
           >
             <Code2 size={16} />
             Practice Exercises
           </Link>
           <Link
-            href="/automation"
+            href={`/${language}/automation`}
             className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-cyan-700 hover:bg-cyan-50 rounded-lg transition"
           >
             <Bot size={16} />
-            Python Automation
+            {LANG_META[language].label} Automation
           </Link>
           <Link
-            href="/quiz"
+            href={`/${language}/quiz`}
             className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-purple-700 hover:bg-purple-50 rounded-lg transition"
           >
             <FlaskConical size={16} />
@@ -76,7 +84,7 @@ export default function Sidebar({ currentTopic, currentLesson }: { currentTopic:
                     return (
                       <Link
                         key={lesson.slug}
-                        href={`/learn/${topic.slug}/${lesson.slug}`}
+                        href={`/${language}/learn/${topic.slug}/${lesson.slug}`}
                         className={`flex items-center gap-2 px-3 py-1.5 text-sm rounded-md transition ${
                           isActive
                             ? "bg-blue-100 text-blue-700 font-medium"
