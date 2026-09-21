@@ -1,0 +1,340 @@
+{
+  "description": "67 curated ARITHMETIC OPERATOR questions for Automation Testing interviews (trimmed from 200; removed 133 redundant near-duplicate questions that tested the same concept).",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does 5 + 3 return?",
+      "answer": "5 + 3 is 8 because the plus operator adds the two numbers together.\n\ncode:\nprint(5 + 3)  # 8\n\nreal example:\nAdding 5 apples and 3 more apples gives you 8 apples on the counter."
+    },
+    {
+      "id": 2,
+      "question": "What does 10 - 4 return?",
+      "answer": "10 - 4 is 6 because the minus operator subtracts the second number from the first.\n\ncode:\nprint(10 - 4)  # 6\n\nreal example:\nIf you had 10 cookies and ate 4, exactly 6 cookies would remain."
+    },
+    {
+      "id": 3,
+      "question": "What does 7 * 6 return?",
+      "answer": "7 * 6 is 42 because the star operator multiplies the two numbers.\n\ncode:\nprint(7 * 6)  # 42\n\nreal example:\nCounting 7 packs of 6 pens gives a total of 42 pens."
+    },
+    {
+      "id": 4,
+      "question": "What does 15 / 3 return?",
+      "answer": "15 / 3 is 5.0 because division always returns a float (a decimal number) in Python.\n\ncode:\nprint(15 / 3)  # 5.0\n\nreal example:\nSplitting 15 dollars evenly among 3 friends gives each friend 5.0 dollars."
+    },
+    {
+      "id": 5,
+      "question": "What does 100 / 10 return?",
+      "answer": "100 / 10 is 10.0 because the division operator returns a float even when the result is a whole number.\n\ncode:\nprint(100 / 10)  # 10.0\n\nreal example:\nSplitting 100 cents into groups of 10 gives 10.0 groups."
+    },
+    {
+      "id": 6,
+      "question": "What does 1 / 2 return?",
+      "answer": "1 / 2 is 0.5 because division returns the exact decimal result.\n\ncode:\nprint(1 / 2)  # 0.5\n\nreal example:\nSharing 1 pizza between 2 people gives each exactly 0.5 pizza."
+    },
+    {
+      "id": 7,
+      "question": "What does 20 - 2 * 5 return?",
+      "answer": "20 - 2 * 5 is 10 because multiplication happens before subtraction, so first compute 2 * 5 = 10.\n\ncode:\nprint(20 - 2 * 5)  # 10\n\nreal example:\nFrom 20 dollars you buy 2 gifts costing 5 dollars each, leaving 10 dollars."
+    },
+    {
+      "id": 8,
+      "question": "What does 6 * (1 + 2) return?",
+      "answer": "6 * (1 + 2) is 18 because the parentheses are solved first: 1 + 2 = 3, then 6 * 3.\n\ncode:\nprint(6 * (1 + 2))  # 18\n\nreal example:\n6 boxes each holding 1 plus 2 toys means each holds 3, so 18 toys total."
+    },
+    {
+      "id": 9,
+      "question": "What does 3 + 4 * 2 return?",
+      "answer": "3 + 4 * 2 is 11 because multiplication has higher priority than addition, so it computes 3 + 8.\n\ncode:\nprint(3 + 4 * 2)  # 11\n\nreal example:\nYou buy 1 drink for 3 dollars plus 4 pens at 2 dollars each, costing 11 dollars total."
+    },
+    {
+      "id": 10,
+      "question": "What does 2 + 3 * 4 return?",
+      "answer": "2 + 3 * 4 is 14 because multiplication happens first (3 * 4 = 12), then 2 + 12.\n\ncode:\nprint(2 + 3 * 4)  # 14\n\nreal example:\nA 2-dollar fee plus 3 items at 4 dollars each costs 14 dollars."
+    },
+    {
+      "id": 11,
+      "question": "What does (2 + 3) * 4 return?",
+      "answer": "(2 + 3) * 4 is 20 because the parentheses run first, turning it into 5 * 4.\n\ncode:\nprint((2 + 3) * 4)  # 20\n\nreal example:\n5 people in a group times 4 identical groups makes 20 people."
+    },
+    {
+      "id": 12,
+      "question": "What does 10 - 2 * 3 return?",
+      "answer": "10 - 2 * 3 is 4 because multiplication runs first (2 * 3 = 6), leaving 10 - 6.\n\ncode:\nprint(10 - 2 * 3)  # 4\n\nreal example:\nFrom 10 minutes, using 3 five-minute tasks minus a 2-minute head start leaves 4 minutes."
+    },
+    {
+      "id": 13,
+      "question": "What does (10 - 2) * 3 return?",
+      "answer": "(10 - 2) * 3 is 24 because the parentheses compute 8 first, then 8 * 3.\n\ncode:\nprint((10 - 2) * 3)  # 24\n\nreal example:\n8 leftover boxes each holding 3 items account for 24 items."
+    },
+    {
+      "id": 14,
+      "question": "What does 3 + 4 * 5 - 2 return?",
+      "answer": "3 + 4 * 5 - 2 is 21 because the multiplication runs first (20), giving 3 + 20 - 2.\n\ncode:\nprint(3 + 4 * 5 - 2)  # 21\n\nreal example:\nA 3-dollar base, 4 items at 5 dollars each, minus a 2-dollar coupon costs 21 dollars."
+    },
+    {
+      "id": 15,
+      "question": "What does (3 + 4) * (5 - 2) return?",
+      "answer": "(3 + 4) * (5 - 2) is 21 because both parentheses compute first: 7 * 3.\n\ncode:\nprint((3 + 4) * (5 - 2))  # 21\n\nreal example:\n7 members in 3 booked rooms equals 21 total seats."
+    },
+    {
+      "id": 16,
+      "question": "What does 5 * 2 ** 3 return?",
+      "answer": "5 * 2 ** 3 is 40 because the exponent runs first (8), then 5 * 8.\n\ncode:\nprint(5 * 2 ** 3)  # 40\n\nreal example:\n5 rows of a board with 8 (2 cubed) cells each holds 40 cells."
+    },
+    {
+      "id": 17,
+      "question": "What does 10 // 3 + 10 % 3 return?",
+      "answer": "10 // 3 + 10 % 3 is 4 because floor division gives 3 and modulo gives 1, then 3 + 1.\n\ncode:\nprint(10 // 3 + 10 % 3)  # 4\n\nreal example:\n10 apples in packs of 3 gives 3 full packs plus 1 leftover apple, 4 pieces of info."
+    },
+    {
+      "id": 18,
+      "question": "What does 100 // 7 % 2 return?",
+      "answer": "100 // 7 % 2 is 0 because floor division and modulo run left to right: 100 // 7 = 14, then 14 % 2 = 0.\n\ncode:\nprint(100 // 7 % 2)  # 0\n\nreal example:\nEven-numbered count: 14 full groups of 7 divide evenly by 2, leaving no remainder."
+    },
+    {
+      "id": 19,
+      "question": "What does 10 // 3 return?",
+      "answer": "10 // 3 is 3 because floor division rounds the quotient down to the nearest whole number.\n\ncode:\nprint(10 // 3)  # 3\n\nreal example:\nPutting 10 marbles into boxes of 3 fills 3 full boxes with marble leftovers."
+    },
+    {
+      "id": 20,
+      "question": "What does -7 // 2 return?",
+      "answer": "-7 // 2 is -4 because floor division always rounds down, and -3.5 rounds down to -4, not -3.\n\ncode:\nprint(-7 // 2)  # -4\n\nreal example:\nIn temperatures, -7 degrees divided across 2 hours means about -4 degrees per hour, rounding down."
+    },
+    {
+      "id": 21,
+      "question": "What does 7 // -2 return?",
+      "answer": "7 // -2 is -4 because floor division rounds down toward negative infinity, so -3.5 becomes -4.\n\ncode:\nprint(7 // -2)  # -4\n\nreal example:\n7 tokens shared in groups of -2 still rounds the quotient down to -4."
+    },
+    {
+      "id": 22,
+      "question": "What does 7.5 // 2 return?",
+      "answer": "7.5 // 2 is 3.0 because floor division rounds down to 3 but keeps the result a float.\n\ncode:\nprint(7.5 // 2)  # 3.0\n\nreal example:\n7.5 liters poured into 2-liter containers fills exactly 3.0 containers."
+    },
+    {
+      "id": 23,
+      "question": "What does 2 // 5 return?",
+      "answer": "2 // 5 is 0 because 2 divided by 5 is less than 1, so the whole part is 0.\n\ncode:\nprint(2 // 5)  # 0\n\nreal example:\n2 candies into bags of 5 means 0 full bags are made."
+    },
+    {
+      "id": 24,
+      "question": "What does 8 // 3 // 2 return?",
+      "answer": "8 // 3 // 2 is 1 because floor division runs left to right: 8 // 3 = 2, then 2 // 2 = 1.\n\ncode:\nprint(8 // 3 // 2)  # 1\n\nreal example:\n8 tiles split into groups of 3 (2 groups), then into halves of 2 gives 1 full group."
+    },
+    {
+      "id": 25,
+      "question": "What does 10 % 3 return?",
+      "answer": "10 % 3 is 1 because the modulo operator returns the remainder left after dividing 10 by 3.\n\ncode:\nprint(10 % 3)  # 1\n\nreal example:\n10 apples shared among 3 people leaves 1 apple remaining."
+    },
+    {
+      "id": 26,
+      "question": "What does 100 % 10 return?",
+      "answer": "100 % 10 is 0 because 100 divides evenly by 10, leaving no remainder.\n\ncode:\nprint(100 % 10)  # 0\n\nreal example:\n100 cents grouped in tens fit perfectly, so nothing is left over."
+    },
+    {
+      "id": 27,
+      "question": "What does -7 % 2 return?",
+      "answer": "-7 % 2 is 1 because Python makes the remainder match the sign of the divisor (2), so it is 1.\n\ncode:\nprint(-7 % 2)  # 1\n\nreal example:\nLayering -7 points round-the-clock on a 2-phase cycle lands on phase 1."
+    },
+    {
+      "id": 28,
+      "question": "What does 7 % -2 return?",
+      "answer": "7 % -2 is -1 because the remainder takes the sign of the divisor (-2), so it is -1.\n\ncode:\nprint(7 % -2)  # -1\n\nreal example:\nOn a -2 repeat cycle, position 7 lands at offset -1."
+    },
+    {
+      "id": 29,
+      "question": "What does -7 % -2 return?",
+      "answer": "-7 % -2 is -1 because with both numbers negative the remainder stays negative, and -7 = 3 * -2 + -1.\n\ncode:\nprint(-7 % -2)  # -1\n\nreal example:\n-7 steps on a cycle of -2 leaves you -1 steps from the start."
+    },
+    {
+      "id": 30,
+      "question": "What does 2 ** 3 return?",
+      "answer": "2 ** 3 is 8 because the power operator raises 2 to the third power: 2 * 2 * 2.\n\ncode:\nprint(2 ** 3)  # 8\n\nreal example:\nDoubling a player count from 2 three times in a row reaches 8 players."
+    },
+    {
+      "id": 31,
+      "question": "What does 2 ** 10 return?",
+      "answer": "2 ** 10 is 1024 because 2 multiplied by itself 10 times grows to 1024.\n\ncode:\nprint(2 ** 10)  # 1024\n\nreal example:\nBinary storage: 2 with 10 bits can represent 1024 distinct values."
+    },
+    {
+      "id": 32,
+      "question": "What does 5 ** 0 return?",
+      "answer": "5 ** 0 is 1 because any number raised to the power 0 equals 1.\n\ncode:\nprint(5 ** 0)  # 1\n\nreal example:\nGrowth factor: no growth steps (power 0) leaves the value at its start, 1."
+    },
+    {
+      "id": 33,
+      "question": "What does 2 ** 2 ** 3 return?",
+      "answer": "2 ** 2 ** 3 is 256 because exponentiation is evaluated from right to left, so first 2 ** 3 = 8, then 2 ** 8.\n\ncode:\nprint(2 ** 2 ** 3)  # 256\n\nreal example:\nStacked discounts on a 8-fold compounding growth end at 256 units."
+    },
+    {
+      "id": 34,
+      "question": "What does 4 ** 0.5 return?",
+      "answer": "4 ** 0.5 is 2.0 because raising to 0.5 means taking the square root, and the result is a float.\n\ncode:\nprint(4 ** 0.5)  # 2.0\n\nreal example:\nFinding the side length of a 4 square-meter plot gives 2.0 meters."
+    },
+    {
+      "id": 35,
+      "question": "What does 2 ** 0.5 return?",
+      "answer": "2 ** 0.5 is 1.4142135623730951 because raising to 0.5 is the square root of 2, which is an irrational float.\n\ncode:\nprint(2 ** 0.5)  # 1.4142135623730951\n\nreal example:\nThe diagonal of a 1 by 1 square tile measures about 1.41 units."
+    },
+    {
+      "id": 36,
+      "question": "What does 10 ** -1 return?",
+      "answer": "10 ** -1 is 0.1 because a negative power means taking the reciprocal: 1 / 10.\n\ncode:\nprint(10 ** -1)  # 0.1\n\nreal example:\nOne decimal place shift: 10 to the minus 1 makes 0.1, like splitting a unit into tenths."
+    },
+    {
+      "id": 37,
+      "question": "What does -5 ** 2 return?",
+      "answer": "-5 ** 2 is -25 because without parentheses the exponent binds tighter than the unary minus, so it is -(5 ** 2).\n\ncode:\nprint(-5 ** 2)  # -25\n\nreal example:\nMisreading a squared drop as negative when the sign sits outside can produce -25."
+    },
+    {
+      "id": 38,
+      "question": "What is the value of x after x = 5; x += 3?",
+      "answer": "x becomes 8 because x += 3 adds 3 to the current value of x (5).\n\ncode:\nx = 5\nx += 3\nprint(x)  # 8\n\nreal example:\nAdding 3 new books to your 5-book shelf updates the total to 8."
+    },
+    {
+      "id": 39,
+      "question": "What is the value of x after x = 10; x -= 4?",
+      "answer": "x becomes 6 because x -= 4 subtracts 4 from the current value of x (10).\n\ncode:\nx = 10\nx -= 4\nprint(x)  # 6\n\nreal example:\nSpending 4 of 10 dollars on your card leaves a balance of 6 dollars."
+    },
+    {
+      "id": 40,
+      "question": "What is the value of x after x = 7; x *= 2?",
+      "answer": "x becomes 14 because x *= 2 doubles the current value of x (7).\n\ncode:\nx = 7\nx *= 2\nprint(x)  # 14\n\nreal example:\nDoubling a delivery of 7 crates gives 14 crates in stock."
+    },
+    {
+      "id": 41,
+      "question": "What is the value of x after x = 20; x /= 4?",
+      "answer": "x becomes 5.0 because x /= 4 divides x by 4, and division always returns a float.\n\ncode:\nx = 20\nx /= 4\nprint(x)  # 5.0\n\nreal example:\nSharing 20 dollars equally among 4 people gives each 5.0 dollars."
+    },
+    {
+      "id": 42,
+      "question": "What is the value of x after x = 10; x //= 3?",
+      "answer": "x becomes 3 because x //= 3 divides x by 3 and takes the whole part, rounding down.\n\ncode:\nx = 10\nx //= 3\nprint(x)  # 3\n\nreal example:\nPacking 10 sandwiches into pages of 3 fills exactly 3 full pages."
+    },
+    {
+      "id": 43,
+      "question": "What is the value of x after x = 10; x %= 3?",
+      "answer": "x becomes 1 because x %= 3 stores the remainder of 10 divided by 3.\n\ncode:\nx = 10\nx %= 3\nprint(x)  # 1\n\nreal example:\n10 people split into pairs of 3 leaves 1 person not in a full pair."
+    },
+    {
+      "id": 44,
+      "question": "What is the value of x after x = 2; x **= 5?",
+      "answer": "x becomes 32 because x **= 5 raises x (2) to the fifth power.\n\ncode:\nx = 2\nx **= 5\nprint(x)  # 32\n\nreal example:\nDoubling a 2-player pool 5 times grows the pool to 32 players."
+    },
+    {
+      "id": 45,
+      "question": "What is the value of s after s = 'ab'; s *= 3?",
+      "answer": "s becomes 'ababab' because multiplying a string by a number repeats the string that many times.\n\ncode:\ns = 'ab'\ns *= 3\nprint(s)  # ababab\n\nreal example:\nPrinting a divider 'ab' three times creates the pattern 'ababab'."
+    },
+    {
+      "id": 46,
+      "question": "What is the value of s after s = 'a'; s += 'b'?",
+      "answer": "s becomes 'ab' because += on a string appends the text to the end of it.\n\ncode:\ns = 'a'\ns += 'b'\nprint(s)  # ab\n\nreal example:\nBuilding a username by adding each character of 'a' then 'b' gives 'ab'."
+    },
+    {
+      "id": 47,
+      "question": "What is the value of x after x = 5; y = 2; x += y?",
+      "answer": "x becomes 7 because x += y adds the value of y (2) to the value of x (5).\n\ncode:\nx = 5\ny = 2\nx += y\nprint(x)  # 7\n\nreal example:\nAdding your 2 coins to your friend's 5 coins makes a total of 7 coins."
+    },
+    {
+      "id": 48,
+      "question": "What does -(-5) return?",
+      "answer": "-(-5) is 5 because the inner -5 is flipped by the outer minus into positive 5.\n\ncode:\nprint(-(-5))  # 5\n\nreal example:\nCancelling a minus sign on a -5 point penalty gives back the positive 5 points."
+    },
+    {
+      "id": 49,
+      "question": "What does +5 return?",
+      "answer": "+5 is 5 because the unary plus sign leaves the number unchanged.\n\ncode:\nprint(+5)  # 5\n\nreal example:\nWriting a positive balance as +5 still means the same 5 dollars."
+    },
+    {
+      "id": 50,
+      "question": "What does -0 return?",
+      "answer": "-0 is 0 because negating zero leaves it zero.\n\ncode:\nprint(-0)  # 0\n\nreal example:\nA zero balance stays zero whether credited or debited."
+    },
+    {
+      "id": 51,
+      "question": "What does 0.1 + 0.2 return?",
+      "answer": "0.1 + 0.2 is 0.30000000000000004 because floats store decimals in binary, which cannot hold exact values for 0.1 and 0.2.\n\ncode:\nprint(0.1 + 0.2)  # 0.30000000000000004\n\nreal example:\nMoney math with floats can show tiny rounding errors, so currency usually uses cents instead."
+    },
+    {
+      "id": 52,
+      "question": "What does 10 + 2.5 return?",
+      "answer": "10 + 2.5 is 12.5 because mixing an int and a float gives a float result.\n\ncode:\nprint(10 + 2.5)  # 12.5\n\nreal example:\nA 10-meter race plus a 2.5-meter head start covers 12.5 meters."
+    },
+    {
+      "id": 53,
+      "question": "What does 3 * 0.5 return?",
+      "answer": "3 * 0.5 is 1.5 because multiplying an int by a float keeps the float type.\n\ncode:\nprint(3 * 0.5)  # 1.5\n\nreal example:\n3 half-liters of juice total 1.5 liters."
+    },
+    {
+      "id": 54,
+      "question": "What does 7 // 2.0 return?",
+      "answer": "7 // 2.0 is 3.0 because floor division rounds down, and the float divisor keeps the result a float.\n\ncode:\nprint(7 // 2.0)  # 3.0\n\nreal example:\n7 meters of tape cut into 2.0-meter strips makes 3.0 full strips."
+    },
+    {
+      "id": 55,
+      "question": "What does 5.5 % 1 return?",
+      "answer": "5.5 % 1 is 0.5 because 1 fits 5 whole times in 5.5, leaving the fractional part 0.5.\n\ncode:\nprint(5.5 % 1)  # 0.5\n\nreal example:\nKeeping just the decimal part of a distance 5.5 km gives 0.5 km."
+    },
+    {
+      "id": 56,
+      "question": "What does divmod(13, 5) return?",
+      "answer": "divmod(13, 5) is (2, 3) because the function returns a tuple of the quotient and remainder together.\n\ncode:\nprint(divmod(13, 5))  # (2, 3)\n\nreal example:\nChecking how many groups of 5 items fit in 13 and what is leftover gives (2, 3)."
+    },
+    {
+      "id": 57,
+      "question": "What does divmod(13, -5) return?",
+      "answer": "divmod(13, -5) is (-3, -2) because with a negative divisor the quotient rounds down to -3 and the remainder takes its sign.\n\ncode:\nprint(divmod(13, -5))  # (-3, -2)\n\nreal example:\nBalancing accounts on a -5 cycle reports (-3, -2) for 13 units."
+    },
+    {
+      "id": 58,
+      "question": "What does round(3.14159, 2) return?",
+      "answer": "round(3.14159, 2) is 3.14 because rounding to 2 decimal places keeps the hundredths digits.\n\ncode:\nprint(round(3.14159, 2))  # 3.14\n\nreal example:\nReporting pi at 2 decimals for a receipt shows 3.14."
+    },
+    {
+      "id": 59,
+      "question": "What does round(2.5) return?",
+      "answer": "round(2.5) is 2 because Python uses banker's rounding, which rounds to the nearest even number.\n\ncode:\nprint(round(2.5))  # 2\n\nreal example:\nRounding 2.5 out of 5 stars displays 2 stars under this rule."
+    },
+    {
+      "id": 60,
+      "question": "What does round(3.5) return?",
+      "answer": "round(3.5) is 4 because banker's rounding rounds half values to the nearest even, and 4 is even.\n\ncode:\nprint(round(3.5))  # 4\n\nreal example:\nA 3.5 rating shown as a whole star value becomes 4 stars."
+    },
+    {
+      "id": 61,
+      "question": "What does abs(-7) return?",
+      "answer": "abs(-7) is 7 because the absolute value function strips the sign and keeps the distance from zero.\n\ncode:\nprint(abs(-7))  # 7\n\nreal example:\nA temperature drop of -7 degrees has an absolute change of 7 degrees."
+    },
+    {
+      "id": 62,
+      "question": "What does pow(2, 10) return?",
+      "answer": "pow(2, 10) is 1024 because pow(base, exp) computes 2 raised to the power 10.\n\ncode:\nprint(pow(2, 10))  # 1024\n\nreal example:\nBits in computing: 2 to the 10th gives 1024 possible on-off combinations."
+    },
+    {
+      "id": 63,
+      "question": "What does pow(2, 10, 1000) return?",
+      "answer": "pow(2, 10, 1000) is 24 because the third argument computes the power first, then takes the remainder on dividing by 1000.\n\ncode:\nprint(pow(2, 10, 1000))  # 24\n\nreal example:\nFinding a huge growth 2**10 reduced modulo 1000 lands at 24 for wrapping counters."
+    },
+    {
+      "id": 64,
+      "question": "What does True + True return?",
+      "answer": "True + True is 2 because in arithmetic True behaves as the integer 1.\n\ncode:\nprint(True + True)  # 2\n\nreal example:\nCounting two yes answers as ones gives a total score of 2."
+    },
+    {
+      "id": 65,
+      "question": "What does 5 + True return?",
+      "answer": "5 + True is 6 because True is treated as the number 1 in arithmetic.\n\ncode:\nprint(5 + True)  # 6\n\nreal example:\n5 base points plus a bonus yes flag adds 1 point, reaching 6."
+    },
+    {
+      "id": 66,
+      "question": "What happens when you evaluate 10 // 0?",
+      "answer": "Evaluating 10 // 0 raises a ZeroDivisionError because dividing by zero is not allowed in mathematics.\n\ncode:\nprint(10 // 0)  # raises ZeroDivisionError\n\nreal example:\nSplitting 10 apples among 0 people is undefined, so the program stops with an error."
+    },
+    {
+      "id": 67,
+      "question": "What does 1e3 return?",
+      "answer": "1e3 is 1000.0 because scientific notation e3 means 1 times 10 to the power 3, and it is a float.\n\ncode:\nprint(1e3)  # 1000.0\n\nreal example:\nDescribing 1 thousand in scientific notation for large datasets writes 1e3."
+    }
+  ]
+}

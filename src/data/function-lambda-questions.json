@@ -1,0 +1,675 @@
+{
+  "description": "134 curated FUNCTION LAMBDA questions for Automation Testing interviews (trimmed from 250; removed 116 redundant near-duplicate questions that tested the same concept).",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What keyword creates an anonymous function in Python?",
+      "answer": "The keyword lambda creates an anonymous function.\n\ncode:\nf = lambda x: x + 1\nprint(f(2))  # 3\n\nreal example:\nInline one-liners like sort keys use lambda without naming a full function."
+    },
+    {
+      "id": 2,
+      "question": "What is the general syntax of a lambda?",
+      "answer": "It is lambda parameters: expression.\n\ncode:\ndouble = lambda x: x * 2\nprint(double(5))  # 10\n\nreal example:\nShort mappings like number-to-word converters fit the one-line lambda syntax."
+    },
+    {
+      "id": 3,
+      "question": "What is a lambda function?",
+      "answer": "A small anonymous function defined as a single expression.\n\ncode:\nadd = lambda a, b: a + b\nprint(add(2, 3))  # 5\n\nreal example:\nApplying a tiny transform to a series of values is where lambdas shine."
+    },
+    {
+      "id": 4,
+      "question": "Can a lambda have multiple parameters?",
+      "answer": "Yes, separate them with commas: lambda a, b: a * b.\n\ncode:\nmul = lambda a, b: a * b\nprint(mul(3, 4))  # 12\n\nreal example:\nTwo-value math like total = lambda qty, price: qty * price is common."
+    },
+    {
+      "id": 5,
+      "question": "Can a lambda have default parameters?",
+      "answer": "Yes, it supports defaults like lambda x=1: x.\n\ncode:\nf = lambda x=1: x * 10\nprint(f())    # 10\nprint(f(2))   # 20\n\nreal example:\nOptional settings inside a quick inline function default naturally."
+    },
+    {
+      "id": 6,
+      "question": "Can a lambda contain statements like if/else blocks?",
+      "answer": "No, only a single expression; conditional expressions are allowed but blocks are not.\n\ncode:\nclassify = lambda n: \"even\" if n % 2 == 0 else \"odd\"\nprint(classify(4))  # even\n\nreal example:\nA concise inline answer like this works, but multi-step logic belongs in def."
+    },
+    {
+      "id": 7,
+      "question": "Does a lambda have an explicit return keyword?",
+      "answer": "No, it implicitly returns the value of its expression.\n\ncode:\nf = lambda x: x + 5\nprint(f(1))  # 6\n\nreal example:\nThe expression result appears automatically, so no return is ever written."
+    },
+    {
+      "id": 8,
+      "question": "What does print((lambda x: x + 1)(4)) output?",
+      "answer": "It prints 5, computed as 4 + 1.\n\ncode:\nprint((lambda x: x + 1)(4))  # 5\n\nreal example:\nImmediately calling a lambda applies the transform on the spot without naming it."
+    },
+    {
+      "id": 9,
+      "question": "What is the type of a lambda?",
+      "answer": "It is a function, same as a def-defined function.\n\ncode:\nf = lambda x: x\nprint(type(f))  # <class 'function'>\n\nreal example:\nLambdas can be passed anywhere a def function is accepted, like sorted keys."
+    },
+    {
+      "id": 10,
+      "question": "What is the __name__ attribute of a lambda?",
+      "answer": "It is always \"<lambda>\".\n\ncode:\nf = lambda x: x\nprint(f.__name__)  # <lambda>\n\nreal example:\nLoggers see <lambda> for anonymous callbacks, so debugging is easier with def."
+    },
+    {
+      "id": 11,
+      "question": "When should you use lambda instead of def?",
+      "answer": "For short, single-expression inline functions passed to higher-order calls.\n\ncode:\nnums = [3, 1, 2]\nprint(sorted(nums, key=lambda x: -x))  # [3, 2, 1]\n\nreal example:\nInline sort keys and short callbacks are the sweet spot for lambdas."
+    },
+    {
+      "id": 12,
+      "question": "Why is naming a lambda (f = lambda x: x) discouraged?",
+      "answer": "PEP 8 says to use def for named functions; lambdas are meant for anonymous use.\n\ncode:\ndef f(x):  # preferred style for a named function\n    return x\n\nreal example:\nNamed functions give better names, docs, and tracebacks in shared codebases."
+    },
+    {
+      "id": 13,
+      "question": "How do you call a lambda immediately?",
+      "answer": "Wrap it in parentheses and add arguments: (lambda x: x * 2)(5).\n\ncode:\nresult = (lambda x: x * 2)(5)\nprint(result)  # 10\n\nreal example:\nImmediately-invoked lambdas compute one-off values without polluting the namespace."
+    },
+    {
+      "id": 14,
+      "question": "Can a lambda be returned from a function?",
+      "answer": "Yes, a lambda is a normal function object that can be returned.\n\ncode:\ndef make(n):\n    return lambda x: x + n\n\nadd3 = make(3)\nprint(add3(4))  # 7\n\nreal example:\nFactories returning tailored lambdas create reusable customized behavior."
+    },
+    {
+      "id": 15,
+      "question": "What does print(sum(map(len, [\"a\", \"bc\", \"def\"]))) output?",
+      "answer": "It prints 6, the total of the lengths 1, 2, and 3.\n\ncode:\nprint(sum(map(len, [\"a\", \"bc\", \"def\"])))  # 6\n\nreal example:\nCounting total characters across many usernames sums their lengths."
+    },
+    {
+      "id": 16,
+      "question": "Can you store a lambda in a list?",
+      "answer": "Yes, store it and call it later with funcs[0]().\n\ncode:\nfuncs = [lambda: 1, lambda: 2]\nprint(funcs[0]())  # 1\n\nreal example:\nA list of tiny strategies can be picked by index at runtime."
+    },
+    {
+      "id": 17,
+      "question": "What does map() do?",
+      "answer": "It applies a function to each item of an iterable and yields results lazily.\n\ncode:\nprint(list(map(lambda x: x + 1, [1, 2])))  # [2, 3]\n\nreal example:\nApplying a conversion to every row of a large log stream is map's job."
+    },
+    {
+      "id": 18,
+      "question": "What type does map() return?",
+      "answer": "It returns a map object, which is an iterator.\n\ncode:\nm = map(str, [1, 2])\nprint(type(m))  # <class 'map'>\n\nreal example:\nBecause it is lazy, map can stream huge inputs without building results upfront."
+    },
+    {
+      "id": 19,
+      "question": "How do you materialize a map result?",
+      "answer": "Wrap it with list(): list(map(...)).\n\ncode:\nprint(list(map(lambda x: x * 3, [1, 2])))  # [3, 6]\n\nreal example:\nAfter lazily transforming readings, list() collects them for storage or display."
+    },
+    {
+      "id": 20,
+      "question": "What does print(list(map(lambda x: x ** 2, range(3)))) output?",
+      "answer": "It prints [0, 1, 4], the squares of 0, 1, and 2.\n\ncode:\nprint(list(map(lambda x: x ** 2, range(3))))  # [0, 1, 4]\n\nreal example:\nSquaring sequence values for a chart series follows this pattern."
+    },
+    {
+      "id": 21,
+      "question": "How does map behave with two iterables?",
+      "answer": "It pairs items like zip, passing one argument per iterable to the function.\n\ncode:\nprint(list(map(lambda a, b: a + b, [1, 2], [10, 20])))  # [11, 22]\n\nreal example:\nCombining two sensor channels element by element suits two-argument map."
+    },
+    {
+      "id": 22,
+      "question": "How many items does map produce with uneven iterables?",
+      "answer": "It stops at the shortest iterable, like zip.\n\ncode:\nprint(list(map(lambda a, b: a + b, [1, 2, 3], [10, 20])))  # [11, 22]\n\nreal example:\nWhen one data stream runs short, map stops so no missing values are invented."
+    },
+    {
+      "id": 23,
+      "question": "What does filter() do?",
+      "answer": "It yields only the items for which the function returns a truthy value.\n\ncode:\nprint(list(filter(lambda x: x > 2, [1, 2, 3, 4])))  # [3, 4]\n\nreal example:\nA contact list filtered to active members keeps only matching entries."
+    },
+    {
+      "id": 24,
+      "question": "What does print(list(filter(lambda x: x > 2, [1, 2, 3, 4]))) output?",
+      "answer": "It prints [3, 4], keeping only values strictly greater than 2.\n\ncode:\nprint(list(filter(lambda x: x > 2, [1, 2, 3, 4])))  # [3, 4]\n\nreal example:\nFiltering orders above a minimum threshold trims a report to relevant rows."
+    },
+    {
+      "id": 25,
+      "question": "Why pass None as the filter function?",
+      "answer": "None means keep only truthy items, dropping zeroes, empties, and None.\n\ncode:\nprint(list(filter(None, [0, 1, \"\", \"a\"])))  # [1, 'a']\n\nreal example:\nCleaning user replies of empty strings and zero values is quick with filter(None)."
+    },
+    {
+      "id": 26,
+      "question": "What does print(list(filter(None, [0, 1, \"\", \"a\"]))) output?",
+      "answer": "It prints [1, 'a'], dropping the falsy 0 and empty string.\n\ncode:\nprint(list(filter(None, [0, 1, \"\", \"a\"])))  # [1, 'a']\n\nreal example:\nPreparing a list of non-empty tags before display uses exactly this cleaning."
+    },
+    {
+      "id": 27,
+      "question": "What does sorted() take as the key parameter?",
+      "answer": "A function applied to each element to compute the sort key.\n\ncode:\nwords = [\"cat\", \"banana\", \"a\"]\nprint(sorted(words, key=len))  # ['a', 'cat', 'banana']\n\nreal example:\nSorting by a computed property, like age or priority, centers on the key function."
+    },
+    {
+      "id": 28,
+      "question": "How do you sort strings by their length?",
+      "answer": "Pass len as the key: sorted(words, key=len).\n\ncode:\nwords = [\"bb\", \"a\", \"ccc\"]\nprint(sorted(words, key=len))  # ['a', 'bb', 'ccc']\n\nreal example:\nArranging titles or names by character count uses len as the key."
+    },
+    {
+      "id": 29,
+      "question": "How do you sort by the second element of tuples?",
+      "answer": "Use sorted(pairs, key=lambda t: t[1]).\n\ncode:\npairs = [(1, \"b\"), (2, \"a\")]\nprint(sorted(pairs, key=lambda t: t[1]))  # [(2, 'a'), (1, 'b')]\n\nreal example:\nRanking players by their score slot in a tuple is a textbook sort key."
+    },
+    {
+      "id": 30,
+      "question": "How do you find the element with the largest abs value?",
+      "answer": "Use max(items, key=abs).\n\ncode:\nnums = [-7, 3, -1]\nprint(max(nums, key=abs))  # -7\n\nreal example:\nPicking the biggest-possible deviation in a sensor log uses max with abs."
+    },
+    {
+      "id": 31,
+      "question": "How do you sort a dict's items by value?",
+      "answer": "Use sorted(d.items(), key=lambda item: item[1]).\n\ncode:\nd = {\"a\": 3, \"b\": 1, \"c\": 2}\nprint(sorted(d.items(), key=lambda item: item[1]))  # [('b', 1), ('c', 2), ('a', 3)]\n\nreal example:\nRanking word counts or scores by their dict values sorts items this way."
+    },
+    {
+      "id": 32,
+      "question": "What does functools.reduce do?",
+      "answer": "It folds an iterable into one accumulated value from left to right.\n\ncode:\nfrom functools import reduce\n\nprint(reduce(lambda a, b: a + b, [1, 2, 3, 4]))  # 10\n\nreal example:\nReducing daily page views into a monthly total is exactly this fold."
+    },
+    {
+      "id": 33,
+      "question": "Where do you import reduce from?",
+      "answer": "From functools: from functools import reduce.\n\ncode:\nfrom functools import reduce\n\nprint(reduce(lambda a, b: a * b, [2, 3]))  # 6\n\nreal example:\nPython keeps advanced tools like reduce importable on demand from functools."
+    },
+    {
+      "id": 34,
+      "question": "What does reduce(lambda a, b: a + b, [1, 2, 3, 4]) return?",
+      "answer": "It returns 10, the sum accumulated across the list.\n\ncode:\nfrom functools import reduce\n\nprint(reduce(lambda a, b: a + b, [1, 2, 3, 4]))  # 10\n\nreal example:\nTotaling expense entries into one balance uses an addition fold."
+    },
+    {
+      "id": 35,
+      "question": "What does reduce(lambda a, b: a * b, [1, 2, 3, 4, 5]) return?",
+      "answer": "It returns 120, the product of all numbers in the list.\n\ncode:\nfrom functools import reduce\n\nprint(reduce(lambda a, b: a * b, [1, 2, 3, 4, 5]))  # 120\n\nreal example:\nMultiplying growth factors into one combined ratio is a product fold."
+    },
+    {
+      "id": 36,
+      "question": "What happens if reduce gets an empty iterable with no initial?",
+      "answer": "It raises TypeError, since there is nothing to reduce without an initial value.\n\ncode:\nfrom functools import reduce\n\n# reduce(lambda a, b: a + b, []) -> TypeError: reduce() of empty sequence with no initial value\n\nreal example:\nGuarding against empty data when totaling ensures the error is handled up front."
+    },
+    {
+      "id": 37,
+      "question": "What does reduce(lambda a, b: a + b, [], 10) return?",
+      "answer": "It returns 10, the initial value when the iterable is empty.\n\ncode:\nfrom functools import reduce\n\nprint(reduce(lambda a, b: a + b, [], 10))  # 10\n\nreal example:\nA sale total starting from a carry-forward credit returns that base when nothing is added."
+    },
+    {
+      "id": 38,
+      "question": "How do you flatten [[1, 2], [3], [4, 5]] with reduce?",
+      "answer": "Concatenate each inner list onto the accumulated result, starting from an empty list.\n\ncode:\nfrom functools import reduce\n\ndata = [[1, 2], [3], [4, 5]]\nprint(reduce(lambda acc, lst: acc + lst, data, []))  # [1, 2, 3, 4, 5]\n\nreal example:\nFlattening grouped rows into a single listing for export is exactly this use."
+    },
+    {
+      "id": 39,
+      "question": "What does functools.partial do?",
+      "answer": "It creates a new function with some arguments pre-filled or frozen.\n\ncode:\nfrom functools import partial\n\ndef add(a, b):\n    return a + b\n\nadd1 = partial(add, 1)\nprint(add1(10))  # 11\n\nreal example:\nPre-binding a base price or default tax produces a ready-to-use function."
+    },
+    {
+      "id": 40,
+      "question": "What does partial(pow, 2) create?",
+      "answer": "A function that returns 2 ** x when called with one argument x.\n\ncode:\nfrom functools import partial\n\np2 = partial(pow, 2)\nprint(p2(3))  # 8\n\nreal example:\nPowers of two used repeatedly in binary logic get a tidy pre-bound function."
+    },
+    {
+      "id": 41,
+      "question": "What does print(partial(pow, 2)(3)) output?",
+      "answer": "It prints 8, since pow(2, 3) equals 8.\n\ncode:\nfrom functools import partial\n\nprint(partial(pow, 2)(3))  # 8\n\nreal example:\nComputing binary shifts as powers of two in one call is convenient for logs."
+    },
+    {
+      "id": 42,
+      "question": "What does partial(int, base=2) do?",
+      "answer": "It creates an int-like function that parses strings as base-2 numbers.\n\ncode:\nfrom functools import partial\n\nbin_int = partial(int, base=2)\nprint(bin_int(\"1010\"))  # 10\n\nreal example:\nParsing many binary configuration flags uses this pre-configured converter."
+    },
+    {
+      "id": 43,
+      "question": "Does partial modify the original function?",
+      "answer": "No, it returns a new wrapped callable, leaving the original untouched.\n\ncode:\nfrom functools import partial\n\ndef add(a, b):\n    return a + b\n\np = partial(add, 1)\nprint(p(2), add(3, 4))  # 3 7\n\nreal example:\nSharing a base function while giving each team their own variant keeps the source intact."
+    },
+    {
+      "id": 44,
+      "question": "What is function composition?",
+      "answer": "Combining functions so each output feeds the next: h(x) = g(f(x)).\n\ncode:\ndef f(x):\n    return x + 2\n\ndef g(x):\n    return x * 3\n\nprint(g(f(1)))  # 9\n\nreal example:\nPipeline stages like clean then convert chain outputs into inputs in order."
+    },
+    {
+      "id": 45,
+      "question": "Write a small compose helper.",
+      "answer": "Return a lambda that applies g to the result of f.\n\ncode:\ndef compose(g, f):\n    return lambda x: g(f(x))\n\nadd2 = lambda x: x + 2\ndouble = lambda x: x * 2\nh = compose(double, add2)\nprint(h(3))  # 10\n\nreal example:\nBuilding transformation pipelines from small reusable steps uses compose."
+    },
+    {
+      "id": 46,
+      "question": "What does make_adder(n) return in def make_adder(n): return lambda x: x + n?",
+      "answer": "It returns a lambda that adds n to its argument.\n\ncode:\ndef make_adder(n):\n    return lambda x: x + n\n\nadd5 = make_adder(5)\nprint(add5(2))  # 7\n\nreal example:\nFactory-built adders, like adding a fixed tip, come from this closure pattern."
+    },
+    {
+      "id": 47,
+      "question": "What does print(make_adder(5)(3)) output when make_adder(n): return lambda x: x + n?",
+      "answer": "It prints 8, computed as 5 + 3.\n\ncode:\ndef make_adder(n):\n    return lambda x: x + n\n\nprint(make_adder(5)(3))  # 8\n\nreal example:\nInstantly adding a remembered constant to an argument is a closure one-liner."
+    },
+    {
+      "id": 48,
+      "question": "How does a closure keep its free variables alive?",
+      "answer": "It holds references to the enclosing scope's cells, inspectable via __closure__.\n\ncode:\ndef outer(x):\n    def inner():\n        return x\n    return inner\n\nf = outer(9)\nprint(f(), f.__closure__[0].cell_contents)  # 9 9\n\nreal example:\nThe captured value stays alive even after the outer function finishes, like saved memory."
+    },
+    {
+      "id": 49,
+      "question": "What is the late-binding closure gotcha?",
+      "answer": "Loop-created closures all see the final value of the loop variable.\n\ncode:\nfuncs = []\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])  # [2, 2, 2]\n\nreal example:\nEvent handlers in a loop unexpectedly all reference the last counter value."
+    },
+    {
+      "id": 50,
+      "question": "What does the following print?\nfuncs = []\nfor i in range(3):\n    funcs.append(lambda: i)\nprint([f() for f in funcs])",
+      "answer": "It prints [2, 2, 2], because all lambdas see the final i.\n\ncode:\nfuncs = []\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])  # [2, 2, 2]\n\nreal example:\nButtons assigned in a loop all click the last item; each needs its own snapshot."
+    },
+    {
+      "id": 51,
+      "question": "How do you fix the late-binding gotcha in a loop?",
+      "answer": "Bind the current value as a default argument: lambda i=i: i.\n\ncode:\nfuncs = []\nfor i in range(3):\n    funcs.append(lambda i=i: i)\n\nprint([f() for f in funcs])  # [0, 1, 2]\n\nreal example:\nGiving each loop-based handler its own value via default binding fixes menus and buttons."
+    },
+    {
+      "id": 52,
+      "question": "What does nonlocal do?",
+      "answer": "It allows assigning to a variable in an enclosing, non-global function scope.\n\ncode:\ndef outer():\n    n = 0\n    def inner():\n        nonlocal n\n        n += 1\n        return n\n    return inner\n\nup = outer()\nprint(up(), up())  # 1 2\n\nreal example:\nUpdating a remembered count inside a nested function needs nonlocal."
+    },
+    {
+      "id": 53,
+      "question": "Write a counter closure using nonlocal.",
+      "answer": "Use nonlocal to change the enclosing n and return the incremented count.\n\ncode:\ndef counter():\n    n = 0\n    def up():\n        nonlocal n\n        n += 1\n        return n\n    return up\n\nc = counter()\nprint(c(), c(), c())  # 1 2 3\n\nreal example:\nPer-user click counters created by a factory use this exact closure."
+    },
+    {
+      "id": 54,
+      "question": "What happens if you assign to a name that matches an enclosing variable, without nonlocal?",
+      "answer": "Python treats it as a brand-new local variable in the inner function.\n\ncode:\ndef outer():\n    n = 0\n    def inner():\n        n = 5  # new local n, outer untouched\n        return n\n    inner()\n    return n\n\nprint(outer())  # 0\n\nreal example:\nForgetting nonlocal creates a shadowing local, silently leaving the outer value unchanged."
+    },
+    {
+      "id": 55,
+      "question": "What is a cell variable?",
+      "answer": "A special holder that lets inner functions share mutable state with enclosing scopes.\n\ncode:\ndef outer():\n    x = [1]\n    def inner():\n        x.append(2)\n        return x\n    return inner\n\nf = outer()\nprint(f())  # [1, 2]\n\nreal example:\nA shared tracking list inside closures updates the same cell across all callers."
+    },
+    {
+      "id": 56,
+      "question": "How do you inspect a closure's captured variables?",
+      "answer": "Use fn.__closure__, which holds a tuple of cell objects.\n\ncode:\ndef outer(x):\n    def inner():\n        return x\n    return inner\n\nf = outer(7)\nprint(len(f.__closure__))  # 1\n\nreal example:\nDebuggers count captured variables to understand which values a closure remembers."
+    },
+    {
+      "id": 57,
+      "question": "What does print(sorted([(2, 'b'), (1, 'a'), (2, 'a')]) ) output?",
+      "answer": "It prints [(1, 'a'), (2, 'a'), (2, 'b')], sorted by all tuple elements.\n\ncode:\nprint(sorted([(2, 'b'), (1, 'a'), (2, 'a')]))  # [(1, 'a'), (2, 'a'), (2, 'b')]\n\nreal example:\nSorting rows first by id then by name gives a clean leaderboard order."
+    },
+    {
+      "id": 58,
+      "question": "What does list(filter(lambda x: isinstance(x, str), [1, \"a\", None, \"b\"])) return?",
+      "answer": "It returns ['a', 'b'], keeping only the strings.\n\ncode:\nprint(list(filter(lambda x: isinstance(x, str), [1, \"a\", None, \"b\"])))  # ['a', 'b']\n\nreal example:\nSeparating textual messages from numeric codes in mixed logs filters on isinstance."
+    },
+    {
+      "id": 59,
+      "question": "What does reduce(lambda a, b: a if a > b else b, [4, 9, 2, 7]) return?",
+      "answer": "It returns 9, the largest value found.\n\ncode:\nfrom functools import reduce\n\nprint(reduce(lambda a, b: a if a > b else b, [4, 9, 2, 7]))  # 9\n\nreal example:\nFinding the hottest day's temperature across a week is a keep-the-max fold."
+    },
+    {
+      "id": 60,
+      "question": "Why does sorted([1, 2, 10], key=str) put 10 before 2?",
+      "answer": "Because the strings are compared alphabetically: '1', '10', '2'.\n\ncode:\nprint(sorted([1, 2, 10], key=str))  # [1, 10, 2]\n\nreal example:\nSorting employee badges as text orders 10 before 2, which surprises numeric users."
+    },
+    {
+      "id": 61,
+      "question": "Give a currying-style factory example.",
+      "answer": "Chain lambdas so the outer captures n and inner applies it.\n\ncode:\nadd = lambda n: lambda x: x + n\nadd5 = add(5)\nprint(add5(3))  # 8\n\nreal example:\nTiered discount factories curry the fixed tier first, then apply it to prices."
+    },
+    {
+      "id": 62,
+      "question": "What does print((lambda n: lambda x: x * n)(3)(2)) output?",
+      "answer": "It prints 6, computing 2 * 3 through the curried lambdas.\n\ncode:\nprint((lambda n: lambda x: x * n)(3)(2))  # 6\n\nreal example:\nCurried multipliers take the factor first and the value second, like a partial."
+    },
+    {
+      "id": 63,
+      "question": "What is currying?",
+      "answer": "Turning a function of several arguments into nested single-argument functions.\n\ncode:\ndef curried(a):\n    def step(b):\n        return a + b\n    return step\n\nprint(curried(1)(2))  # 3\n\nreal example:\nConfiguration first, then data, is a common curried API for tool options."
+    },
+    {
+      "id": 64,
+      "question": "What does functools.cmp_to_key do?",
+      "answer": "It converts an old-style comparison function into a sort key function.\n\ncode:\nfrom functools import cmp_to_key\n\ndef compare(a, b):\n    return (a > b) - (a < b)\n\nprint(sorted([3, 1, 2], key=cmp_to_key(compare)))  # [1, 2, 3]\n\nreal example:\nPorting legacy sort comparators into modern sorted() calls uses cmp_to_key."
+    },
+    {
+      "id": 65,
+      "question": "What is an iterable vs an iterator?",
+      "answer": "Iterables produce iterators; iterators are lazy, stateful objects you can next().\n\ncode:\nnums = [1, 2]        # iterable\nit = iter(nums)      # iterator\nprint(next(it))      # 1\nprint(next(it))      # 2\n\nreal example:\nA list is the iterable blueprint; a for loop walks its iterator one item at a time."
+    },
+    {
+      "id": 66,
+      "question": "Are map/filter objects iterators?",
+      "answer": "Yes, they are single-use lazy iterators.\n\ncode:\nm = map(lambda x: x + 1, [1, 2])\nprint(list(m))  # [2, 3]\n\nreal example:\nStreaming API results through map keeps memory low since values come on demand."
+    },
+    {
+      "id": 67,
+      "question": "What happens if you call list() twice on the same map object?",
+      "answer": "The second call gives [], because iterators are exhausted after one pass.\n\ncode:\nm = map(lambda x: x * 2, [1, 2])\nprint(list(m))  # [2, 4]\nprint(list(m))  # []\n\nreal example:\nReusing a map meant for one pass silently empties it, so collect results early."
+    },
+    {
+      "id": 68,
+      "question": "What does list(zip([1, 2], [\"a\", \"b\"])) return?",
+      "answer": "It returns [(1, 'a'), (2, 'b')], pairing items position by position.\n\ncode:\nprint(list(zip([1, 2], [\"a\", \"b\"])))  # [(1, 'a'), (2, 'b')]\n\nreal example:\nMatching player IDs to their names by index is exactly what zip does."
+    },
+    {
+      "id": 69,
+      "question": "How would you transpose rows with zip(*matrix)?",
+      "answer": "Unpack the rows so zip pairs the matching columns instead.\n\ncode:\nmatrix = [[1, 2, 3], [4, 5, 6]]\nprint(list(zip(*matrix)))  # [(1, 4), (2, 5), (3, 6)]\n\nreal example:\nTurning spreadsheet rows into column series for charting is a transposition."
+    },
+    {
+      "id": 70,
+      "question": "What does all() return for a list of truthy values?",
+      "answer": "It returns True when every value is truthy.\n\ncode:\nprint(all([1, \"a\", True]))  # True\n\nreal example:\nConfirming every required field is filled in a form uses all over the checks."
+    },
+    {
+      "id": 71,
+      "question": "What does any([0, 0, 1]) return?",
+      "answer": "It returns True, because at least one value is truthy.\n\ncode:\nprint(any([0, 0, 1]))  # True\n\nreal example:\nChecking whether any product is in stock across a list uses any."
+    },
+    {
+      "id": 72,
+      "question": "What do any() and all() short-circuit?",
+      "answer": "They stop evaluating as soon as the final answer is known.\n\ncode:\ndef loud():\n    print(\"called\")\n    return True\n\nany([False, loud()])  # prints called once, stops after True\n\nreal example:\nStopping at the first failure saves work, like finding one open server port early."
+    },
+    {
+      "id": 73,
+      "question": "What does any() return for an empty list?",
+      "answer": "It returns False.\n\ncode:\nprint(any([]))  # False\n\nreal example:\nAn empty order list failing the any() existence check avoids false positives."
+    },
+    {
+      "id": 74,
+      "question": "What does all() return for an empty list?",
+      "answer": "It returns True.\n\ncode:\nprint(all([]))  # True\n\nreal example:\nAn empty requirements list is vacuously satisfied, so all() returns True."
+    },
+    {
+      "id": 75,
+      "question": "What does __call__ do on an instance?",
+      "answer": "It lets you call the object: obj() invokes obj.__call__().\n\ncode:\nclass Multi:\n    def __call__(self, x):\n        return x * 3\n\nm = Multi()\nprint(m(2))  # 6\n\nreal example:\nObjects configured once, like a scaling factor, then called like functions."
+    },
+    {
+      "id": 76,
+      "question": "Write a class-based callable counter.",
+      "answer": "Define __call__ to bump and return a stored count.\n\ncode:\nclass Count:\n    def __init__(self):\n        self.n = 0\n    def __call__(self):\n        self.n += 1\n        return self.n\n\nc = Count()\nprint(c(), c(), c())  # 1 2 3\n\nreal example:\nKeystroke or click counters implemented as callables track a session total."
+    },
+    {
+      "id": 77,
+      "question": "What does callable(print) return?",
+      "answer": "It returns True, since print is callable.\n\ncode:\nprint(callable(print))  # True\n\nreal example:\nDynamic dispatch verifies handlers with callable() before calling them."
+    },
+    {
+      "id": 78,
+      "question": "Can a class itself be called?",
+      "answer": "Yes, calling a class constructs an instance.\n\ncode:\nclass Point:\n    def __init__(self, x):\n        self.x = x\n\np = Point(3)  # calling Point(x) makes an instance\nprint(p.x)  # 3\n\nreal example:\nLogging or ORM layers call classes like User(name=...) to build records."
+    },
+    {
+      "id": 79,
+      "question": "Write a minimal decorator skeleton.",
+      "answer": "Return a wrapper that forwards arguments and returns the inner result.\n\ncode:\ndef deco(fn):\n    def wrapper(*a, **k):\n        return fn(*a, **k)\n    return wrapper\n\n@deco\ndef f():\n    return \"ok\"\n\nprint(f())  # ok\n\nreal example:\nStarting from this skeleton, add timing or checks for your own decorators."
+    },
+    {
+      "id": 80,
+      "question": "What happens if the wrapper forgets to return the inner result?",
+      "answer": "The decorated function returns None instead of the original value.\n\ncode:\ndef deco(fn):\n    def wrapper():\n        fn()  # result dropped\n    return wrapper\n\n@deco\ndef f():\n    return 1\n\nprint(f())  # None\n\nreal example:\nA buggy wrapper silently swallows return values, breaking callers that expect data."
+    },
+    {
+      "id": 81,
+      "question": "What is __wrapped__?",
+      "answer": "An attribute set by functools.wraps pointing back to the original function.\n\ncode:\nfrom functools import wraps\n\ndef deco(fn):\n    @wraps(fn)\n    def wrapper(*a, **k):\n        return fn(*a, **k)\n    return wrapper\n\n@deco\ndef f():\n    pass\n\nprint(f.__wrapped__ is f)  # True\n\nreal example:\nIntrospection tooling unwraps through __wrapped__ to reach the real function."
+    },
+    {
+      "id": 82,
+      "question": "Why does a parameterized decorator need three levels?",
+      "answer": "The outer captures parameters, the middle captures the function, and the inner runs it.\n\ncode:\ndef with_prefix(prefix):\n    def deco(fn):\n        def wrapper(*a, **k):\n            return prefix + fn(*a, **k)\n        return wrapper\n    return deco\n\n@with_prefix(\">> \")\ndef msg():\n    return \"ready\"\n\nprint(msg())  # >> ready\n\nreal example:\nOne decorator factory serves many settings, like different log prefixes for services."
+    },
+    {
+      "id": 83,
+      "question": "What is a caching/memoization decorator?",
+      "answer": "It stores results by arguments so repeated calls skip the computation.\n\ncode:\ncache = {}\ndef memo(fn):\n    def wrapper(n):\n        if n not in cache:\n            cache[n] = fn(n)\n        return cache[n]\n    return wrapper\n\n@memo\ndef double(n):\n    return n * 2\n\nprint(double(4), double(4))  # 16 16, second call cached\n\nreal example:\nCaching database lookups for repeated identical queries speeds up the API."
+    },
+    {
+      "id": 84,
+      "question": "What does @lru_cache(maxsize=...) control?",
+      "answer": "How many results stay cached before older ones are evicted.\n\ncode:\nfrom functools import lru_cache\n\n@lru_cache(maxsize=2)\ndef f(n):\n    return n + 1\n\nf(1)\nf(2)\nf(3)  # evicts the f(1) entry\nprint(f.cache_info())  # CacheInfo(hits=0, misses=3, maxsize=2, currsize=2)\n\nreal example:\nBounding cache size keeps memory contained on high-traffic services."
+    },
+    {
+      "id": 85,
+      "question": "How do you define a property setter?",
+      "answer": "Add @x.setter on a second method named x.\n\ncode:\nclass Temp:\n    def __init__(self, c):\n        self._c = c\n    @property\n    def c(self):\n        return self._c\n    @c.setter\n    def c(self, value):\n        if value < -273:\n            raise ValueError(\"too cold\")\n        self._c = value\n\nt = Temp(20)\nt.c = 25\nprint(t.c)  # 25\n\nreal example:\nValidating a temperature before storing it is a job for the setter."
+    },
+    {
+      "id": 86,
+      "question": "What is a class-based decorator?",
+      "answer": "A class whose __call__ wraps the original function and stores state.\n\ncode:\nclass Trace:\n    def __init__(self, fn):\n        self.fn = fn\n        self.calls = 0\n    def __call__(self, *a, **k):\n        self.calls += 1\n        return self.fn(*a, **k)\n\n@Trace\ndef f(x):\n    return x + 1\n\nprint(f(1), f.calls)  # 2 1\n\nreal example:\nCall-counting and profiling decorators keep counters in instance attributes."
+    },
+    {
+      "id": 87,
+      "question": "Write a class-based decorator that counts calls.",
+      "answer": "Count each __call__ and forward to the stored original function.\n\ncode:\nclass CountCalls:\n    def __init__(self, fn):\n        self.fn = fn\n        self.n = 0\n    def __call__(self, *a, **k):\n        self.n += 1\n        return self.fn(*a, **k)\n\n@CountCalls\ndef ping():\n    return \"pong\"\n\nping()\nping()\nprint(ping.n)  # 2\n\nreal example:\nMonitoring how often a service endpoint is hit uses a counter decorator."
+    },
+    {
+      "id": 88,
+      "question": "What happens when you CALL a generator function?",
+      "answer": "Nothing runs yet; it just returns a generator object.\n\ncode:\ndef gen():\n    print(\"first call\")\n    yield 1\n\ng = gen()   # nothing printed yet\nprint(next(g))  # first call then 1\n\nreal example:\nDeferred execution lets you hand out generators without doing any work upfront."
+    },
+    {
+      "id": 89,
+      "question": "Which built-in advances a generator to its next yield?",
+      "answer": "next(gen) pulls the generator forward to its next yield.\n\ncode:\ndef gen():\n    yield 10\n    yield 20\n\ng = gen()\nprint(next(g))  # 10\nprint(next(g))  # 20\n\nreal example:\nManual stepping through tokens with next() suits small parsing loops."
+    },
+    {
+      "id": 90,
+      "question": "What error is raised when a generator is exhausted?",
+      "answer": "StopIteration is raised once there are no more yields.\n\ncode:\ndef gen():\n    yield 1\n\ng = gen()\nnext(g)\ntry:\n    next(g)\nexcept StopIteration:\n    print(\"exhausted\")  # exhausted\n\nreal example:\nLoops stop quietly when a cursor is done, letting you know the data ended."
+    },
+    {
+      "id": 91,
+      "question": "What does list(range_gen) do for a generator?",
+      "answer": "It consumes the generator and collects all its values into a list.\n\ncode:\ndef gen():\n    yield 1\n    yield 2\n\nprint(list(gen()))  # [1, 2]\n\nreal example:\nWhen you finally need everything at once, list() materializes the stream."
+    },
+    {
+      "id": 92,
+      "question": "Why do generators save memory?",
+      "answer": "They compute one value at a time instead of storing the whole sequence.\n\ncode:\ndef big():\n    for i in range(10**6):\n        yield i\n\ntotal = sum(x for x in big() if x % 1000 == 0)\nprint(total)  # 499500000\n\nreal example:\nReading a billion-row report streams it without loading everything into RAM."
+    },
+    {
+      "id": 93,
+      "question": "Write a generator that yields 0, 1, 2.",
+      "answer": "Loop over range(3) and yield each number.\n\ncode:\ndef small():\n    for i in range(3):\n        yield i\n\nprint(list(small()))  # [0, 1, 2]\n\nreal example:\nProducing page numbers or tick values one at a time uses this loop."
+    },
+    {
+      "id": 94,
+      "question": "How is (x for x in r) different from [x for x in r]?",
+      "answer": "The generator is lazy and single-use; the list is eager and reusable.\n\ncode:\ng = (x for x in range(3))\nprint(list(g))  # [0, 1, 2]\nprint(list(g))  # []\n\nl = [x for x in range(3)]\nprint(l, l)  # [0, 1, 2] [0, 1, 2]\n\nreal example:\nHuge streams favor generators; small reusable sets favor lists."
+    },
+    {
+      "id": 95,
+      "question": "When is the expression in a generator expression evaluated?",
+      "answer": "Lazily, each time an item is pulled, not all at once.\n\ncode:\ng = (print(x) or x for x in [1, 2])\na = next(g)  # prints 1 only at pull time\nprint(a)  # 1\n\nreal example:\nDeferred evaluation lets infinite streams be filtered without precomputing."
+    },
+    {
+      "id": 96,
+      "question": "What does list(x for x in range(5) if x % 2) return?",
+      "answer": "It returns [1, 3], the odd numbers in range(5).\n\ncode:\nprint(list(x for x in range(5) if x % 2))  # [1, 3]\n\nreal example:\nSelecting odd lane indices or seat numbers uses a truthy remainder filter."
+    },
+    {
+      "id": 97,
+      "question": "What does yield from do?",
+      "answer": "It delegates to a sub-iterable, yielding each of its values in turn.\n\ncode:\ndef chain():\n    yield from [1, 2]\n    yield from \"ab\"\n\nprint(list(chain()))  # [1, 2, 'a', 'b']\n\nreal example:\nFanning multiple data sources into one stream uses yield from per source."
+    },
+    {
+      "id": 98,
+      "question": "Write a generator that flattens nested iterables with yield from.",
+      "answer": "Loop over each iterable and delegate to it with yield from.\n\ncode:\ndef flat(iters):\n    for it in iters:\n        yield from it\n\nprint(list(flat([[1, 2], [3]])))  # [1, 2, 3]\n\nreal example:\nFlattening grouped rows into one log stream is a textbook yield from job."
+    },
+    {
+      "id": 99,
+      "question": "Can a generator function have a return statement?",
+      "answer": "Yes, it stops the generator; the value lands in StopIteration.value.\n\ncode:\ndef g():\n    yield 1\n    return 99\n\nit = g()\nprint(next(it))  # 1\ntry:\n    next(it)\nexcept StopIteration as e:\n    print(e.value)  # 99\n\nreal example:\nCursors report a final summary value tucked into the end-of-stream signal."
+    },
+    {
+      "id": 100,
+      "question": "How do you send a value into a generator?",
+      "answer": "Use gen.send(value); the value becomes the yield expression's result.\n\ncode:\ndef echo():\n    got = yield \"ready\"\n    yield got\n\ng = echo()\nprint(next(g))        # ready\nprint(g.send(\"ping\"))  # ping\n\nreal example:\nInteractive pipelines send user choices back into the running generator."
+    },
+    {
+      "id": 101,
+      "question": "What must you do before the first send()?",
+      "answer": "Call next(gen) or send(None) first to reach the first yield.\n\ncode:\ndef g():\n    x = yield 1\n    yield x\n\ngen = g()\nprint(next(gen))      # 1, primes the generator\nprint(gen.send(\"v\"))  # v\n\nreal example:\nStarting a protocol paves the way before the first message can be pushed in."
+    },
+    {
+      "id": 102,
+      "question": "What does gen.close() do?",
+      "answer": "It raises GeneratorExit inside the generator so it can clean up.\n\ncode:\ndef g():\n    try:\n        yield 1\n    finally:\n        print(\"closing\")\n\ngen = g()\nnext(gen)\ngen.close()  # closing\n\nreal example:\nReleasing an open file when a stream is abandoned happens in the finally block."
+    },
+    {
+      "id": 103,
+      "question": "What is an infinite generator?",
+      "answer": "A generator that never stops, like repeating itertools.count().\n\ncode:\nfrom itertools import count\n\ndef naturals():\n    yield from count()\n\ng = naturals()\nprint(next(g), next(g), next(g))  # 0 1 2\n\nreal example:\nClock ticks or ticket numbers can be streamed endlessly without running out."
+    },
+    {
+      "id": 104,
+      "question": "How is itertools.count different from range?",
+      "answer": "count has no upper bound and produces values lazily and forever.\n\ncode:\nfrom itertools import count\n\nc = count()\nprint(next(c), next(c), next(c))  # 0 1 2\nnext(c)  # keeps going forever\n\nreal example:\nAssigning ever-increasing sequence numbers without knowing the total uses count."
+    },
+    {
+      "id": 105,
+      "question": "What does itertools.cycle do?",
+      "answer": "It repeats an iterable endlessly.\n\ncode:\nfrom itertools import cycle\n\nc = cycle(\"ab\")\nprint(next(c), next(c), next(c), next(c))  # a b a b\n\nreal example:\nRound-robin team assignment cycles players through a fixed list of shifts."
+    },
+    {
+      "id": 106,
+      "question": "What does itertools.islice do?",
+      "answer": "It slices an iterator lazily, like islice(gen, 5) for the first five.\n\ncode:\nfrom itertools import count, islice\n\nprint(list(islice(count(), 5)))  # [0, 1, 2, 3, 4]\n\nreal example:\nTaking the first few readings from an endless sensor stream uses islice."
+    },
+    {
+      "id": 107,
+      "question": "What does itertools.chain do?",
+      "answer": "It concatenates multiple iterables into one lazy sequence.\n\ncode:\nfrom itertools import chain\n\nprint(list(chain([1, 2], \"ab\")))  # [1, 2, 'a', 'b']\n\nreal example:\nMerging several log files into one iteration without copying uses chain."
+    },
+    {
+      "id": 108,
+      "question": "What does itertools.groupby require?",
+      "answer": "Sorted data (or data already grouped by key) and optionally a key function.\n\ncode:\nfrom itertools import groupby\n\ndata = sorted([\"bb\", \"a\", \"c\", \"ddd\"], key=len)\nfor k, grp in groupby(data, key=len):\n    print(k, list(grp))\n# 1 ['a', 'c'] then 2 ['bb'] then 3 ['ddd']\n\nreal example:\nGrouping sorted sales by region works reliably only because input is ordered."
+    },
+    {
+      "id": 109,
+      "question": "What does the following print?\ndef counter():\n    n = 0\n    while True:\n        n += 1\n        yield n\nprint(next(counter()))",
+      "answer": "It prints 1, the first value from the new generator.\n\ncode:\ndef counter():\n    n = 0\n    while True:\n        n += 1\n        yield n\n\nprint(next(counter()))  # 1\n\nreal example:\nFresh infinite counters start each batch at one, like retry numbers."
+    },
+    {
+      "id": 110,
+      "question": "Do generator expressions support multiple for clauses?",
+      "answer": "Yes, just like comprehensions: (a + b for a in x for b in y).\n\ncode:\nsums = (a + b for a in [1, 2] for b in [10, 20])\nprint(list(sums))  # [11, 21, 12, 22]\n\nreal example:\nFlattening combinations of sizes and colors into SKUs uses nested for clauses."
+    },
+    {
+      "id": 111,
+      "question": "What does print(sorted([\"Banana\", \"apple\"], key=str.lower)) output?",
+      "answer": "It prints ['apple', 'Banana'], sorted case-insensitively.\n\ncode:\nprint(sorted([\"Banana\", \"apple\"], key=str.lower))  # ['apple', 'Banana']\n\nreal example:\nSorting names from mixed-case directories should ignore case like a phone book."
+    },
+    {
+      "id": 112,
+      "question": "What does the closure print?\ndef outer(x): return lambda: x\nf = outer(42)\nprint(f())",
+      "answer": "It prints 42, the captured value x.\n\ncode:\ndef outer(x):\n    return lambda: x\n\nf = outer(42)\nprint(f())  # 42\n\nreal example:\nA closure remembering a chosen theme or setting returns it on demand."
+    },
+    {
+      "id": 113,
+      "question": "What does the following print?\ndef outer():\n    x = 1\n    def inner():\n        nonlocal x\n        x += 1\n        return x\n    return inner\ng = outer()\nprint(g(), g(), g())",
+      "answer": "It prints 2 3 4, the nonlocal counter ticking up.\n\ncode:\ndef outer():\n    x = 1\n    def inner():\n        nonlocal x\n        x += 1\n        return x\n    return inner\n\ng = outer()\nprint(g(), g(), g())  # 2 3 4\n\nreal example:\nA persistent attempt counter starts from the captured 1 and climbs each call."
+    },
+    {
+      "id": 114,
+      "question": "What does the following print?\ndef make():\n    x = []\n    def add(v):\n        x.append(v)\n        return x\n    return add\nf = make()\nprint(f(1), f(2))",
+      "answer": "It prints [1, 2] [1, 2]: both arguments reference the same captured list.\n\ncode:\ndef make():\n    x = []\n    def add(v):\n        x.append(v)\n        return x\n    return add\n\nf = make()\nprint(f(1), f(2))  # [1, 2] [1, 2]\n\nreal example:\nPrinting after mutations shows the shared history list's latest state twice."
+    },
+    {
+      "id": 115,
+      "question": "What does the following print?\nfuncs = []\nfor i in range(3):\n    funcs.append(lambda i=i: i)\nprint([f() for f in funcs])",
+      "answer": "It prints [0, 1, 2], because each default argument snapshots its own i.\n\ncode:\nfuncs = []\nfor i in range(3):\n    funcs.append(lambda i=i: i)\n\nprint([f() for f in funcs])  # [0, 1, 2]\n\nreal example:\nLoop-created menu callbacks each remember their own index thanks to the default."
+    },
+    {
+      "id": 116,
+      "question": "Can you decorate a class?",
+      "answer": "Yes, with a function that takes the class and returns the class.\n\ncode:\ndef add_attr(cls):\n    cls.kind = \"thing\"\n    return cls\n\n@add_attr\nclass Robot:\n    pass\n\nprint(Robot.kind)  # thing\n\nreal example:\nClass decorators inject shared attributes or register models automatically."
+    },
+    {
+      "id": 117,
+      "question": "What is functools.singledispatch used for?",
+      "answer": "To implement functions that dispatch on the type of the first argument.\n\ncode:\nfrom functools import singledispatch\n\n@singledispatch\ndef show(x):\n    return \"generic\"\n\n@show.register\ndef _(x: int):\n    return \"int\"\n\nprint(show(1), show(\"a\"))  # int generic\n\nreal example:\nAPIs that serialize numbers differently from strings use singledispatch."
+    },
+    {
+      "id": 118,
+      "question": "How do you register a singledispatch variant?",
+      "answer": "Decorate a type-typed implementation with @funct.register(type).\n\ncode:\nfrom functools import singledispatch\n\n@singledispatch\ndef fmt(x):\n    return str(x)\n\n@fmt.register\ndef _(x: list):\n    return \"list:\" + str(len(x))\n\nprint(fmt([1, 2]))  # list:2\n\nreal example:\nVersion-specific serializers register per type instead of growing if chains."
+    },
+    {
+      "id": 119,
+      "question": "What is the difference between singledispatch and overloading?",
+      "answer": "Python has no static overloading; singledispatch dispatches on the first argument at runtime.\n\ncode:\nfrom functools import singledispatch\n\n@singledispatch\ndef run(x):\n    return \"default\"\n\n@run.register\ndef _(x: str):\n    return \"string branch\"\n\nprint(run(\"hi\"), run(4))  # string branch default\n\nreal example:\nWorking with mixed API payload types makes runtime singledispatch convenient."
+    },
+    {
+      "id": 120,
+      "question": "What does functools.cache do?",
+      "answer": "An unbounded, simple memoization decorator without a size limit.\n\ncode:\nfrom functools import cache\n\n@cache\ndef sq(n):\n    return n * n\n\nprint(sq(4), sq(4))  # 16 16, second call cached\n\nreal example:\nCaching stable lookups like currency rates speeds up repeated identical calls."
+    },
+    {
+      "id": 121,
+      "question": "What happens if you call an lru_cached function with unhashable args?",
+      "answer": "A TypeError occurs, because the cache keys a dict by the arguments.\n\ncode:\nfrom functools import lru_cache\n\n@lru_cache(maxsize=10)\ndef f(x):\n    return x\n\n# f([1, 2]) -> TypeError: unhashable type: 'list'\n\nreal example:\nLists cannot key the cache dict, so convert them to tuples before calling."
+    },
+    {
+      "id": 122,
+      "question": "What does itertools.tee do?",
+      "answer": "It splits one iterator into n independent clones.\n\ncode:\nfrom itertools import tee\n\nbase = iter([1, 2])\na, b = tee(base)\nprint(list(a), list(b))  # [1, 2] [1, 2]\n\nreal example:\nConsuming the same data feed twice, once to count and once to show, uses tee."
+    },
+    {
+      "id": 123,
+      "question": "What does zip_longest do?",
+      "answer": "It pairs iterables and fills in missing values so none are dropped.\n\ncode:\nfrom itertools import zip_longest\n\nprint(list(zip_longest([1, 2, 3], \"ab\", fillvalue=0)))  # [(1, 'a'), (2, 'b'), (3, 0)]\n\nreal example:\nAligning uneven survey results into tidy columns uses zip_longest with a filler."
+    },
+    {
+      "id": 124,
+      "question": "What does itertools.product do?",
+      "answer": "It computes the Cartesian product of the given iterables.\n\ncode:\nfrom itertools import product\n\nprint(list(product([1, 2], \"ab\")))  # [(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]\n\nreal example:\nGenerating every combination of sizes and colors is a product call."
+    },
+    {
+      "id": 125,
+      "question": "What does itertools.combinations do?",
+      "answer": "It yields combinations of a given length without replacement, ignoring order.\n\ncode:\nfrom itertools import combinations\n\nprint(list(combinations(\"abc\", 2)))  # [('a', 'b'), ('a', 'c'), ('b', 'c')]\n\nreal example:\nChoosing pairs of teammates from a roster ignores which was picked first."
+    },
+    {
+      "id": 126,
+      "question": "What does itertools.permutations do?",
+      "answer": "It yields ordered arrangements, honoring position order.\n\ncode:\nfrom itertools import permutations\n\nprint(list(permutations(\"ab\")))  # [('a', 'b'), ('b', 'a')]\n\nreal example:\nListing all password arrangements for a two-letter code cares about ordering."
+    },
+    {
+      "id": 127,
+      "question": "What does the following print?\ng = (i * i for i in range(3))\nprint(list(g), list(g))",
+      "answer": "It prints [0, 1, 4] [], because generators are single-use.\n\ncode:\ng = (i * i for i in range(3))\nprint(list(g), list(g))  # [0, 1, 4] []\n\nreal example:\nReusing the same streamed feed twice silently gives nothing the second time."
+    },
+    {
+      "id": 128,
+      "question": "What does the following print?\ndef deco(fn):\n    def wrapper():\n        print(\"hi\")\n        return fn()\n    return wrapper\n@deco\ndef f():\n    return 1\nprint(f())",
+      "answer": "It prints hi, then 1.\n\ncode:\ndef deco(fn):\n    def wrapper():\n        print(\"hi\")\n        return fn()\n    return wrapper\n\n@deco\ndef f():\n    return 1\n\nprint(f())  # hi then 1\n\nreal example:\nA greeting-style logging decorator prints before forwarding the result."
+    },
+    {
+      "id": 129,
+      "question": "What does the parametrized decorator evaluate when?",
+      "answer": "The outer function runs at decoration time; the wrapper runs at each call.\n\ncode:\ndef add_mark(mark):\n    print(\"decorating now\")\n    def deco(fn):\n        def wrapper():\n            return fn() + mark\n        return wrapper\n    return deco\n\n@add_mark(\"!\")\ndef f():\n    return \"hi\"\n\nprint(f())  # decorating now then hi!\n\nreal example:\nSetup happens once when the module loads, while behavior applies per call."
+    },
+    {
+      "id": 130,
+      "question": "What does partial(max, 100) change when called with a list?",
+      "answer": "partial(max, 100)(3, 7) becomes max(100, 3, 7), returning 100.\n\ncode:\nfrom functools import partial\n\nprint(partial(max, 100)(3, 7))  # 100\n\nreal example:\nEnforcing a minimum floor on score comparisons uses max with a fixed bound."
+    },
+    {
+      "id": 131,
+      "question": "What does def f(): return (yield 1) do?",
+      "answer": "It is a generator function because yield is present; calling it returns a generator.\n\ncode:\ndef f():\n    return (yield 1)\n\ng = f()\nprint(next(g))  # 1\n\nreal example:\nAny yield makes the whole function a generator, even if a return also exists."
+    },
+    {
+      "id": 132,
+      "question": "Can you convert a generator into a tuple directly?",
+      "answer": "Yes, use tuple(gen).\n\ncode:\ndef g():\n    yield 1\n    yield 2\n\nprint(tuple(g()))  # (1, 2)\n\nreal example:\nFreezing a streamed result set into a fixed tuple for lookup is a direct conversion."
+    },
+    {
+      "id": 133,
+      "question": "When is a decorator applied relative to the function definition?",
+      "answer": "Immediately after the function object is created, before it is bound in the namespace.\n\ncode:\ndef deco(fn):\n    print(\"applying now\")\n    return fn\n\n@deco\ndef f():\n    return 1\n\nprint(\"after\")  # applying now then after\n\nreal example:\nSetup logs at import time confirm decoration happens during module loading."
+    },
+    {
+      "id": 134,
+      "question": "What does inspect.signature(fn) provide?",
+      "answer": "A Signature object describing the callable's parameters.\n\ncode:\nimport inspect\n\ndef f(a, b=2, *, c):\n    pass\n\nsig = inspect.signature(f)\nprint([p.name for p in sig.parameters.values()])  # ['a', 'b', 'c']\n\nreal example:\nAPIs and docs render parameter lists by introspecting the function signature."
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "description": "39 curated LOGICAL OPERATOR questions for Automation Testing interviews (trimmed from 100; removed 61 redundant near-duplicate questions that tested the same concept).",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does True and False return?",
+      "answer": "True and False is False because and needs both sides True, and the second side is False.\n\ncode:\nprint(True and False)  # False\n\nreal example:\nEntry is granted only when you are signed in and the door is unlocked; if not unlocked it fails."
+    },
+    {
+      "id": 2,
+      "question": "What does True and True return?",
+      "answer": "True and True is True because and returns True only when both sides are True.\n\ncode:\nprint(True and True)  # True\n\nreal example:\nA purchase needs payment and stock, and both are available, so it succeeds."
+    },
+    {
+      "id": 3,
+      "question": "What does False or True return?",
+      "answer": "False or True is True because or returns True when at least one side is True.\n\ncode:\nprint(False or True)  # True\n\nreal example:\nAdmission with a ticket or a pass works if either one is valid."
+    },
+    {
+      "id": 4,
+      "question": "What does False or False return?",
+      "answer": "False or False is False because or needs at least one True side, and there are none.\n\ncode:\nprint(False or False)  # False\n\nreal example:\nAccess fails when neither the key card nor the code is valid."
+    },
+    {
+      "id": 5,
+      "question": "What does not True return?",
+      "answer": "not True is False because the not operator flips the boolean value.\n\ncode:\nprint(not True)  # False\n\nreal example:\nTurning off an enabled flag flips it to False."
+    },
+    {
+      "id": 6,
+      "question": "What does not False return?",
+      "answer": "not False is True because the not operator flips False into True.\n\ncode:\nprint(not False)  # True\n\nreal example:\nA lock that is not open is closed, so the check is True."
+    },
+    {
+      "id": 7,
+      "question": "What does 5 > 3 and 3 > 1 return?",
+      "answer": "5 > 3 and 3 > 1 is True because both comparisons are True, and and requires all of them.\n\ncode:\nprint(5 > 3 and 3 > 1)  # True\n\nreal example:\nChecking a price above the minimum and below the maximum passes."
+    },
+    {
+      "id": 8,
+      "question": "What does 5 < 3 or 3 > 1 return?",
+      "answer": "5 < 3 or 3 > 1 is True because the second comparison 3 > 1 is True, enough for or.\n\ncode:\nprint(5 < 3 or 3 > 1)  # True\n\nreal example:\nA discount applies with code A or code B, and code B is valid."
+    },
+    {
+      "id": 9,
+      "question": "What does True or False and False return?",
+      "answer": "True or False and False is True because and binds tighter than or, so it is True or (False and False), which is True or False.\n\ncode:\nprint(True or False and False)  # True\n\nreal example:\nHaving the main key alone is enough even if the backup pair fails."
+    },
+    {
+      "id": 10,
+      "question": "What does False and True or True return?",
+      "answer": "False and True or True is True because and runs first giving False, then False or True is True.\n\ncode:\nprint(False and True or True)  # True\n\nreal example:\nEven if the first check is false, the final fallback being true passes."
+    },
+    {
+      "id": 11,
+      "question": "What does 1 and 2 or 3 return?",
+      "answer": "1 and 2 or 3 is 2 because and runs first giving 2, then 2 or 3 returns 2.\n\ncode:\nprint(1 and 2 or 3)  # 2\n\nreal example:\nA confirmed quantity resolves to 2 without falling back to 3."
+    },
+    {
+      "id": 12,
+      "question": "What does not [] return?",
+      "answer": "not [] is True because an empty list is falsy, so not makes it True.\n\ncode:\nprint(not [])  # True\n\nreal example:\nA cart with no items means nothing is present, matching True."
+    },
+    {
+      "id": 13,
+      "question": "What does not None return?",
+      "answer": "not None is True because None is falsy, so not flips it to True.\n\ncode:\nprint(not None)  # True\n\nreal example:\nA variable that has no value still yields True for not."
+    },
+    {
+      "id": 14,
+      "question": "What does bool(0) return?",
+      "answer": "bool(0) is False because the number 0 is falsy in Python.\n\ncode:\nprint(bool(0))  # False\n\nreal example:\nChecking if a stock count exists fails when the count is zero."
+    },
+    {
+      "id": 15,
+      "question": "What does bool(1) return?",
+      "answer": "bool(1) is True because any non-zero number is truthy in Python.\n\ncode:\nprint(bool(1))  # True\n\nreal example:\nA single item in stock counts as present."
+    },
+    {
+      "id": 16,
+      "question": "What does bool(' ') return?",
+      "answer": "bool(' ') is True because a string containing a space is not truly empty.\n\ncode:\nprint(bool(' '))  # True\n\nreal example:\nInput that only has a space still counts as having text, so validate whitespace separately."
+    },
+    {
+      "id": 17,
+      "question": "What does bool([]) return?",
+      "answer": "bool([]) is False because an empty list is falsy.\n\ncode:\nprint(bool([]))  # False\n\nreal example:\nA task list with no items is considered empty."
+    },
+    {
+      "id": 18,
+      "question": "What does bool('False') return?",
+      "answer": "bool('False') is True because it is a non-empty string, and the text 'False' does not matter.\n\ncode:\nprint(bool('False'))  # True\n\nreal example:\nA form value stuck as text 'False' is still truthy, catching beginners."
+    },
+    {
+      "id": 19,
+      "question": "What does bool(0.0) return?",
+      "answer": "bool(0.0) is False because the float zero is falsy.\n\ncode:\nprint(bool(0.0))  # False\n\nreal example:\nA balance of 0.0 dollars counts as empty."
+    },
+    {
+      "id": 20,
+      "question": "What does bool('0') return?",
+      "answer": "bool('0') is True because '0' is a non-empty string.\n\ncode:\nprint(bool('0'))  # True\n\nreal example:\nA code field with text '0' is filled in, unlike the number 0."
+    },
+    {
+      "id": 21,
+      "question": "What does bool(range(0)) return?",
+      "answer": "bool(range(0)) is False because a range with no numbers is falsy.\n\ncode:\nprint(bool(range(0)))  # False\n\nreal example:\nAn empty range of indices means nothing to process."
+    },
+    {
+      "id": 22,
+      "question": "What does 0 and 5 return?",
+      "answer": "0 and 5 is 0 because and returns the first falsy value and stops there.\n\ncode:\nprint(0 and 5)  # 0\n\nreal example:\nWhen a quantity is 0, the result short-circuits to 0 instead of 5."
+    },
+    {
+      "id": 23,
+      "question": "What does 1 or 0 return?",
+      "answer": "1 or 0 is 1 because or returns the first truthy value, and 1 is truthy.\n\ncode:\nprint(1 or 0)  # 1\n\nreal example:\nFallback logic picks 1 without ever consulting 0."
+    },
+    {
+      "id": 24,
+      "question": "What does '' or 0 or 'a' return?",
+      "answer": "'' or 0 or 'a' is 'a' because or keeps going through falsy values and returns the first truthy one.\n\ncode:\nprint('' or 0 or 'a')  # a\n\nreal example:\nChoosing a default value picks the first usable entry, here 'a'."
+    },
+    {
+      "id": 25,
+      "question": "What does True and 'x' return?",
+      "answer": "True and 'x' is 'x' because and passes through the truthy True and returns the last value.\n\ncode:\nprint(True and 'x')  # x\n\nreal example:\nA confirmed condition then yields the chosen 'x' option."
+    },
+    {
+      "id": 26,
+      "question": "What does 'a' or 'b' return?",
+      "answer": "'a' or 'b' is 'a' because or returns the first truthy value, and 'a' is truthy.\n\ncode:\nprint('a' or 'b')  # a\n\nreal example:\nPicking the first available option 'a' over the backup 'b'."
+    },
+    {
+      "id": 27,
+      "question": "What does 1 and 2 return?",
+      "answer": "1 and 2 is 2 because and returns the last value when both are truthy.\n\ncode:\nprint(1 and 2)  # 2\n\nreal example:\nWith both checks valid, the final value 2 is delivered."
+    },
+    {
+      "id": 28,
+      "question": "What does not (True or True) return?",
+      "answer": "not (True or True) is False because the or inside is True, and not flips it to False.\n\ncode:\nprint(not (True or True))  # False\n\nreal example:\nClaiming that neither of two true conditions holds is false."
+    },
+    {
+      "id": 29,
+      "question": "What does not not 5 return?",
+      "answer": "not not 5 is True because not 5 is False, then not False is True.\n\ncode:\nprint(not not 5)  # True\n\nreal example:\nDouble negation simply reports that 5 is truthy, like a yes."
+    },
+    {
+      "id": 30,
+      "question": "What does not 'x' or 'y' return?",
+      "answer": "not 'x' or 'y' is 'y' because not 'x' is False, so or returns 'y'.\n\ncode:\nprint(not 'x' or 'y')  # y\n\nreal example:\nWhen text is missing, fall back to the default 'y'."
+    },
+    {
+      "id": 31,
+      "question": "What does 'yes' if 5 > 3 else 'no' return?",
+      "answer": "'yes' if 5 > 3 else 'no' is 'yes' because the condition is True, so the if-branch wins.\n\ncode:\nprint('yes' if 5 > 3 else 'no')  # yes\n\nreal example:\nChoosing yes whenever the score passes the threshold."
+    },
+    {
+      "id": 32,
+      "question": "What does 'yes' if 5 < 3 else 'no' return?",
+      "answer": "'yes' if 5 < 3 else 'no' is 'no' because the condition is False, so the else-branch runs.\n\ncode:\nprint('yes' if 5 < 3 else 'no')  # no\n\nreal example:\nSince the score does not pass, the answer is no."
+    },
+    {
+      "id": 33,
+      "question": "What does ('even' if 10 % 2 == 0 else 'odd') return?",
+      "answer": "('even' if 10 % 2 == 0 else 'odd') is 'even' because 10 is even, so the remainder check succeeds.\n\ncode:\nprint('even' if 10 % 2 == 0 else 'odd')  # even\n\nreal example:\nSorting page numbers into even or odd bins."
+    },
+    {
+      "id": 34,
+      "question": "What does 1 if False else 2 return?",
+      "answer": "1 if False else 2 is 2 because the condition is False, so the else-branch value 2 is returned.\n\ncode:\nprint(1 if False else 2)  # 2\n\nreal example:\nA disabled feature falls back to the default value 2."
+    },
+    {
+      "id": 35,
+      "question": "What does 0 == False and 1 == True return?",
+      "answer": "0 == False and 1 == True is True because both equality comparisons hold: 0 equals False and 1 equals True.\n\ncode:\nprint(0 == False and 1 == True)  # True\n\nreal example:\nConfirming that binary flags match their numeric counter values."
+    },
+    {
+      "id": 36,
+      "question": "What does (5 > 3) and (10 % 2 == 0) return?",
+      "answer": "(5 > 3) and (10 % 2 == 0) is True because both parts are True: the comparison and the evenness check.\n\ncode:\nprint((5 > 3) and (10 % 2 == 0))  # True\n\nreal example:\nA price check and an exact-division rule both pass."
+    },
+    {
+      "id": 37,
+      "question": "What does (not True) or (not False) return?",
+      "answer": "(not True) or (not False) is True because not True is False and not False is True, then False or True is True.\n\ncode:\nprint((not True) or (not False))  # True\n\nreal example:\nAs long as one cleaned flag stays true, the system is usable."
+    },
+    {
+      "id": 38,
+      "question": "What does 5 > 3 == True return?",
+      "answer": "5 > 3 == True is False because chaining turns it into 5 > 3 and 3 == True, and 3 == True is False.\n\ncode:\nprint(5 > 3 == True)  # False\n\nreal example:\nCasual chained checks mislead; compare booleans with explicit parentheses instead."
+    },
+    {
+      "id": 39,
+      "question": "What does not (1 > 2 or 'a' == 'b') return?",
+      "answer": "not (1 > 2 or 'a' == 'b') is True because both inner conditions are False, so not False is True.\n\ncode:\nprint(not (1 > 2 or 'a' == 'b'))  # True\n\nreal example:\nSince neither bad case holds, the safe result is True."
+    }
+  ]
+}

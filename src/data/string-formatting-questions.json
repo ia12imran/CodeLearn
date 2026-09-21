@@ -1,0 +1,255 @@
+{
+  "description": "50 most important questions for automation testing interviews",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does print('a\\nb') show?",
+      "answer": "The \\n escape stands for a newline, so print writes 'a', then moves to a fresh line for 'b'.\n\ncode:\nprint('a\\nb')\n# a\n# b\n\nreal example:\nPutting two lines of a message inside a single print call."
+    },
+    {
+      "id": 2,
+      "question": "What is the escape sequence for a tab?",
+      "answer": "The tab escape is \\t, which produces a tab character that jumps to the next tab stop.\n\ncode:\nprint('a\\tb')  # a TAB b\n\nreal example:\nAligning columns in a plain-text table or log."
+    },
+    {
+      "id": 3,
+      "question": "What is the escape for a newline?",
+      "answer": "The escape for a newline is \\n, which inserts a line break into the text.\n\ncode:\nprint('first\\nsecond')\n# first\n# second\n\nreal example:\nCreating multi-line output for a receipt."
+    },
+    {
+      "id": 4,
+      "question": "What is the escape for a backslash?",
+      "answer": "The escape for a backslash is '\\\\' in source code, which stands for one literal backslash character.\n\ncode:\nbs = chr(92)\nprint(bs)  # \nreal example:\nWriting Windows file paths safely inside strings."
+    },
+    {
+      "id": 5,
+      "question": "What does the literal 'C:\\\\Users' represent?",
+      "answer": "In source, 'C:\\\\Users' represents the text C:\\Users, with a single backslash between 'C:' and 'Users'.\n\ncode:\npath = r'C:\\Users'\nprint(path)  # C:\\Users\n\nreal example:\nA raw string keeps a real file path looking exactly like the folder bar."
+    },
+    {
+      "id": 6,
+      "question": "How do you put a double quote inside a double-quoted string?",
+      "answer": "Escape the double quote with \\\" inside the string, or simply wrap it in single quotes instead.\n\ncode:\nprint('He said \"hi\"')  # He said \"hi\"\n\nreal example:\nIncluding spoken quotes inside a chat message without breaking it."
+    },
+    {
+      "id": 7,
+      "question": "How do you write an f-string?",
+      "answer": "Prefix the string with f and put the expression inside curly braces, like f\"text {variable}\".\n\ncode:\nname = 'Py'\nprint(f'Hello {name}')  # Hello Py\n\nreal example:\nShowing a live price or time inside a message."
+    },
+    {
+      "id": 8,
+      "question": "What does f'{2 + 3}' evaluate to?",
+      "answer": "Inside an f-string, {2 + 3} is evaluated first and converted to text, so the result is the string '5'.\n\ncode:\nprint(f'{2 + 3}')  # 5\n\nreal example:\nInserting a computed count straight into a status line."
+    },
+    {
+      "id": 9,
+      "question": "What does f'{3.14159:.2f}' return?",
+      "answer": "The :.2f format keeps 2 decimal places, rounding 3.14159 to 3.14.\n\ncode:\nprint(f'{3.14159:.2f}')  # 3.14\n\nreal example:\nDisplaying prices with exactly two decimal places."
+    },
+    {
+      "id": 10,
+      "question": "What does f'{10:03d}' return?",
+      "answer": "The :03d format pads the number 10 to width 3 with leading zeros, giving '010'.\n\ncode:\nprint(f'{10:03d}')  # 010\n\nreal example:\nNumbering files as 001, 002, 003 so they sort correctly."
+    },
+    {
+      "id": 11,
+      "question": "What does f'{255:x}' return?",
+      "answer": "The :x format writes the number in lowercase hexadecimal, and 255 in hex is ff.\n\ncode:\nprint(f'{255:x}')  # ff\n\nreal example:\nShowing colour components as hex codes in HTML."
+    },
+    {
+      "id": 12,
+      "question": "What does f'{255:b}' return?",
+      "answer": "The :b format writes the number in binary, and 255 in binary is 11111111.\n\ncode:\nprint(f'{255:b}')  # 11111111\n\nreal example:\nShowing permissions or bitmasks in binary form."
+    },
+    {
+      "id": 13,
+      "question": "What does f'{10:>5}' return?",
+      "answer": ">5 aligns the text to the right in a width of 5, so 10 becomes '   10' with three leading spaces.\n\ncode:\nprint(repr(f'{10:>5}'))  # '   10'\n\nreal example:\nRight-aligning numbers in a fixed-width table column."
+    },
+    {
+      "id": 14,
+      "question": "What does f'{10:<5}' return?",
+      "answer": "The <5 format left-aligns within width 5, so 10 gets trailing spaces: '10   '.\n\ncode:\nprint(repr(f'{10:<5}'))  # '10   '\n\nreal example:\nLeft-aligning names in a printed list."
+    },
+    {
+      "id": 15,
+      "question": "What does f'{10:^5}' return?",
+      "answer": "The ^5 format centres the value in width 5; the two spare spaces split left and right.\n\ncode:\nprint(repr(f'{10:^5}'))  # ' 10  '\n\nreal example:\nCentring a title in a fixed-width banner."
+    },
+    {
+      "id": 16,
+      "question": "What does f'{1000:,}' return?",
+      "answer": "The comma , format adds thousands separators, so 1000 becomes 1,000.\n\ncode:\nprint(f'{1000:,}')  # 1,000\n\nreal example:\nShowing large totals like 1234567 as 1,234,567."
+    },
+    {
+      "id": 17,
+      "question": "What does f'{0.5:.1%}' return?",
+      "answer": ":.1% multiplies by 100, keeps one decimal, and appends a percent sign, so 0.5 becomes 50.0%.\n\ncode:\nprint(f'{0.5:.1%}')  # 50.0%\n\nreal example:\nDisplaying a completion ratio as a readable percentage."
+    },
+    {
+      "id": 18,
+      "question": "What does '{0} {1}'.format('a', 'b') return?",
+      "answer": "{0} and {1} refer to the first and second arguments, so 'a' and 'b' appear in that order.\n\ncode:\nprint('{0} {1}'.format('a', 'b'))  # a b\n\nreal example:\nReordering words, for example '{1} {0}' to swap them."
+    },
+    {
+      "id": 19,
+      "question": "What does '{1} {0}'.format('a', 'b') return?",
+      "answer": "{1} pulls the second argument 'b' and {0} pulls the first 'a', giving 'b a'.\n\ncode:\nprint('{1} {0}'.format('a', 'b'))  # b a\n\nreal example:\nRearranging a last-first name into first-last order."
+    },
+    {
+      "id": 20,
+      "question": "What does '{name} is {n}'.format(name='Py', n=1) return?",
+      "answer": "Named placeholders are filled by keyword arguments, so {name} gets 'Py' and {n} gets 1.\n\ncode:\nprint('{name} is {n}'.format(name='Py', n=1))  # Py is 1\n\nreal example:\nFilling a template like '{city} is {rank}' with variables."
+    },
+    {
+      "id": 21,
+      "question": "What does '{:.2f}'.format(3.14159) return?",
+      "answer": ":.2f rounds 3.14159 to two decimal places, giving 3.14.\n\ncode:\nprint('{:.2f}'.format(3.14159))  # 3.14\n\nreal example:\nShowing a measurement to two decimal places."
+    },
+    {
+      "id": 22,
+      "question": "What does '{:>10}'.format('x') return?",
+      "answer": ">10 right-aligns 'x' in a width of 10, so it sits after nine spaces.\n\ncode:\nprint(repr('{:>10}'.format('x')))  # '         x'\n\nreal example:\nRight-aligning a small value in a wide report column."
+    },
+    {
+      "id": 23,
+      "question": "What does f'{2 ** 10}' return?",
+      "answer": "The expression inside the braces is evaluated first, so 2 ** 10 calculates to 1024.\n\ncode:\nprint(f'{2 ** 10}')  # 1024\n\nreal example:\nShowing a computed power of two in a technical table."
+    },
+    {
+      "id": 24,
+      "question": "What does f'{len(\"hello\")}' return?",
+      "answer": "The length is computed inside the braces, so len(\"hello\") evaluates to 5 before formatting.\n\ncode:\nprint(f'{len(\"hello\")}')  # 5\n\nreal example:\nDisplaying the character count of a message."
+    },
+    {
+      "id": 25,
+      "question": "What does '%s' % 'Py' return?",
+      "answer": "The %s placeholder is replaced by the value 'Py', converted to a string.\n\ncode:\nprint('%s' % 'Py')  # Py\n\nreal example:\nThe old-style formatting still appears in legacy code."
+    },
+    {
+      "id": 26,
+      "question": "What does 'Hello %s' % 'World' return?",
+      "answer": "%s is replaced by 'World' inside the fixed text, giving 'Hello World'.\n\ncode:\nprint('Hello %s' % 'World')  # Hello World\n\nreal example:\nFilling a greeting name into an older-style message."
+    },
+    {
+      "id": 27,
+      "question": "What does '%.2f' % 3.14159 return?",
+      "answer": "%.2f rounds 3.14159 to two decimal places, so the result is 3.14.\n\ncode:\nprint('%.2f' % 3.14159)  # 3.14\n\nreal example:\nFormatting decimals in code written years ago."
+    },
+    {
+      "id": 28,
+      "question": "What does f'{{literal}}' return?",
+      "answer": "The double braces are escapes, so f'{{literal}}' produces the plain text '{literal}'.\n\ncode:\nprint(f'{{literal}}')  # {literal}\n\nreal example:\nBuilding format strings or JSON snippets that contain real braces."
+    },
+    {
+      "id": 29,
+      "question": "What does '{:.0f}'.format(6.7) return?",
+      "answer": "The :.0f format uses zero decimals, so 6.7 rounds up to the whole number 7.\n\ncode:\nprint('{:.0f}'.format(6.7))  # 7\n\nreal example:\nRounding a score to a whole number for display."
+    },
+    {
+      "id": 30,
+      "question": "How do you reverse a string in one expression?",
+      "answer": "Reverse with the slice s[::-1], where the -1 step walks the string from the end.\n\ncode:\ns = 'abc'\nprint(s[::-1])  # cba\n\nreal example:\nFlipping a word for a word-game check."
+    },
+    {
+      "id": 31,
+      "question": "How do you check if a string is a palindrome?",
+      "answer": "A palindrome reads the same forwards and backwards, checked with s == s[::-1].\n\ncode:\ndef is_pal(s):\n    return s == s[::-1]\nprint(is_pal('madam'))  # True\n\nreal example:\nValidating a name like 'level' in a puzzle app."
+    },
+    {
+      "id": 32,
+      "question": "How do you count the words in a sentence?",
+      "answer": "split() breaks the sentence on whitespace, and len() counts the resulting words.\n\ncode:\nprint(len('the quick fox'.split()))  # 3\n\nreal example:\nCounting words in a blog post or essay text."
+    },
+    {
+      "id": 33,
+      "question": "How do you count a specific character?",
+      "answer": "s.count(ch) counts how many times the character ch appears in s.\n\ncode:\nprint('banana'.count('a'))  # 3\n\nreal example:\nCounting occurrences of a letter in a word puzzle."
+    },
+    {
+      "id": 34,
+      "question": "How do you find the most frequent character?",
+      "answer": "max(s, key=s.count) scans each character and returns the one that appears most often.\n\ncode:\ns = 'banana'\nprint(max(s, key=s.count))  # a\n\nreal example:\nFinding the most repeated letter in a word."
+    },
+    {
+      "id": 35,
+      "question": "Write code to reverse the order of words.",
+      "answer": "Split into words, reverse the list with [::-1], then join back with spaces.\n\ncode:\ns = 'one two three'\nprint(' '.join(s.split()[::-1]))  # three two one\n\nreal example:\nReversing a sentence's word order for a cipher."
+    },
+    {
+      "id": 36,
+      "question": "What does ' '.join('hello world'.split()[::-1]) return?",
+      "answer": "'hello world'.split() gives ['hello', 'world'], which reversed and joined becomes 'world hello'.\n\ncode:\nprint(' '.join('hello world'.split()[::-1]))  # world hello\n\nreal example:\nReordering a two-word phrase before sending it."
+    },
+    {
+      "id": 37,
+      "question": "How do you check if two strings are anagrams?",
+      "answer": "Two strings are anagrams when their sorted character lists are equal.\n\ncode:\nprint(sorted('listen') == sorted('silent'))  # True\n\nreal example:\nComparing words in an anagram game."
+    },
+    {
+      "id": 38,
+      "question": "Are 'listen' and 'silent' anagrams?",
+      "answer": "Yes, 'listen' and 'silent' contain exactly the same letters, just in different order.\n\ncode:\nprint(sorted('listen') == sorted('silent'))  # True\n\nreal example:\nA well-known pair used to test anagram detection."
+    },
+    {
+      "id": 39,
+      "question": "How do you remove duplicate characters preserving order?",
+      "answer": "dict.fromkeys(s) keeps only first occurrences as keys; joining those keys removes duplicates in order.\n\ncode:\ns = 'abca'\nprint(''.join(dict.fromkeys(s)))  # abc\n\nreal example:\nCleaning a list of IDs by keeping each one once."
+    },
+    {
+      "id": 40,
+      "question": "What does ''.join(dict.fromkeys('abca')) return?",
+      "answer": "dict.fromkeys keeps the first 'a', 'b', and 'c' in order, so joining them gives 'abc'.\n\ncode:\nprint(''.join(dict.fromkeys('abca')))  # abc\n\nreal example:\nDe-duplicating a sequence of letters while keeping their order."
+    },
+    {
+      "id": 41,
+      "question": "Write code to count vowels.",
+      "answer": "Loop over the lowercased characters and count how many are vowels.\n\ncode:\ns = 'hello'\nprint(sum(1 for c in s.lower() if c in 'aeiou'))  # 2\n\nreal example:\nCounting vowels in names for a word game."
+    },
+    {
+      "id": 42,
+      "question": "Write code to mask all but the last 4 characters.",
+      "answer": "Replace everything except the last 4 characters with asterisks.\n\ncode:\ns = '12345678'\nprint('*' * (len(s) - 4) + s[-4:])  # ****5678\n\nreal example:\nHiding a credit card number while keeping the last four digits."
+    },
+    {
+      "id": 43,
+      "question": "How do you convert spaces in a string to underscores?",
+      "answer": "s.replace(' ', '_') swaps every space for an underscore.\n\ncode:\ns = 'my file name'\nprint(s.replace(' ', '_'))  # my_file_name\n\nreal example:\nTurning a sentence into a URL-friendly slug."
+    },
+    {
+      "id": 44,
+      "question": "Write code to title-case each word of a sentence.",
+      "answer": "Split into words, capitalise each, and rejoin with spaces to title-case every word.\n\ncode:\ns = 'hello world'\nprint(' '.join(w.capitalize() for w in s.split()))  # Hello World\n\nreal example:\nFormatting a name or title that comes as lowercase text."
+    },
+    {
+      "id": 45,
+      "question": "Write a one-line Caesar shift of +1.",
+      "answer": "Add 1 to each character's code point with ord() and convert back with chr() to shift every letter.\n\ncode:\ns = 'abc'\nprint(''.join(chr(ord(c) + 1) for c in s))  # bcd\n\nreal example:\nMaking a simple secret code that shifts letters by one."
+    },
+    {
+      "id": 46,
+      "question": "How do you check a string has only letters and digits?",
+      "answer": "s.isalnum() returns True when every character is a letter or a digit (no spaces or symbols).\n\ncode:\nprint('abc123'.isalnum())  # True\nprint('abc 1'.isalnum())  # False\n\nreal example:\nValidating a username that must be letters and digits only."
+    },
+    {
+      "id": 47,
+      "question": "How do you check the string contains any digit?",
+      "answer": "any(c.isdigit() for c in s) is True as soon as one character is a digit.\n\ncode:\nprint(any(c.isdigit() for c in 'ab1'))  # True\n\nreal example:\nChecking that a password contains at least one number."
+    },
+    {
+      "id": 48,
+      "question": "What does '{:,}'.format(1234567) return?",
+      "answer": "The comma adds thousands separators, turning 1234567 into 1,234,567.\n\ncode:\nprint('{:,}'.format(1234567))  # 1,234,567\n\nreal example:\nPrinting population or money totals with separators."
+    },
+    {
+      "id": 49,
+      "question": "What does f'{0.1 + 0.2:.3f}' return?",
+      "answer": ":.3f rounds to three decimals, so the tiny floating-point error of 0.1 + 0.2 is hidden and shows 0.300.\n\ncode:\nprint(f'{0.1 + 0.2:.3f}')  # 0.300\n\nreal example:\nAvoiding ugly binary floating-point noise in currency sums."
+    },
+    {
+      "id": 50,
+      "question": "What does '{!r}'.format('hi') return?",
+      "answer": "{!r} uses repr(), which shows a string with its quotes, so 'hi' becomes the text 'hi' surrounded by quotes.\n\ncode:\nimport json\nprint('{!r}'.format('hi'))  # 'hi'\nprint(json.dumps('{!r}'.format('hi')))  # \"'hi'\"\n\nreal example:\nDebugging values so their type is visible in output."
+    }
+  ]
+}

@@ -1,0 +1,345 @@
+{
+  "description": "68 curated COMPARISON OPERATOR questions for Automation Testing interviews (trimmed from 200; removed 132 redundant near-duplicate questions that tested the same concept).",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does 5 == 5 return?",
+      "answer": "5 == 5 is True because the equality operator checks whether both values are the same.\n\ncode:\nprint(5 == 5)  # True\n\nreal example:\nVerifying that two entered prices match passes when both are 5."
+    },
+    {
+      "id": 2,
+      "question": "What does 5 == 6 return?",
+      "answer": "5 == 6 is False because 5 and 6 are different values, so equality fails.\n\ncode:\nprint(5 == 6)  # False\n\nreal example:\nChecking whether a guessed number 6 is the secret number 5 returns False."
+    },
+    {
+      "id": 3,
+      "question": "What does 5 != 6 return?",
+      "answer": "5 != 6 is True because the not-equal operator is True when the values differ.\n\ncode:\nprint(5 != 6)  # True\n\nreal example:\nA check that a discount code differs from the standard price passes."
+    },
+    {
+      "id": 4,
+      "question": "What does None == None return?",
+      "answer": "None == None is True because both sides are the exact same special value meaning nothing.\n\ncode:\nprint(None == None)  # True\n\nreal example:\nTwo empty database fields both hold None, so they compare equal."
+    },
+    {
+      "id": 5,
+      "question": "What does None == 0 return?",
+      "answer": "None == 0 is False because None is a special placeholder, not the number zero.\n\ncode:\nprint(None == 0)  # False\n\nreal example:\nA missing value stored as None is not the same as a zero balance."
+    },
+    {
+      "id": 6,
+      "question": "What does {} == {} return?",
+      "answer": "{} == {} is True because two empty dictionaries have the same contents, no key-value pairs.\n\ncode:\nprint({} == {})  # True\n\nreal example:\nTwo empty configuration objects compare as identical."
+    },
+    {
+      "id": 7,
+      "question": "What does True == 1 return?",
+      "answer": "True == 1 is True because True is treated as 1 when comparing values.\n\ncode:\nprint(True == 1)  # True\n\nreal example:\nCounting a yes answer as 1 matches a numeric total of 1."
+    },
+    {
+      "id": 8,
+      "question": "What does False == 0 return?",
+      "answer": "False == 0 is True because False is treated as 0 when comparing values.\n\ncode:\nprint(False == 0)  # True\n\nreal example:\nA no answer counting as 0 matches a zero total."
+    },
+    {
+      "id": 9,
+      "question": "What does 10 == 10.0 return?",
+      "answer": "10 == 10.0 is True because Python compares numeric values without worrying about int vs float type.\n\ncode:\nprint(10 == 10.0)  # True\n\nreal example:\nChecking meters 10 and meters 10.0 from different sensors agrees."
+    },
+    {
+      "id": 10,
+      "question": "What does '5' == 5 return?",
+      "answer": "'5' == 5 is False because a string '5' is a different type from the number 5.\n\ncode:\nprint('5' == 5)  # False\n\nreal example:\nA text field containing '5' does not equal the numeric value 5."
+    },
+    {
+      "id": 11,
+      "question": "What does 'a' == 'a' return?",
+      "answer": "'a' == 'a' is True because the two character strings are exactly the same.\n\ncode:\nprint('a' == 'a')  # True\n\nreal example:\nConfirming the entered key 'a' matches the stored key 'a'."
+    },
+    {
+      "id": 12,
+      "question": "What does 'a' != 'A' return?",
+      "answer": "'a' != 'A' is True because Python treats lowercase and uppercase letters as different characters.\n\ncode:\nprint('a' != 'A')  # True\n\nreal example:\nPasswords are case-sensitive, so typing 'a' instead of 'A' is a mismatch."
+    },
+    {
+      "id": 13,
+      "question": "What does [1, 2] == [1, 2] return?",
+      "answer": "[1, 2] == [1, 2] is True because lists compare element by element and all elements match.\n\ncode:\nprint([1, 2] == [1, 2])  # True\n\nreal example:\nComparing two shopping carts with the same items in the same order confirms they are equal."
+    },
+    {
+      "id": 14,
+      "question": "What does [1, 2] == [2, 1] return?",
+      "answer": "[1, 2] == [2, 1] is False because lists care about order, and the elements are swapped.\n\ncode:\nprint([1, 2] == [2, 1])  # False\n\nreal example:\nA receipt listing apples then oranges differs from the reverse order."
+    },
+    {
+      "id": 15,
+      "question": "What does (1, 2) == (2, 1) return?",
+      "answer": "(1, 2) == (2, 1) is False because tuple values and their order differ.\n\ncode:\nprint((1, 2) == (2, 1))  # False\n\nreal example:\nA point at (1, 2) is not the same as a point at (2, 1)."
+    },
+    {
+      "id": 16,
+      "question": "What does 3 < 5 return?",
+      "answer": "3 < 5 is True because the less-than operator checks that 3 is smaller than 5.\n\ncode:\nprint(3 < 5)  # True\n\nreal example:\nConfirming your speed 3 km/h is under the limit 5 km/h."
+    },
+    {
+      "id": 17,
+      "question": "What does 5 > 3 return?",
+      "answer": "5 > 3 is True because the greater-than operator checks that 5 is bigger than 3.\n\ncode:\nprint(5 > 3)  # True\n\nreal example:\nChecking whether your score 5 beats the required 3 points."
+    },
+    {
+      "id": 18,
+      "question": "What does 5 <= 5 return?",
+      "answer": "5 <= 5 is True because the less-than-or-equal operator allows equality.\n\ncode:\nprint(5 <= 5)  # True\n\nreal example:\nJoining a ride when the age limit is 5 and you are exactly 5 passes."
+    },
+    {
+      "id": 19,
+      "question": "What does 5 >= 5 return?",
+      "answer": "5 >= 5 is True because the greater-than-or-equal operator accepts equality here.\n\ncode:\nprint(5 >= 5)  # True\n\nreal example:\nA membership pass checking the required 5 uses qualifies with exactly 5 uses."
+    },
+    {
+      "id": 20,
+      "question": "What does 10 > 10 return?",
+      "answer": "10 > 10 is False because a number is not greater than itself.\n\ncode:\nprint(10 > 10)  # False\n\nreal example:\nChecking if today's 10-cm rainfall exceeds yesterday's 10 cm gives False."
+    },
+    {
+      "id": 21,
+      "question": "What does -1 < 0 return?",
+      "answer": "-1 < 0 is True because negative numbers are always smaller than zero.\n\ncode:\nprint(-1 < 0)  # True\n\nreal example:\nA temperature of -1 degrees is colder than 0 degrees."
+    },
+    {
+      "id": 22,
+      "question": "What does True < 2 return?",
+      "answer": "True < 2 is True because True counts as 1 in comparisons, and 1 < 2.\n\ncode:\nprint(True < 2)  # True\n\nreal example:\nTreating a yes flag as 1 means it is less than a 2-point bonus."
+    },
+    {
+      "id": 23,
+      "question": "What does True > 0 return?",
+      "answer": "True > 0 is True because True is treated as 1 in comparisons, and 1 > 0.\n\ncode:\nprint(True > 0)  # True\n\nreal example:\nA confirmed flag (1) is greater than a zero count."
+    },
+    {
+      "id": 24,
+      "question": "What does 1e3 == 1000 return?",
+      "answer": "1e3 == 1000 is True because 1e3 is scientific notation for 1000 (as a float).\n\ncode:\nprint(1e3 == 1000)  # True\n\nreal example:\nWriting big numbers as 1e3 still equals the value 1000."
+    },
+    {
+      "id": 25,
+      "question": "What does 0.1 + 0.2 == 0.3 return?",
+      "answer": "0.1 + 0.2 == 0.3 is False because binary floats store 0.1 and 0.2 imprecisely, so the sum is slightly off.\n\ncode:\nprint(0.1 + 0.2 == 0.3)  # False\n\nreal example:\nComparing discounted prices computed with floats can fail; use cents instead."
+    },
+    {
+      "id": 26,
+      "question": "What does 3 < 4 < 5 return?",
+      "answer": "3 < 4 < 5 is True because chained comparisons check both: 3 < 4 and 4 < 5.\n\ncode:\nprint(3 < 4 < 5)  # True\n\nreal example:\nChecking that 4 is between 3 and 5 passes an age-range rule."
+    },
+    {
+      "id": 27,
+      "question": "What does 1 < 2 == 2 return?",
+      "answer": "1 < 2 == 2 is True because the chain checks 1 < 2 and also 2 == 2.\n\ncode:\nprint(1 < 2 == 2)  # True\n\nreal example:\nA value 2 that is above 1 and also equal to the max passes both rules."
+    },
+    {
+      "id": 28,
+      "question": "What does 0 < 5 < 10 return?",
+      "answer": "0 < 5 < 10 is True because both parts hold: 0 < 5 and 5 < 10.\n\ncode:\nprint(0 < 5 < 10)  # True\n\nreal example:\nA stock level of 5 staying above 0 and below 10 is safe."
+    },
+    {
+      "id": 29,
+      "question": "What does 'a' < 'b' < 'c' return?",
+      "answer": "'a' < 'b' < 'c' is True because letters compare by alphabetical order in both steps.\n\ncode:\nprint('a' < 'b' < 'c')  # True\n\nreal example:\nSorting names alphabetically, entries starting with a, b, then c are in order."
+    },
+    {
+      "id": 30,
+      "question": "What does 3 in [1, 2, 3] == True return?",
+      "answer": "3 in [1, 2, 3] == True is False because chaining turns it into two checks: 3 in [1, 2, 3] and [1, 2, 3] == True.\n\ncode:\nprint(3 in [1, 2, 3] == True)  # False\n\nreal example:\nWriting such combined checks surprises beginners, so use parentheses to stay clear."
+    },
+    {
+      "id": 31,
+      "question": "What does 5 > 2 > 0 return?",
+      "answer": "5 > 2 > 0 is True because both steps hold: 5 > 2 and 2 > 0.\n\ncode:\nprint(5 > 2 > 0)  # True\n\nreal example:\nA speed of 5 units above 2 and above 0 passes the range."
+    },
+    {
+      "id": 32,
+      "question": "What does 'a' < 'b' return?",
+      "answer": "'a' < 'b' is True because Python compares strings alphabetically by character code.\n\ncode:\nprint('a' < 'b')  # True\n\nreal example:\nSorting a list alphabetically puts 'a' before 'b'."
+    },
+    {
+      "id": 33,
+      "question": "What does 'A' < 'a' return?",
+      "answer": "'A' < 'a' is True because uppercase letters have smaller character codes than lowercase ones.\n\ncode:\nprint('A' < 'a')  # True\n\nreal example:\nIn ASCII sorting, 'A' (65) comes before 'a' (97) in digital lists."
+    },
+    {
+      "id": 34,
+      "question": "What does 'abc' < 'abcd' return?",
+      "answer": "'abc' < 'abcd' is True because one string being a prefix makes the shorter one smaller.\n\ncode:\nprint('abc' < 'abcd')  # True\n\nreal example:\nIn a sort, the shorter word 'abc' comes before the longer 'abcd'."
+    },
+    {
+      "id": 35,
+      "question": "What does 'Zebra' < 'apple' return?",
+      "answer": "'Zebra' < 'apple' is True because uppercase 'Z' has a smaller character code than lowercase 'a'.\n\ncode:\nprint('Zebra' < 'apple')  # True\n\nreal example:\nSorting animal names by code puts 'Zebra' before 'apple', surprising as it may be."
+    },
+    {
+      "id": 36,
+      "question": "What does '10' < '9' return?",
+      "answer": "'10' < '9' is True because strings compare character by character, and '1' is smaller than '9'.\n\ncode:\nprint('10' < '9')  # True\n\nreal example:\nSorting part numbers as text places '10' before '9'."
+    },
+    {
+      "id": 37,
+      "question": "What does '' < 'a' return?",
+      "answer": "'' < 'a' is True because the empty string is a prefix, making it smaller than any non-empty string.\n\ncode:\nprint('' < 'a')  # True\n\nreal example:\nSorting blank entries always places them first."
+    },
+    {
+      "id": 38,
+      "question": "What does 'abc' < 'ab' return?",
+      "answer": "'abc' < 'ab' is False because 'ab' is a prefix of 'abc', so the shorter string is smaller.\n\ncode:\nprint('abc' < 'ab')  # False\n\nreal example:\nIn sorting, 'ab' comes before 'abc', so this comparison is false."
+    },
+    {
+      "id": 39,
+      "question": "What does [1, 2] < [1, 3] return?",
+      "answer": "[1, 2] < [1, 3] is True because lists compare element by element: first 1 == 1, then 2 < 3.\n\ncode:\nprint([1, 2] < [1, 3])  # True\n\nreal example:\nTwo ordered scores [1, 2] and [1, 3] rank the first as lower."
+    },
+    {
+      "id": 40,
+      "question": "What does [1] < [1, 2] return?",
+      "answer": "[1] < [1, 2] is True because [1] is a prefix pair, and the shorter list is smaller.\n\ncode:\nprint([1] < [1, 2])  # True\n\nreal example:\nA path with fewer steps [1] sorts before the longer [1, 2]."
+    },
+    {
+      "id": 41,
+      "question": "What does [] < [0] return?",
+      "answer": "[] < [0] is True because an empty list is a prefix, so it is smaller than any non-empty list.\n\ncode:\nprint([] < [0])  # True\n\nreal example:\nSorting empty inventories places the empty list first."
+    },
+    {
+      "id": 42,
+      "question": "What does (3, 1) > (2, 9) return?",
+      "answer": "(3, 1) > (2, 9) is True because the first elements differ: 3 > 2, deciding the result.\n\ncode:\nprint((3, 1) > (2, 9))  # True\n\nreal example:\nA primary score 3 beats a primary score 2 regardless of the tiebreak."
+    },
+    {
+      "id": 43,
+      "question": "What does x is y return if x = [1, 2]; y = [1, 2]?",
+      "answer": "x is y is False because x and y are two separate lists that happen to hold equal contents.\n\ncode:\nx = [1, 2]\ny = [1, 2]\nprint(x is y)  # False\n\nreal example:\nTwo identical-looking recipes are still different objects on the shelf."
+    },
+    {
+      "id": 44,
+      "question": "What does x is y return if x = [1, 2]; y = x?",
+      "answer": "x is y is True because y = x makes both names refer to the very same list object.\n\ncode:\nx = [1, 2]\ny = x\nprint(x is y)  # True\n\nreal example:\nAn alias and the original cart point at the same items list."
+    },
+    {
+      "id": 45,
+      "question": "What does [] is [] return?",
+      "answer": "[] is [] is False because each literal creates a brand-new, separate empty list.\n\ncode:\nprint([] is [])  # False\n\nreal example:\nTwo new empty baskets are distinct objects even though both are empty."
+    },
+    {
+      "id": 46,
+      "question": "What does None is None return?",
+      "answer": "None is None is True because None is a single shared object, so both sides are the same.\n\ncode:\nprint(None is None)  # True\n\nreal example:\nTwo missing-value fields both refer to the same None marker."
+    },
+    {
+      "id": 47,
+      "question": "What does x is y return if x = 5; y = 5?",
+      "answer": "x is y is True because small integers like 5 are reused, so x and y name the same object.\n\ncode:\nx = 5\ny = 5\nprint(x is y)  # True\n\nreal example:\nCounting helpers reusing the number 5 means both variables share it."
+    },
+    {
+      "id": 48,
+      "question": "What does () is () return?",
+      "answer": "() is () is True because small tuples like the empty tuple are reused as one shared object.\n\ncode:\nprint(() is ())  # True\n\nreal example:\nTwo functions returning no arguments share the same empty tuple."
+    },
+    {
+      "id": 49,
+      "question": "What does s is s2 return if s = 'ab'; s2 = ''.join(['a', 'b'])?",
+      "answer": "s is s2 is False because ''.join builds a new string object even when the text looks the same.\n\ncode:\ns = 'ab'\ns2 = ''.join(['a', 'b'])\nprint(s is s2)  # False\n\nreal example:\nAssembled user input is a fresh object, unlike a literal string."
+    },
+    {
+      "id": 50,
+      "question": "What does x == y return if x = [1]; y = [1]?",
+      "answer": "x == y is True because equality compares the list contents, and both are [1].\n\ncode:\nx = [1]\ny = [1]\nprint(x == y)  # True\n\nreal example:\nTwo separate one-item lists compare equal by their values."
+    },
+    {
+      "id": 51,
+      "question": "What does x is y return if x = [1, 2]; y = x[:]?",
+      "answer": "x is y is False because y = x[:] copies the list, creating a distinct new object.\n\ncode:\nx = [1, 2]\ny = x[:]\nprint(x is y)  # False\n\nreal example:\nCopying a document creates a separate object even with identical text."
+    },
+    {
+      "id": 52,
+      "question": "What does x == y return if x = [1, 2]; y = x[:]?",
+      "answer": "x == y is True because equality compares contents, and the copy has the same values.\n\ncode:\nx = [1, 2]\ny = x[:]\nprint(x == y)  # True\n\nreal example:\nA printed copy equals the original in content, unlike in identity."
+    },
+    {
+      "id": 53,
+      "question": "What does 2 in [1, 2, 3] return?",
+      "answer": "2 in [1, 2, 3] is True because the membership operator checks whether 2 appears in the list.\n\ncode:\nprint(2 in [1, 2, 3])  # True\n\nreal example:\nChecking that size 2 is among the available sizes passes."
+    },
+    {
+      "id": 54,
+      "question": "What does 4 in [1, 2, 3] return?",
+      "answer": "4 in [1, 2, 3] is False because 4 does not appear anywhere in the list.\n\ncode:\nprint(4 in [1, 2, 3])  # False\n\nreal example:\nAsking whether size 4 is in stock returns False when it is not listed."
+    },
+    {
+      "id": 55,
+      "question": "What does 'hello' in 'say hello' return?",
+      "answer": "'hello' in 'say hello' is True because the shorter string appears as part of the longer one.\n\ncode:\nprint('hello' in 'say hello')  # True\n\nreal example:\nSearching a message for the word 'hello' succeeds."
+    },
+    {
+      "id": 56,
+      "question": "What does 'key' in {'key': 1} return?",
+      "answer": "'key' in {'key': 1} is True because membership in a dict checks its keys.\n\ncode:\nprint('key' in {'key': 1})  # True\n\nreal example:\nVerifying a user name exists among account keys."
+    },
+    {
+      "id": 57,
+      "question": "What does 1 in {'key': 1} return?",
+      "answer": "1 in {'key': 1} is False because dict membership looks at keys only, and 1 is a value here.\n\ncode:\nprint(1 in {'key': 1})  # False\n\nreal example:\nSeeking ID 1 in the key list returns False since keys are names."
+    },
+    {
+      "id": 58,
+      "question": "What does '' in 'abc' return?",
+      "answer": "'' in 'abc' is True because the empty string is considered a substring of every string.\n\ncode:\nprint('' in 'abc')  # True\n\nreal example:\nSearch criteria that allow blank input always match any text."
+    },
+    {
+      "id": 59,
+      "question": "What does 5 in range(10) return?",
+      "answer": "5 in range(10) is True because range(10) holds the numbers 0 through 9, which includes 5.\n\ncode:\nprint(5 in range(10))  # True\n\nreal example:\nChecking that row 5 is within the 10-row grid."
+    },
+    {
+      "id": 60,
+      "question": "What does [1, 2] in [[1, 2]] return?",
+      "answer": "[1, 2] in [[1, 2]] is True because the outer list contains the inner list [1, 2] as an element.\n\ncode:\nprint([1, 2] in [[1, 2]])  # True\n\nreal example:\nSearching whether a preset pair is one of the saved combinations."
+    },
+    {
+      "id": 61,
+      "question": "What happens when you evaluate 5 < 'a'?",
+      "answer": "5 < 'a' raises a TypeError because you cannot compare a number with a string.\n\ncode:\nprint(5 < 'a')  # raises TypeError\n\nreal example:\nSorting a mixed list of ages and names needs same types, or Python errors."
+    },
+    {
+      "id": 62,
+      "question": "What happens when you evaluate 'a' < 1?",
+      "answer": "'a' < 1 raises a TypeError because a string cannot be ordered against a number.\n\ncode:\nprint('a' < 1)  # raises TypeError\n\nreal example:\nMixing letter grades with numeric scores in one comparison is invalid."
+    },
+    {
+      "id": 63,
+      "question": "What does min(3, 7, 1) return?",
+      "answer": "min(3, 7, 1) is 1 because min returns the smallest value among its arguments.\n\ncode:\nprint(min(3, 7, 1))  # 1\n\nreal example:\nFinding the lowest price among 3, 7, and 1 dollars gives 1."
+    },
+    {
+      "id": 64,
+      "question": "What does max(1, 9, 4) return?",
+      "answer": "max(1, 9, 4) is 9 because max returns the largest value among its arguments.\n\ncode:\nprint(max(1, 9, 4))  # 9\n\nreal example:\nChoosing the highest score from 1, 9, and 4 gives 9."
+    },
+    {
+      "id": 65,
+      "question": "What does max('apple') return?",
+      "answer": "max('apple') is 'p' because max picks the character with the highest character code, and 'p' wins.\n\ncode:\nprint(max('apple'))  # p\n\nreal example:\nFinding the letter that sorts last in 'apple' yields 'p'."
+    },
+    {
+      "id": 66,
+      "question": "What does int('10') < 9 return?",
+      "answer": "int('10') < 9 is False because converting '10' to the number 10 makes 10 < 9 false.\n\ncode:\nprint(int('10') < 9)  # False\n\nreal example:\nParsing a text quantity to a number before comparing avoids text order bugs."
+    },
+    {
+      "id": 67,
+      "question": "What does 0.0 == False return?",
+      "answer": "0.0 == False is True because False is treated as the number 0, matching 0.0.\n\ncode:\nprint(0.0 == False)  # True\n\nreal example:\nA zero balance as a float equals a False enabled flag."
+    },
+    {
+      "id": 68,
+      "question": "What does 2 == 2.0 and 2 is not 2.0 return?",
+      "answer": "2 == 2.0 and 2 is not 2.0 is True because the values are equal numerically, yet int 2 and float 2.0 are different objects.\n\ncode:\nprint(2 == 2.0 and 2 is not 2.0)  # True\n\nreal example:\nComparing a kg count from scales: same value, but int and float sources."
+    }
+  ]
+}

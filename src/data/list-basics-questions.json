@@ -1,0 +1,660 @@
+{
+  "description": "131 curated LIST BASICS questions for Automation Testing interviews (trimmed from 200; removed 69 redundant near-duplicate questions that tested the same concept).",
+  "questions": [
+    {
+      "id": 1,
+      "question": "How do you create a list containing the integers 1, 2, and 3?",
+      "answer": "Use square brackets with the numbers separated by commas.\n\ncode:\nnums = [1, 2, 3]\nprint(nums)  # [1, 2, 3]\n\nreal example:\nA simple scoreboard program stores the top three scores in a list."
+    },
+    {
+      "id": 2,
+      "question": "How do you create an empty list?",
+      "answer": "Use a pair of square brackets, or the list() constructor.\n\ncode:\nempty1 = []\nempty2 = list()\nprint(empty1, empty2)  # [] []\n\nreal example:\nApps often start with an empty list, like an empty shopping cart that gets filled as items are added."
+    },
+    {
+      "id": 3,
+      "question": "What does list(\"abc\") return?",
+      "answer": "It splits the string into its individual characters so each one becomes an element.\n\ncode:\nprint(list(\"abc\"))  # ['a', 'b', 'c']\n\nreal example:\nTranslating each letter of a username into its own item for processing one character at a time."
+    },
+    {
+      "id": 4,
+      "question": "What does list(range(5)) return?",
+      "answer": "range() produces a sequence of numbers, and list() turns that sequence into a real list.\n\ncode:\nprint(list(range(5)))  # [0, 1, 2, 3, 4]\n\nreal example:\nGenerating slot numbers 0 to 4 for five parking spaces in a booking system."
+    },
+    {
+      "id": 5,
+      "question": "Can a list contain elements of different types?",
+      "answer": "Yes. A list happily stores ints, strings, floats, booleans, and more all together.\n\ncode:\nmixed = [1, \"a\", 3.5, True, None]\nprint(mixed)\n\nreal example:\nA contact record that mixes a phone number, name, and rating for one person in a single list."
+    },
+    {
+      "id": 6,
+      "question": "Can a list contain another list?",
+      "answer": "Yes. A list stored inside another list is called a nested list.\n\ncode:\nmatrix = [[1, 2], [3, 4]]\nprint(matrix[0])  # [1, 2]\n\nreal example:\nA tic-tac-toe board stores its rows as small lists inside one big list."
+    },
+    {
+      "id": 7,
+      "question": "What does [1] * 3 produce?",
+      "answer": "The * operator repeats the list, so the element 1 is copied three times in a row.\n\ncode:\nprint([1] * 3)  # [1, 1, 1]\n\nreal example:\nCreating a 7-day calendar row of empty slots with ['x'] * 7."
+    },
+    {
+      "id": 8,
+      "question": "Are lists ordered?",
+      "answer": "Yes. Elements keep the exact order in which they were added, and each has a position.\n\ncode:\nwords = [\"first\", \"second\", \"third\"]\nprint(words[0])  # first\n\nreal example:\nA playlist keeps songs in the order you added them so playback follows that sequence."
+    },
+    {
+      "id": 9,
+      "question": "Are lists mutable in Python?",
+      "answer": "Yes. You can add, remove, or change elements after the list is created.\n\ncode:\nnums = [1, 2, 3]\nnums[0] = 99\nnums.append(4)\nprint(nums)  # [99, 2, 3, 4]\n\nreal example:\nA to-do app lets you edit or delete tasks at any time, so the task list changes as you work."
+    },
+    {
+      "id": 10,
+      "question": "Can a list contain duplicate values?",
+      "answer": "Yes. Lists allow the same value to appear any number of times at different positions.\n\ncode:\nnums = [1, 1, 2, 1]\nprint(nums.count(1))  # 3\n\nreal example:\nA survey stores every answer, even when many people pick the same option."
+    },
+    {
+      "id": 11,
+      "question": "What does {} create?",
+      "answer": "Curly braces make an empty dictionary, not a list. Use [] or list() for a list.\n\ncode:\nd = {}\nprint(type(d))  # <class 'dict'>\nempty_list = []\n\nreal example:\nA phonebook uses {} to store key-value pairs like a name mapped to a number, while a list is just a row of items."
+    },
+    {
+      "id": 12,
+      "question": "What does the list() function do?",
+      "answer": "It builds a new list from any iterable such as a string, tuple, range, or dictionary keys.\n\ncode:\nprint(list(\"hi\"))        # ['h', 'i']\nprint(list(range(3)))   # [0, 1, 2]\n\nreal example:\nConverting a string of typed digits into a list of characters so each digit can be validated separately."
+    },
+    {
+      "id": 13,
+      "question": "What is the difference between a list and a tuple?",
+      "answer": "A list can be changed while a tuple cannot. After a tuple is created its contents are fixed.\n\ncode:\nlst = [1, 2]\nlst[0] = 9\nprint(lst)  # [9, 2]\ntup = (1, 2)\nprint(tup)  # (1, 2)  -- cannot be changed\n\nreal example:\nPoint coordinates that never change stay in a tuple, while a growing cart of items lives in a list."
+    },
+    {
+      "id": 14,
+      "question": "What does range(3) produce by itself?",
+      "answer": "It produces a range object, which is a lazy sequence. Wrap it in list() to see the numbers.\n\ncode:\nr = range(3)\nprint(r)           # range(0, 3)\nprint(list(r))     # [0, 1, 2]\n\nreal example:\nA download tracker uses range to plan 100 chunks but never stores all 100 at once until needed."
+    },
+    {
+      "id": 15,
+      "question": "How do you access the first element of [10, 20, 30]?",
+      "answer": "Use index 0 in square brackets, because list indexing starts counting at 0.\n\ncode:\nlst = [10, 20, 30]\nprint(lst[0])  # 10\n\nreal example:\nShowing the newest headline by grabbing the first item in a list of news stories."
+    },
+    {
+      "id": 16,
+      "question": "How do you access the last element of a list?",
+      "answer": "Use index -1, which counts backward from the end of the list.\n\ncode:\nlst = [5, 10, 15]\nprint(lst[-1])  # 15\n\nreal example:\nAn undo button in a text editor reads the most recent action from the end of a history list."
+    },
+    {
+      "id": 17,
+      "question": "What happens if you access an index that is out of range?",
+      "answer": "Python raises an IndexError, because no element exists at that position.\n\ncode:\nlst = [1, 2, 3]\nprint(lst[9])  # IndexError: list index out of range\n\nreal example:\nA program crashes with this error if it assumes a list has more items than it actually received from the user."
+    },
+    {
+      "id": 18,
+      "question": "What is the index of the last element of a list of length n?",
+      "answer": "It is n - 1 because counting starts at 0, or simply -1 to count from the end.\n\ncode:\nlst = [10, 20, 30, 40]\nprint(len(lst) - 1)  # 3\nprint(lst[-1])       # 40\n\nreal example:\nFinding the last queued task's position when there are 10 tasks, which is index 9."
+    },
+    {
+      "id": 19,
+      "question": "What does [[1, 2], [3, 4]][0] return?",
+      "answer": "Index 0 grabs the first inner list, which is [1, 2], as a single element.\n\ncode:\nmatrix = [[1, 2], [3, 4]]\nprint(matrix[0])  # [1, 2]\n\nreal example:\nGrabbing the first row of a spreadsheet that is stored as a list of rows."
+    },
+    {
+      "id": 20,
+      "question": "What does [[1, 2], [3, 4]][1][0] return?",
+      "answer": "The first index picks the second inner list, then the second index picks its first item.\n\ncode:\nmatrix = [[1, 2], [3, 4]]\nprint(matrix[1][0])  # 3\n\nreal example:\nLocating a cell on a seating chart by first choosing the row, then the seat within that row."
+    },
+    {
+      "id": 21,
+      "question": "What does [\"hi\", 5, 3.5][1] return?",
+      "answer": "Index 1 is the second element, which happens to be the integer 5.\n\ncode:\nmixed = [\"hi\", 5, 3.5]\nprint(mixed[1])  # 5\n\nreal example:\nReading the second column of a mixed-type data row like a name, count, and price."
+    },
+    {
+      "id": 22,
+      "question": "Can you use a negative index beyond the list length?",
+      "answer": "No. If the negative index goes further back than the list has elements, an IndexError is raised.\n\ncode:\nlst = [1, 2, 3]\nprint(lst[-5])  # IndexError: list index out of range\n\nreal example:\nA chat app crashes if it assumes 5 earlier messages exist but only 2 are in the history."
+    },
+    {
+      "id": 23,
+      "question": "What does [\"a\", \"b\", \"c\"][-3] return?",
+      "answer": "Index -3 is the third from the end, which is also the first element, \"a\".\n\ncode:\nletters = [\"a\", \"b\", \"c\"]\nprint(letters[-3])  # a\n\nreal example:\nWalking three steps back through a list of played songs to reach the first one of the three."
+    },
+    {
+      "id": 24,
+      "question": "What does [0, 1, 2, 3, 4][1:3] return?",
+      "answer": "A slice from index 1 up to but not including index 3, so it keeps items 1 and 2.\n\ncode:\nlst = [0, 1, 2, 3, 4]\nprint(lst[1:3])  # [1, 2]\n\nreal example:\nExtracting items 2 and 3 from a 5-level difficulty menu to show mid-level options."
+    },
+    {
+      "id": 25,
+      "question": "What does [0, 1, 2, 3, 4][:2] return?",
+      "answer": "With no start, the slice begins at index 0 and stops before index 2, giving the first two items.\n\ncode:\nlst = [0, 1, 2, 3, 4]\nprint(lst[:2])  # [0, 1]\n\nreal example:\nShowing only the first two headlines on a news app's home screen."
+    },
+    {
+      "id": 26,
+      "question": "What does [0, 1, 2, 3, 4][2:] return?",
+      "answer": "With no end, the slice runs from index 2 all the way to the end of the list.\n\ncode:\nlst = [0, 1, 2, 3, 4]\nprint(lst[2:])  # [2, 3, 4]\n\nreal example:\nSkipping the first two questions of a quiz and grabbing everything that comes after them."
+    },
+    {
+      "id": 27,
+      "question": "What does [0, 1, 2, 3, 4][:] return?",
+      "answer": "A slice with both ends omitted copies the whole list into a brand-new list.\n\ncode:\nlst = [0, 1, 2, 3, 4]\ncopy = lst[:]\ncopy.append(9)\nprint(lst)  # [0, 1, 2, 3, 4]  -- original unchanged\n\nreal example:\nSaving a backup of the active roster so edits to the working copy do not touch the saved one."
+    },
+    {
+      "id": 28,
+      "question": "What does [0, 1, 2, 3, 4][::2] return?",
+      "answer": "The step of 2 makes the slice take every other item, starting at index 0.\n\ncode:\nlst = [0, 1, 2, 3, 4]\nprint(lst[::2])  # [0, 2, 4]\n\nreal example:\nShowing only even seat numbers from a row of seats for a special two-seat pricing."
+    },
+    {
+      "id": 29,
+      "question": "What does [0, 1, 2, 3, 4][::-1] return?",
+      "answer": "A step of -1 walks backward through the list, producing it in reverse order.\n\ncode:\nlst = [0, 1, 2, 3, 4]\nprint(lst[::-1])  # [4, 3, 2, 1, 0]\n\nreal example:\nDisplaying a chat history newest message first instead of oldest first."
+    },
+    {
+      "id": 30,
+      "question": "What does [0, 1, 2, 3, 4][1:4:2] return?",
+      "answer": "From index 1 up to before 4, taking every second item, it grabs indices 1 and 3.\n\ncode:\nlst = [0, 1, 2, 3, 4]\nprint(lst[1:4:2])  # [1, 3]\n\nreal example:\nChoosing only the second and fourth slides from the middle of a presentation."
+    },
+    {
+      "id": 31,
+      "question": "Is the end index in a slice included?",
+      "answer": "No. Slices include everything up to but not including the end index.\n\ncode:\nlst = [10, 20, 30]\nprint(lst[0:2])  # [10, 20]  -- 30 is not included\n\nreal example:\nSplitting a 5-sentence paragraph at sentence 3 so sentence 3 itself belongs to the next part."
+    },
+    {
+      "id": 32,
+      "question": "What does [0, 1, 2, 3, 4][-2:] return?",
+      "answer": "Starting from two positions before the end, the slice keeps everything to the end.\n\ncode:\nlst = [0, 1, 2, 3, 4]\nprint(lst[-2:])  # [3, 4]\n\nreal example:\nAn order tracker shows only the last two status updates from a longer activity log."
+    },
+    {
+      "id": 33,
+      "question": "What is returned by a slice when the start index is beyond the end?",
+      "answer": "A slice never raises an error; when the start is past everything, it simply returns an empty list.\n\ncode:\nlst = [1, 2, 3]\nprint(lst[9:])  # []\n\nreal example:\nAn app asking for items after position 10 of a 3-item list gets nothing without crashing."
+    },
+    {
+      "id": 34,
+      "question": "What does [1, 2, 3][:100] return?",
+      "answer": "When the end index overshoots the list, slicing simply returns every element it had.\n\ncode:\nlst = [1, 2, 3]\nprint(lst[:100])  # [1, 2, 3]\n\nreal example:\nAsking for the first hundred items of a 3-item sale list safely returns the whole tiny list."
+    },
+    {
+      "id": 35,
+      "question": "Does slicing a list create a new list?",
+      "answer": "Yes. Slicing always builds a brand-new list, so editing the slice does not change the original.\n\ncode:\noriginal = [1, 2, 3]\npart = original[:2]\npart[0] = 99\nprint(original)  # [1, 2, 3]\n\nreal example:\nPreviewing a cut version of a video timeline without affecting the saved project."
+    },
+    {
+      "id": 36,
+      "question": "What does nums[::] produce?",
+      "answer": "With all slice parts empty and step 1, it copies every element into a new list.\n\ncode:\nnums = [1, 2, 3]\ncopy = nums[::]\ncopy.append(4)\nprint(nums)  # [1, 2, 3]  -- unchanged\n\nreal example:\nDuplicating a team's player list so a manager can experiment without altering the official roster."
+    },
+    {
+      "id": 37,
+      "question": "What does [1, 2, 3, 4][1:1] return?",
+      "answer": "When the start and end of a slice are equal, the range is empty, so you get an empty list.\n\ncode:\nlst = [1, 2, 3, 4]\nprint(lst[1:1])  # []\n\nreal example:\nInserting a new item at a position patched in later with slice assignment, which starts with an empty slot."
+    },
+    {
+      "id": 38,
+      "question": "What is the default value of the start in a slice?",
+      "answer": "When you leave out the start, slicing begins at index 0, the very first element.\n\ncode:\nlst = [10, 20, 30, 40]\nprint(lst[:2])  # [10, 20]  -- started at 0\n\nreal example:\nShowing the first few stories of a feed by slicing with no start index."
+    },
+    {
+      "id": 39,
+      "question": "What is the default value of the step in a slice?",
+      "answer": "The default step is 1, meaning every element in the range is taken in order.\n\ncode:\nlst = [1, 2, 3]\nprint(lst[0:2])  # [1, 2]  -- step of 1\n\nreal example:\nReading a queue in normal order by asking for a plain slice, which visits each item once."
+    },
+    {
+      "id": 40,
+      "question": "How do you copy a list without affecting the original on change?",
+      "answer": "Use lst[:], lst.copy(), or list(lst); all three create a separate list you can edit freely.\n\ncode:\noriginal = [1, 2, 3]\ncopy = original.copy()\ncopy.append(99)\nprint(original)  # [1, 2, 3]  -- unaffected\n\nreal example:\nBacking up a recipe list before a cook modifies a working copy of the ingredients."
+    },
+    {
+      "id": 41,
+      "question": "What is the length of [1, 2, 3]?",
+      "answer": "It holds 3 elements, and len() reports that count.\n\ncode:\nprint(len([1, 2, 3]))  # 3\n\nreal example:\nA packing app counts how many items are in your suitcase list before a trip."
+    },
+    {
+      "id": 42,
+      "question": "What does \"apple\" in [\"apple\", \"banana\"] return?",
+      "answer": "The in operator checks whether a value exists and returns True when it does.\n\ncode:\nfruits = [\"apple\", \"banana\"]\nprint(\"apple\" in fruits)  # True\n\nreal example:\nChecking whether an ingredient is already on the grocery list before adding it."
+    },
+    {
+      "id": 43,
+      "question": "What does min([3, 1, 2]) return?",
+      "answer": "min() scans the list and returns the smallest value, which is 1.\n\ncode:\nprint(min([3, 1, 2]))  # 1\n\nreal example:\nFinding the lowest price in today's list of store discounts."
+    },
+    {
+      "id": 44,
+      "question": "What does max([3, 1, 2]) return?",
+      "answer": "max() scans the list and returns the largest value, which is 3.\n\ncode:\nprint(max([3, 1, 2]))  # 3\n\nreal example:\nShowing the highest score from a list of this week's quiz results."
+    },
+    {
+      "id": 45,
+      "question": "What does sum([1, 2, 3]) return?",
+      "answer": "sum() adds up every number in the list, so 1 + 2 + 3 equals 6.\n\ncode:\nprint(sum([1, 2, 3]))  # 6\n\nreal example:\nAdding all items in a cart to compute the total price for checkout."
+    },
+    {
+      "id": 46,
+      "question": "Does sorted([3, 1, 2]) modify the original list?",
+      "answer": "No. sorted() returns a new sorted list and leaves the original exactly as it was.\n\ncode:\nnums = [3, 1, 2]\nn = sorted(nums)\nprint(nums)  # [3, 1, 2]  -- unchanged\nprint(n)     # [1, 2, 3]\n\nreal example:\nSorting a copy of rankings for display while keeping the official order untouched."
+    },
+    {
+      "id": 47,
+      "question": "How do you sort a list in descending order with sorted()?",
+      "answer": "Pass reverse=True so sorted() orders the items from largest to smallest.\n\ncode:\nnums = [3, 1, 2]\nprint(sorted(nums, reverse=True))  # [3, 2, 1]\n\nreal example:\nListing a leaderboard from the highest score down to the lowest."
+    },
+    {
+      "id": 48,
+      "question": "What happens if you call min() on a list with mixed types like [1, \"a\"]?",
+      "answer": "Python cannot compare ints and strings, so it raises a TypeError.\n\ncode:\nprint(min([1, \"a\"]))  # TypeError: '<' not supported between 'int' and 'str'\n\nreal example:\nA sorting feature fails if someone mixes numbers and text in one column of imported spreadsheet data."
+    },
+    {
+      "id": 49,
+      "question": "What does sum([]) return?",
+      "answer": "Adding nothing gives zero, so sum() of an empty list is 0.\n\ncode:\nprint(sum([]))  # 0\n\nreal example:\nAn order app starts a running total at 0 when the cart has no items yet."
+    },
+    {
+      "id": 50,
+      "question": "What is the difference between list.sort() and sorted(list)?",
+      "answer": "sort() changes the list in place and returns None, while sorted() returns a new list.\n\ncode:\nnums = [3, 1, 2]\nnums.sort()\nprint(nums)  # [3, 1, 2] becomes [1, 2, 3]\nprint(sorted([3, 1, 2]))  # [1, 2, 3] as a new list\n\nreal example:\nUse sort() to permanently reorder a game's hidden deck, or sorted() for a temporary sorted view of it."
+    },
+    {
+      "id": 51,
+      "question": "What does [1, 2] + [3, 4] return?",
+      "answer": "The plus operator joins two lists end to end into one longer list.\n\ncode:\nprint([1, 2] + [3, 4])  # [1, 2, 3, 4]\n\nreal example:\nMerging the morning and afternoon appointment lists into a single full-day schedule."
+    },
+    {
+      "id": 52,
+      "question": "What does max([\"a\", \"b\", \"c\"]) return?",
+      "answer": "Strings compare in alphabetical order, so the largest is \"c\".\n\ncode:\nprint(max([\"a\", \"b\", \"c\"]))  # c\n\nreal example:\nFinding the last letter alphabetically among collected answer keys."
+    },
+    {
+      "id": 53,
+      "question": "What does any([False, True, False]) return?",
+      "answer": "any() returns True as soon as at least one element is truthy, and True is truthy here.\n\ncode:\nprint(any([False, True, False]))  # True\n\nreal example:\nShowing a warning if any of the luggage items is overweight, based on a list of checks."
+    },
+    {
+      "id": 54,
+      "question": "What does all([True, True]) return?",
+      "answer": "all() returns True only if every element is truthy, and here both are True.\n\ncode:\nprint(all([True, True]))  # True\n\nreal example:\nApproving a form only when all required fields in a checklist are filled in."
+    },
+    {
+      "id": 55,
+      "question": "What does [1, 2, 3].append(4) do?",
+      "answer": "It adds 4 to the end of the list in place, changing it to [1, 2, 3, 4].\n\ncode:\nnums = [1, 2, 3]\nnums.append(4)\nprint(nums)  # [1, 2, 3, 4]\n\nreal example:\nAdding a newly purchased item to the end of a customer's cart list."
+    },
+    {
+      "id": 56,
+      "question": "What does append() return?",
+      "answer": "append() modifies the list in place and returns None, not the updated list.\n\ncode:\nresult = [1].append(2)\nprint(result)  # None\n\nreal example:\nCode should call append() without assigning its result, just like writing a note to a log without expecting a value back."
+    },
+    {
+      "id": 57,
+      "question": "What does [1, 2].extend([3, 4]) do?",
+      "answer": "extend() adds each element of the argument, so the list becomes [1, 2, 3, 4].\n\ncode:\nnums = [1, 2]\nnums.extend([3, 4])\nprint(nums)  # [1, 2, 3, 4]\n\nreal example:\nAdding all of this week's new members to the main member list at once."
+    },
+    {
+      "id": 58,
+      "question": "What is the difference between append([3, 4]) and extend([3, 4])?",
+      "answer": "append adds the list as one single element, while extend adds each item separately.\n\ncode:\nnums = [1, 2]\nnums.append([3, 4])\nprint(nums)  # [1, 2, [3, 4]]\nnums = [1, 2]\nnums.extend([3, 4])\nprint(nums)  # [1, 2, 3, 4]\n\nreal example:\nUse append to store one full list (like one order), and extend to pour many products into a flat catalog."
+    },
+    {
+      "id": 59,
+      "question": "What does [1, 3].insert(1, 2) do?",
+      "answer": "insert() places 2 at index 1, pushing 3 right, so the list becomes [1, 2, 3].\n\ncode:\nnums = [1, 3]\nnums.insert(1, 2)\nprint(nums)  # [1, 2, 3]\n\nreal example:\nSlipping a newly ranked player into position two of a standings list."
+    },
+    {
+      "id": 60,
+      "question": "How do you add an element to the very beginning of a list?",
+      "answer": "Use lst.insert(0, value), which places the value at the front index 0.\n\ncode:\ntasks = [\"wash dishes\"]\ntasks.insert(0, \"call mom\")\nprint(tasks)  # ['call mom', 'wash dishes']\n\nreal example:\nMaking an urgent task jump to the top of a daily to-do list."
+    },
+    {
+      "id": 61,
+      "question": "What happens if you insert at an index larger than the list length?",
+      "answer": "Python does not error; it simply appends the element at the very end.\n\ncode:\nnums = [1, 2]\nnums.insert(99, 3)\nprint(nums)  # [1, 2, 3]\n\nreal example:\nInserting a finishing item at a far-away position safely just adds it to the end of the queue."
+    },
+    {
+      "id": 62,
+      "question": "What does [1, 2, 3].remove(2) do?",
+      "answer": "remove() deletes the first matching value 2, leaving the list as [1, 3].\n\ncode:\nnums = [1, 2, 3]\nnums.remove(2)\nprint(nums)  # [1, 3]\n\nreal example:\nDeleting an item by name from a shopping list without needing to know its position."
+    },
+    {
+      "id": 63,
+      "question": "What happens if remove() can't find the value?",
+      "answer": "If the value is absent, remove() raises a ValueError.\n\ncode:\nnums = [1, 2, 3]\nnums.remove(99)  # ValueError: list.remove(x): x not in list\n\nreal example:\nA program deleting a player from a roster crashes with this error if that player is not on it."
+    },
+    {
+      "id": 64,
+      "question": "If a value appears multiple times, which one does remove() delete?",
+      "answer": "remove() deletes only the first occurrence, leaving the later duplicates in place.\n\ncode:\nnums = [1, 2, 1]\nnums.remove(1)\nprint(nums)  # [2, 1]\n\nreal example:\nUnsubscribing a user once even if they appear multiple times in one duplicate-heavy mailing list."
+    },
+    {
+      "id": 65,
+      "question": "What does nums = [1, 2, 3]; print(nums.pop()) output?",
+      "answer": "pop() removes and returns the last item, so it prints 3 and the list shrinks to [1, 2].\n\ncode:\nnums = [1, 2, 3]\nprint(nums.pop())  # 3\nprint(nums)        # [1, 2]\n\nreal example:\nUndoing the most recent action in a text editor by popping it off the history stack."
+    },
+    {
+      "id": 66,
+      "question": "What does [10, 20, 30].pop(1) do?",
+      "answer": "pop(1) removes and returns the element at index 1, which is 20, leaving [10, 30].\n\ncode:\nnums = [10, 20, 30]\nprint(nums.pop(1))  # 20\nprint(nums)         # [10, 30]\n\nreal example:\nRemoving the second seat reservation from a waiting list while keeping the one before and after."
+    },
+    {
+      "id": 67,
+      "question": "What does pop() return?",
+      "answer": "pop() returns the removed element, which is why it is handy for using that value right away.\n\ncode:\nnums = [5, 6, 7]\nlast = nums.pop()\nprint(last)   # 7\nprint(nums)   # [5, 6]\n\nreal example:\nDealing a card by popping the top card off a deck list and using it in the game."
+    },
+    {
+      "id": 68,
+      "question": "What happens if you call pop() on an empty list?",
+      "answer": "There is nothing to remove, so Python raises an IndexError naming the empty pop.\n\ncode:\nnums = []\nnums.pop()  # IndexError: pop from empty list\n\nreal example:\nA music player crashes if you press skip on a queue that is already out of songs."
+    },
+    {
+      "id": 69,
+      "question": "What does del lst[1] do?",
+      "answer": "del removes the element at index 1 from the list in place, without returning it.\n\ncode:\nlst = [1, 2, 3]\ndel lst[1]\nprint(lst)  # [1, 3]\n\nreal example:\nDeleting the second photo from an album when you no longer need it."
+    },
+    {
+      "id": 70,
+      "question": "What does del lst[0:2] do?",
+      "answer": "It deletes the slice from index 0 up to (not including) index 2, removing the first two items.\n\ncode:\nlst = [1, 2, 3, 4]\ndel lst[0:2]\nprint(lst)  # [3, 4]\n\nreal example:\nRemoving the first two early-version entries from a changelog list to show only recent updates."
+    },
+    {
+      "id": 71,
+      "question": "What does del lst do?",
+      "answer": "It deletes the variable itself, so the name no longer refers to any list at all.\n\ncode:\nlst = [1, 2, 3]\ndel lst\nprint(lst)  # NameError: name 'lst' is not defined\n\nreal example:\nClearing a temporary cache variable completely so the app frees its memory afterwards."
+    },
+    {
+      "id": 72,
+      "question": "What does [1, 2].clear() do?",
+      "answer": "clear() removes all elements from the list in place, leaving it as an empty list.\n\ncode:\nnums = [1, 2]\nnums.clear()\nprint(nums)  # []\n\nreal example:\nEmptying the current shopping cart after the order has been paid for."
+    },
+    {
+      "id": 73,
+      "question": "What is the difference between clear() and del lst?",
+      "answer": "clear() empties the list but keeps the variable usable, while del lst removes the variable entirely.\n\ncode:\nnums = [1, 2]\nnums.clear()\nprint(nums)      # []  -- still a list\ndel nums\n# print(nums)    # NameError\n\nreal example:\nUse clear() to reset a scoreboard to zero for a new round, but del to completely retire a variable in cleanup code."
+    },
+    {
+      "id": 74,
+      "question": "What does [10, 20, 30].index(20) return?",
+      "answer": "index() finds the position of the first match, and 20 sits at index 1.\n\ncode:\nprint([10, 20, 30].index(20))  # 1\n\nreal example:\nLooking up where the current chapter sits in a table-of-contents list."
+    },
+    {
+      "id": 75,
+      "question": "What does [1, 1, 2].count(1) return?",
+      "answer": "count() counts how many times 1 appears, and it shows up twice here.\n\ncode:\nprint([1, 1, 2].count(1))  # 2\n\nreal example:\nCounting how many times a product was ordered by scanning a list of order IDs."
+    },
+    {
+      "id": 76,
+      "question": "What does [1, 2, 3].count(9) return?",
+      "answer": "9 never appears in the list, so count() returns 0.\n\ncode:\nprint([1, 2, 3].count(9))  # 0\n\nreal example:\nChecking whether a seat number was booked at all by counting it in the bookings list."
+    },
+    {
+      "id": 77,
+      "question": "What is the difference between remove() and pop()?",
+      "answer": "remove() deletes by matching a value, while pop() deletes by index and returns that value.\n\ncode:\nlst = [10, 20, 30]\nlst.remove(20)\nprint(lst)            # [10, 30]\nx = [10, 20, 30].pop(1)\nprint(x)              # 20\n\nreal example:\nUse pop() to take the next ticket by position, and remove() to scratch off one specific item by name."
+    },
+    {
+      "id": 78,
+      "question": "What does lst = [3, 1, 2]; lst.sort(); print(lst) output?",
+      "answer": "sort() reorders the list in place, so printing it shows the sorted [1, 2, 3].\n\ncode:\nlst = [3, 1, 2]\nlst.sort()\nprint(lst)  # [1, 2, 3]\n\nreal example:\nA music app permanently reorders the library alphabetically when you choose sort by name."
+    },
+    {
+      "id": 79,
+      "question": "What does print([3, 1, 2].sort()) output?",
+      "answer": "sort() changes the list in place and returns None, so it prints None.\n\ncode:\nresult = [3, 1, 2].sort()\nprint(result)  # None\n\nreal example:\nTrying to print sort() directly shows None, a classic beginner trap; print the list itself instead."
+    },
+    {
+      "id": 80,
+      "question": "How do you sort in descending order in place?",
+      "answer": "Call lst.sort(reverse=True), which reorders the same list from largest to smallest.\n\ncode:\nscores = [60, 90, 75]\nscores.sort(reverse=True)\nprint(scores)  # [90, 75, 60]\n\nreal example:\nRanking exam scores from highest to lowest right inside the score list."
+    },
+    {
+      "id": 81,
+      "question": "What does [3, 1, 2].reverse() do?",
+      "answer": "reverse() flips the list in place, so [3, 1, 2] becomes [2, 1, 3].\n\ncode:\nnums = [3, 1, 2]\nnums.reverse()\nprint(nums)  # [2, 1, 3]\n\nreal example:\nReversing a calendar list so upcoming events appear in reverse chronological order."
+    },
+    {
+      "id": 82,
+      "question": "What does list(reversed([1, 2, 3])) return?",
+      "answer": "reversed() gives an iterator that walks backward, and list() turns it into [3, 2, 1].\n\ncode:\nprint(list(reversed([1, 2, 3])))  # [3, 2, 1]\n\nreal example:\nShowing the three most recent messages in reverse order without changing the stored chat."
+    },
+    {
+      "id": 83,
+      "question": "What does reversed() return?",
+      "answer": "reversed() returns a reverse iterator, not a list, so you wrap it with list() to materialize one.\n\ncode:\nr = reversed([1, 2, 3])\nprint(r)          # <list_reverseiterator ...>\nprint(list(r))    # [3, 2, 1]\n\nreal example:\nAn app walks a playlist backwards efficiently for a shuffle, converting the view to a list only when needed."
+    },
+    {
+      "id": 84,
+      "question": "What does lst.copy() do?",
+      "answer": "copy() returns a new list with the same elements, so edits to the copy leave the original alone.\n\ncode:\na = [1, 2, 3]\nb = a.copy()\nb.append(4)\nprint(a)  # [1, 2, 3]\nprint(b)  # [1, 2, 3, 4]\n\nreal example:\nDuplicating a wedding guest list so a planner can test changes safely."
+    },
+    {
+      "id": 85,
+      "question": "What does b = a do (both lists)?",
+      "answer": "b = a copies the reference, so both names point to the same list object and edits affect both.\n\ncode:\na = [1, 2]\nb = a\nb.append(3)\nprint(a)  # [1, 2, 3]\n\nreal example:\nWhen two parts of a program share one settings list, a change in one shows up in the other."
+    },
+    {
+      "id": 86,
+      "question": "How do you sort strings by length?",
+      "answer": "Pass key=len to sorted() so it orders by each string's character count.\n\ncode:\nwords = [\"apple\", \"hi\", \"banana\"]\nprint(sorted(words, key=len))  # ['hi', 'apple', 'banana']\n\nreal example:\nDisplaying hashtags from shortest to longest for a cleaner trending list."
+    },
+    {
+      "id": 87,
+      "question": "What does sorted([\"b\", \"A\", \"C\"], key=str.lower) return?",
+      "answer": "Using key=str.lower, sorting compares lowercased forms, so the order is A, b, C.\n\ncode:\nprint(sorted([\"b\", \"A\", \"C\"], key=str.lower))  # ['A', 'b', 'C']\n\nreal example:\nSorting festival ticket codes case-insensitively so uppercase and lowercase entries mix nicely."
+    },
+    {
+      "id": 88,
+      "question": "How do you change the element at index 0 to 99?",
+      "answer": "Assign a new value to lst[0], which replaces whatever was stored at the front.\n\ncode:\nlst = [1, 2, 3]\nlst[0] = 99\nprint(lst)  # [99, 2, 3]\n\nreal example:\nUpdating the current level number at the start of a levels list after the player finishes round one."
+    },
+    {
+      "id": 89,
+      "question": "What happens if you assign to an index that doesn't exist?",
+      "answer": "Assigning to a missing index raises an IndexError because there is no slot to overwrite.\n\ncode:\nlst = [1, 2, 3]\nlst[5] = 9  # IndexError: list assignment index out of range\n\nreal example:\nA scoreboard crashes if it tries to overwrite the sixth slot of a three-placement list."
+    },
+    {
+      "id": 90,
+      "question": "What does lst[1:3] = [100, 200] do?",
+      "answer": "Slice assignment replaces those slots, turning the covered elements into the assigned values.\n\ncode:\nlst = [1, 2, 3, 4]\nlst[1:3] = [100, 200]\nprint(lst)  # [1, 100, 200, 4]\n\nreal example:\nSwapping the middle options in a menu list for new, updated choices."
+    },
+    {
+      "id": 91,
+      "question": "Can slice assignment change the length of a list?",
+      "answer": "Yes. Replacing a slice with a shorter or longer list shrinks or grows the list accordingly.\n\ncode:\nlst = [1, 2, 3, 4]\nlst[1:3] = [100, 200, 300]\nprint(lst)  # [1, 100, 200, 300, 4]\n\nreal example:\nInserting extra weekday classes into the middle of a schedule without touching the ones around them."
+    },
+    {
+      "id": 92,
+      "question": "What is the difference between lst += [4] and lst = lst + [4]?",
+      "answer": "+= extends the existing list in place, while lst = lst + [4] creates a brand-new list.\n\ncode:\na = [1, 2]\na += [3]       # modifies in place\nprint(a)       # [1, 2, 3]\nb = [1, 2]\nb = b + [3]    # new list, old one still exists\nprint(b)       # [1, 2, 3]\n\nreal example:\nIf two parts of a program share a list, in-place += shows the change in both, while = leaves the old list unchanged elsewhere."
+    },
+    {
+      "id": 93,
+      "question": "What does [1, 2] < [1, 3] evaluate to?",
+      "answer": "Lists compare element by element; first elements tie at 1, then 2 is less than 3, so it is True.\n\ncode:\nprint([1, 2] < [1, 3])  # True\n\nreal example:\nComparing two versions of a scoreboard list to see which is earlier when versions differ at one slot."
+    },
+    {
+      "id": 94,
+      "question": "What does [1, 2, 3] == [1, 2, 3] evaluate to?",
+      "answer": "== compares by value, and both lists hold identical elements, so the result is True.\n\ncode:\nprint([1, 2, 3] == [1, 2, 3])  # True\n\nreal example:\nChecking whether two saved game states contain exactly the same saved progress."
+    },
+    {
+      "id": 95,
+      "question": "What does a, b = [1, 2] do?",
+      "answer": "It unpacks the list, assigning its elements positionally: a gets 1 and b gets 2.\n\ncode:\na, b = [1, 2]\nprint(a)  # 1\nprint(b)  # 2\n\nreal example:\nA calendar app unpacks a [month, day] pair into two separate variables for easier use."
+    },
+    {
+      "id": 96,
+      "question": "What does a, *b = [1, 2, 3] do?",
+      "answer": "The starred variable collects the leftover elements, so a is 1 and b is [2, 3].\n\ncode:\na, *b = [1, 2, 3]\nprint(a)  # 1\nprint(b)  # [2, 3]\n\nreal example:\nSeparating a name from extra scores in a row, so the first value stands alone and the rest become a list."
+    },
+    {
+      "id": 97,
+      "question": "What does *a, b = [1, 2, 3] do?",
+      "answer": "The starred variable swallows all but the last element: a is [1, 2] and b is 3.\n\ncode:\n*a, b = [1, 2, 3]\nprint(a)  # [1, 2]\nprint(b)  # 3\n\nreal example:\nReading a log line where the final value is the result and all earlier values collapse into a list."
+    },
+    {
+      "id": 98,
+      "question": "How do you join a list of strings into one string?",
+      "answer": "Call the separator's join() method with the list, and it glues them together.\n\ncode:\nwords = [\"a\", \"b\"]\nprint(\" \".join(words))  # a b\n\nreal example:\nBuilding a full sentence from individual message words, with spaces between each."
+    },
+    {
+      "id": 99,
+      "question": "Can a list be used as a dictionary key?",
+      "answer": "No, because lists are mutable and therefore unhashable. Use a tuple instead of a list as a key.\n\ncode:\n# d = {[1, 2]: \"x\"}  # TypeError: unhashable type: 'list'\nd = {(1, 2): \"x\"}\nprint(d)  # {(1, 2): 'x'}\n\nreal example:\nA map that looks up a city by its (lat, long) coordinates uses a tuple, never a list, for the key."
+    },
+    {
+      "id": 100,
+      "question": "How do you check if a list is empty?",
+      "answer": "An empty list is falsy, so the clean check is if not lst.\n\ncode:\nlst = []\nif not lst:\n    print(\"empty\")  # empty\n\nreal example:\nShowing an out-of-stock message when the inventory list is empty."
+    },
+    {
+      "id": 101,
+      "question": "How do you check if a list is NOT empty?",
+      "answer": "A non-empty list is truthy, so use if lst, or compare its length to zero.\n\ncode:\nlst = [1]\nif lst:\n    print(\"has items\")  # has items\n\nreal example:\nDisabling a checkout button until the cart list has at least one item."
+    },
+    {
+      "id": 102,
+      "question": "What does bool([]) return?",
+      "answer": "An empty list has nothing in it, so it is treated as False in a boolean context.\n\ncode:\nprint(bool([]))  # False\n\nreal example:\nA chat app treats an empty notification list as a reason to show no unread badge."
+    },
+    {
+      "id": 103,
+      "question": "What does bool([0]) return?",
+      "answer": "The list contains one element, so it is truthy regardless of that element being 0.\n\ncode:\nprint(bool([0]))  # True\n\nreal example:\nA to-do list with a single item marked as pending still counts as having something to do."
+    },
+    {
+      "id": 104,
+      "question": "How do you iterate over all elements of a list?",
+      "answer": "A for loop visits each element in order, giving you one value per iteration.\n\ncode:\ncolors = [\"red\", \"green\", \"blue\"]\nfor color in colors:\n    print(color)\n\nreal example:\nLooping through a list of station names to announce each stop on a train route."
+    },
+    {
+      "id": 105,
+      "question": "How do you get both index and element in a loop?",
+      "answer": "Use enumerate() in the loop; it yields each index together with its matching element.\n\ncode:\nfruits = [\"apple\", \"banana\"]\nfor i, fruit in enumerate(fruits):\n    print(i, fruit)\n\nreal example:\nNumbering items in a shopping list as 0 apple, 1 banana while processing them."
+    },
+    {
+      "id": 106,
+      "question": "What does zip([1, 2], [\"a\", \"b\"]) produce when looped?",
+      "answer": "zip() pairs up positions from both lists, producing (1, \"a\") then (2, \"b\").\n\ncode:\nfor pair in zip([1, 2], [\"a\", \"b\"]):\n    print(pair)  # (1, 'a') and (2, 'b')\n\nreal example:\nPairing student IDs with their names from two parallel lists so each pair travels together."
+    },
+    {
+      "id": 107,
+      "question": "How do you loop over a list using indices?",
+      "answer": "Loop with range(len(lst)) and then read lst[i] using the current index i.\n\ncode:\nlst = [\"a\", \"b\", \"c\"]\nfor i in range(len(lst)):\n    print(i, lst[i])\n\nreal example:\nRe-checking items in a queue by their position number when you need the location, not just the value."
+    },
+    {
+      "id": 108,
+      "question": "What happens if you append to a list while looping over it?",
+      "answer": "The loop keeps seeing the new elements, so the iteration may never end.\n\ncode:\nlst = [1]\nfor x in lst:\n    lst.append(x + 1)\n# This runs forever (never run it!)\n\nreal example:\nA program adding tasks while scanning the task list can loop forever; copy the list first to avoid it."
+    },
+    {
+      "id": 109,
+      "question": "How do you sum all elements of a list with a loop?",
+      "answer": "Start total at 0 and add each element inside the loop, accumulating the sum.\n\ncode:\ntotal = 0\nfor x in [1, 2, 3]:\n    total += x\nprint(total)  # 6\n\nreal example:\nTallying the number of steps walked each day, adding each day's count to the total."
+    },
+    {
+      "id": 110,
+      "question": "How do you find the largest element without max()?",
+      "answer": "Assume the first element is largest, then update it whenever a bigger value appears.\n\ncode:\nlst = [3, 7, 2]\nlargest = lst[0]\nfor x in lst:\n    if x > largest:\n        largest = x\nprint(largest)  # 7\n\nreal example:\nScanning exam scores by hand to pick out the highest mark from the list."
+    },
+    {
+      "id": 111,
+      "question": "How do you loop over a matrix (list of lists)?",
+      "answer": "Use two nested loops: the outer row loop visits each inner list, and the inner loop its items.\n\ncode:\nmatrix = [[1, 2], [3, 4]]\nfor row in matrix:\n    for item in row:\n        print(item)  # 1, 2, 3, 4\n\nreal example:\nScanning a seating chart row by row, seat by seat, to find any empty seats."
+    },
+    {
+      "id": 112,
+      "question": "How do you get the middle element of [1, 2, 3, 4, 5]?",
+      "answer": "Use len(lst) // 2 as the index, which lands on the middle element 3.\n\ncode:\nlst = [1, 2, 3, 4, 5]\nprint(lst[len(lst) // 2])  # 3\n\nreal example:\nPicking the median point on a list of five price quotes to show a typical value."
+    },
+    {
+      "id": 113,
+      "question": "How do you flatten a list of pairs like [[1, 2], [3, 4]]?",
+      "answer": "A nested comprehension loops over rows then items, pulling every element into one list.\n\ncode:\nmatrix = [[1, 2], [3, 4]]\nflat = [x for row in matrix for x in row]\nprint(flat)  # [1, 2, 3, 4]\n\nreal example:\nTurning a spreadsheet's rows of cells into one long list so every value can be searched at once."
+    },
+    {
+      "id": 114,
+      "question": "What does [[0] * 3 for _ in range(3)] create?",
+      "answer": "It builds three full rows of zeros, giving a 3 by 3 matrix of zeros.\n\ncode:\nm = [[0] * 3 for _ in range(3)]\nprint(m)  # [[0, 0, 0], [0, 0, 0], [0, 0, 0]]\n\nreal example:\nInitializing an empty game board for tic-tac-toe ready to be filled with moves."
+    },
+    {
+      "id": 115,
+      "question": "Why is [[0] * 3] * 3 a bad way to build a matrix?",
+      "answer": "The * operator reuses the same inner list three times, so all rows are really one row.\n\ncode:\nm = [[0] * 3] * 3\nm[0][1] = 9\nprint(m)  # [[0, 9, 0], [0, 9, 0], [0, 9, 0]]\n\nreal example:\nUpdating one row of a schedule would mysteriously change every row, so always use a comprehension for a real grid."
+    },
+    {
+      "id": 116,
+      "question": "What is the difference between == and is on two equal lists?",
+      "answer": "== compares the contents, while is checks whether they are the same object in memory.\n\ncode:\na = [1, 2]\nb = [1, 2]\nprint(a == b)  # True\nprint(a is b)  # False\n\nreal example:\nTwo classrooms with identical student lists are equal in content, but they are still two separate lists."
+    },
+    {
+      "id": 117,
+      "question": "How do you create a list of the keys of a dictionary?",
+      "answer": "Wrap the dictionary in list(), or call its keys view, to get all keys as a list.\n\ncode:\nd = {\"a\": 1, \"b\": 2}\nprint(list(d.keys()))  # ['a', 'b']\nprint(list(d))         # ['a', 'b']  -- same thing\n\nreal example:\nBuilding a dropdown menu from the list of countries stored as dictionary keys."
+    },
+    {
+      "id": 118,
+      "question": "How do you create a list of the values of a dictionary?",
+      "answer": "Wrap d.values() in list() to collect every value into an ordinary list.\n\ncode:\nd = {\"a\": 1, \"b\": 2}\nprint(list(d.values()))  # [1, 2]\n\nreal example:\nExtracting all the prices out of a product dictionary so you can total them."
+    },
+    {
+      "id": 119,
+      "question": "Does reverse() return a new list?",
+      "answer": "No. reverse() flips the list in place and returns None; it does not make a copy.\n\ncode:\nnums = [1, 2, 3]\nresult = nums.reverse()\nprint(result)  # None\nprint(nums)    # [3, 2, 1]\n\nreal example:\nFlipping a leaderboard in place before showing it, without needing the return value."
+    },
+    {
+      "id": 120,
+      "question": "Can a list contain None?",
+      "answer": "Yes. None is a normal value and can appear anywhere in a list.\n\ncode:\ndata = [1, None, 2]\nprint(data)          # [1, None, 2]\nprint(data[1] is None)  # True\n\nreal example:\nA survey results list uses None to mark questions a user skipped."
+    },
+    {
+      "id": 121,
+      "question": "What does [5] * 0 return?",
+      "answer": "Repeating a list zero times produces an empty list.\n\ncode:\nprint([5] * 0)  # []\n\nreal example:\nBuilding a fixture list for zero rounds of a canceled tournament gracefully returns no rounds."
+    },
+    {
+      "id": 122,
+      "question": "What does len([1, [2, 3]]) return?",
+      "answer": "The nested list counts as a single element, so the length is 2.\n\ncode:\nprint(len([1, [2, 3]]))  # 2\n\nreal example:\nCounting how many rows are in a table where each row is one nested list of cells."
+    },
+    {
+      "id": 123,
+      "question": "What does samp = [1, 2, 3]; samp[1] = 99; print(samp) output?",
+      "answer": "Assigning to index 1 replaces the 2 with 99, so the list prints as [1, 99, 3].\n\ncode:\nsamp = [1, 2, 3]\nsamp[1] = 99\nprint(samp)  # [1, 99, 3]\n\nreal example:\nUpdating the second lab result in a results list with the corrected reading."
+    },
+    {
+      "id": 124,
+      "question": "How do you keep duplicates out of a list?",
+      "answer": "Convert the list to a set to drop duplicates, then back to a list; order is not guaranteed.\n\ncode:\nitems = [1, 2, 2, 3]\nunique = list(set(items))\nprint(unique)  # [1, 2, 3] in some order\n\nreal example:\nRemoving duplicate coupon codes from a raffle entry list before drawing a winner."
+    },
+    {
+      "id": 125,
+      "question": "What does list(set([1, 2, 2, 3])) return?",
+      "answer": "The set removes the duplicate 2, so the result is a list with 1, 2, 3 in some order.\n\ncode:\nprint(list(set([1, 2, 2, 3])))  # [1, 2, 3] -- order not fixed\n\nreal example:\nCleaning duplicate tags out of an article's tag list before saving it."
+    },
+    {
+      "id": 126,
+      "question": "How do you swap the first and last elements of a list?",
+      "answer": "Assign both positions using a single line with a comma-separated swap.\n\ncode:\nlst = [1, 2, 3]\nlst[0], lst[-1] = lst[-1], lst[0]\nprint(lst)  # [3, 2, 1]\n\nreal example:\nMoving the least recent appointment to the front of a list in bookings previews."
+    },
+    {
+      "id": 127,
+      "question": "What is type([])?",
+      "answer": "An empty list literal has the type list.\n\ncode:\nprint(type([]))  # <class 'list'>\n\nreal example:\nA file reader checks type(item) is list before treating it as a row of values."
+    },
+    {
+      "id": 128,
+      "question": "How do you find the second largest number in [3, 8, 5, 8]?",
+      "answer": "Deduplicate with set(), sort, and take index -2, which lands on 5.\n\ncode:\nlst = [3, 8, 5, 8]\nsecond = sorted(set(lst))[-2]\nprint(second)  # 5\n\nreal example:\nAwarding the runner-up prize by picking the second-highest distinct score from results."
+    },
+    {
+      "id": 129,
+      "question": "How do you find the index of the maximum value?",
+      "answer": "Find max() first, then ask the list for that value's index with index().\n\ncode:\nlst = [4, 9, 2]\nprint(lst.index(max(lst)))  # 1\n\nreal example:\nReporting which question number had the hardest score by locating the maximum's position."
+    },
+    {
+      "id": 130,
+      "question": "How do you split a string into a list of words?",
+      "answer": "Call .split() on the string, which returns a list of words separated by spaces.\n\ncode:\nprint(\"hello world\".split())  # ['hello', 'world']\n\nreal example:\nBreaking a user's typed search phrase into separate words so each can be matched."
+    },
+    {
+      "id": 131,
+      "question": "How do you find the average of a list of numbers?",
+      "answer": "Divide the sum() of the list by its len() to get the mean value.\n\ncode:\nnums = [2, 4, 6]\navg = sum(nums) / len(nums)\nprint(avg)  # 4.0\n\nreal example:\nComputing the average daily temperature from a week of recorded temperatures."
+    }
+  ]
+}

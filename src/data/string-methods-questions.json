@@ -1,0 +1,255 @@
+{
+  "description": "50 most important questions for automation testing interviews",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does 'Hello'.upper() return?",
+      "answer": ".upper() converts every letter to uppercase, so 'Hello' becomes 'HELLO'.\n\ncode:\nprint('Hello'.upper())  # HELLO\n\nreal example:\nShouting a headline or normalising product names."
+    },
+    {
+      "id": 2,
+      "question": "What does 'Hello'.lower() return?",
+      "answer": ".lower() converts every letter to lowercase, so 'Hello' becomes 'hello'.\n\ncode:\nprint('Hello'.lower())  # hello\n\nreal example:\nMaking search keywords lowercase so they match reliably."
+    },
+    {
+      "id": 3,
+      "question": "What does 'hELLO wORLD'.capitalize() return?",
+      "answer": ".capitalize() uppercases only the first letter and lowercases everything else.\n\ncode:\nprint('hELLO wORLD'.capitalize())  # Hello world\n\nreal example:\nFixing a sentence typed in all caps to normal sentence case."
+    },
+    {
+      "id": 4,
+      "question": "What does 'hello world'.title() return?",
+      "answer": ".title() capitalises the first letter of every word and lowercases the rest.\n\ncode:\nprint('hello world'.title())  # Hello World\n\nreal example:\nConverting a lowercase book title into Title Case."
+    },
+    {
+      "id": 5,
+      "question": "What does 'PYTHON'.isupper() return?",
+      "answer": ".isupper() returns True when there is at least one letter and every letter is uppercase.\n\ncode:\nprint('PYTHON'.isupper())  # True\n\nreal example:\nChecking whether a flag or label is in shout form."
+    },
+    {
+      "id": 6,
+      "question": "What does 'python'.islower() return?",
+      "answer": ".islower() returns True when every cased letter is lowercase, and 'python' qualifies.\n\ncode:\nprint('python'.islower())  # True\n\nreal example:\nConfirming text uses only small letters."
+    },
+    {
+      "id": 7,
+      "question": "Which method is best for case-insensitive comparisons?",
+      "answer": "casefold() is best because it handles more letters (like \u00df) for genuine case-insensitive comparisons.\n\ncode:\nprint('STRASSE'.casefold() == 'strasse'.casefold())  # True\n\nreal example:\nMatching city names or words regardless of letter case."
+    },
+    {
+      "id": 8,
+      "question": "What does '  hello  '.strip() return?",
+      "answer": ".strip() removes whitespace from both ends, so '  hello  ' becomes 'hello'.\n\ncode:\nprint('  hello  '.strip())  # hello\n\nreal example:\nCleaning extra spaces pasted around user input."
+    },
+    {
+      "id": 9,
+      "question": "What does '  hello  '.lstrip() return?",
+      "answer": ".lstrip() removes whitespace only from the left side, keeping the right-side spaces.\n\ncode:\nprint(repr('  hello  '.lstrip()))  # 'hello  '\n\nreal example:\nTrimming accidental indent from the start of pasted text."
+    },
+    {
+      "id": 10,
+      "question": "What does '  hello  '.rstrip() return?",
+      "answer": ".rstrip() removes whitespace only from the right side, keeping the leading spaces.\n\ncode:\nprint(repr('  hello  '.rstrip()))  # '  hello'\n\nreal example:\nRemoving trailing spaces at the end of a line of text."
+    },
+    {
+      "id": 11,
+      "question": "What does strip() remove by default?",
+      "answer": "By default, strip() removes whitespace: spaces, tabs, and newline characters.\n\ncode:\nprint(repr(' \\t\\n '.strip()))  # ''\n\nreal example:\nSanitising free-form input that may contain blank spaces."
+    },
+    {
+      "id": 12,
+      "question": "What does 'hello'.find('z') return?",
+      "answer": ".find('z') returns -1 when the text is not found, instead of raising an error.\n\ncode:\nprint('hello'.find('z'))  # -1\n\nreal example:\nChecking whether a value like 'z' exists in user input."
+    },
+    {
+      "id": 13,
+      "question": "What does 'hello'.index('z') do?",
+      "answer": ".index('z') raises a ValueError because 'z' is not found, unlike find which returns -1.\n\ncode:\n# 'hello'.index('z')  # ValueError: substring not found\n\nreal example:\nUsing .find instead when a missing value should be handled gently."
+    },
+    {
+      "id": 14,
+      "question": "What does 'ababa'.count('a') return?",
+      "answer": ".count('a') counts non-overlapping occurrences of 'a', and 'ababa' has three of them.\n\ncode:\nprint('ababa'.count('a'))  # 3\n\nreal example:\nCounting how often a chosen letter appears in a word."
+    },
+    {
+      "id": 15,
+      "question": "How are find() and index() different?",
+      "answer": "Both find a substring, but find() returns -1 if missing while index() raises a ValueError instead.\n\ncode:\nprint('hi'.find('z'))  # -1\n# 'hi'.index('z')  # ValueError\n\nreal example:\nChoosing find() when a missing match should be a non-error answer."
+    },
+    {
+      "id": 16,
+      "question": "What does 'mississippi'.count('s') return?",
+      "answer": ".count('s') counts the 's' characters in 'mississippi', which appear four times.\n\ncode:\nprint('mississippi'.count('s'))  # 4\n\nreal example:\nTallying a letter in a tongue-twister word."
+    },
+    {
+      "id": 17,
+      "question": "What does 'hello'.replace('l', 'L') return?",
+      "answer": ".replace('l', 'L') swaps every 'l' for an uppercase 'L', giving 'heLLo'.\n\ncode:\nprint('hello'.replace('l', 'L'))  # heLLo\n\nreal example:\nHighlighting a letter in a word-cleanup tool."
+    },
+    {
+      "id": 18,
+      "question": "What does 'aaa'.replace('a', 'b', 1) return?",
+      "answer": ".replace with a count of 1 changes only the first match, leaving the rest alone.\n\ncode:\nprint('aaa'.replace('a', 'b', 1))  # baa\n\nreal example:\nFixing the first typo in a line but not later ones."
+    },
+    {
+      "id": 19,
+      "question": "What does 'hello'.replace('x', 'y') return?",
+      "answer": "When no match exists, replace() returns the original string unchanged.\n\ncode:\nprint('hello'.replace('x', 'y'))  # hello\n\nreal example:\nA safe edit operation that does nothing on a miss."
+    },
+    {
+      "id": 20,
+      "question": "What does 'hello'.replace('l', '') return?",
+      "answer": "replace('l', '') deletes every 'l' by swapping it for nothing, giving 'heo'.\n\ncode:\nprint('hello'.replace('l', ''))  # heo\n\nreal example:\nRemoving a character everywhere in a cleaned phrase."
+    },
+    {
+      "id": 21,
+      "question": "Does replace modify the original string?",
+      "answer": "replace() returns a brand-new string; the original string is never modified.\n\ncode:\ns = 'abc'\ns.replace('a', 'z')\nprint(s)  # abc\n\nreal example:\nEditing displayed text while keeping the stored original safe."
+    },
+    {
+      "id": 22,
+      "question": "What does 'a,b,c'.split(',') return?",
+      "answer": ".split(',') cuts the string at each comma, returning the pieces as a list.\n\ncode:\nprint('a,b,c'.split(','))  # ['a', 'b', 'c']\n\nreal example:\nParsing comma-separated values from a simple line."
+    },
+    {
+      "id": 23,
+      "question": "What does 'hello world'.split() return?",
+      "answer": ".split() with no separator splits on any whitespace, giving separate words.\n\ncode:\nprint('hello world'.split())  # ['hello', 'world']\n\nreal example:\nBreaking a sentence into a list of words."
+    },
+    {
+      "id": 24,
+      "question": "What does '  a  b  '.split() return?",
+      "answer": "split() with no argument collapses runs of whitespace, so extra spaces are ignored.\n\ncode:\nprint('  a  b  '.split())  # ['a', 'b']\n\nreal example:\nCleaning messy, multiply-spaced input into tokens."
+    },
+    {
+      "id": 25,
+      "question": "What does 'a,b,,c'.split(',') return?",
+      "answer": "Splitting on ',' keeps empty pieces where two commas touch, so an empty string appears.\n\ncode:\nprint('a,b,,c'.split(','))  # ['a', 'b', '', 'c']\n\nreal example:\nParsing CSV rows where blank fields must be preserved."
+    },
+    {
+      "id": 26,
+      "question": "What does 'a b c'.split(' ', 1) return?",
+      "answer": ".split(' ', 1) splits only once, so everything after the first space stays whole.\n\ncode:\nprint('a b c'.split(' ', 1))  # ['a', 'b c']\n\nreal example:\nSeparating a command word from the rest of an instruction."
+    },
+    {
+      "id": 27,
+      "question": "What does 'a-b-c'.rsplit('-', 1) return?",
+      "answer": ".rsplit('-', 1) splits from the right, separating only the final field.\n\ncode:\nprint('a-b-c'.rsplit('-', 1))  # ['a-b', 'c']\n\nreal example:\nExtracting just the last part of a hyphenated code."
+    },
+    {
+      "id": 28,
+      "question": "What does 'a\\nb\\n'.splitlines() return?",
+      "answer": ".splitlines() breaks on newline characters and leaves them out.\n\ncode:\nprint('a\\nb\\n'.splitlines())  # ['a', 'b']\n\nreal example:\nReading lines of a text file into a list."
+    },
+    {
+      "id": 29,
+      "question": "What does ''.split() return?",
+      "answer": ".split() on an empty string returns an empty list, with no words to produce.\n\ncode:\nprint(''.split())  # []\n\nreal example:\nA safe way to tokenise possibly-empty input."
+    },
+    {
+      "id": 30,
+      "question": "What does '-'.join(['a', 'b', 'c']) return?",
+      "answer": "'a', 'b', 'c' are joined with a '-' placed between each pair, giving 'a-b-c'.\n\ncode:\nprint('-'.join(['a', 'b', 'c']))  # a-b-c\n\nreal example:\nBuilding a dash-separated list from items."
+    },
+    {
+      "id": 31,
+      "question": "What does ''.join(['a', 'b', 'c']) return?",
+      "answer": "An empty join string places nothing between elements, so the letters merge into 'abc'.\n\ncode:\nprint(''.join(['a', 'b', 'c']))  # abc\n\nreal example:\nMerging character pieces back into one word."
+    },
+    {
+      "id": 32,
+      "question": "What does ' '.join(['hello', 'world']) return?",
+      "answer": "A space joins the two words, producing 'hello world' with one space between.\n\ncode:\nprint(' '.join(['hello', 'world']))  # hello world\n\nreal example:\nReassembling tokens into a readable sentence."
+    },
+    {
+      "id": 33,
+      "question": "Can join() accept non-string elements?",
+      "answer": "join() needs every element to be a string; anything else raises a TypeError.\n\ncode:\n# '-'.join([1, 2])  # TypeError: sequence item 0: expected str\n\nreal example:\nConverting numbers with str() before building CSV text."
+    },
+    {
+      "id": 34,
+      "question": "What does '-'.join([]) return?",
+      "answer": "Joining an empty list produces an empty string because there is nothing to join.\n\ncode:\nprint(repr('-'.join([])))  # ''\n\nreal example:\nA safe default when no items are available to combine."
+    },
+    {
+      "id": 35,
+      "question": "What does 'Hello World'.startswith('Hello') return?",
+      "answer": ".startswith('Hello') checks the very beginning, and 'Hello World' does begin with 'Hello'.\n\ncode:\nprint('Hello World'.startswith('Hello'))  # True\n\nreal example:\nChecking whether a line starts with a heading marker."
+    },
+    {
+      "id": 36,
+      "question": "What does 'file.txt'.endswith('.txt') return?",
+      "answer": ".endswith('.txt') checks the file extension, and 'file.txt' does end with it.\n\ncode:\nprint('file.txt'.endswith('.txt'))  # True\n\nreal example:\nClassifying files by their extension."
+    },
+    {
+      "id": 37,
+      "question": "What does 'abc'.startswith(('a', 'b')) return?",
+      "answer": "Passing a tuple of options makes startswith return True if ANY of them matches.\n\ncode:\nprint('abc'.startswith(('a', 'b')))  # True\n\nreal example:\nAccepting a few valid prefixes for a code."
+    },
+    {
+      "id": 38,
+      "question": "What does 'data.csv'.endswith(('.csv', '.json')) return?",
+      "answer": ".endswith accepts a tuple, and '.csv' is in the allowed list.\n\ncode:\nprint('data.csv'.endswith(('.csv', '.json')))  # True\n\nreal example:\nAccepting only whitelisted data file formats."
+    },
+    {
+      "id": 39,
+      "question": "What does 'abc'.isalpha() return?",
+      "answer": ".isalpha() returns True when the string has only letters, and 'abc' does.\n\ncode:\nprint('abc'.isalpha())  # True\n\nreal example:\nValidating a word-only input field."
+    },
+    {
+      "id": 40,
+      "question": "What does '123'.isdigit() return?",
+      "answer": ".isdigit() returns True when every character is a digit, and '123' qualifies.\n\ncode:\nprint('123'.isdigit())  # True\n\nreal example:\nChecking a field should be a plain number."
+    },
+    {
+      "id": 41,
+      "question": "What does '12.5'.isdigit() return?",
+      "answer": ".isdigit() is False because the dot is not a digit.\n\ncode:\nprint('12.5'.isdigit())  # False\n\nreal example:\nRemembering decimals need float() instead of isdigit."
+    },
+    {
+      "id": 42,
+      "question": "What does 'abc1'.isalnum() return?",
+      "answer": ".isalnum() returns True when all characters are letters or digits, and 'abc1' fits.\n\ncode:\nprint('abc1'.isalnum())  # True\n\nreal example:\nAccepting usernames made of letters and numbers."
+    },
+    {
+      "id": 43,
+      "question": "What does '   '.isspace() return?",
+      "answer": ".isspace() returns True when every character is whitespace, and spaces qualify.\n\ncode:\nprint('   '.isspace())  # True\n\nreal example:\nDetecting blank-only lines in a text file."
+    },
+    {
+      "id": 44,
+      "question": "What does '_var'.isidentifier() return?",
+      "answer": ".isidentifier() checks a valid Python name: '_var' starts with underscore and is allowed.\n\ncode:\nprint('_var'.isidentifier())  # True\n\nreal example:\nValidating variable names generated by a script."
+    },
+    {
+      "id": 45,
+      "question": "What does '42'.zfill(5) return?",
+      "answer": ".zfill(5) pads '42' with leading zeros until the total width is 5.\n\ncode:\nprint('42'.zfill(5))  # 00042\n\nreal example:\nFormatting order numbers with a fixed number of digits."
+    },
+    {
+      "id": 46,
+      "question": "What does 'hello'.ljust(8) return?",
+      "answer": ".ljust(8) adds spaces to the right so the text fills a width of 8.\n\ncode:\nprint(repr('hello'.ljust(8)))  # 'hello   '\n\nreal example:\nMaking uneven names line up on the left of a column."
+    },
+    {
+      "id": 47,
+      "question": "What does 'hello'.rjust(8) return?",
+      "answer": ".rjust(8) adds spaces on the left so 'hello' ends at width 8.\n\ncode:\nprint(repr('hello'.rjust(8)))  # '   hello'\n\nreal example:\nRight-aligning labels so numbers at the end line up."
+    },
+    {
+      "id": 48,
+      "question": "How do you convert a string to bytes?",
+      "answer": "Use s.encode('utf-8') to turn the string into a bytes object encoded in UTF-8.\n\ncode:\nprint('hi'.encode('utf-8'))  # b'hi'\n\nreal example:\nPreparing text for writing to a binary file."
+    },
+    {
+      "id": 49,
+      "question": "What does 'hi'.encode() return?",
+      "answer": ".encode() with the default UTF-8 encoding turns 'hi' into the bytes object b'hi'.\n\ncode:\nprint('hi'.encode())  # b'hi'\n\nreal example:\nConverting text to the bytes a network socket expects."
+    },
+    {
+      "id": 50,
+      "question": "What does b'hi'.decode() return?",
+      "answer": ".decode() turns bytes back into a normal string, so b'hi' becomes 'hi'.\n\ncode:\nprint(b'hi'.decode())  # hi\n\nreal example:\nReading bytes from a file and converting to readable text."
+    }
+  ]
+}

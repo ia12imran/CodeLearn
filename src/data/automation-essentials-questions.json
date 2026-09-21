@@ -1,0 +1,733 @@
+{
+  "automation_python_essentials": [
+    {
+      "id": 1,
+      "priority": "MUST KNOW",
+      "topic": "String Formatting (f-strings)",
+      "question": "What will be the output of the following code?\nname = \"Alice\"\nprint(f\"Hello {name}\", end=\" \")\nprint(f\"{len(name)} letters total\")",
+      "simple_solution": "name = \"Alice\"\nprint(f\"Hello {name}\", end=\" \")        # Hello Alice\nprint(f\"{len(name)} letters total\")     # 5 letters total\n# Output: Hello Alice 5 letters total",
+      "why_for_automation": "Dynamic log messages and readable assertions (logging a test step with variable data) depend on f-strings.",
+      "key_takeaway": "f\"...\" lets you embed variables and even expressions like len(name) directly."
+    },
+    {
+      "id": 2,
+      "priority": "MUST KNOW",
+      "topic": "Splitting & Joining Strings",
+      "question": "What is the output of this code?\npath = \"https://example.com/api/users\"\nparts = path.split(\"/\")\nprint(parts)\nprint(\"-\".join(parts[2:]))",
+      "simple_solution": "path = \"https://example.com/api/users\"\nparts = path.split(\"/\")\nprint(parts)          # ['https:', '', 'example.com', 'api', 'users']\nprint(\"-\".join(parts[2:]))   # example.com-api-users",
+      "why_for_automation": "Parsing URLs, CSV lines, and log lines is a daily automation task; split() breaks them apart and join() rebuilds.",
+      "key_takeaway": "split(sep) turns a string into a list; \"sep\".join(list) reverses it."
+    },
+    {
+      "id": 3,
+      "priority": "MUST KNOW",
+      "topic": "Common String Cleanup",
+      "question": "What does this code print?\nraw = \"  LOGIN_FAILED  \"\nprint(raw.strip().lower().replace(\"_\", \" \"))",
+      "simple_solution": "raw = \"  LOGIN_FAILED  \"\nprint(raw.strip().lower().replace(\"_\", \" \"))   # login failed",
+      "why_for_automation": "UI text from browsers comes with spaces and inconsistent casing; normalize it before comparing with expected values.",
+      "key_takeaway": "Chain strip(), lower() and replace() to clean ragged text before assertions."
+    },
+    {
+      "id": 4,
+      "priority": "MUST KNOW",
+      "topic": "List Methods: append vs extend",
+      "question": "What are the two lists printed here?\nlst = [1, 2]\nlst.append([3, 4])\nprint(lst)\na = [1, 2]\na.extend([3, 4])\nprint(a)",
+      "simple_solution": "lst = [1, 2]\nlst.append([3, 4])     # appends the LIST itself\nprint(lst)             # [1, 2, [3, 4]]\n\na = [1, 2]\na.extend([3, 4])       # merges the elements\nprint(a)               # [1, 2, 3, 4]",
+      "why_for_automation": "When collecting test results you often merge two lists (e.g. new failures into all failures) - knowing which method flattens vs nests is essential.",
+      "key_takeaway": "append() adds one element; extend() merges the elements of an iterable into the list."
+    },
+    {
+      "id": 5,
+      "priority": "MUST KNOW",
+      "topic": "List Slicing",
+      "question": "What does this print?\ndata = [10, 20, 30, 40, 50]\nprint(data[1:4])\nprint(data[-2:])",
+      "simple_solution": "data = [10, 20, 30, 40, 50]\nprint(data[1:4])   # [20, 30, 40]  (index 1 up to, not including, 4)\nprint(data[-2:])   # [40, 50]      (last two)",
+      "why_for_automation": "Grabbing a range or the tail of test data (e.g. last 5 logs, a column of values) is a frequent data-prep step.",
+      "key_takeaway": "s[i:j] includes index i and stops before j; negative indexes count from the end."
+    },
+    {
+      "id": 6,
+      "priority": "MUST KNOW",
+      "topic": "dict.get() with Default",
+      "question": "What is the output?\nenv = {\"BASE_URL\": \"https://dev.example.com\"}\nprint(env.get(\"BASE_URL\"))\nprint(env.get(\"API_KEY\", \"NOT SET\"))",
+      "simple_solution": "env = {\"BASE_URL\": \"https://dev.example.com\"}\nprint(env.get(\"BASE_URL\"))              # https://dev.example.com\nprint(env.get(\"API_KEY\", \"NOT SET\"))    # NOT SET - no KeyError",
+      "why_for_automation": "Config/data lookups in automation must never crash on a missing key; .get() returns a safe default instead of raising.",
+      "key_takeaway": "d.get(key, default) never raises KeyError and lets you supply a fallback."
+    },
+    {
+      "id": 7,
+      "priority": "MUST KNOW",
+      "topic": "Iterating Dictionaries",
+      "question": "What does this loop print?\nuser = {\"name\": \"Alice\", \"role\": \"admin\"}\nfor key, value in user.items():\n    print(f\"{key} -> {value}\")",
+      "simple_solution": "user = {\"name\": \"Alice\", \"role\": \"admin\"}\nfor key, value in user.items():\n    print(f\"{key} -> {value}\")\n\n# name -> Alice\n# role -> admin",
+      "why_for_automation": "Filling forms, building request payloads and writing reports all iterate over dictionaries.",
+      "key_takeaway": "dict.items() gives you key and value together in one loop."
+    },
+    {
+      "id": 8,
+      "priority": "MUST KNOW",
+      "topic": "Sets for Deduplication",
+      "question": "What is set() returning here?\nstatuses = [\"PASS\", \"FAIL\", \"PASS\", \"SKIP\"]\nprint(set(statuses))",
+      "simple_solution": "statuses = [\"PASS\", \"FAIL\", \"PASS\", \"SKIP\"]\nprint(set(statuses))   # {'PASS', 'FAIL', 'SKIP'}  (order is not guaranteed)",
+      "why_for_automation": "Summarizing how many distinct outcomes (pass/fail/skip/broken) a test run produced is a classic reporting task.",
+      "key_takeaway": "set(...) removes duplicates instantly; it does not preserve order."
+    },
+    {
+      "id": 9,
+      "priority": "MUST KNOW",
+      "topic": "Tuple Unpacking",
+      "question": "What does this print?\nsize = (1920, 1080)\nwidth, height = size\nprint(f\"{width}x{height}\")",
+      "simple_solution": "size = (1920, 1080)\nwidth, height = size       # tuple unpacking\nprint(f\"{width}x{height}\") # 1920x1080",
+      "why_for_automation": "Functions commonly return small value pairs (locator + tag, x + y, key + value); unpacking reads them cleanly.",
+      "key_takeaway": "Tuples unpack directly into variables: a, b = (1, 2)."
+    },
+    {
+      "id": 10,
+      "priority": "MUST KNOW",
+      "topic": "enumerate() in Loops",
+      "question": "What does this print?\nsteps = [\"open browser\", \"login\", \"search\"]\nfor i, step in enumerate(steps, start=1):\n    print(f\"Step {i}: {step}\")",
+      "simple_solution": "steps = [\"open browser\", \"login\", \"search\"]\nfor i, step in enumerate(steps, start=1):\n    print(f\"Step {i}: {step}\")\n\n# Step 1: open browser\n# Step 2: login\n# Step 3: search",
+      "why_for_automation": "Numbered execution logs and reports need the index together with the item, which plain loops hide.",
+      "key_takeaway": "enumerate(seq, start=1) yields (index, item) pairs."
+    },
+    {
+      "id": 11,
+      "priority": "MUST KNOW",
+      "topic": "zip() for Pairing Data",
+      "question": "What does this print?\nusers = [\"alice\", \"bob\"]\npasswords = [\"p@ss\", \"secret\"]\nfor u, p in zip(users, passwords):\n    print(u, p)",
+      "simple_solution": "users = [\"alice\", \"bob\"]\npasswords = [\"p@ss\", \"secret\"]\nfor u, p in zip(users, passwords):\n    print(u, p)\n\n# alice p@ss\n# bob secret",
+      "why_for_automation": "Data-driven tests often come as separate lists (users, passwords, emails); zip() pairs them positionally.",
+      "key_takeaway": "zip(list1, list2) iterates the lists in parallel, element by element."
+    },
+    {
+      "id": 12,
+      "priority": "MUST KNOW",
+      "topic": "Membership with in",
+      "question": "What is printed?\nallowed = [\"chrome\", \"firefox\", \"edge\"]\nbrowser = \"safari\"\nprint(browser in allowed)\nprint(\"firefox\" in allowed)",
+      "simple_solution": "allowed = [\"chrome\", \"firefox\", \"edge\"]\nbrowser = \"safari\"\nprint(browser in allowed)   # False\nprint(\"firefox\" in allowed) # True",
+      "why_for_automation": "Validating that a requested browser/platform is supported before starting a run avoids confusing runtime errors.",
+      "key_takeaway": "The in operator checks membership on lists, tuples, strings and dict keys."
+    },
+    {
+      "id": 13,
+      "priority": "MUST KNOW",
+      "topic": "Truthiness & Falsy Values",
+      "question": "What does this print?\nfor v in [\"\", 0, None, [], \"ok\"]:\n    print(bool(v))",
+      "simple_solution": "for v in [\"\", 0, None, [], \"ok\"]:\n    print(bool(v))\n\n# False\n# False\n# False\n# False\n# True",
+      "why_for_automation": "Guarding logic with `if result:` (instead of `if result is not None`) catches empty strings, None and empty lists at once.",
+      "key_takeaway": "Empty string, 0, 0.0, None, [] and {} are all falsy in conditionals."
+    },
+    {
+      "id": 14,
+      "priority": "MUST KNOW",
+      "topic": "Exception Handling",
+      "question": "What is printed?\ndef to_int(text):\n    if text.isdigit():\n        return int(text)\n    return None\nprint(to_int(\"42\"))\nprint(to_int(\"abc\"))",
+      "simple_solution": "def to_int(text):\n    if text.isdigit():\n        return int(text)\n    return None\n\nprint(to_int(\"42\"))     # 42\nprint(to_int(\"abc\"))    # None",
+      "why_for_automation": "Reading test-data files and UI text yields strings that must be safely converted without crashing the suite.",
+      "key_takeaway": "Validate before converting (e.g. .isdigit()) or wrap int(...) in try/except."
+    },
+    {
+      "id": 15,
+      "priority": "MUST KNOW",
+      "topic": "File Handling with Context Manager",
+      "question": "What happens after this block runs?\nwith open(\"report.txt\", \"w\") as f:\n    f.write(\"Test passed\\n\")",
+      "simple_solution": "with open(\"report.txt\", \"w\") as f:\n    f.write(\"Test passed\\n\")\n\n# report.txt is closed automatically when the block ends,\n# even if an exception occurs inside.",
+      "why_for_automation": "Every report-writing and test-data-read uses files; the with statement guarantees the file handle is released.",
+      "key_takeaway": "with open(...) closes the file automatically - always prefer it over manual open()/close()."
+    },
+    {
+      "id": 16,
+      "priority": "MUST KNOW",
+      "topic": "Reading Files Line by Line",
+      "question": "What does lines contain?\nwith open(\"users.txt\") as f:\n    lines = [line.strip() for line in f]\nprint(lines)",
+      "simple_solution": "with open(\"users.txt\") as f:\n    lines = [line.strip() for line in f]\n\nprint(lines)   # each line with newline removed, e.g. ['alice', 'bob']",
+      "why_for_automation": "Loading row-oriented test data (users, credentials, search terms) is line-at-a-time work.",
+      "key_takeaway": "Iterating a file object yields one line at a time; always strip() the newline."
+    },
+    {
+      "id": 17,
+      "priority": "MUST KNOW",
+      "topic": "Function Default Arguments",
+      "question": "What is printed?\ndef login(user=\"admin\", password=\"admin123\"):\n    return f\"{user}:{password}\"\nprint(login())\nprint(login(\"qa\"))",
+      "simple_solution": "def login(user=\"admin\", password=\"admin123\"):\n    return f\"{user}:{password}\"\n\nprint(login())          # admin:admin123\nprint(login(\"qa\"))      # qa:admin123  (password keeps its default)",
+      "why_for_automation": "Reusable helper methods (login, open_app) with safe defaults avoid boilerplate everywhere in the framework.",
+      "key_takeaway": "Default arguments apply only when the caller omits that argument."
+    },
+    {
+      "id": 18,
+      "priority": "MUST KNOW",
+      "topic": "Returning Multiple Values",
+      "question": "What does this print?\ndef split_label(line):\n    name, status = line.split(\":\", 1)\n    return name.strip(), status.strip()\nstep, result = split_label(\"login: PASS\")\nprint(step, result)",
+      "simple_solution": "def split_label(line):\n    name, status = line.split(\":\", 1)\n    return name.strip(), status.strip()\n\nstep, result = split_label(\"login: PASS\")\nprint(step, result)     # login PASS",
+      "why_for_automation": "Parsing \"step: status\" log lines and returning labelled fields is standard in custom reporters.",
+      "key_takeaway": "A function returns a tuple which you unpack directly into variables."
+    },
+    {
+      "id": 19,
+      "priority": "MUST KNOW",
+      "topic": "Type Checking",
+      "question": "What is the output?\nvalue = \"PASS\"\nprint(type(value))\nprint(isinstance(value, str))\nprint(isinstance(5, int))",
+      "simple_solution": "value = \"PASS\"\nprint(type(value))              # <class 'str'>\nprint(isinstance(value, str))   # True\nprint(isinstance(5, int))       # True",
+      "why_for_automation": "Validating that parsed test data (IDs, prices, counts) has the expected type before using it prevents silent bugs.",
+      "key_takeaway": "Prefer isinstance() over type(), because isinstance() also handles subclasses."
+    },
+    {
+      "id": 20,
+      "priority": "MUST KNOW",
+      "topic": "Comparisons & Booleans",
+      "question": "What is printed?\nprint(10 == \"10\")\nprint(10 == 10.0)\nprint(10 != 20)\nprint(\"abc\" < \"abd\")",
+      "simple_solution": "print(10 == \"10\")      # False - int vs str never equal\nprint(10 == 10.0)      # True  - numeric comparison\nprint(10 != 20)        # True\nprint(\"abc\" < \"abd\")   # True  - strings compare lexically",
+      "why_for_automation": "Asserting actual vs expected values (strings, numbers, status codes) requires understanding when values compare equal.",
+      "key_takeaway": "== compares values; types must be compatible, and strings compare alphabetically."
+    },
+    {
+      "id": 21,
+      "priority": "HIGH VALUE",
+      "topic": "JSON Serialization",
+      "question": "What does this print?\nimport json\ndata = {\"test\": \"login\", \"passed\": True}\ns = json.dumps(data)\nprint(s)\nback = json.loads(s)\nprint(back[\"test\"])",
+      "simple_solution": "import json\ndata = {\"test\": \"login\", \"passed\": True}\ns = json.dumps(data)          # dict -> JSON string\nprint(s)                      # {\"test\": \"login\", \"passed\": true}\nback = json.loads(s)          # JSON string -> dict\nprint(back[\"test\"])           # login",
+      "why_for_automation": "Every REST API test serializes and deserializes JSON payloads.",
+      "key_takeaway": "json.dumps -> string, json.loads -> dict; note Python True becomes JSON true."
+    },
+    {
+      "id": 22,
+      "priority": "HIGH VALUE",
+      "topic": "Reading & Writing JSON Files",
+      "question": "Complete: read config.json, bump retries, save it back.",
+      "simple_solution": "import json\n\nwith open(\"config.json\") as f:\n    cfg = json.load(f)          # file -> dict\n\ncfg[\"retries\"] = cfg.get(\"retries\", 0) + 1\n\nwith open(\"config.json\", \"w\") as f:\n    json.dump(cfg, f, indent=2)  # dict -> file",
+      "why_for_automation": "Persistence of config, test data and run results is a fixture of every real framework.",
+      "key_takeaway": "json.load reads a file into a dict; json.dump writes a dict to a file; indent=2 keeps it readable."
+    },
+    {
+      "id": 23,
+      "priority": "HIGH VALUE",
+      "topic": "Reading CSV into Dicts",
+      "question": "Write code to read a CSV into a list of dicts keyed by header row.",
+      "simple_solution": "import csv\n\ndef csv_to_dicts(path):\n    with open(path, newline=\"\") as f:\n        return list(csv.DictReader(f))\n\ndata = csv_to_dicts(\"testdata.csv\")\nfor row in data:\n    print(row[\"username\"], row[\"password\"])",
+      "why_for_automation": "Data-driven testing reads test cases straight from CSV files prepared by the team.",
+      "key_takeaway": "csv.DictReader uses the first row as keys, so each row becomes a dict."
+    },
+    {
+      "id": 24,
+      "priority": "HIGH VALUE",
+      "topic": "Writing CSV Reports",
+      "question": "Write test results to a CSV report with a header row.",
+      "simple_solution": "import csv\n\nresults = [\n    {\"name\": \"test_login\", \"status\": \"PASS\", \"time\": 1.2},\n    {\"name\": \"test_logout\", \"status\": \"FAIL\", \"time\": 0.8},\n]\n\nwith open(\"report.csv\", \"w\", newline=\"\") as f:\n    writer = csv.DictWriter(f, fieldnames=[\"name\", \"status\", \"time\"])\n    writer.writeheader()\n    writer.writerows(results)",
+      "why_for_automation": "Generating machine-readable reports for CI is a core deliverable of automation.",
+      "key_takeaway": "csv.DictWriter maps each dict key to a column; writeheader() writes the top row."
+    },
+    {
+      "id": 25,
+      "priority": "HIGH VALUE",
+      "topic": "Path Building with os.path",
+      "question": "What does this print? (see comments)\nimport os\nbase = \"reports\"\nname = os.path.join(base, \"2026-09-15\", \"run1.json\")\nprint(os.path.exists(name))\nprint(os.path.dirname(name))",
+      "simple_solution": "import os\nbase = \"reports\"\nname = os.path.join(base, \"2026-09-15\", \"run1.json\")\nprint(os.path.exists(name))      # True if the file exists\nprint(os.path.dirname(name))     # reports/2026-09-15",
+      "why_for_automation": "Storing screenshots, logs and reports in dated folders requires robust cross-platform path building.",
+      "key_takeaway": "os.path.join() builds platform-safe paths; os.path.exists() and os.path.dirname() inspect them."
+    },
+    {
+      "id": 26,
+      "priority": "HIGH VALUE",
+      "topic": "Environment Variables for Config",
+      "question": "How do you read the BROWSER setting safely, defaulting to chrome?",
+      "simple_solution": "import os\n\nbrowser = os.environ.get(\"BROWSER\", \"chrome\")\nurl = os.environ.get(\"BASE_URL\", \"http://localhost:3000\")\n\nprint(browser, url)",
+      "why_for_automation": "Secrets (API keys, tokens) and environment-specific config should come from env vars, never hardcoded or committed.",
+      "key_takeaway": "os.environ.get(key, default) reads an env var with a fallback and never raises."
+    },
+    {
+      "id": 27,
+      "priority": "HIGH VALUE",
+      "topic": "Timestamps & Formatted Dates",
+      "question": "Get the current time as a file-safe string like 2026-09-15_18-30-05.",
+      "simple_solution": "from datetime import datetime\n\nstamp = datetime.now().strftime(\"%Y-%m-%d_%H-%M-%S\")\nprint(stamp)   # 2026-09-15_18-30-05\n\nwith open(f\"screenshot_{stamp}.png\", \"wb\") as f:\n    pass  # save artifact with a unique name",
+      "why_for_automation": "Unique timestamps name every screenshot, report and log so CI artifacts never overwrite each other.",
+      "key_takeaway": "datetime.now() gives the current time; strftime(\"%Y-%m-%d_%H-%M-%S\") formats it safely for filenames."
+    },
+    {
+      "id": 28,
+      "priority": "HIGH VALUE",
+      "topic": "Handling Waits",
+      "question": "Write a loop that retries up to 5 times until a function returns a truthy value, sleeping 1s between tries.",
+      "simple_solution": "import time\n\ndef loaded():\n    return False  # e.g. driver.find_elements(...)\n\nfor attempt in range(5):\n    if loaded():\n        print(\"ready\")\n        break\n    time.sleep(1)\nelse:\n    raise TimeoutError(\"Condition never became true\")",
+      "why_for_automation": "UIs and app servers are slow; bounded retry-with-sleep logic makes tests robust without sleeping forever.",
+      "key_takeaway": "Use a for/else loop with time.sleep() for bounded polling instead of a fixed time.sleep()."
+    },
+    {
+      "id": 29,
+      "priority": "HIGH VALUE",
+      "topic": "HTTP GET with requests",
+      "question": "Send a GET request with query params and print the result.",
+      "simple_solution": "import requests\n\nres = requests.get(\n    \"https://api.example.com/search\",\n    params={\"q\": \"python\", \"limit\": 5},\n    timeout=10,\n)\nprint(res.status_code)\nprint(res.text[:200])",
+      "why_for_automation": "Checking search endpoints and query-driven APIs is constant work in API automation.",
+      "key_takeaway": "requests.get(url, params={...}) encodes the query string for you; always pass timeout=."
+    },
+    {
+      "id": 30,
+      "priority": "HIGH VALUE",
+      "topic": "HTTP POST / API Call",
+      "question": "Create a user via a POST request with a JSON body.",
+      "simple_solution": "import requests\n\npayload = {\"username\": \"alice\", \"role\": \"admin\"}\nres = requests.post(\n    \"https://api.example.com/users\",\n    json=payload,\n    headers={\"Authorization\": \"Bearer token123\"},\n    timeout=10,\n)\nprint(res.status_code)\nprint(res.json())",
+      "why_for_automation": "Setup/teardown of users, orders and bookings through APIs is a main automation pattern (API-driven tests).",
+      "key_takeaway": "requests.post(url, json=dict, headers=...) sends the payload as JSON automatically."
+    },
+    {
+      "id": 31,
+      "priority": "HIGH VALUE",
+      "topic": "Asserting HTTP Status",
+      "question": "Verify a response succeeded, otherwise raise a clear error.",
+      "simple_solution": "import requests\n\nres = requests.get(\"https://api.example.com/health\", timeout=10)\n\nassert res.status_code == 200, f\"Expected 200, got {res.status_code}\"\n# or use the built-in check:\nres.raise_for_status()",
+      "why_for_automation": "Every API assertion starts by confirming the status code before parsing the body.",
+      "key_takeaway": "assert res.status_code == 200 or call res.raise_for_status() to fail fast on bad responses."
+    },
+    {
+      "id": 32,
+      "priority": "HIGH VALUE",
+      "topic": "Parsing API Responses",
+      "question": "Extract the 'id' from a nested JSON response.",
+      "simple_solution": "import requests\n\nres = requests.get(\"https://api.example.com/users/1\", timeout=10)\ndata = res.json()          # full response as dict\n\nuser_id = data[\"id\"]\nemail = data.get(\"email\", \"no-email\")\nprint(user_id, email)",
+      "why_for_automation": "Diving into nested response bodies and tolerating optional fields is day-to-day API work.",
+      "key_takeaway": "res.json() parses the body to a dict; use [key] for required fields and .get() for optional ones."
+    },
+    {
+      "id": 33,
+      "priority": "HIGH VALUE",
+      "topic": "Locating Elements",
+      "question": "Locate a 'Search' input box in Selenium.",
+      "simple_solution": "from selenium import webdriver\nfrom selenium.webdriver.common.by import By\n\ndriver = webdriver.Chrome()\ndriver.get(\"https://example.com\")\n\n# Prefer stable attribute-based locators\nsearch_box = driver.find_element(By.ID, \"search-input\")\n# search_box = driver.find_element(By.NAME, \"q\")\n# search_box = driver.find_element(By.XPATH, \"//input[@placeholder='Search']\")",
+      "why_for_automation": "Finding elements reliably is the #1 practical skill in web automation.",
+      "key_takeaway": "Prefer By.ID / By.NAME over fragile XPath/CSS when the app provides stable attributes."
+    },
+    {
+      "id": 34,
+      "priority": "HIGH VALUE",
+      "topic": "Filling Form Fields",
+      "question": "Fill a username and password field in Selenium.",
+      "simple_solution": "from selenium.webdriver.common.by import By\n\ndriver.find_element(By.ID, \"username\").send_keys(\"alice\")\ndriver.find_element(By.ID, \"password\").send_keys(\"Secret123!\")\ndriver.find_element(By.ID, \"login-btn\").click()",
+      "why_for_automation": "Automated login and form flows are so common that every suite has a version of this.",
+      "key_takeaway": "Use .send_keys() to type and .click() to submit; clear() first when the field is pre-filled."
+    },
+    {
+      "id": 35,
+      "priority": "HIGH VALUE",
+      "topic": "Explicit Waits (WebDriverWait)",
+      "question": "Wait up to 10s for a submit button to be clickable before clicking.",
+      "simple_solution": "from selenium.webdriver.support.ui import WebDriverWait\nfrom selenium.webdriver.support import expected_conditions as EC\nfrom selenium.webdriver.common.by import By\n\nwait = WebDriverWait(driver, 10)\nbutton = wait.until(\n    EC.element_to_be_clickable((By.ID, \"submit-btn\"))\n)\nbutton.click()",
+      "why_for_automation": "Flaky UI tests are almost always fixed by replacing sleeps with explicit waits on real conditions.",
+      "key_takeaway": "WebDriverWait + expected_conditions polls until the condition is true instead of blind sleeping."
+    },
+    {
+      "id": 36,
+      "priority": "HIGH VALUE",
+      "topic": "pytest Assertions",
+      "question": "Write a pytest test that asserts two values are equal with a helpful message.",
+      "simple_solution": "def add(a, b):\n    return a + b\n\ndef test_add_positive_numbers():\n    result = add(2, 3)\n    assert result == 5, f\"Expected 5, got {result}\"\n    assert isinstance(result, int)",
+      "why_for_automation": "pytest's plain assert turns any expression into a test check; no special syntax is needed.",
+      "key_takeaway": "assert expression, \"message\" is a complete pytest assertion."
+    },
+    {
+      "id": 37,
+      "priority": "HIGH VALUE",
+      "topic": "pytest Fixtures",
+      "question": "Write a fixture that provides a browser driver to any test.",
+      "simple_solution": "import pytest\n\n@pytest.fixture\ndef driver():\n    # setup - runs before each test that asks for 'driver'\n    d = webdriver.Chrome()\n    yield d\n    # teardown - runs after the test\n    d.quit()\n\ndef test_login_works(driver):\n    driver.get(\"https://example.com\")",
+      "why_for_automation": "Fixtures share setup/teardown (browser, DB, API client) across many tests without duplication.",
+      "key_takeaway": "yield splits a fixture into setup and teardown; pytest injects the value into any test that names it."
+    },
+    {
+      "id": 38,
+      "priority": "HIGH VALUE",
+      "topic": "Parameterized Tests",
+      "question": "Run one test against three input/output pairs.",
+      "simple_solution": "import pytest\n\n@pytest.mark.parametrize(\"a,b,expected\", [\n    (1, 2, 3),\n    (-1, 1, 0),\n    (0, 0, 0),\n])\ndef test_add(a, b, expected):\n    assert a + b == expected",
+      "why_for_automation": "Data-driven testing: one test logic, many case rows - reports show each case separately.",
+      "key_takeaway": "@pytest.mark.parametrize runs the test once per row; failure messages name the exact inputs."
+    },
+    {
+      "id": 39,
+      "priority": "HIGH VALUE",
+      "topic": "Basic logging",
+      "question": "Set up and use a module-level logger instead of print().",
+      "simple_solution": "import logging\n\nlogging.basicConfig(level=logging.INFO, format=\"%(asctime)s %(levelname)s %(message)s\")\nlogger = logging.getLogger(\"tests\")\n\nlogger.info(\"Test started: %s\", \"test_login\")\nlogger.error(\"Failed to find element: %s\", \"search-input\")",
+      "why_for_automation": "Loggers add timestamps/levels and write to CI logs properly, which print() cannot do.",
+      "key_takeaway": "logging.getLogger(\"name\") + basicConfig() gives production-quality, configurable logging."
+    },
+    {
+      "id": 40,
+      "priority": "HIGH VALUE",
+      "topic": "List Comprehensions",
+      "question": "Get the names of all passed tests from a list of results.",
+      "simple_solution": "results = [\n    {\"name\": \"login\", \"status\": \"PASS\"},\n    {\"name\": \"logout\", \"status\": \"FAIL\"},\n    {\"name\": \"search\", \"status\": \"PASS\"},\n]\n\npassed_names = [r[\"name\"] for r in results if r[\"status\"] == \"PASS\"]\nprint(passed_names)   # ['login', 'search']",
+      "why_for_automation": "Filtering results, collecting element texts or building payload lists are concise one-liners.",
+      "key_takeaway": "A comprehension is [expr for item in seq if condition] - read it left to right."
+    },
+    {
+      "id": 41,
+      "priority": "HIGH VALUE",
+      "topic": "Dict & Set Comprehensions",
+      "question": "Build a dict mapping each test name to PASS/FAIL, and a set of passing names.",
+      "simple_solution": "results = {\"login\": \"PASS\", \"logout\": \"FAIL\", \"search\": \"PASS\"}\n\npassed = {name for name, status in results.items() if status == \"PASS\"}\ncounts = {status: 0 for status in (\"PASS\", \"FAIL\", \"SKIP\")}\nfor status in results.values():\n    counts[status] += 1\n\nprint(passed)   # {'login', 'search'}\nprint(counts)   # {'PASS': 2, 'FAIL': 1, 'SKIP': 0}",
+      "why_for_automation": "Quick transforms of run results into ready-to-report structures are everywhere in reporter code.",
+      "key_takeaway": "{...} with a for clause builds dicts and sets just like a list comprehension."
+    },
+    {
+      "id": 42,
+      "priority": "MEDIUM",
+      "topic": "defaultdict Counters",
+      "question": "What is printed?\nfrom collections import defaultdict\nstatuses = [\"PASS\", \"FAIL\", \"PASS\"]\nd = defaultdict(int)\nfor s in statuses:\n    d[s] += 1\nprint(d)\nprint(d[\"SKIP\"])",
+      "simple_solution": "from collections import defaultdict\nstatuses = [\"PASS\", \"FAIL\", \"PASS\"]\nd = defaultdict(int)\nfor s in statuses:\n    d[s] += 1\nprint(d)          # defaultdict(<class 'int'>, {'PASS': 2, 'FAIL': 1})\nprint(d[\"SKIP\"])  # 0 - missing key auto-initialized to 0",
+      "why_for_automation": "Counting outcomes without manual 'if key in dict' boilerplate is a reporting staple.",
+      "key_takeaway": "defaultdict(int) auto-creates a 0 for any key you touch, so d[k] += 1 always works."
+    },
+    {
+      "id": 43,
+      "priority": "MEDIUM",
+      "topic": "collections.Counter",
+      "question": "How do you count occurrences of test statuses in one line?",
+      "simple_solution": "from collections import Counter\n\nstatuses = [\"PASS\", \"FAIL\", \"PASS\", \"SKIP\", \"PASS\"]\ncounts = Counter(statuses)\n\nprint(counts)             # Counter({'PASS': 3, 'FAIL': 1, 'SKIP': 1})\nprint(counts.most_common(1))  # [('PASS', 3)]",
+      "why_for_automation": "When you only need counts, Counter is shorter and offers helpful extras like most_common().",
+      "key_takeaway": "Counter(iterable).most_common(n) gives frequencies and ranking in one shot."
+    },
+    {
+      "id": 44,
+      "priority": "MEDIUM",
+      "topic": "namedtuple for Clean Data",
+      "question": "Define a lightweight TestResult record with fields name, status, duration.",
+      "simple_solution": "from collections import namedtuple\n\nTestResult = namedtuple(\"TestResult\", \"name status duration\")\n\nr = TestResult(\"login\", \"PASS\", 1.25)\nprint(r.name)          # login\nprint(r.status)        # PASS\nprint(f\"{r.name}: {r.status}\")  # login: PASS",
+      "why_for_automation": "Replacing bare tuples with named fields makes result-list code readable and self-documenting.",
+      "key_takeaway": "namedtuple(\"Name\", \"field1 field2\") gives tuple objects with named attributes."
+    },
+    {
+      "id": 45,
+      "priority": "MEDIUM",
+      "topic": "FIFO Queues with deque",
+      "question": "Process task names in first-in-first-out order.",
+      "simple_solution": "from collections import deque\n\nqueue = deque([\"login\", \"search\", \"logout\"])\nwhile queue:\n    task = queue.popleft()\n    print(\"running:\", task)\n\n# running: login\n# running: search\n# running: logout",
+      "why_for_automation": "Task queues, browser tabs and retry buffers are naturally FIFO; list.pop(0) would be O(n).",
+      "key_takeaway": "deque.popleft() removes from the front efficiently and is the right structure for queues."
+    },
+    {
+      "id": 46,
+      "priority": "MEDIUM",
+      "topic": "*args & **kwargs",
+      "question": "Write a function that logs any number of extra details as key=value.",
+      "simple_solution": "def log_event(step, *args, **kwargs):\n    extras = \", \".join(str(a) for a in args)\n    kv = \", \".join(f\"{k}={v}\" for k, v in kwargs.items())\n    print(f\"[{step}] {extras} {kv}\")\n\nlog_event(\"login\", \"192.168.1.5\", user=\"alice\", delay=1.2)",
+      "why_for_automation": "Wrapper methods that forward arbitrary extra data (log steps, retry helpers, decorators) rely on *args/**kwargs.",
+      "key_takeaway": "*args collects positional extras into a tuple; **kwargs collects named extras into a dict."
+    },
+    {
+      "id": 47,
+      "priority": "MEDIUM",
+      "topic": "Sorting with key (lambda)",
+      "question": "Sort tests by duration, shortest first.",
+      "simple_solution": "tests = [\n    {\"name\": \"login\", \"duration\": 2.1},\n    {\"name\": \"search\", \"duration\": 0.4},\n    {\"name\": \"load\", \"duration\": 8.9},\n]\n\ntests.sort(key=lambda t: t[\"duration\"])\nprint([t[\"name\"] for t in tests])  # ['search', 'login', 'load']",
+      "why_for_automation": "Ordering rows by duration, count or size (slowest test first) is a common report feature.",
+      "key_takeaway": "list.sort(key=...) / sorted(seq, key=...) order by the value the key function returns."
+    },
+    {
+      "id": 48,
+      "priority": "MEDIUM",
+      "topic": "Shallow vs Deep Copy",
+      "question": "What does this print?\nimport copy\noriginal = {\"steps\": [1, 2]}\nshallow = copy.copy(original)\ndeep = copy.deepcopy(original)\noriginal[\"steps\"].append(3)\nprint(shallow[\"steps\"])\nprint(deep[\"steps\"])",
+      "simple_solution": "import copy\noriginal = {\"steps\": [1, 2]}\nshallow = copy.copy(original)      # shares the inner list\ndeep = copy.deepcopy(original)     # fully independent\n\noriginal[\"steps\"].append(3)\nprint(shallow[\"steps\"])   # [1, 2, 3] - same inner list\nprint(deep[\"steps\"])      # [1, 2]    - independent copy",
+      "why_for_automation": "Reusing a template test payload and mutating it can corrupt other tests; deepcopy guards against that.",
+      "key_takeaway": "copy.copy() is shallow (inner objects shared); copy.deepcopy() clones everything."
+    },
+    {
+      "id": 49,
+      "priority": "MEDIUM",
+      "topic": "In-memory Files with StringIO/BytesIO",
+      "question": "Treat a string as a file to read CSV data without touching disk.",
+      "simple_solution": "import csv\nfrom io import StringIO\n\nraw = \"username,password\\nalice,secret\\nbob,pass\"\nreader = csv.DictReader(StringIO(raw))\nprint([row[\"username\"] for row in reader])  # ['alice', 'bob']",
+      "why_for_automation": "Parsing CSV/JSON you already have in memory (API responses, pasted data) needs no temp files.",
+      "key_takeaway": "StringIO(...) wraps a string in a file-like object that csv/json/write accept."
+    },
+    {
+      "id": 50,
+      "priority": "MEDIUM",
+      "topic": "pathlib.Path",
+      "question": "Rewritten: list all .log files in ./artifacts using pathlib.",
+      "simple_solution": "from pathlib import Path\n\nartifacts = Path(\"artifacts\")\nlogs = sorted(artifacts.glob(\"*.log\"))   # generator of paths\n\nfor p in logs:\n    print(p.name, p.stat().st_size)       # name and size",
+      "why_for_automation": "Filesystem work in modern codebases is done with pathlib - cleaner than os.path juggling.",
+      "key_takeaway": "Path(\"dir\").glob(\"*.log\") yields matching paths; Path handles joining and existence checks."
+    },
+    {
+      "id": 51,
+      "priority": "MEDIUM",
+      "topic": "Zipping Test Evidence",
+      "question": "Compress all files in ./evidence into evidence.zip.",
+      "simple_solution": "import zipfile\nfrom pathlib import Path\n\nwith zipfile.ZipFile(\"evidence.zip\", \"w\") as zf:\n    for p in Path(\"evidence\").glob(\"*\"):\n        zf.write(p, arcname=p.name)",
+      "why_for_automation": "Shrinking screenshots/logs into one artifact for upload to CI or a bug tracker is a common need.",
+      "key_takeaway": "zipfile.ZipFile(path, \"w\").write(file) adds an entry; arcname sets the stored name."
+    },
+    {
+      "id": 52,
+      "priority": "MEDIUM",
+      "topic": "Running Commands with subprocess",
+      "question": "Run a shell command and capture its stdout.",
+      "simple_solution": "import subprocess\n\nresult = subprocess.run(\n    [\"git\", \"rev-parse\", \"--short\", \"HEAD\"],\n    capture_output=True,\n    text=True,\n)\nprint(result.stdout.strip())   # e.g. a1b2c3d",
+      "why_for_automation": "Automation frequently shells out to CLI tools (git, docker, npm) to gather context or trigger steps.",
+      "key_takeaway": "subprocess.run(list, capture_output=True, text=True) returns stdout/stderr/returncode."
+    },
+    {
+      "id": 53,
+      "priority": "MEDIUM",
+      "topic": "Retry Logic with a Decorator",
+      "question": "Write a retry decorator that tries a function up to 3 times.",
+      "simple_solution": "import time\n\ndef retry(times=3, delay=1):\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for attempt in range(times):\n                try:\n                    return func(*args, **kwargs)\n                except Exception:\n                    if attempt == times - 1:\n                        raise\n                    time.sleep(delay)\n        return wrapper\n    return decorator\n\n@retry(times=3, delay=1)\ndef flaky_call():\n    return remote_request()",
+      "why_for_automation": "Retrying flaky network/server calls makes suites resilient instead of failing on one glitch.",
+      "key_takeaway": "A decorator wraps a function to add behavior (retry, logging, timing) without changing its code."
+    },
+    {
+      "id": 54,
+      "priority": "MEDIUM",
+      "topic": "requests.Session for Reuse",
+      "question": "Reuse one session for two calls that share cookies and headers.",
+      "simple_solution": "import requests\n\ns = requests.Session()\ns.headers.update({\"Authorization\": \"Bearer token123\", \"Accept\": \"application/json\"})\n\nlogin = s.post(\"https://api.example.com/login\", json={\"u\": \"alice\"}, timeout=10)\nme = s.get(\"https://api.example.com/me\", timeout=10)\nprint(login.status_code, me.status_code)",
+      "why_for_automation": "A session keeps cookies and headers across calls - exactly how multi-step API tests behave.",
+      "key_takeaway": "requests.Session() persists cookies and headers between requests on the same client."
+    },
+    {
+      "id": 55,
+      "priority": "MEDIUM",
+      "topic": "Headers & Cookies",
+      "question": "Send a request with a custom header and read a cookie from the response.",
+      "simple_solution": "import requests\n\nres = requests.get(\n    \"https://example.com\",\n    headers={\"User-Agent\": \"automation-tests/1.0\"},\n    timeout=10,\n)\n\nsession_id = res.cookies.get(\"session\")\nprint(\"UA echoed:\", res.request.headers.get(\"User-Agent\"))\nprint(\"cookie:\", session_id)",
+      "why_for_automation": "Headless tests often need custom User-Agent or session cookies to mimic a real browser.",
+      "key_takeaway": "requests.get(url, headers={...}) sets request headers; res.cookies.get() reads response cookies."
+    },
+    {
+      "id": 56,
+      "priority": "MEDIUM",
+      "topic": "Mocking with unittest.mock",
+      "question": "Simulate a slow/flaky API call so a unit test is fast and deterministic.",
+      "simple_solution": "from unittest.mock import patch\n\ndef get_user(api):\n    return api.get(\"/users/1\")\n\ndef test_get_user(api):\n    with patch.object(api, \"get\", return_value={\"id\": 1, \"name\": \"Alice\"}):\n        user = get_user(api)\n    assert user[\"name\"] == \"Alice\"",
+      "why_for_automation": "Unit tests must not hit real services; mocking isolates your logic from the outside world.",
+      "key_takeaway": "patch.object(obj, \"method\", return_value=...) replaces the method only inside the with block."
+    },
+    {
+      "id": 57,
+      "priority": "MEDIUM",
+      "topic": "Pairing Test Data (combinations)",
+      "question": "Generate all (browser, device) combinations for cross-browser runs.",
+      "simple_solution": "import itertools\n\nbrowsers = [\"chrome\", \"firefox\"]\ndevices = [\"desktop\", \"mobile\"]\n\nfor browser, device in itertools.product(browsers, devices):\n    print(browser, device)\n\n# chrome desktop / chrome mobile / firefox desktop / firefox mobile",
+      "why_for_automation": "Cross-browser/mobile matrixes generate one config per combination via itertools.product.",
+      "key_takeaway": "itertools.product(list1, list2) yields every combination; great for parametrized matrix tests."
+    },
+    {
+      "id": 58,
+      "priority": "MEDIUM",
+      "topic": "Reading config.ini",
+      "question": "Read the [browser] section's name from config.ini.",
+      "simple_solution": "from configparser import ConfigParser\n\nconfig = ConfigParser()\nconfig.read(\"config.ini\")\n\nbrowser = config.get(\"browser\", \"name\", fallback=\"chrome\")\nheadless = config.getboolean(\"browser\", \"headless\", fallback=False)\nprint(browser, headless)",
+      "why_for_automation": "Legacy CI still ships .ini files; ConfigParser reads typed values with fallbacks.",
+      "key_takeaway": "ConfigParser().read(path) exposes sections; .getboolean() converts booleans safely."
+    },
+    {
+      "id": 59,
+      "priority": "MEDIUM",
+      "topic": "Aligning Log Output",
+      "question": "Print a summary table with right-aligned columns for name and count.",
+      "simple_solution": "statuses = [(\"PASS\", 12), (\"FAIL\", 2), (\"SKIP\", 1)]\n\nfor name, count in statuses:\n    print(f\"{name:<8} {count:>4}\")\n\n# PASS       12\n# FAIL        2\n# SKIP        1",
+      "why_for_automation": "Neat, consistent report output makes failures legible in CI logs.",
+      "key_takeaway": "f\"{value:<8}\" left-aligns, f\"{value:>4}\" right-aligns within a fixed width."
+    },
+    {
+      "id": 60,
+      "priority": "MEDIUM",
+      "topic": "Any/All for Batch Checks",
+      "question": "Use single statements to check that all tests passed, then that any failed.",
+      "simple_solution": "results = {\"login\": \"PASS\", \"search\": \"PASS\", \"load\": \"FAIL\"}\n\nall_passed = all(s == \"PASS\" for s in results.values())\nany_failed = any(s == \"FAIL\" for s in results.values())\nprint(all_passed, any_failed)   # False True",
+      "why_for_automation": "Skipping a suite or marking a build red depends on whole-collection conditions.",
+      "key_takeaway": "all(...) and any(...) with a generator expression evaluate a condition across every item."
+    },
+    {
+      "id": 61,
+      "priority": "MEDIUM",
+      "topic": "Validation with Regex",
+      "question": "Check that an email address is in a valid format.",
+      "simple_solution": "import re\n\npattern = r\"^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$\"\n\ndef is_valid_email(email):\n    return bool(re.match(pattern, email))\n\nprint(is_valid_email(\"alice@example.com\"))   # True\nprint(is_valid_email(\"not-an-email\"))        # False",
+      "why_for_automation": "Validating emails, phone numbers or log timestamps before using them prevents downstream failures.",
+      "key_takeaway": "re.match(pattern, text) returns a match object or None; anchor with ^ and $ for full-string checks."
+    },
+    {
+      "id": 62,
+      "priority": "MEDIUM",
+      "topic": "Measuring Test Duration",
+      "question": "Measure how long a block of code takes, accurately.",
+      "simple_solution": "import time\n\nstart = time.perf_counter()\n# ... run the test, collect results ...\nduration = time.perf_counter() - start\n\nprint(f\"Elapsed: {duration:.2f}s\")\nprint(f\"Elapsed: {duration * 1000:.0f} ms\")",
+      "why_for_automation": "Performance budgets and slow-test reports rely on accurate timing of steps and runs.",
+      "key_takeaway": "time.perf_counter() has high resolution; subtract start from end to get seconds."
+    },
+    {
+      "id": 63,
+      "priority": "MEDIUM",
+      "topic": "Walking Directories",
+      "question": "List every screenshot file under ./reports recursively.",
+      "simple_solution": "import os\n\nfor root, dirs, files in os.walk(\"reports\"):\n    for name in files:\n        if name.endswith(\".png\"):\n            print(os.path.join(root, name))",
+      "why_for_automation": "Gathering artifacts from nested dated folders for cleanup or upload uses os.walk.",
+      "key_takeaway": "os.walk(top) yields (root, dirs, files) for every subdirectory - recurse manually."
+    },
+    {
+      "id": 64,
+      "priority": "MEDIUM",
+      "topic": "Temporary Files",
+      "question": "Create a temp directory that is cleaned up automatically, and write a file into it.",
+      "simple_solution": "import tempfile\nfrom pathlib import Path\n\nwith tempfile.TemporaryDirectory() as tmp:\n    tmp_path = Path(tmp)\n    (tmp_path / \"run.log\").write_text(\"started\")\n    print(tmp_path / \"run.log\")\n\n# after the block, tmp is deleted automatically",
+      "why_for_automation": "Test runs can generate scratch files; temp dirs keep them out of the repo and delete themselves.",
+      "key_takeaway": "tempfile.TemporaryDirectory() deletes itself when the with block exits."
+    },
+    {
+      "id": 65,
+      "priority": "MEDIUM",
+      "topic": "Command-line Arguments",
+      "question": "Parse --browser=firefox and --headless from the command line.",
+      "simple_solution": "import argparse\n\nparser = argparse.ArgumentParser(description=\"Run tests\")\nparser.add_argument(\"--browser\", default=\"chrome\", help=\"browser to use\")\nparser.add_argument(\"--headless\", action=\"store_true\")\nargs = parser.parse_args()\n\nprint(args.browser, args.headless)\n# python run_tests.py --browser=firefox --headless -> firefox True",
+      "why_for_automation": "Making runners configurable via CLI flags is standard for teams and CI pipelines.",
+      "key_takeaway": "argparse turns flags into typed attributes (strings, flags, numbers) with built-in --help."
+    },
+    {
+      "id": 66,
+      "priority": "LOW",
+      "topic": "Dataclasses for Test Models",
+      "question": "Define a TestConfig dataclass with browser, url and headless defaults.",
+      "simple_solution": "from dataclasses import dataclass\n\n@dataclass\nclass TestConfig:\n    browser: str = \"chrome\"\n    url: str = \"http://localhost:3000\"\n    headless: bool = False\n\ncfg = TestConfig(browser=\"firefox\")\nprint(cfg)          # TestConfig(browser='firefox', url='http://localhost:3000', headless=False)\nprint(cfg.url)",
+      "why_for_automation": "Dataclasses give typed, readable config/result objects with free __repr__ and ordering.",
+      "key_takeaway": "@dataclass auto-generates __init__, __repr__ and equality from the annotated fields."
+    },
+    {
+      "id": 67,
+      "priority": "LOW",
+      "topic": "Custom Context Manager",
+      "question": "Write a with-statement that times any block automatically.",
+      "simple_solution": "import time\nfrom contextlib import contextmanager\n\n@contextmanager\ndef timed(label):\n    start = time.perf_counter()\n    yield\n    elapsed = time.perf_counter() - start\n    print(f\"{label}: {elapsed:.3f}s\")\n\nwith timed(\"search flow\"):\n    run_search_flow()",
+      "why_for_automation": "Reusable timing/logging around arbitrary blocks keeps test code declarative.",
+      "key_takeaway": "@contextmanager converts a generator (yield splits setup/teardown) into a context manager."
+    },
+    {
+      "id": 68,
+      "priority": "LOW",
+      "topic": "Caching with lru_cache",
+      "question": "Speed up repeated identical API lookups inside one run.",
+      "simple_solution": "from functools import lru_cache\n\n@lru_cache(maxsize=64)\ndef user_name(user_id):\n    # pretend this does requests.get(...)\n    return {1: \"Alice\", 2: \"Bob\"}[user_id]\n\nprint(user_name(1))   # first call - computed\nprint(user_name(1))   # cached - no recompute",
+      "why_for_automation": "Pure lookups called repeatedly (roles, permissions, config) can be memoized to cut I/O.",
+      "key_takeaway": "@lru_cache memoizes results by arguments; identical calls return instantly."
+    },
+    {
+      "id": 69,
+      "priority": "LOW",
+      "topic": "Hashing & Integrity Checks",
+      "question": "Compute an MD5/SHA256 checksum of a downloaded file.",
+      "simple_solution": "import hashlib\n\nwith open(\"app.zip\", \"rb\") as f:\n    digest = hashlib.sha256(f.read()).hexdigest()\n\nprint(digest)   # compare with the published hash to verify integrity",
+      "why_for_automation": "Verifying downloads match expected hashes guards against corrupted artifacts in CI.",
+      "key_takeaway": "hashlib.sha256(data).hexdigest() returns a fixed-length fingerprint of the bytes."
+    },
+    {
+      "id": 70,
+      "priority": "LOW",
+      "topic": "Encoding with base64",
+      "question": "Encode and decode an auth token or small binary payload.",
+      "simple_solution": "import base64\n\ntoken = \"admin:secret123\"\nencoded = base64.b64encode(token.encode()).decode()\ndecoded = base64.b64decode(encoded).decode()\n\nprint(encoded)   # YWRtaW46c2VjcmV0MTIz\nprint(decoded)   # admin:secret123",
+      "why_for_automation": "Basic-auth headers and small binary transfers use base64; tests often log/decode them.",
+      "key_takeaway": "base64.b64encode/decode work on bytes; call .encode() before and .decode() after."
+    },
+    {
+      "id": 71,
+      "priority": "LOW",
+      "topic": "os.walk Cleanup Helper",
+      "question": "Delete all PNG files inside ./reports before a fresh run.",
+      "simple_solution": "import os\n\nfor root, dirs, files in os.walk(\"reports\"):\n    for name in files:\n        if name.endswith(\".png\"):\n            os.remove(os.path.join(root, name))\n\nprint(\"old evidence removed\")",
+      "why_for_automation": "Clean runs start from a clean artifacts folder; recursive cleanup prevents stale evidence.",
+      "key_takeaway": "os.remove(path) deletes a file; guard with endswith() before removing."
+    },
+    {
+      "id": 72,
+      "priority": "LOW",
+      "topic": "Type Hints",
+      "question": "Add type hints to a helper that returns a dict of user info.",
+      "simple_solution": "from typing import Dict, Optional\n\ndef get_user(user_id: int) -> Optional[Dict[str, str]]:\n    # ... look up user ...\n    return {\"name\": \"Alice\"} if user_id else None\n\nname: Optional[str] = None\nresult = get_user(1)\nif result:\n    name = result[\"name\"]\nprint(name)",
+      "why_for_automation": "Type hints make framework helpers self-documenting and let IDEs/static checks catch bugs.",
+      "key_takeaway": "Annotate parameters and return types - they are hints, not runtime enforced."
+    },
+    {
+      "id": 73,
+      "priority": "LOW",
+      "topic": "Comparing File Contents",
+      "question": "Show the first difference between two log files.",
+      "simple_solution": "import difflib\n\ndef first_diff(a_path, b_path):\n    a = open(a_path).read().splitlines()\n    b = open(b_path).read().splitlines()\n    for line in difflib.unified_diff(a, b, lineterm=\"\"):\n        print(line)\n\nwith open(\"expected.log\") as f:\n    expected = f.read().splitlines()\nwith open(\"actual.log\") as f:\n    actual = f.read().splitlines()\nfor line in difflib.unified_diff(expected, actual, lineterm=\"\"):\n    print(line)",
+      "why_for_automation": "Comparing snapshots, golden files or expected logs against actual output is a real assertion pattern.",
+      "key_takeaway": "difflib.unified_diff(a, b) yields the +/- lines marking exactly what differs."
+    },
+    {
+      "id": 74,
+      "priority": "LOW",
+      "topic": "Extracting Data with Regex findall",
+      "question": "Pull every ID like ORD-12345 out of an order log.",
+      "simple_solution": "import re\n\nlog = \"created ORD-10042 then cancelled ORD-10055\"\nids = re.findall(r\"ORD-\\d+\", log)\nprint(ids)   # ['ORD-10042', 'ORD-10055']",
+      "why_for_automation": "Scraping references (order IDs, tickets) from free-text UI or logs for later lookup.",
+      "key_takeaway": "re.findall(pattern, text) returns every non-overlapping match as a list."
+    },
+    {
+      "id": 75,
+      "priority": "LOW",
+      "topic": "Sorting Dictionaries by Value",
+      "question": "Rank test names by duration (highest first) using sorted() on dict items.",
+      "simple_solution": "tests = {\"login\": 2.1, \"search\": 0.4, \"load\": 8.9}\n\nranked = sorted(tests.items(), key=lambda item: item[1], reverse=True)\nprint(ranked)   # [('load', 8.9), ('login', 2.1), ('search', 0.4)]\n\nfor name, duration in ranked:\n    print(f\"{name}: {duration}s\")",
+      "why_for_automation": "Slowest-last / slowest-first reports order dicts by their values, not keys.",
+      "key_takeaway": "sorted(d.items(), key=lambda item: item[1]) sorts pairs by value."
+    },
+    {
+      "id": 76,
+      "priority": "LOW",
+      "topic": "Pickle for Test State",
+      "question": "Save a run summary object and reload it later.",
+      "simple_solution": "import pickle\n\nsummary = {\"passed\": 12, \"failed\": 2, \"names\": [\"login\", \"logout\"]}\n\nwith open(\"run.pkl\", \"wb\") as f:\n    pickle.dump(summary, f)\n\nwith open(\"run.pkl\", \"rb\") as f:\n    loaded = pickle.load(f)\n\nprint(loaded)   # {'passed': 12, 'failed': 2, 'names': ['login', 'logout']}",
+      "why_for_automation": "Persisting complex run state between processes; prefer JSON for anything you need to read by hand.",
+      "key_takeaway": "pickle.dump/load save nearly any Python object to a file (stable-rev warning: not cross-version safe)."
+    },
+    {
+      "id": 77,
+      "priority": "LOW",
+      "topic": "Running Tests in Threads",
+      "question": "Run two independent checks in parallel and wait for both.",
+      "simple_solution": "import threading\n\nresults = []\n\ndef check(name, ok):\n    results.append((name, ok))\n\nt1 = threading.Thread(target=check, args=(\"login\", True))\nt2 = threading.Thread(target=check, args=(\"logout\", False))\nt1.start(); t2.start()\nt1.join(); t2.join()\n\nprint(results)   # [( 'login', True), ('logout', False)] in any order",
+      "why_for_automation": "Parallel smoke checks cut wall-clock time, but keep shared state thread-safe.",
+      "key_takeaway": "threading.Thread(target=fn, args=...).start() then .join() waits for completion."
+    },
+    {
+      "id": 78,
+      "priority": "LOW",
+      "topic": "Reading YAML Config",
+      "question": "Load test credentials/settings from a YAML file.",
+      "simple_solution": "import yaml\n\nwith open(\"config.yaml\") as f:\n    cfg = yaml.safe_load(f)\n\nprint(cfg[\"browser\"][\"name\"])      # chrome\nprint(cfg.get(\"retries\", 3))       # safe default",
+      "why_for_automation": "Modern frameworks (Selenium Grid, Playwright, k8s) use YAML; tests read it directly.",
+      "key_takeaway": "yaml.safe_load (never yaml.load) turns YAML into dicts/lists; .get() gives safe defaults."
+    },
+    {
+      "id": 79,
+      "priority": "LOW",
+      "topic": "Precise Timers (perf_counter)",
+      "question": "Why use perf_counter instead of time.time() for a 2 ms check?",
+      "simple_solution": "import time\n\nstart = time.perf_counter()\n# tiny operation\nduration = time.perf_counter() - start\nprint(f\"{duration * 1000:.3f} ms\")\n\n# time.time() has second/greater granularity on some platforms and is meant for wall clock",
+      "why_for_automation": "Micro-benchmarks and step times need sub-millisecond resolution.",
+      "key_takeaway": "time.perf_counter() is the correct high-resolution timer for measuring code."
+    },
+    {
+      "id": 80,
+      "priority": "LOW",
+      "topic": "Reading config from env + defaults merge",
+      "question": "Merge env vars and defaults into one settings dict.",
+      "simple_solution": "import os\n\nDEFAULTS = {\"browser\": \"chrome\", \"headless\": False, \"url\": \"http://localhost:3000\"}\n\ndef load_settings():\n    settings = dict(DEFAULTS)\n    settings[\"browser\"] = os.environ.get(\"BROWSER\", settings[\"browser\"])\n    settings[\"headless\"] = os.environ.get(\"HEADLESS\", \"false\").lower() == \"true\"\n    return settings\n\nprint(load_settings())",
+      "why_for_automation": "Frameworks resolve config in layers: defaults < env < CLI flags. This is that pattern in miniature.",
+      "key_takeaway": "Start from a defaults dict and override keys from env vars - never the other way around."
+    },
+    {
+      "id": 81,
+      "priority": "LOW",
+      "topic": "Breaking Early with any() and generator",
+      "question": "Stop scanning a large log as soon as any 'ERROR' line is found.",
+      "simple_solution": "def has_error(lines):\n    return any(\"ERROR\" in line for line in lines)\n\nlogs = [\"INFO started\", \"ERROR timeout\", \"INFO done\"]\nif has_error(logs):\n    print(\"Build contains an error line\")",
+      "why_for_automation": "any()/all() with a generator short-circuit - perfect for scanning big log files cheaply.",
+      "key_takeaway": "Generator expressions feed any/all lazily, so scanning stops at the first match."
+    }
+  ]
+}

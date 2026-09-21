@@ -1,0 +1,340 @@
+{
+  "description": "67 curated FOR LOOPS questions for Automation Testing interviews (trimmed from 100; removed 33 redundant near-duplicate questions that tested the same concept).",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does this print?\nfor i in range(3):\n    print(i)",
+      "answer": "range(3) yields 0, 1, 2, and each value prints on its own line.\n\ncode:\nfor i in range(3):\n    print(i)\n\nreal example:\nNumbering the first three rows of a table."
+    },
+    {
+      "id": 2,
+      "question": "What does range(5) produce?",
+      "answer": "It produces 0, 1, 2, 3, 4, because the stop value 5 is exclusive (not included).\n\ncode:\nfor i in range(5):\n    print(i)\n\nreal example:\nRepeating an action exactly five times, like five retry attempts."
+    },
+    {
+      "id": 3,
+      "question": "What does this print?\nfor i in range(1, 4):\n    print(i)",
+      "answer": "range(1, 4) starts at 1 and stops before 4, printing 1, 2, 3.\n\ncode:\nfor i in range(1, 4):\n    print(i)\n\nreal example:\nProcessing items whose positions start at 1."
+    },
+    {
+      "id": 4,
+      "question": "What does this print?\nfor i in range(0, 10, 3):\n    print(i)",
+      "answer": "The third argument is the step, so it counts 0, 3, 6, 9 and stops before 10.\n\ncode:\nfor i in range(0, 10, 3):\n    print(i)\n\nreal example:\nSampling every third value from a series."
+    },
+    {
+      "id": 5,
+      "question": "What does this print?\nfor i in range(5, 0, -1):\n    print(i)",
+      "answer": "A negative step counts downward, giving 5, 4, 3, 2, 1.\n\ncode:\nfor i in range(5, 0, -1):\n    print(i)\n\nreal example:\nCounting down to zero at a rocket launch."
+    },
+    {
+      "id": 6,
+      "question": "What does this print?\nfruits = [\"apple\", \"banana\", \"cherry\"]\nfor f in fruits:\n    print(f)",
+      "answer": "The loop visits each element of the list in order and prints it.\n\ncode:\nfruits = [\"apple\", \"banana\", \"cherry\"]\nfor f in fruits:\n    print(f)\n\nreal example:\nDisplaying each product name in a store catalog."
+    },
+    {
+      "id": 7,
+      "question": "What does this print?\nfor ch in \"abc\":\n    print(ch)",
+      "answer": "Strings are iterable, so the loop hands over one character at a time: a, b, c.\n\ncode:\nfor ch in \"abc\":\n    print(ch)\n\nreal example:\nScanning each letter of a username for validation."
+    },
+    {
+      "id": 8,
+      "question": "What does this print?\ntotal = 0\nfor i in range(1, 5):\n    total += i\nprint(total)",
+      "answer": "total accumulates 1 + 2 + 3 + 4 = 10.\n\ncode:\ntotal = 0\nfor i in range(1, 5):\n    total += i\nprint(total)\n\nreal example:\nSumming the prices of items in a small cart."
+    },
+    {
+      "id": 9,
+      "question": "What does this print?\nfor i in range(1, 6):\n    if i % 2 == 0:\n        print(i)",
+      "answer": "i takes 1 to 5 and only the even values 2 and 4 pass the filter.\n\ncode:\nfor i in range(1, 6):\n    if i % 2 == 0:\n        print(i)\n\nreal example:\nListing only even-numbered seats in a hall."
+    },
+    {
+      "id": 10,
+      "question": "What does this print?\nsquares = [x**2 for x in range(4)]\nprint(squares)",
+      "answer": "The list comprehension squares 0, 1, 2, 3, producing [0, 1, 4, 9].\n\ncode:\nsquares = [x**2 for x in range(4)]\nprint(squares)\n\nreal example:\nBuilding a list of square areas for a row of plot sizes."
+    },
+    {
+      "id": 11,
+      "question": "What does this list comprehension produce?\n[x for x in range(6) if x % 2 == 0]",
+      "answer": "It collects the even numbers from 0 through 5, giving [0, 2, 4].\n\ncode:\nevens = [x for x in range(6) if x % 2 == 0]\nprint(evens)\n\nreal example:\nFiltering a list of order numbers down to even ones."
+    },
+    {
+      "id": 12,
+      "question": "What does this print?\nmat = [[1, 2], [3, 4]]\nflat = [num for row in mat for num in row]\nprint(flat)",
+      "answer": "The nested comprehension flattens the 2D list into one list: [1, 2, 3, 4].\n\ncode:\nmat = [[1, 2], [3, 4]]\nflat = [num for row in mat for num in row]\nprint(flat)\n\nreal example:\nFlattening grouped survey data into a single column."
+    },
+    {
+      "id": 13,
+      "question": "Write a one-line list comprehension for even numbers 0-20.",
+      "answer": "Filter the range with a condition: keep each x where x % 2 == 0, from 0 up to 20.\n\ncode:\neven = [x for x in range(21) if x % 2 == 0]\nprint(even)\n\nreal example:\nGrabbing the even page numbers for a document index in one line."
+    },
+    {
+      "id": 14,
+      "question": "What does enumerate([\"a\", \"b\"]) produce when looped?\nfor i, item in enumerate([\"a\", \"b\"]):\n    print(i, item)",
+      "answer": "enumerate pairs each item with its index starting at 0, printing 0 a and 1 b.\n\ncode:\nfor i, item in enumerate([\"a\", \"b\"]):\n    print(i, item)\n\nreal example:\nNumbering the rows of a to-do list."
+    },
+    {
+      "id": 15,
+      "question": "What does this print?\nword = \"banana\"\nfor i, ch in enumerate(word):\n    if ch == \"a\":\n        print(i)",
+      "answer": "The letter a sits at positions 1, 3, and 5, so those indexes print.\n\ncode:\nword = \"banana\"\nfor i, ch in enumerate(word):\n    if ch == \"a\":\n        print(i)\n\nreal example:\nFinding where a letter appears in a word guessing game."
+    },
+    {
+      "id": 16,
+      "question": "What does this print?\ncolors = [\"red\", \"green\"]\nfor idx, color in enumerate(colors, start=1):\n    print(idx, color)",
+      "answer": "enumerate(colors, start=1) begins indexes at 1, so it prints 1 red and 2 green.\n\ncode:\ncolors = [\"red\", \"green\"]\nfor idx, color in enumerate(colors, start=1):\n    print(idx, color)\n\nreal example:\nNumbering invoice line items starting from 1."
+    },
+    {
+      "id": 17,
+      "question": "What does this print?\nnames = [\"Alice\", \"Bob\"]\nscores = [90, 80]\nfor name, score in zip(names, scores):\n    print(name, score)",
+      "answer": "zip feeds each name with its matching score, printing Alice 90 and Bob 80.\n\ncode:\nnames = [\"Alice\", \"Bob\"]\nscores = [90, 80]\nfor name, score in zip(names, scores):\n    print(name, score)\n\nreal example:\nListing students with their exam results side by side."
+    },
+    {
+      "id": 18,
+      "question": "What happens with zip when lists have different lengths?",
+      "answer": "zip stops as soon as the shortest list runs out and ignores the extra items.\n\ncode:\nlist(zip([1, 2, 3], [\"a\", \"b\"]))\n\nreal example:\nPairing two lists safely so no mismatch happens at the tail."
+    },
+    {
+      "id": 19,
+      "question": "How many times does the inner loop body run here?\nfor i in range(3):\n    for j in range(4):\n        print(i, j)",
+      "answer": "The inner body runs 3 * 4 = 12 times in total.\n\ncode:\nfor i in range(3):\n    for j in range(4):\n        print(i, j)\n\nreal example:\nMarking every cell in a 3 by 4 seating chart."
+    },
+    {
+      "id": 20,
+      "question": "What does this print?\nresult = []\nfor word in [\"HELLO\", \"WORLD\"]:\n    result.append(word.lower())\nprint(result)",
+      "answer": "Each word is lowercased and appended, producing ['hello', 'world'].\n\ncode:\nresult = []\nfor word in [\"HELLO\", \"WORLD\"]:\n    result.append(word.lower())\nprint(result)\n\nreal example:\nNormalizing user names to lowercase before storing them."
+    },
+    {
+      "id": 21,
+      "question": "What does this print?\nfirst = [1, 2, 3]\nfor x in first:\n    first.append(x)  # careful!\nprint(first)",
+      "answer": "It never finishes. Appending while iterating over the same list keeps the list growing, so the loop runs forever.\n\ncode:\nfirst = [1, 2, 3]\nfor x in first.copy():\n    first.append(x)\nprint(first)\n\nreal example:\nAlways loop over a copy when you plan to grow a list during iteration."
+    },
+    {
+      "id": 22,
+      "question": "What does this print?\nfor i in range(3):\n    if i == 1:\n        break\n    print(i)",
+      "answer": "break stops the loop the moment i reaches 1, so only 0 prints.\n\ncode:\nfor i in range(3):\n    if i == 1:\n        break\n    print(i)\n\nreal example:\nStopping a search as soon as the target item is found."
+    },
+    {
+      "id": 23,
+      "question": "What does this print?\nfor i in range(5):\n    if i == 2:\n        continue\n    print(i)",
+      "answer": "continue skips the current iteration for i == 2, so the loop prints 0, 1, 3, 4.\n\ncode:\nfor i in range(5):\n    if i == 2:\n        continue\n    print(i)\n\nreal example:\nSkipping a blocked user while still mailing everyone else."
+    },
+    {
+      "id": 24,
+      "question": "What does this print?\nfor i in range(10):\n    if i % 3 == 0:\n        continue\n    if i > 6:\n        break\n    print(i)",
+      "answer": "Multiples of 3 are skipped and the loop breaks when i exceeds 6, leaving 1, 2, 4, 5.\n\ncode:\nfor i in range(10):\n    if i % 3 == 0:\n        continue\n    if i > 6:\n        break\n    print(i)\n\nreal example:\nFiltering invalid records and stopping after a cutoff point."
+    },
+    {
+      "id": 25,
+      "question": "What does this print?\nfor i in range(3):\n    print(i)\nelse:\n    print(\"done\")",
+      "answer": "The loop runs normally to completion, so the else block prints done after 0, 1, 2.\n\ncode:\nfor i in range(3):\n    print(i)\nelse:\n    print(\"done\")\n\nreal example:\nConfirming a file was fully processed when no break occurred."
+    },
+    {
+      "id": 26,
+      "question": "What does this print?\nfor i in range(3):\n    if i == 1:\n        break\n    print(i)\nelse:\n    print(\"done\")",
+      "answer": "break at i == 1 means the loop was interrupted, so the else does NOT run and only 0 prints.\n\ncode:\nfor i in range(3):\n    if i == 1:\n        break\n    print(i)\nelse:\n    print(\"done\")\n\nreal example:\nShowing a search-canceled message when the scan breaks early."
+    },
+    {
+      "id": 27,
+      "question": "What does this print?\nfor i in range(4):\n    if i == 2:\n        break\nelse:\n    print(\"complete\")\nprint(\"after\")",
+      "answer": "break at i == 2 skips the else, so only after prints once the loop is done.\n\ncode:\nfor i in range(4):\n    if i == 2:\n        break\nelse:\n    print(\"complete\")\nprint(\"after\")\n\nreal example:\nStopping a cleanup routine early without reporting completion."
+    },
+    {
+      "id": 28,
+      "question": "What does this print?\nnums = [1, 2, 3, 4, 5]\nfor n in nums:\n    if n == 3:\n        print(\"found 3\")\n        break\nelse:\n    print(\"never found 3\")",
+      "answer": "break on finding 3 skips the else, so only found 3 prints.\n\ncode:\nnums = [1, 2, 3, 4, 5]\nfor n in nums:\n    if n == 3:\n        print(\"found 3\")\n        break\nelse:\n    print(\"never found 3\")\n\nreal example:\nConfirming a user exists in a list without a separate found flag."
+    },
+    {
+      "id": 29,
+      "question": "What does this print?\nfor i in range(1, 4):\n    if i == 2:\n        continue\n    print(\"num\", i)\nelse:\n    print(\"done\")",
+      "answer": "continue skips i == 2 but the loop still finishes normally, so num 1, num 3 and done print.\n\ncode:\nfor i in range(1, 4):\n    if i == 2:\n        continue\n    print(\"num\", i)\nelse:\n    print(\"done\")\n\nreal example:\nProcessing most records, then confirming the batch completed."
+    },
+    {
+      "id": 30,
+      "question": "What does this print?\nword = \"hello\"\nfor ch in word:\n    print(ch.upper(), end=\"\")",
+      "answer": "Each character is uppercased and printed with end=\"\" so nothing newline-separates them: HELLO.\n\ncode:\nword = \"hello\"\nfor ch in word:\n    print(ch.upper(), end=\"\")\n\nreal example:\nAssembling an all-caps message on a single output line."
+    },
+    {
+      "id": 31,
+      "question": "What does this print?\nresult = \"\"\nfor ch in \"python\":\n    if ch in \"aeiou\":\n        result += ch.upper()\n    else:\n        result += ch\nprint(result)",
+      "answer": "Only the vowels o become uppercase while consonants stay, producing pYthOn.\n\ncode:\nresult = \"\"\nfor ch in \"python\":\n    if ch in \"aeiou\":\n        result += ch.upper()\n    else:\n        result += ch\nprint(result)\n\nreal example:\nHighlighting vowels while building a display string."
+    },
+    {
+      "id": 32,
+      "question": "What does this print?\nmy_str = \"level\"\nreversed_str = \"\"\nfor ch in my_str:\n    reversed_str = ch + reversed_str\nprint(reversed_str)",
+      "answer": "Each character is placed in front, which reverses the word. level reversed is still level.\n\ncode:\nmy_str = \"level\"\nreversed_str = \"\"\nfor ch in my_str:\n    reversed_str = ch + reversed_str\nprint(reversed_str)\n\nreal example:\nReversing a word by hand to check it for word-game symmetry."
+    },
+    {
+      "id": 33,
+      "question": "What does this print?\nword = \"a1b2c3\"\nletters = \"\"\nfor ch in word:\n    if ch.isalpha():\n        letters += ch\nprint(letters)",
+      "answer": "Only the letters are kept, producing abc after the digits are dropped.\n\ncode:\nword = \"a1b2c3\"\nletters = \"\"\nfor ch in word:\n    if ch.isalpha():\n        letters += ch\nprint(letters)\n\nreal example:\nStripping the digits out of an order code to read the product letters."
+    },
+    {
+      "id": 34,
+      "question": "What does this print?\nfor i in range(1, 4):\n    print(str(i) * i)",
+      "answer": "String multiplication repeats each digit: '1', '22', '333'.\n\ncode:\nfor i in range(1, 4):\n    print(str(i) * i)\n\nreal example:\nPadding a receipt line with repeated symbols."
+    },
+    {
+      "id": 35,
+      "question": "What does this print?\nmatrix = [[1, 2], [3, 4]]\nfor row in matrix:\n    for num in row:\n        print(num, end=\" \")",
+      "answer": "The outer loop takes each row and the inner loop prints its numbers, giving 1 2 3 4 on one line.\n\ncode:\nmatrix = [[1, 2], [3, 4]]\nfor row in matrix:\n    for num in row:\n        print(num, end=\" \")\n\nreal example:\nReading every cell of a spreadsheet table in order."
+    },
+    {
+      "id": 36,
+      "question": "What does this print?\nvals = [10, 20, 30]\nfor v in vals:\n    if v > 15:\n        print(v)\n        break",
+      "answer": "The loop exits via break after finding the first value over 15, which is 20.\n\ncode:\nvals = [10, 20, 30]\nfor v in vals:\n    if v > 15:\n        print(v)\n        break\n\nreal example:\nFinding the first order above a spending threshold."
+    },
+    {
+      "id": 37,
+      "question": "What does this print?\nfor i in range(5):\n    print(i)\n    if i == 3:\n        break",
+      "answer": "Each i prints before the check, and break fires when i hits 3: 0, 1, 2, 3.\n\ncode:\nfor i in range(5):\n    print(i)\n    if i == 3:\n        break\n\nreal example:\nLogging each step until the third retry is reached."
+    },
+    {
+      "id": 38,
+      "question": "What does this print?\nfound = False\nfor i in range(3, 10):\n    if i % 7 == 0:\n        found = True\n        break\nprint(found)",
+      "answer": "The range reaches 7, the first multiple of 7, so found becomes True and the loop breaks.\n\ncode:\nfound = False\nfor i in range(3, 10):\n    if i % 7 == 0:\n        found = True\n        break\nprint(found)\n\nreal example:\nFlagging whether any item in a scan matched a search."
+    },
+    {
+      "id": 39,
+      "question": "What does this print?\nnumbers = [3, 1, 2]\nfor n in sorted(numbers):\n    print(n)",
+      "answer": "sorted returns a new sorted copy, so the loop prints 1, 2, 3.\n\ncode:\nnumbers = [3, 1, 2]\nfor n in sorted(numbers):\n    print(n)\n\nreal example:\nDisplaying a price list from cheapest to most expensive."
+    },
+    {
+      "id": 40,
+      "question": "What does this print?\nnums = [4, 7, 1]\nfor n in sorted(nums, reverse=True):\n    print(n, end=\" \")",
+      "answer": "reverse=True sorts descending, so the loop prints 7 4 1.\n\ncode:\nnums = [4, 7, 1]\nfor n in sorted(nums, reverse=True):\n    print(n, end=\" \")\n\nreal example:\nRanking products from best to worst seller."
+    },
+    {
+      "id": 41,
+      "question": "What does this print?\nd = {\"a\": 1, \"b\": 2}\nfor key in d:\n    print(key)",
+      "answer": "Looping over a dictionary yields its keys, so a and b print.\n\ncode:\nd = {\"a\": 1, \"b\": 2}\nfor key in d:\n    print(key)\n\nreal example:\nListing the field names of a settings object."
+    },
+    {
+      "id": 42,
+      "question": "What does this print?\nd = {\"a\": 1, \"b\": 2}\nfor k, v in d.items():\n    print(k, v)",
+      "answer": "items() hands out (key, value) pairs that unpack into k and v, printing a 1 and b 2.\n\ncode:\nd = {\"a\": 1, \"b\": 2}\nfor k, v in d.items():\n    print(k, v)\n\nreal example:\nShowing each setting name with its current value."
+    },
+    {
+      "id": 43,
+      "question": "What does this print?\nn = 5\nfactorial = 1\nfor i in range(1, n + 1):\n    factorial *= i\nprint(factorial)",
+      "answer": "Each i from 1 to 5 multiplies the running product, so factorial is 1*2*3*4*5 = 120.\n\ncode:\nn = 5\nfactorial = 1\nfor i in range(1, n + 1):\n    factorial *= i\nprint(factorial)\n\nreal example:\nCalculating the number of ways to arrange five prizes."
+    },
+    {
+      "id": 44,
+      "question": "What does this print?\nvals = [1, 2, 3, 4]\nlargest = 0\nfor v in vals:\n    if v > largest:\n        largest = v\nprint(largest)",
+      "answer": "largest updates whenever a bigger value appears, ending at 4.\n\ncode:\nvals = [1, 2, 3, 4]\nlargest = 0\nfor v in vals:\n    if v > largest:\n        largest = v\nprint(largest)\n\nreal example:\nFinding the highest score on a leaderboard."
+    },
+    {
+      "id": 45,
+      "question": "What does this print?\nmonthly = [1200, 1300, 1250]\naverage = 0\nfor m in monthly:\n    average += m / len(monthly)\nprint(round(average))",
+      "answer": "Each value divided by 3 adds up to 3750 / 3 = 1250, which rounds to 1250.\n\ncode:\nmonthly = [1200, 1300, 1250]\naverage = 0\nfor m in monthly:\n    average += m / len(monthly)\nprint(round(average))\n\nreal example:\nComputing the average monthly income of a worker."
+    },
+    {
+      "id": 46,
+      "question": "What does this print?\ntext = \"The quick fox\"\nwords = text.split()\nlongest = \"\"\nfor w in words:\n    if len(w) > len(longest):\n        longest = w\nprint(longest)",
+      "answer": "Of The, quick, fox, the longest word is quick at 5 letters.\n\ncode:\ntext = \"The quick fox\"\nlongest = \"\"\nfor w in text.split():\n    if len(w) > len(longest):\n        longest = w\nprint(longest)\n\nreal example:\nFinding the longest word to feature in a word cloud."
+    },
+    {
+      "id": 47,
+      "question": "What does this print?\ncounts = {}\nletters = \"abbccc\"\nfor ch in letters:\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts)",
+      "answer": "get returns the current count (or 0) and adds 1, giving {'a': 1, 'b': 2, 'c': 3}.\n\ncode:\ncounts = {}\nfor ch in \"abbccc\":\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts)\n\nreal example:\nCounting how often each tag appears in a blog."
+    },
+    {
+      "id": 48,
+      "question": "What does this print?\nfor i in range(0):\n    print(\"x\")\nprint(\"done\")",
+      "answer": "The loop body is skipped entirely because range(0) is empty, so only done prints.\n\ncode:\nfor i in range(0):\n    print(\"x\")\nprint(\"done\")\n\nreal example:\nSkipping processing when a queue has no pending items."
+    },
+    {
+      "id": 49,
+      "question": "What does this print?\nfor i in range(1, 7):\n    if i % 2 == 0:\n        continue\n    print(i, end=\" \")",
+      "answer": "continue skips every even i, so only odd numbers 1, 3, 5 print on one line.\n\ncode:\nfor i in range(1, 7):\n    if i % 2 == 0:\n        continue\n    print(i, end=\" \")\n\nreal example:\nListing only the odd-numbered floors an elevator may stop at."
+    },
+    {
+      "id": 50,
+      "question": "What does this print?\nnums = [5, 10, 15, 20]\ncount = 0\nfor n in nums:\n    if n % 10 == 0:\n        count += 1\nprint(count)",
+      "answer": "10 and 20 are divisible by 10, so count reaches 2.\n\ncode:\nnums = [5, 10, 15, 20]\ncount = 0\nfor n in nums:\n    if n % 10 == 0:\n        count += 1\nprint(count)\n\nreal example:\nCounting how many bills in a drawer are exact ten-dollar bills."
+    },
+    {
+      "id": 51,
+      "question": "What does this print?\ncount = 0\nfor i in range(10):\n    if i % 2 == 0 and i % 3 == 0:\n        count += 1\nprint(count)",
+      "answer": "From 0 to 9 only 0 and 6 are divisible by both 2 and 3, so count is 2.\n\ncode:\ncount = 0\nfor i in range(10):\n    if i % 2 == 0 and i % 3 == 0:\n        count += 1\nprint(count)\n\nreal example:\nCounting hours that align with both schedules on a timetable."
+    },
+    {
+      "id": 52,
+      "question": "What does this print?\nnames = [\"Alice\", \"Bob\", \"Charlie\"]\nfor name in names:\n    if name.startswith(\"A\"):\n        print(name)",
+      "answer": "Only Alice starts with A, so Alice prints and the other names are skipped.\n\ncode:\nnames = [\"Alice\", \"Bob\", \"Charlie\"]\nfor name in names:\n    if name.startswith(\"A\"):\n        print(name)\n\nreal example:\nFiltering a contact list for names beginning with A."
+    },
+    {
+      "id": 53,
+      "question": "What does this print?\nfor i in range(5):\n    if i == 4:\n        print(\"last\")\n    else:\n        print(i)",
+      "answer": "i prints as 0, 1, 2, 3, and when i reaches 4 the else branch prints last instead.\n\ncode:\nfor i in range(5):\n    if i == 4:\n        print(\"last\")\n    else:\n        print(i)\n\nreal example:\nLabeling the final row of a table differently from the rest."
+    },
+    {
+      "id": 54,
+      "question": "What does this print?\nfor i in range(3):\n    if i:\n        print(i)",
+      "answer": "0 is falsy, so the if skips i == 0; only 1 and 2 print.\n\ncode:\nfor i in range(3):\n    if i:\n        print(i)\n\nreal example:\nProcessing only the non-zero quantities in a batch."
+    },
+    {
+      "id": 55,
+      "question": "What does this print?\ns = \"Python3\"\ndigits = 0\nfor ch in s:\n    if ch.isdigit():\n        digits += 1\nprint(digits)",
+      "answer": "Only the character 3 is a digit, so the count is 1.\n\ncode:\ns = \"Python3\"\ndigits = 0\nfor ch in s:\n    if ch.isdigit():\n        digits += 1\nprint(digits)\n\nreal example:\nCounting numeric characters during a strong-password check."
+    },
+    {
+      "id": 56,
+      "question": "What does this print?\ntext = \"hello world\"\nletters = 0\nfor ch in text:\n    if ch == \" \":\n        continue\n    letters += 1\nprint(letters)",
+      "answer": "Every character except the single space counts, so hello world is 10 letters.\n\ncode:\ntext = \"hello world\"\nletters = 0\nfor ch in text:\n    if ch == \" \":\n        continue\n    letters += 1\nprint(letters)\n\nreal example:\nMeasuring a username length while ignoring spaces."
+    },
+    {
+      "id": 57,
+      "question": "What does this print?\nfor i in range(3):\n    for j in range(3):\n        if j == 2:\n            break\n        print(i, j)",
+      "answer": "The inner loop breaks at j == 2 each round, so every row prints only (i,0) and (i,1).\n\ncode:\nfor i in range(3):\n    for j in range(3):\n        if j == 2:\n            break\n        print(i, j)\n\nreal example:\nReading only the first two columns of each data row."
+    },
+    {
+      "id": 58,
+      "question": "What does this print?\nfor i in range(3):\n    for j in range(i + 1):\n        print(\"*\", end=\"\")\n    print()",
+      "answer": "The inner loop prints i + 1 stars per row, drawing the triangle *, **, ***.\n\ncode:\nfor i in range(3):\n    for j in range(i + 1):\n        print(\"*\", end=\"\")\n    print()\n\nreal example:\nDrawing a growing bar for a simple chart."
+    },
+    {
+      "id": 59,
+      "question": "What does this print?\nfor a in range(1, 3):\n    for b in range(1, 3):\n        if a == b:\n            print(a, b, \"match\")",
+      "answer": "The match prints whenever a equals b: 1 1 match and 2 2 match.\n\ncode:\nfor a in range(1, 3):\n    for b in range(1, 3):\n        if a == b:\n            print(a, b, \"match\")\n\nreal example:\nFinding matching pairs between two identical-sized lists."
+    },
+    {
+      "id": 60,
+      "question": "What does this print?\nfor i in range(1, 4):\n    line = \"\"\n    for j in range(1, 4):\n        line += str(i * j) + \" \"\n    print(line.strip())",
+      "answer": "Each cell holds i times j, building the rows: 1 2 3, 2 4 6, 3 6 9.\n\ncode:\nfor i in range(1, 4):\n    print(i, i * 2, i * 3)\n\nreal example:\nPrinting a small multiplication table for a teaching app."
+    },
+    {
+      "id": 61,
+      "question": "What does this print?\nfor i in range(3):\n    total = 0\n    for j in range(4):\n        total += 1\n    print(total)",
+      "answer": "total resets to 0 at the start of every outer pass, so it is 4 each time: 4, 4, 4.\n\ncode:\nfor i in range(3):\n    total = 0\n    for j in range(4):\n        total += 1\n    print(total)\n\nreal example:\nRecounting a batch of four items for each separate category."
+    },
+    {
+      "id": 62,
+      "question": "What does this print?\nfor i in range(3):\n    for j in range(3):\n        if i == j:\n            continue\n        print(f\"({i},{j})\", end=\" \")\n    print()",
+      "answer": "continue skips the diagonal where i equals j, so each row prints its two off-diagonal pairs.\n\ncode:\nfor i in range(3):\n    for j in range(3):\n        if i == j:\n            continue\n        print(f\"({i},{j})\", end=\" \")\n    print()\n\nreal example:\nBuilding a connection matrix that ignores self-links."
+    },
+    {
+      "id": 63,
+      "question": "What does this print?\nfor i in range(3):\n    pass\nprint(\"finished\")",
+      "answer": "pass does nothing, so the loop is a placeholder and finished prints after it.\n\ncode:\nfor i in range(3):\n    pass\nprint(\"finished\")\n\nreal example:\nReserving a spot for code you will write later."
+    },
+    {
+      "id": 64,
+      "question": "What does this print?\npeople = [(\"Alice\", 25), (\"Bob\", 30)]\nfor name, age in people:\n    print(f\"{name}: {age}\")",
+      "answer": "Each tuple unpacks into name and age, building the lines Alice: 25 and Bob: 30.\n\ncode:\npeople = [(\"Alice\", 25), (\"Bob\", 30)]\nfor name, age in people:\n    print(f\"{name}: {age}\")\n\nreal example:\nPrinting a roster of members with their ages."
+    },
+    {
+      "id": 65,
+      "question": "What does this print?\nvals = [1, 2, 3, 4, 5]\nprint(vals[1:4])",
+      "answer": "The slice starts at index 1 and stops before index 4, taking elements 2, 3, 4.\n\ncode:\nvals = [1, 2, 3, 4, 5]\nprint(vals[1:4])\n\nreal example:\nGrabbing the middle few entries of a list."
+    },
+    {
+      "id": 66,
+      "question": "What does this print?\nitems = [\"a\", \"b\", \"c\", \"d\"]\nfor i in range(0, len(items), 2):\n    print(items[i])",
+      "answer": "range steps by 2, picking indexes 0 and 2, which print a and c.\n\ncode:\nitems = [\"a\", \"b\", \"c\", \"d\"]\nfor i in range(0, len(items), 2):\n    print(items[i])\n\nreal example:\nSampling every second entry of a log file."
+    },
+    {
+      "id": 67,
+      "question": "What does this print?\nword = \"racecar\"\nis_pal = True\nfor i in range(len(word) // 2):\n    if word[i] != word[-(i + 1)]:\n        is_pal = False\n        break\nprint(is_pal)",
+      "answer": "The loop compares outer letters with inner letters, and racecar matches at every step, so True prints.\n\ncode:\nword = \"racecar\"\nprint(word == word[::-1])\n\nreal example:\nChecking whether a serial number reads the same backwards."
+    }
+  ]
+}

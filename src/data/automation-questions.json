@@ -1,0 +1,148 @@
+{
+  "automation_testing_python_questions": [
+    {
+      "id": 16,
+      "priority": "MUST KNOW",
+      "topic": "List Mutability & Reference Behavior",
+      "question": "What will be the output of the following Python code?\nlist1 = [1, 3]\nlist2 = list1\nlist1[0] = 4\nprint(list2)",
+      "simple_solution": "list1 = [1, 3]\nlist2 = list1          # list2 points to same list\nlist1[0] = 4           # modifies both\nprint(list2)           # [4, 3]",
+      "why_for_automation": "Lists are passed by reference. If you pass test data to a function and it modifies it, your original data changes. Always use list1.copy() when you want an independent copy.",
+      "key_takeaway": "list2 = list1 creates a reference, not a copy. Use .copy() for a real copy."
+    },
+    {
+      "id": 20,
+      "priority": "MUST KNOW",
+      "topic": "Function Modifying List In-Place",
+      "question": "What will be the output of the following Python program?\ndef addItem(listParam):\n    listParam += [1]\n\nmylist = [1, 2, 3, 4]\naddItem(mylist)\nprint(len(mylist))",
+      "simple_solution": "def add_item(lst):\n    lst += [1]         # mutates original list\n\nmylist = [1, 2, 3, 4]\nadd_item(mylist)\nprint(len(mylist))     # 5",
+      "why_for_automation": "Helper functions that append results/logs to a shared list will mutate the caller's list. Be aware of this behavior.",
+      "key_takeaway": "+= on a list mutates in place; the original list is changed."
+    },
+    {
+      "id": 50,
+      "priority": "MUST KNOW",
+      "topic": "Remove Duplicates from a List",
+      "question": "Write code to remove duplicates from a list",
+      "simple_solution": "# Method 1: order not preserved (fast)\nresult = list(set(lst))\n\n# Method 2: order preserved\nresult = []\nfor x in lst:\n    if x not in result:\n        result.append(x)\n\n# Method 3: one-liner order preserved\nresult = list(dict.fromkeys(lst))",
+      "why_for_automation": "Test data often has duplicates; deduplicate expected values before comparison.",
+      "key_takeaway": "Use set() for speed, dict.fromkeys() to preserve order."
+    },
+    {
+      "id": 66,
+      "priority": "MUST KNOW",
+      "topic": "Frequency of Each Element in List",
+      "question": "Write code to find frequency of each element in list",
+      "simple_solution": "from collections import Counter\n\nlst = ['pass', 'fail', 'pass', 'skip', 'pass']\nfreq = Counter(lst)\nprint(freq)              # Counter({'pass': 3, 'fail': 1, 'skip': 1})\nprint(freq['pass'])      # 3",
+      "why_for_automation": "Count passed/failed/skipped tests instantly for reporting.",
+      "key_takeaway": "Counter is the cleanest way to count occurrences."
+    },
+    {
+      "id": 88,
+      "priority": "MUST KNOW",
+      "topic": "Character Frequency Using Dictionary",
+      "question": "Count character frequency using dictionary",
+      "simple_solution": "def char_frequency(text):\n    freq = {}\n    for ch in text:\n        freq[ch] = freq.get(ch, 0) + 1\n    return freq\n\nprint(char_frequency('hello'))\n# {'h': 1, 'e': 1, 'l': 2, 'o': 1}",
+      "why_for_automation": "Teaches the dict.get(key, default) pattern - one of the most used patterns in automation for counters, config lookups, and caching.",
+      "key_takeaway": "dict.get(key, 0) + 1 is the universal counting pattern."
+    },
+    {
+      "id": 90,
+      "priority": "MUST KNOW",
+      "topic": "Merge Two Dictionaries",
+      "question": "Merge two dictionaries",
+      "simple_solution": "d1 = {'a': 1, 'b': 2}\nd2 = {'c': 3, 'd': 4}\n\n# Method 1: unpacking (works everywhere)\nmerged = {**d1, **d2}\n\n# Method 2: | operator (Python 3.9+)\nmerged = d1 | d2\n\n# Method 3: update()\nmerged = d1.copy()\nmerged.update(d2)\n\nprint(merged)  # {'a': 1, 'b': 2, 'c': 3, 'd': 4}",
+      "why_for_automation": "Merging config dicts, headers, capabilities, environment settings - very common in Selenium/Playwright/API frameworks.",
+      "key_takeaway": "{**d1, **d2} is the safest and most common merge."
+    },
+    {
+      "id": 97,
+      "priority": "MUST KNOW",
+      "topic": "Create Dictionary from Two Lists",
+      "question": "Create dictionary from two lists",
+      "simple_solution": "keys = ['name', 'age', 'city']\nvalues = ['Alice', 25, 'New York']\n\nresult = dict(zip(keys, values))\nprint(result)\n# {'name': 'Alice', 'age': 25, 'city': 'New York'}",
+      "why_for_automation": "Converting headers + row data into dicts (CSV reading, API payload building).",
+      "key_takeaway": "dict(zip(keys, values)) is the standard pairing idiom."
+    },
+    {
+      "id": 101,
+      "priority": "MUST KNOW",
+      "topic": "Check if Two Dictionaries Are Equal",
+      "question": "Check if two dictionaries are equal",
+      "simple_solution": "d1 = {'a': 1, 'b': 2}\nd2 = {'b': 2, 'a': 1}\nd3 = {'a': 1, 'b': 3}\n\nprint(d1 == d2)   # True  (order does not matter)\nprint(d1 == d3)   # False",
+      "why_for_automation": "Comparing actual vs expected API responses - the most common assertion pattern.",
+      "key_takeaway": "== compares dict contents, not order."
+    },
+    {
+      "id": 105,
+      "priority": "MUST KNOW",
+      "topic": "Convert Dictionary to List of Tuples",
+      "question": "Convert dictionary to list of tuples",
+      "simple_solution": "d = {'a': 1, 'b': 2, 'c': 3}\nresult = list(d.items())\nprint(result)  # [('a', 1), ('b', 2), ('c', 3)]",
+      "why_for_automation": "Iterating key-value pairs is foundational; .items() is used in every framework.",
+      "key_takeaway": "dict.items() gives (key, value) pairs."
+    },
+    {
+      "id": 107,
+      "priority": "MUST KNOW",
+      "topic": "Character Counter Using defaultdict",
+      "question": "Implement character counter using defaultdict",
+      "simple_solution": "from collections import defaultdict\n\ndef char_counter(text):\n    counter = defaultdict(int)\n    for ch in text:\n        counter[ch] += 1\n    return dict(counter)\n\nprint(char_counter('hello world'))\n# {'h': 1, 'e': 1, 'l': 3, 'o': 2, ' ': 1, 'w': 1, 'r': 1, 'd': 1}",
+      "why_for_automation": "Cleaner than .get() pattern; no need to set a default.",
+      "key_takeaway": "defaultdict(int) auto-initializes missing keys to 0."
+    },
+    {
+      "id": 212,
+      "priority": "HIGH VALUE",
+      "topic": "Write List of Dictionaries to CSV",
+      "question": "Write list of dictionaries to CSV",
+      "simple_solution": "import csv\n\ndata = [\n    {'name': 'test_login', 'status': 'PASS', 'time': 1.2},\n    {'name': 'test_logout', 'status': 'FAIL', 'time': 0.8},\n]\n\nwith open('report.csv', 'w', newline='') as f:\n    writer = csv.DictWriter(f, fieldnames=['name', 'status', 'time'])\n    writer.writeheader()\n    writer.writerows(data)",
+      "why_for_automation": "Generating test reports is a core automation task.",
+      "key_takeaway": "csv.DictWriter maps dict keys to CSV columns directly."
+    },
+    {
+      "id": 214,
+      "priority": "HIGH VALUE",
+      "topic": "Write Dictionary to JSON File",
+      "question": "Write dictionary to JSON file",
+      "simple_solution": "import json\n\ndata = {'test': 'login', 'status': 'PASS', 'duration': 1.5}\n\nwith open('result.json', 'w') as f:\n    json.dump(data, f, indent=4)",
+      "why_for_automation": "Saving API payloads, configs, test evidence.",
+      "key_takeaway": "json.dump(data, file, indent=4) for readable output."
+    },
+    {
+      "id": 303,
+      "priority": "HIGH VALUE",
+      "topic": "Read CSV into List of Dictionaries",
+      "question": "Write a function that reads a CSV file and returns the data as a list of dictionaries.",
+      "simple_solution": "import csv\n\ndef csv_to_dict_list(filename):\n    with open(filename, 'r') as f:\n        reader = csv.DictReader(f)\n        return [row for row in reader]\n\n# Usage\ndata = csv_to_dict_list('testdata.csv')\nfor row in data:\n    print(row['username'], row['password'])",
+      "why_for_automation": "Data-driven testing - one of the most common automation patterns.",
+      "key_takeaway": "csv.DictReader auto-uses first row as keys."
+    },
+    {
+      "id": 361,
+      "priority": "HIGH VALUE",
+      "topic": "Fill Form with Dictionary Data (Selenium)",
+      "question": "Write a function that fills a form with test data (dictionary mapping field names to values).",
+      "simple_solution": "from selenium.webdriver.common.by import By\n\ndef fill_form(driver, form_data):\n    for field_name, value in form_data.items():\n        element = driver.find_element(By.NAME, field_name)\n        element.clear()\n        element.send_keys(value)\n\n# Usage\nfill_form(driver, {'username': 'alice', 'password': 'secret'})",
+      "why_for_automation": "Directly usable Selenium form automation pattern.",
+      "key_takeaway": "Iterate dict.items() to fill form fields dynamically."
+    },
+    {
+      "id": 416,
+      "priority": "HIGH VALUE",
+      "topic": "Test Execution Summary Dictionary",
+      "question": "Write a function to create a test execution summary dictionary with start/end time and pass rate.",
+      "simple_solution": "def create_test_summary(results, start_time, end_time):\n    duration = (end_time - start_time).total_seconds()\n    passed = sum(1 for r in results if r['status'] == 'PASS')\n    rate = round((passed / len(results)) * 100, 2) if results else 0\n    return {\n        'duration': duration,\n        'passed': passed,\n        'total': len(results),\n        'pass_rate': rate\n    }",
+      "why_for_automation": "Exactly what a test reporter does - summary of the run.",
+      "key_takeaway": "Combine sum(), generator expressions, and dict return for reports."
+    },
+    {
+      "id": 409,
+      "priority": "HIGH VALUE",
+      "topic": "StepLogger Class for Test Steps",
+      "question": "Write a StepLogger class that stores test steps as a list of dictionaries with timestamps.",
+      "simple_solution": "from datetime import datetime\n\nclass StepLogger:\n    def __init__(self):\n        self.steps = []\n\n    def add_step(self, name, status, details=''):\n        step = {\n            'timestamp': datetime.now().isoformat(),\n            'step': name,\n            'status': status,\n            'details': details\n        }\n        self.steps.append(step)\n        return step\n\n# Usage\nlogger = StepLogger()\nlogger.add_step('Open browser', 'PASS')\nlogger.add_step('Login', 'FAIL', 'Invalid password')\nprint(logger.steps)",
+      "why_for_automation": "Logging test steps with timestamps is directly reusable in any framework.",
+      "key_takeaway": "List of dicts + timestamps = simple, effective step logger."
+    }
+  ]
+}

@@ -1,0 +1,255 @@
+{
+  "description": "50 most important questions for automation testing interviews",
+  "questions": [
+    {
+      "id": 1,
+      "question": "How do you write a Python string using single quotes?",
+      "answer": "Wrap the text in single quote characters, like 'hello'. The quotes mark where the text begins and ends.\n\ncode:\ns = 'hello'\nprint(s)  # hello\n\nreal example:\nStoring everyday text such as 'Good morning' in a variable."
+    },
+    {
+      "id": 2,
+      "question": "How do you write a Python string using double quotes?",
+      "answer": "Wrap the text in double quote characters, like \"hello\". Double-quoted strings behave exactly like single-quoted ones.\n\ncode:\ns = \"hello\"\nprint(s)  # hello\n\nreal example:\nStoring a greeting message in a program."
+    },
+    {
+      "id": 3,
+      "question": "What is the value of 'a' + 'b'?",
+      "answer": "The + operator joins two strings end to end, so 'a' plus 'b' becomes the single string 'ab'.\n\ncode:\nprint('a' + 'b')  # ab\n\nreal example:\nBuilding a full name by joining a first name and a last name."
+    },
+    {
+      "id": 4,
+      "question": "How do you create an empty string?",
+      "answer": "A pair of quotes with nothing between them creates an empty string, which contains zero characters.\n\ncode:\nempty = ''\nprint(len(empty))  # 0\n\nreal example:\nStarting a variable as blank text before appending to it."
+    },
+    {
+      "id": 5,
+      "question": "What does str(123) return?",
+      "answer": "str() converts a number into its text form, so str(123) becomes the string '123' instead of the integer 123.\n\ncode:\nprint(str(123))  # 123\nprint(type(str(123)))  # <class 'str'>\n\nreal example:\nTurning a price number into text so it can be shown in a label."
+    },
+    {
+      "id": 6,
+      "question": "What is the type of 'python'?",
+      "answer": "Single-quoted 'python' is a string, and its type is str, which is short for string.\n\ncode:\nprint(type('python'))  # <class 'str'>\n\nreal example:\nChecking that user input came through as text before processing it."
+    },
+    {
+      "id": 7,
+      "question": "Are single-quoted and double-quoted strings different in behavior?",
+      "answer": "Single-quoted and double-quoted strings behave exactly the same; the choice is just style.\n\ncode:\nprint('hi' == \"hi\")  # True\n\nreal example:\nPicking whichever quote style lets you avoid escaping characters in a message."
+    },
+    {
+      "id": 8,
+      "question": "Can you write a string with triple single quotes?",
+      "answer": "Three single quotes in a row create a string that can hold multiple lines of text.\n\ncode:\ns = '''hello\nworld'''\nprint(s)\n\nreal example:\nStoring a multi-line note, address block, or paragraph."
+    },
+    {
+      "id": 9,
+      "question": "Can you concatenate a string and an integer with +?",
+      "answer": "No, adding a string and an integer raises a TypeError because Python will not combine different types by guessing.\n\ncode:\n# print('x' + 5)  # TypeError: can only concatenate str\n\nreal example:\nConvert the number first, for example 'x' + str(5), before joining."
+    },
+    {
+      "id": 10,
+      "question": "How do you join a number into a string?",
+      "answer": "Convert the number to text first with str() or an f-string, then combine it with the rest of the text.\n\ncode:\nage = 25\nprint('Age: ' + str(age))  # Age: 25\nprint(f'Age: {age}')  # Age: 25\n\nreal example:\nShowing a player's score or age as part of a text message."
+    },
+    {
+      "id": 11,
+      "question": "Is '5' + 5 valid Python?",
+      "answer": "No, '5' + 5 raises a TypeError because you cannot mix a string and an integer with +.\n\ncode:\n# '5' + 5  # TypeError\nprint(int('5') + 5)  # 10  (convert first)\n\nreal example:\nAdding numbers typed by the user requires converting them with int() first."
+    },
+    {
+      "id": 12,
+      "question": "Can you repeat a string with a float such as 'a' * 2.0?",
+      "answer": "No, repeating needs a whole number; using a float like 2.0 raises a TypeError.\n\ncode:\n# 'a' * 2.0  # TypeError: can't multiply sequence by non-int\nprint('a' * 2)  # aa\n\nreal example:\nPreventing accidental repetition by decimals when formatting output."
+    },
+    {
+      "id": 13,
+      "question": "How do you repeat a string N times in one expression?",
+      "answer": "Use s * N; Python duplicates the whole string N times in a single expression.\n\ncode:\ns = 'ab'\nprint(s * 3)  # ababab\n\nreal example:\nTripling a separator like '-=' for a decorated heading."
+    },
+    {
+      "id": 14,
+      "question": "What does len('Python') return?",
+      "answer": "len() counts the number of characters, and 'Python' has six letters, so it returns 6.\n\ncode:\nprint(len('Python'))  # 6\n\nreal example:\nChecking how long a username or label is."
+    },
+    {
+      "id": 15,
+      "question": "What does len('hello world') return?",
+      "answer": "The space counts as a character too, so 5 letters + 1 space + 5 letters gives 11.\n\ncode:\nprint(len('hello world'))  # 11\n\nreal example:\nMeasuring a message length before sending or storing it."
+    },
+    {
+      "id": 16,
+      "question": "What does len('a\\nb') return?",
+      "answer": "The \\n inside the quotes is one newline character, so the string is 'a', newline, and 'b', giving 3.\n\ncode:\ntext = 'a\\nb'\nprint(len(text))  # 3\n\nreal example:\nCounting characters in text that has line breaks built in."
+    },
+    {
+      "id": 17,
+      "question": "What does len('') return?",
+      "answer": "An empty string has no characters at all, so its length is 0.\n\ncode:\nprint(len(''))  # 0\n\nreal example:\nChecking if a text input field was left blank."
+    },
+    {
+      "id": 18,
+      "question": "What is the index of the first character of a string?",
+      "answer": "Counting starts at zero in Python, so the first character of a string is always at index 0.\n\ncode:\nprint('abc'[0])  # a\n\nreal example:\nTaking the initial letter of a name."
+    },
+    {
+      "id": 19,
+      "question": "What does 'Python'[0] return?",
+      "answer": "Index 0 selects the very first character, so 'Python'[0] is 'P'.\n\ncode:\nprint('Python'[0])  # P\n\nreal example:\nReading the leading letter of an airport code."
+    },
+    {
+      "id": 20,
+      "question": "What does 'Python'[1] return?",
+      "answer": "Index 1 picks the second character because Python counts starting from zero.\n\ncode:\nprint('Python'[1])  # y\n\nreal example:\nGrabbing the second letter of a three-letter abbreviation."
+    },
+    {
+      "id": 21,
+      "question": "What does 'Python'[-1] return?",
+      "answer": "Negative indexes count from the end, and -1 always means the last character.\n\ncode:\nprint('Python'[-1])  # n\n\nreal example:\nFinding the last letter of a word without needing its length."
+    },
+    {
+      "id": 22,
+      "question": "What does 'Python'[-2] return?",
+      "answer": "Index -2 is two from the end, which is the character 'o' in 'Python'.\n\ncode:\nprint('Python'[-2])  # o\n\nreal example:\nTaking the next-to-last character of a shortened code."
+    },
+    {
+      "id": 23,
+      "question": "What happens at 'abc'[3]?",
+      "answer": "'abc' has only indexes 0, 1, and 2, so index 3 is out of range and raises IndexError.\n\ncode:\n# 'abc'[3]  # IndexError: string index out of range\n\nreal example:\nCheck the string length before indexing to avoid an IndexError."
+    },
+    {
+      "id": 24,
+      "question": "How do you get the last character of any string s?",
+      "answer": "Use index -1, which always means the last character, regardless of string length.\n\ncode:\ns = 'cat'\nprint(s[-1])  # t\n\nreal example:\nReading the last letter of a file extension."
+    },
+    {
+      "id": 25,
+      "question": "Can you modify a character with s[0] = 'X'?",
+      "answer": "No, strings are immutable, so assigning a new value to an index raises a TypeError.\n\ncode:\ns = 'cat'\n# s[0] = 'X'  # TypeError: 'str' object does not support item assignment\n\nreal example:\nBuild a new string instead, for example 'X' + s[1:] to change the first letter."
+    },
+    {
+      "id": 26,
+      "question": "What type is the result of 'abc'[0]?",
+      "answer": "Even a single character is still a full string; Python has no separate 'character' type.\n\ncode:\nprint(type('abc'[0]))  # <class 'str'>\n\nreal example:\nTreating each digit of a phone number as an individual string."
+    },
+    {
+      "id": 27,
+      "question": "What does 'Python'[0:2] return?",
+      "answer": "Slicing from index 0 up to (but not including) 2 returns 'Py'.\n\ncode:\nprint('Python'[0:2])  # Py\n\nreal example:\nTaking the first two letters of a two-letter country code."
+    },
+    {
+      "id": 28,
+      "question": "What does 'Python'[1:3] return?",
+      "answer": "Slicing from 1 to 3 returns characters at positions 1 and 2, giving 'yt'.\n\ncode:\nprint('Python'[1:3])  # yt\n\nreal example:\nExtracting the middle two letters from a word."
+    },
+    {
+      "id": 29,
+      "question": "What does 'Python'[:3] return?",
+      "answer": "Slicing with no start index begins at 0, so [:3] returns the first three characters.\n\ncode:\nprint('Python'[:3])  # Pyt\n\nreal example:\nTaking the first three letters of a word as a short code."
+    },
+    {
+      "id": 30,
+      "question": "What does 'Python'[3:] return?",
+      "answer": "Slicing with no end index goes to the end, so [3:] returns from position 3 onward.\n\ncode:\nprint('Python'[3:])  # hon\n\nreal example:\nDropping the first part of a string and keeping the rest."
+    },
+    {
+      "id": 31,
+      "question": "What does 'Python'[::2] return?",
+      "answer": "A step of 2 skips every other character, taking 'P', 't', 'o' from 'Python'.\n\ncode:\nprint('Python'[::2])  # Pto\n\nreal example:\nPicking every second character in a periodic data string."
+    },
+    {
+      "id": 32,
+      "question": "What does 'Python'[::-1] return?",
+      "answer": "A step of -1 reverses the whole string, turning 'Python' into 'nohtyP'.\n\ncode:\nprint('Python'[::-1])  # nohtyP\n\nreal example:\nChecking whether a word reads the same backwards."
+    },
+    {
+      "id": 33,
+      "question": "What does 'Python'[:-2] return?",
+      "answer": "[:-2] slices off the last two characters, so 'Python' becomes 'Pyth'.\n\ncode:\nprint('Python'[:-2])  # Pyth\n\nreal example:\nRemoving a two-character suffix from a word."
+    },
+    {
+      "id": 34,
+      "question": "How do you reverse a string using slicing?",
+      "answer": "Use s[::-1]; the negative step makes the slice walk the string backwards.\n\ncode:\ns = 'stressed'\nprint(s[::-1])  # desserts\n\nreal example:\nFlipping a word for a spelling game."
+    },
+    {
+      "id": 35,
+      "question": "What does 'racecar'[::-1] return?",
+      "answer": "Reversing 'racecar' gives the same word because it is a palindrome.\n\ncode:\nprint('racecar'[::-1])  # racecar\n\nreal example:\nChecking whether a word reads identically backwards."
+    },
+    {
+      "id": 36,
+      "question": "Which loop prints each character of 'abc'?",
+      "answer": "Assign c to each character in turn and print it; 'abc' prints a, then b, then c.\n\ncode:\nfor c in 'abc':\n    print(c)\n\nreal example:\nPrinting each letter of a word on its own line."
+    },
+    {
+      "id": 37,
+      "question": "How do you iterate with index and character?",
+      "answer": "Use enumerate(s), which yields both i (the index) and c (the character) together.\n\ncode:\nfor i, c in enumerate('abc'):\n    print(i, c)  # 0 a, 1 b, 2 c\n\nreal example:\nPrinting each character of a text with its position number."
+    },
+    {
+      "id": 38,
+      "question": "What does 'ell' in 'hello' return?",
+      "answer": "The in operator checks whether a substring appears anywhere in the string, and 'ell' is inside 'hello'.\n\ncode:\nprint('ell' in 'hello')  # True\n\nreal example:\nChecking whether a keyword appears inside a sentence."
+    },
+    {
+      "id": 39,
+      "question": "What does 'py' in 'Python' return?",
+      "answer": "The check is case-sensitive: lowercase 'py' does not match 'Python' (uppercase P).\n\ncode:\nprint('py' in 'Python')  # False\n\nreal example:\nAvoiding case mismatches when searching user-entered text."
+    },
+    {
+      "id": 40,
+      "question": "Which operator tests substring presence?",
+      "answer": "The in operator tests whether a substring is contained in a string.\n\ncode:\nprint('an' in 'banana')  # True\n\nreal example:\nUsing in to search for keywords inside a sentence."
+    },
+    {
+      "id": 41,
+      "question": "How do you write a raw string?",
+      "answer": "Prefix a string with r or R, like r'text', to tell Python to treat backslashes as literal characters.\n\ncode:\npath = r'C:\\new'\nprint(path)  # C:\\new\n\nreal example:\nWriting Windows file paths and regex patterns without escaping."
+    },
+    {
+      "id": 42,
+      "question": "Why use raw strings?",
+      "answer": "Raw strings disable escape processing, which is essential for regular expressions and Windows paths with backslashes.\n\ncode:\npattern = r'\\d+'  # matches digits, backslashes stay literal\n\nreal example:\nWriting a regex like r'C:\\\\Users' without backslash soup."
+    },
+    {
+      "id": 43,
+      "question": "How do you write a multi-line string?",
+      "answer": "Use triple quotes (either three single quotes or three double quotes) to write a string that spans several lines.\n\ncode:\ntext = '''first line\nsecond line'''\nprint(text)\n\nreal example:\nStoring a multi-line address or message in one variable."
+    },
+    {
+      "id": 44,
+      "question": "Are strings mutable?",
+      "answer": "Strings are immutable, meaning their characters cannot be changed after creation.\n\ncode:\ns = 'hi'\n# s[0] = 'x'  # TypeError: 'str' object does not support item assignment\n\nreal example:\nTreating strings as safe, unchangeable text you can trust."
+    },
+    {
+      "id": 45,
+      "question": "What happens when you assign s[0] = 'X'?",
+      "answer": "Assigning to a string index is not allowed because strings are immutable, raising a TypeError.\n\ncode:\ns = 'cat'\n# s[0] = 'X'  # TypeError\n\nreal example:\nCreate a replacement string with slicing and + instead."
+    },
+    {
+      "id": 46,
+      "question": "How do you convert '42' to an integer?",
+      "answer": "int('42') parses the text '42' and returns the integer 42.\n\ncode:\nprint(int('42'))  # 42\n\nreal example:\nConverting digits typed by a user into a number for math."
+    },
+    {
+      "id": 47,
+      "question": "How do you convert '3.14' to a float?",
+      "answer": "float('3.14') parses the text and returns the floating-point number 3.14.\n\ncode:\nprint(float('3.14'))  # 3.14\n\nreal example:\nConverting a price entered as text into a value to calculate with."
+    },
+    {
+      "id": 48,
+      "question": "What happens with int('abc')?",
+      "answer": "int('abc') cannot be parsed as a number, so Python raises a ValueError.\n\ncode:\n# int('abc')  # ValueError: invalid literal for int()\n\nreal example:\nValidate numeric input before converting it."
+    },
+    {
+      "id": 49,
+      "question": "What does 'abc'[1:3][::-1] return?",
+      "answer": "First 'abc'[1:3] gives 'bc', then [::-1] reverses it into 'cb'.\n\ncode:\nprint('abc'[1:3][::-1])  # cb\n\nreal example:\nReversing a slice of a word in one chained expression."
+    },
+    {
+      "id": 50,
+      "question": "What does ('hi ' * 2).strip() return?",
+      "answer": "'hi ' repeated twice is 'hi hi ', and strip() removes the outer spaces to give 'hi hi'.\n\ncode:\nprint(('hi ' * 2).strip())  # hi hi\n\nreal example:\nCleaning up repeated-text patterns that add stray spaces."
+    }
+  ]
+}

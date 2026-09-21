@@ -1,0 +1,767 @@
+{
+  "basic_syntax": {
+    "description": "50 most important questions for automation testing interviews",
+    "questions": [
+      {
+        "id": 1,
+        "question": "What is the correct file extension for Python files?",
+        "answer": "Python source files use the .py extension. It tells Python and other tools that the file contains Python code.\n\ncode:\n# save this file as hello.py\nprint('Hello world')\n\nreal example:\nEvery Python script you save, like a game or calculator, must end in .py so it runs correctly."
+      },
+      {
+        "id": 2,
+        "question": "How do you write a single-line comment in Python?",
+        "answer": "Use the # symbol to write a single-line comment. Everything after # on that line is ignored by Python.\n\ncode:\n# this is a comment\nx = 5  # and a comment at line end\n\nreal example:\nProgrammers use # comments to leave short notes that explain tricky lines of code."
+      },
+      {
+        "id": 3,
+        "question": "How do you write a multi-line comment in Python?",
+        "answer": "Python has no true multi-line comment, but a string wrapped in triple single quotes ''' spans several lines and is commonly used as a multi-line comment.\n\ncode:\nx = 5\n'''\nthis text is\ntreated as a comment\n'''\nprint(x)\n\nreal example:\nBlocking out a few lines of notes above a tricky section of code."
+      },
+      {
+        "id": 4,
+        "question": "What function is used to display output in Python?",
+        "answer": "print() displays values or text to the screen. It is the main way a program produces output.\n\ncode:\nprint('Hello')\nprint(3 + 4)\n\nreal example:\nA quiz app uses print() to show the question and the final score."
+      },
+      {
+        "id": 5,
+        "question": "What function is used to get user input in Python?",
+        "answer": "input() reads a line of text typed by the user and returns it as a string. You can pass a prompt message to show first.\n\ncode:\nname = input('What is your name? ')\nprint('Hi', name)\n\nreal example:\nA command-line tool asks for a file name or an option using input()."
+      },
+      {
+        "id": 6,
+        "question": "What is the correct syntax for an if statement?",
+        "answer": "An if statement starts with if, then a condition, then a colon, followed by an indented block that runs when the condition is true.\n\ncode:\nage = 18\nif age >= 18:\n    print('Adult')\n\nreal example:\nChecking whether a typed password is long enough before accepting it."
+      },
+      {
+        "id": 7,
+        "question": "How do you write an else statement?",
+        "answer": "The else statement follows an if block and runs only when the if condition was false. It also ends with a colon and an indented block.\n\ncode:\nage = 15\nif age >= 18:\n    print('Adult')\nelse:\n    print('Minor')\n\nreal example:\nShowing a success message when a form submits, otherwise showing an error."
+      },
+      {
+        "id": 8,
+        "question": "How do you write an elif statement?",
+        "answer": "elif lets you check more conditions after if. Each elif runs only if all earlier conditions were false.\n\ncode:\nscore = 85\nif score >= 90:\n    grade = 'A'\nelif score >= 80:\n    grade = 'B'\nelse:\n    grade = 'C'\nprint(grade)\n\nreal example:\nConverting a test score into a letter grade."
+      },
+      {
+        "id": 9,
+        "question": "What is the syntax for a for loop?",
+        "answer": "A for loop uses syntax for item in iterable: followed by an indented block. It runs the block once for every element.\n\ncode:\nfor fruit in ['apple', 'banana']:\n    print(fruit)\n\nreal example:\nProcessing every row of a spreadsheet one by one."
+      },
+      {
+        "id": 10,
+        "question": "What is the syntax for a while loop?",
+        "answer": "A while loop uses while condition: followed by an indented block. It repeats the block as long as the condition stays true.\n\ncode:\nx = 0\nwhile x < 3:\n    print(x)\n    x += 1\n\nreal example:\nKeeping a loading screen showing until a download finishes."
+      },
+      {
+        "id": 11,
+        "question": "How do you define a function in Python?",
+        "answer": "Define a function with def, the name, parentheses with parameters, a colon, then an indented body.\n\ncode:\ndef greet(name):\n    print('Hello', name)\n\ngreet('Anna')\n\nreal example:\nWriting a reusable function, like one that calculates shipping cost."
+      },
+      {
+        "id": 12,
+        "question": "What keyword is used to return a value from a function?",
+        "answer": "return sends a value back to the caller and immediately stops the function. Any code after return does not run.\n\ncode:\ndef double(x):\n    return x * 2\n\nprint(double(5))\n\nreal example:\nA function that computes sales tax and returns the amount to whoever called it."
+      },
+      {
+        "id": 13,
+        "question": "How do you import a module in Python?",
+        "answer": "import module_name loads the whole module so you can use its contents through the module name.\n\ncode:\nimport math\nprint(math.sqrt(16))\n\nreal example:\nImporting the math module to compute square roots in a geometry tool."
+      },
+      {
+        "id": 14,
+        "question": "How do you import a specific function from a module?",
+        "answer": "from module_name import function_name imports just one specific name, so you can call it without the module prefix.\n\ncode:\nfrom math import sqrt\nprint(sqrt(16))\n\nreal example:\nImporting only sqrt to avoid typing math. every time."
+      },
+      {
+        "id": 15,
+        "question": "What is the correct way to handle exceptions?",
+        "answer": "Wrap risky code in try: and handle the problem in except:. If no error happens, the except block is skipped.\n\ncode:\ntry:\n    n = int('abc')\nexcept ValueError:\n    n = 0\nprint(n)\n\nreal example:\nSafely parsing a user input that might not be a number."
+      },
+      {
+        "id": 16,
+        "question": "What keyword is used to define a class?",
+        "answer": "class defines a new type, a blueprint for creating objects. A class bundles data and the methods that work on it.\n\ncode:\nclass Dog:\n    def bark(self):\n        print('Woof')\n\nreal example:\nModeling real things in an app, like a User or a Product."
+      },
+      {
+        "id": 17,
+        "question": "What is the syntax for creating an object from a class?",
+        "answer": "Create an instance (object) by calling the class name like a function, with parentheses at the end.\n\ncode:\nclass Dog:\n    pass\n\nd = Dog()\nprint(d)\n\nreal example:\nCreating one user account object from a User class blueprint."
+      },
+      {
+        "id": 18,
+        "question": "How do you access a method of an object?",
+        "answer": "Access a method using dot notation: object_name.method_name(). The parentheses call the method.\n\ncode:\nname = 'python'\nprint(name.upper())\n\nreal example:\nCalling .upper() to turn typed text into uppercase in a signup form."
+      },
+      {
+        "id": 19,
+        "question": "What is the purpose of the __init__ method?",
+        "answer": "__init__ is the constructor. It runs automatically when an instance is created and is where you set up initial attributes with self.\n\ncode:\nclass Person:\n    def __init__(self, name):\n        self.name = name\n\np = Person('Ana')\nprint(p.name)\n\nreal example:\nStoring a username and age right when a new account is made."
+      },
+      {
+        "id": 20,
+        "question": "What does the pass statement do?",
+        "answer": "pass does nothing; it is a placeholder that keeps an empty block valid. You fill it in with real code later.\n\ncode:\nclass Temp:\n    pass\n\nreal example:\nLeaving a stub class or function in a draft so the file still runs."
+      },
+      {
+        "id": 21,
+        "question": "What is indentation used for in Python?",
+        "answer": "Indentation, leading spaces before a line, defines blocks of code in Python. It replaces the braces other languages use.\n\ncode:\nif True:\n    print('inside the block')\nprint('outside the block')\n\nreal example:\nStudents indent the body inside a loop so only those lines repeat."
+      },
+      {
+        "id": 22,
+        "question": "How many spaces are recommended for indentation in Python?",
+        "answer": "The PEP 8 style guide recommends 4 spaces for each indentation level. You should stay consistent and never mix tabs and spaces.\n\ncode:\nif True:\n    print('4 spaces before me')\n\nreal example:\nTeams use 4 spaces so all code in a project looks identical."
+      },
+      {
+        "id": 23,
+        "question": "What is the purpose of the break statement?",
+        "answer": "break immediately exits the loop it is inside, even if the loop condition is still true.\n\ncode:\nfor i in range(10):\n    if i == 3:\n        break\n    print(i)\n\nreal example:\nStopping a search loop as soon as the desired item is found."
+      },
+      {
+        "id": 24,
+        "question": "What is the purpose of the continue statement?",
+        "answer": "continue skips the rest of the current iteration and jumps straight to the next one.\n\ncode:\nfor i in range(5):\n    if i == 2:\n        continue\n    print(i)\n\nreal example:\nSkipping empty lines while reading through a text file."
+      },
+      {
+        "id": 25,
+        "question": "What does the range() function do?",
+        "answer": "range(n) generates the numbers 0 up to n-1. It is almost always used with for loops to repeat an action a set number of times.\n\ncode:\nfor i in range(3):\n    print(i)\n\nreal example:\nTrying to reconnect to WiFi exactly three times before giving up."
+      },
+      {
+        "id": 26,
+        "question": "What is the syntax for a lambda function?",
+        "answer": "A lambda is a tiny anonymous function written as lambda arguments: expression. It evaluates and returns the expression.\n\ncode:\ndouble = lambda x: x * 2\nprint(double(4))\n\nreal example:\nUsing a small inline function as a sort key or callback."
+      },
+      {
+        "id": 27,
+        "question": "How do you write a conditional expression (ternary operator)?",
+        "answer": "A conditional expression (ternary operator) picks one of two values: value_if_true if condition else value_if_false.\n\ncode:\nage = 20\nstatus = 'adult' if age >= 18 else 'minor'\nprint(status)\n\nreal example:\nChoosing a label without writing a full if/else block."
+      },
+      {
+        "id": 28,
+        "question": "How do you create a docstring?",
+        "answer": "A docstring is a triple-quoted string placed as the first statement of a module, function, class, or method. It documents that code.\n\ncode:\ndef add(a, b):\n    '''Return the sum of a and b.'''\n    return a + b\n\nprint(add(2, 3))\n\nreal example:\nWriting usage notes so that help(add) shows them to users."
+      },
+      {
+        "id": 29,
+        "question": "What is the correct way to check if a value is None?",
+        "answer": "Use if value is None: to test for the special None value. The identity check is the correct and safe way to compare with None.\n\ncode:\nx = None\nif x is None:\n    print('no value')\n\nreal example:\nChecking whether an optional form field was never filled in."
+      },
+      {
+        "id": 30,
+        "question": "What is the difference between == and is?",
+        "answer": "== compares whether two values are equal; is compares whether two names point to the exact same object in memory.\n\ncode:\na = [1, 2]\nb = [1, 2]\nprint(a == b)  # True, values match\nprint(a is b)  # False, different objects\n\nreal example:\nUse == for user data like passwords, and use is only for singletons like None."
+      },
+      {
+        "id": 31,
+        "question": "What is the purpose of the assert statement?",
+        "answer": "assert checks a condition and raises AssertionError if it is false. It is used to catch impossible situations early.\n\ncode:\nx = 10\nassert x > 0, 'x must be positive'\nprint(x)\n\nreal example:\nValidating input in a test or data pipeline before continuing."
+      },
+      {
+        "id": 32,
+        "question": "How do you raise an exception?",
+        "answer": "raise deliberately throws an exception, stopping normal flow so the caller can handle the problem.\n\ncode:\ndef set_age(x):\n    if x < 0:\n        raise ValueError('Age cannot be negative')\n    return x\n\nreal example:\nRejecting invalid input like a negative age on a form."
+      },
+      {
+        "id": 33,
+        "question": "What is the purpose of the finally clause?",
+        "answer": "The finally clause always runs, whether an exception was raised or not. It is the perfect place for cleanup code.\n\ncode:\ntry:\n    value = int('5')\nfinally:\n    print('cleanup done')\nprint(value)\n\nreal example:\nClosing a file or database connection no matter what happened."
+      },
+      {
+        "id": 34,
+        "question": "What is the syntax for a decorator?",
+        "answer": "A decorator is written with @decorator_name on the line directly above a function definition. It wraps that function with extra behavior.\n\ncode:\ndef shout(func):\n    def wrapper():\n        print(func() + '!')\n    return wrapper\n\n@shout\ndef greet():\n    return 'Hi'\n\ngreet()\n\nreal example:\nAdding logging or timing to functions without changing their code."
+      },
+      {
+        "id": 35,
+        "question": "How do you write a list comprehension?",
+        "answer": "A list comprehension builds a list in one line using [expression for item in iterable if condition].\n\ncode:\nsquares = [i * i for i in range(5)]\nprint(squares)\n\nreal example:\nSquaring all numbers in a dataset in a single line."
+      },
+      {
+        "id": 36,
+        "question": "How do you write a dictionary comprehension?",
+        "answer": "A dictionary comprehension builds a dict in one line using {key: value for item in iterable if condition}.\n\ncode:\nsquares = {i: i * i for i in range(4)}\nprint(squares)\n\nreal example:\nTurning a list of names into a name-to-length dictionary."
+      },
+      {
+        "id": 37,
+        "question": "What is the purpose of the with statement?",
+        "answer": "The with statement automatically sets up and cleans up a resource (a context manager), even when errors occur.\n\ncode:\nwith open('file.txt', 'w') as f:\n    f.write('hello')\n\nreal example:\nOpening a file for writing; it is closed for you automatically."
+      },
+      {
+        "id": 38,
+        "question": "How do you concatenate strings in Python?",
+        "answer": "Use + for a new joined string, or join() to combine many pieces efficiently.\n\ncode:\nfirst = 'hello'\nsecond = 'world'\nprint(first + ' ' + second)\nprint(' '.join(['hello', 'world']))\n\nreal example:\nBuilding a full name from a first and last name."
+      },
+      {
+        "id": 39,
+        "question": "What is an f-string?",
+        "answer": "An f-string is a string prefixed with f that lets you insert values or expressions inside curly braces.\n\ncode:\nname = 'Sam'\nprint(f'Hello {name}')\n\nreal example:\nInserting a user's name into a personalized email."
+      },
+      {
+        "id": 40,
+        "question": "How do you create an infinite loop?",
+        "answer": "while True: creates an infinite loop that repeats forever until you exit it with break or stop the program.\n\ncode:\nwhile True:\n    print('looping')\n    break\n\nreal example:\nA menu that keeps asking for a choice until the user picks exit."
+      },
+      {
+        "id": 41,
+        "question": "What is the difference between print() and return?",
+        "answer": "print() displays text on the screen; return sends a value back from a function so the caller can use it.\n\ncode:\ndef make():\n    return 42\n\nresult = make()\nprint(result)\n\nreal example:\nFunctions compute and return values; print is only for showing them."
+      },
+      {
+        "id": 42,
+        "question": "How do you define a variable with multiple assignments?",
+        "answer": "a, b, c = 1, 2, 3 assigns the three values to the three names, in order.\n\ncode:\na, b, c = 1, 2, 3\nprint(a, b, c)\n\nreal example:\nUnpacking length, width, height from a measurement tuple."
+      },
+      {
+        "id": 43,
+        "question": "How do you swap two variables in Python?",
+        "answer": "a, b = b, a swaps the two variables cleanly without needing a temporary variable.\n\ncode:\na, b = 1, 2\na, b = b, a\nprint(a, b)\n\nreal example:\nSwapping the first and second place competitors in a leaderboard."
+      },
+      {
+        "id": 44,
+        "question": "What is the purpose of the *args parameter?",
+        "answer": "*args collects any number of extra positional arguments into a tuple inside the function.\n\ncode:\ndef total(*args):\n    return sum(args)\n\nprint(total(1, 2, 3))\n\nreal example:\nA function that sums whatever number of prices it is given."
+      },
+      {
+        "id": 45,
+        "question": "What is the purpose of the **kwargs parameter?",
+        "answer": "**kwargs collects any number of extra keyword arguments into a dictionary inside the function.\n\ncode:\ndef show(**kwargs):\n    print(kwargs)\n\nshow(name='Ana', age=30)\n\nreal example:\nPassing many optional settings to a configuration function."
+      },
+      {
+        "id": 46,
+        "question": "How do you call a function with keyword arguments?",
+        "answer": "Call a function with keyword arguments by writing function_name(param=value). The function receives them by name.\n\ncode:\ndef greet(name, greeting):\n    print(greeting, name)\n\ngreet(greeting='Hi', name='Ana')\n\nreal example:\nMaking function calls clearer and independent of argument order."
+      },
+      {
+        "id": 47,
+        "question": "What is a default parameter value?",
+        "answer": "A default parameter value is used automatically when the caller does not supply that argument.\n\ncode:\ndef greet(name='friend'):\n    print('Hi', name)\n\ngreet()\ngreet('Ana')\n\nreal example:\nAn optional setting that uses a sensible default when not provided."
+      },
+      {
+        "id": 48,
+        "question": "What is the correct way to write a boolean expression?",
+        "answer": "Combine conditions with the and, or, and not operators to build True/False boolean expressions.\n\ncode:\nage = 20\nif age >= 18 and age < 65:\n    print('working age')\n\nreal example:\nChecking that an input satisfies several rules at the same time."
+      },
+      {
+        "id": 49,
+        "question": "What is short-circuit evaluation?",
+        "answer": "and stops evaluating at the first False, and or stops at the first True. Later parts of the expression may never run.\n\ncode:\nx = 0\nresult = x != 0 and 10 / x > 2\nprint(result)\n\nreal example:\nAvoiding a divide-by-zero crash by checking before dividing."
+      },
+      {
+        "id": 50,
+        "question": "What is the purpose of the isinstance() function?",
+        "answer": "isinstance(obj, Class) returns True if obj is an instance of Class or of a subclass of it.\n\ncode:\nprint(isinstance(5, int))\nprint(isinstance('hi', int))\n\nreal example:\nChecking that incoming data has the right type before using it."
+      }
+    ]
+  },
+  "variables": {
+    "description": "50 most important questions for automation testing interviews",
+    "questions": [
+      {
+        "id": 1,
+        "question": "What is a variable in Python?",
+        "answer": "A variable is a named reference to a value stored in memory. You create one by assigning a value with an equals sign.\n\ncode:\nage = 25\nprint(age)\n\nreal example:\nStoring a user's height in a health app so it can be looked up by name."
+      },
+      {
+        "id": 2,
+        "question": "How do you assign a value to a variable?",
+        "answer": "Assign a value with the equals sign: variable_name = value. This associates the value with the name.\n\ncode:\nname = 'Ana'\n\nreal example:\nSaving a setting like a username so the program can use it later."
+      },
+      {
+        "id": 3,
+        "question": "What are the rules for naming variables in Python?",
+        "answer": "Variable names must start with a letter or underscore, then can contain letters, digits, and underscores. Names are case-sensitive.\n\ncode:\nuser_name = 'Ana'\n_private = 1\n# 2nd_place is invalid as a name\n\nreal example:\nNaming variables like total_price in a shopping app."
+      },
+      {
+        "id": 4,
+        "question": "Can a variable name start with a number?",
+        "answer": "No, a variable name cannot start with a digit. Python rejects such names with a syntax error.\n\ncode:\n# name1 is fine, 1name is not allowed\nname1 = 'ok'\n\nreal example:\nKeeping names like score2 readable without confusing them with numeric constants."
+      },
+      {
+        "id": 5,
+        "question": "Are variable names case-sensitive in Python?",
+        "answer": "Yes. name, Name, and NAME are three completely different variables.\n\ncode:\nname = 'a'\nName = 'b'\nprint(name, Name)\n\nreal example:\nRemembering uppercase and lowercase spellings matter when reading code reviews."
+      },
+      {
+        "id": 6,
+        "question": "What is the naming convention for variables in Python?",
+        "answer": "The PEP 8 convention for variable names is snake_case: lowercase words joined by underscores.\n\ncode:\nuser_age = 30\n\nreal example:\nTeam projects use snake_case so all code reads consistently."
+      },
+      {
+        "id": 7,
+        "question": "How do you create a constant in Python?",
+        "answer": "By convention, constants are written in all uppercase letters: CONSTANT_NAME = value.\n\ncode:\nMAX_SIZE = 100\nPI = 3.14\n\nreal example:\nA fixed tax rate or app version that should not change during a run."
+      },
+      {
+        "id": 8,
+        "question": "Does Python have true constants?",
+        "answer": "No. Python has no enforced constants; uppercase names are just a convention and the value can still be reassigned.\n\ncode:\nMAX_SIZE = 100\nMAX_SIZE = 200  # allowed, no error\nprint(MAX_SIZE)\n\nreal example:\nPython trusts programmers to follow the all-caps convention by discipline."
+      },
+      {
+        "id": 9,
+        "question": "How do you assign multiple variables in one line?",
+        "answer": "a, b, c = 1, 2, 3 assigns three values to three names in a single statement, in order.\n\ncode:\na, b, c = 1, 2, 3\nprint(a, b, c)\n\nreal example:\nUnpacking an (x, y, z) coordinate into three variables at once."
+      },
+      {
+        "id": 10,
+        "question": "How do you assign the same value to multiple variables?",
+        "answer": "a = b = c = 0 chains the assignments so all three names point to the same value.\n\ncode:\na = b = c = 0\nprint(a, b, c)\n\nreal example:\nInitializing several counters to zero in one line."
+      },
+      {
+        "id": 11,
+        "question": "How do you swap two variables?",
+        "answer": "a, b = b, a swaps the two values without needing a temporary variable.\n\ncode:\na, b = 1, 2\na, b = b, a\nprint(a, b)\n\nreal example:\nSwapping the order of two items in a list-driven interface."
+      },
+      {
+        "id": 12,
+        "question": "What is a global variable?",
+        "answer": "A global variable is defined at the module level, outside any function, and can be read anywhere in the module.\n\ncode:\ngreeting = 'Hello'\n\ndef show():\n    print(greeting)\n\nshow()\n\nreal example:\nApp configuration loaded once at startup and available to all functions."
+      },
+      {
+        "id": 13,
+        "question": "What is a local variable?",
+        "answer": "A local variable is created inside a function and exists only while that function is running.\n\ncode:\ndef calc():\n    total = 10  # local to calc()\n    return total\n\nprint(calc())\n\nreal example:\nTemporary scratch values used and discarded inside one calculation."
+      },
+      {
+        "id": 14,
+        "question": "How do you access a global variable inside a function?",
+        "answer": "Declare global var_name inside the function so assignments target the module-level variable instead of making a local copy.\n\ncode:\ncount = 0\n\ndef bump():\n    global count\n    count += 1\n\nbump()\nprint(count)\n\nreal example:\nUpdating a shared score from several different functions."
+      },
+      {
+        "id": 15,
+        "question": "What happens if you assign to a global variable inside a function without global keyword?",
+        "answer": "Without global, Python creates a brand-new local variable with that name, leaving the global variable unchanged.\n\ncode:\ncount = 10\n\ndef try_bump():\n    count = 0\n\ntry_bump()\nprint(count)\n\nreal example:\nAvoiding accidental changes to shared settings by mistake."
+      },
+      {
+        "id": 16,
+        "question": "What is variable scope?",
+        "answer": "Variable scope is the region of code where a variable name is accessible. It tells you where a name can be read or changed.\n\ncode:\ndef f():\n    x = 1\n\nf()\n# print(x) -> NameError\n\nreal example:\nUnderstanding why a loop counter is missing outside the function that used it."
+      },
+      {
+        "id": 17,
+        "question": "What are the types of variable scope in Python?",
+        "answer": "Python has four scopes: Local (inside a function), Enclosing (outer functions), Global (module level), and Built-in (like len).\n\ncode:\nx = 'global'\n\ndef outer():\n    y = 'enclosing'\n    def inner():\n        z = 'local'\n        print(x, y, z)\n    inner()\n\nouter()\n\nreal example:\nKnowing which value a reused name refers to inside nested code."
+      },
+      {
+        "id": 18,
+        "question": "What is the LEGB rule?",
+        "answer": "LEGB is the lookup order Python uses when finding a variable: Local, Enclosing, Global, Built-in. It takes the first match.\n\ncode:\nx = 'g'\n\ndef f():\n    x = 'l'\n    print(x)\n\nf()\n\nreal example:\nPredicting which x a function will print when names overlap."
+      },
+      {
+        "id": 19,
+        "question": "How do you delete a variable?",
+        "answer": "del variable_name removes the name so the variable can no longer be used.\n\ncode:\nx = 5\ndel x\n# print(x) -> NameError\n\nreal example:\nRemoving an unneeded name from a module's namespace."
+      },
+      {
+        "id": 20,
+        "question": "What happens when you delete a variable?",
+        "answer": "del removes the reference to the object. If no other references remain, Python can free the object's memory.\n\ncode:\nx = [1, 2, 3]\ndel x\n\nreal example:\nDropping a large temporary dataset so memory can be reclaimed."
+      },
+      {
+        "id": 21,
+        "question": "Can you use a variable before assigning it?",
+        "answer": "No. Using a name before any assignment raises a NameError because the name does not exist yet.\n\ncode:\n# print(x) -> NameError\nx = 10\n\nreal example:\nAlways initialize variables first, then read them later."
+      },
+      {
+        "id": 22,
+        "question": "What is a dynamically typed language?",
+        "answer": "In a dynamically typed language, a variable can hold a value of any type, and types are checked at runtime instead of compile time.\n\ncode:\nx = 5\nx = 'text'  # allowed\nprint(x)\n\nreal example:\nFast prototyping since you don't have to declare types up front."
+      },
+      {
+        "id": 23,
+        "question": "Is Python statically or dynamically typed?",
+        "answer": "Python is dynamically typed. The type of a variable is determined at runtime by the value assigned to it.\n\ncode:\nx = 42\nx = 'a string'\nprint(type(x))\n\nreal example:\nThe same name can hold different kinds of data during a program's life."
+      },
+      {
+        "id": 24,
+        "question": "Can a variable change type in Python?",
+        "answer": "Yes. Assigning a new value of a different type to the same variable is always allowed.\n\ncode:\nx = 5\nx = 'hello'\nprint(x)\n\nreal example:\nA variable that first holds a number and later a status message."
+      },
+      {
+        "id": 25,
+        "question": "What is None in Python?",
+        "answer": "None is Python's special single object that represents the absence of a value. It is the default result of functions without return.\n\ncode:\nx = None\nprint(x)\n\nreal example:\nA login function returns None when no user data was found."
+      },
+      {
+        "id": 26,
+        "question": "Is None the same as 0 or empty string?",
+        "answer": "No. None is its own distinct object; it is not equal to 0, an empty string, or an empty collection.\n\ncode:\nprint(None == 0)\nprint(None == '')\n\nreal example:\nChecking 'did the user answer at all?' must compare against None."
+      },
+      {
+        "id": 27,
+        "question": "How do you check if a variable is None?",
+        "answer": "Use if variable is None: to test whether a variable holds None. The identity check is the accepted way.\n\ncode:\nx = None\nif x is None:\n    print('empty')\n\nreal example:\nTesting whether login information exists before logging in."
+      },
+      {
+        "id": 28,
+        "question": "What is variable shadowing?",
+        "answer": "Variable shadowing happens when a local variable has the same name as a global one, hiding the global inside that scope.\n\ncode:\nx = 'global'\n\ndef f():\n    x = 'local'\n    print(x)\n\nf()\nprint(x)\n\nreal example:\nA local loop variable accidentally hiding a global counter."
+      },
+      {
+        "id": 29,
+        "question": "What is a nonlocal variable?",
+        "answer": "A nonlocal variable belongs to an enclosing (outer) function scope. Nested functions modify it using the nonlocal keyword.\n\ncode:\ndef outer():\n    count = 0\n    def inner():\n        nonlocal count\n        count += 1\n    inner()\n    return count\n\nprint(outer())\n\nreal example:\nA counter kept alive and updated inside a closure."
+      },
+      {
+        "id": 30,
+        "question": "What is a class variable?",
+        "answer": "A class variable is defined in the class body and shared by every instance of the class.\n\ncode:\nclass Dog:\n    species = 'canine'\n\nprint(Dog.species)\n\nreal example:\nA shared default, like every employee's company name."
+      },
+      {
+        "id": 31,
+        "question": "How do you access a class variable?",
+        "answer": "Access a class variable with ClassName.variable or instance.variable; both give the same shared value.\n\ncode:\nclass Dog:\n    species = 'canine'\n\nd = Dog()\nprint(Dog.species)\nprint(d.species)\n\nreal example:\nReading a shared setting from any instance of a class."
+      },
+      {
+        "id": 32,
+        "question": "What is an instance variable?",
+        "answer": "An instance variable is unique to each object and is usually created in __init__ with self.\n\ncode:\nclass Dog:\n    def __init__(self, name):\n        self.name = name\n\nd1 = Dog('Rex')\nd2 = Dog('Max')\nprint(d1.name, d2.name)\n\nreal example:\nEach user account storing its own email address."
+      },
+      {
+        "id": 33,
+        "question": "How do you create an instance variable?",
+        "answer": "Assign inside a method with self.variable_name = value, typically in __init__.\n\ncode:\nclass Car:\n    def __init__(self):\n        self.speed = 0\n\nc = Car()\nc.speed = 50\nprint(c.speed)\n\nreal example:\nUpdating a car object's speed as it accelerates."
+      },
+      {
+        "id": 34,
+        "question": "What is a mutable variable?",
+        "answer": "A mutable variable points to an object whose contents can change in place, such as a list or dictionary.\n\ncode:\nnums = [1, 2]\nnums.append(3)  # changed in place\nprint(nums)\n\nreal example:\nA shopping list that keeps getting new items added."
+      },
+      {
+        "id": 35,
+        "question": "What is an immutable variable?",
+        "answer": "An immutable variable points to a value that cannot change, like an int, str, or tuple. New values create new objects.\n\ncode:\ns = 'hello'\nt = s.upper()  # new string\nprint(s, t)\n\nreal example:\nA username string is never modified; changes make a new string."
+      },
+      {
+        "id": 36,
+        "question": "What is a property in Python?",
+        "answer": "A property is a method that is accessed like an attribute, created with the @property decorator.\n\ncode:\nclass Circle:\n    def __init__(self, r):\n        self.r = r\n    @property\n    def area(self):\n        return 3.14 * self.r ** 2\n\nc = Circle(2)\nprint(c.area)\n\nreal example:\nAccessing full_name that is computed from first and last names."
+      },
+      {
+        "id": 37,
+        "question": "What is the id() function?",
+        "answer": "id(object) returns a unique integer identifier for an object, usually its address in memory.\n\ncode:\nx = 5\nprint(id(x))\n\nreal example:\nChecking whether two names actually point to the same object."
+      },
+      {
+        "id": 38,
+        "question": "Do two equal variables have the same id?",
+        "answer": "Not necessarily. Two values that compare equal can still be separate objects with different ids.\n\ncode:\na = [1, 2]\nb = [1, 2]\nprint(a == b, id(a) == id(b))\n\nreal example:\nLists built independently have distinct identities even when equal."
+      },
+      {
+        "id": 39,
+        "question": "What is the difference between copy and deepcopy?",
+        "answer": "copy makes a shallow copy that shares nested objects; deepcopy recursively copies every nested object.\n\ncode:\nimport copy\n\ninner = [1]\na = [inner]\nb = copy.copy(a)\nb[0].append(2)\nprint(a)\n\nreal example:\nCopying config lists without accidentally sharing inner parts."
+      },
+      {
+        "id": 40,
+        "question": "How do you make a shallow copy of a list?",
+        "answer": "Use list.copy(), list[:], or copy.copy(list) to make a shallow copy of a list.\n\ncode:\nnums = [1, 2, 3]\ncopy1 = nums.copy()\nprint(copy1)\n\nreal example:\nKeeping the original list safe from later changes."
+      },
+      {
+        "id": 41,
+        "question": "How do you make a deep copy of a list?",
+        "answer": "copy.deepcopy(list) duplicates the list and every nested object inside it.\n\ncode:\nimport copy\n\noriginal = [[1], [2]]\ndeep = copy.deepcopy(original)\nprint(deep)\n\nreal example:\nCloning a nested settings structure for a different user."
+      },
+      {
+        "id": 42,
+        "question": "What is variable annotation?",
+        "answer": "Variable annotation is the syntax variable: type used to declare the intended type of a variable.\n\ncode:\ncount: int = 0\nname: str = 'Ana'\n\nreal example:\nMaking data pipelines self-documenting about what each value holds."
+      },
+      {
+        "id": 43,
+        "question": "How do you get the type of a variable?",
+        "answer": "type(variable) returns the exact type object of the value stored in the variable.\n\ncode:\nprint(type(42))\n\nreal example:\nDebugging what kind of data a function actually received."
+      },
+      {
+        "id": 44,
+        "question": "How do you check if a variable is an integer?",
+        "answer": "isinstance(variable, int) returns True when the value is an integer, including an int subclass.\n\ncode:\nprint(isinstance(42, int))\nprint(isinstance('42', int))\n\nreal example:\nValidating that a value is numeric before doing arithmetic on it."
+      },
+      {
+        "id": 45,
+        "question": "What is duck typing?",
+        "answer": "Duck typing means caring about behavior rather than type: if something behaves like a duck, treat it as one.\n\ncode:\ndef add(a, b):\n    return a + b\n\nprint(add(2, 3))\nprint(add('a', 'b'))\n\nreal example:\nAccepting any object that supports the operation you need."
+      },
+      {
+        "id": 46,
+        "question": "What is EAFP?",
+        "answer": "EAFP (Easier to Ask Forgiveness than Permission) means trying the operation and handling failure with try/except.\n\ncode:\ntry:\n    n = int('abc')\nexcept ValueError:\n    n = 0\nprint(n)\n\nreal example:\nParsing untrusted user input and falling back on failure."
+      },
+      {
+        "id": 47,
+        "question": "What is a flag variable?",
+        "answer": "A flag is a boolean variable used to track a state, like whether something has happened.\n\ncode:\nfound = False\nfor n in [1, 4, 7]:\n    if n == 4:\n        found = True\nif found:\n    print('found')\n\nreal example:\nSignaling that a user successfully registered."
+      },
+      {
+        "id": 48,
+        "question": "What is an accumulator variable?",
+        "answer": "An accumulator builds a result across iterations, like a running total.\n\ncode:\ntotal = 0\nfor n in [1, 2, 3]:\n    total += n\nprint(total)\n\nreal example:\nSumming the prices in a shopping cart."
+      },
+      {
+        "id": 49,
+        "question": "What is a counter variable?",
+        "answer": "A counter is a variable that counts how many times something happens.\n\ncode:\ncount = 0\nfor ch in 'hello':\n    if ch == 'l':\n        count += 1\nprint(count)\n\nreal example:\nCounting how many times a button was clicked."
+      },
+      {
+        "id": 50,
+        "question": "How do you increment a variable?",
+        "answer": "Use += to increment: variable += 1 adds one and stores the result back.\n\ncode:\nx = 0\nx += 1\nprint(x)\n\nreal example:\nA score that goes up by one for each correct answer."
+      }
+    ]
+  },
+  "data_types": {
+    "description": "50 most important questions for automation testing interviews",
+    "questions": [
+      {
+        "id": 1,
+        "question": "What are the main data types in Python?",
+        "answer": "Python's core data types are int, float, complex, str, bool, list, tuple, set, dict, and NoneType.\n\ncode:\nfor v in [1, 1.5, 'a', True, [1], (1,), {1}, {'a': 1}, None]:\n    print(type(v).__name__)\n\nreal example:\nChoosing the right type, like float for prices and str for names in an app."
+      },
+      {
+        "id": 2,
+        "question": "What is an integer in Python?",
+        "answer": "An integer is a whole number without a decimal point. Python integers have unlimited precision and can grow as large as memory allows.\n\ncode:\nx = 42\nbig = 10 ** 100\nprint(type(x), big > 0)\n\nreal example:\nCounting votes or the number of items in a cart."
+      },
+      {
+        "id": 3,
+        "question": "How do you create an integer?",
+        "answer": "Create an integer by writing a plain number or by calling int() on a compatible string.\n\ncode:\na = 42\nb = int('42')\nprint(a, b, type(b))\n\nreal example:\nParsing a quantity that a user typed into a form."
+      },
+      {
+        "id": 4,
+        "question": "What is a float in Python?",
+        "answer": "A float is a number with a decimal point, stored using binary floating-point representation.\n\ncode:\nx = 3.14\nprint(type(x))\n\nreal example:\nRepresenting prices, temperatures, and other measurements."
+      },
+      {
+        "id": 5,
+        "question": "What is floating-point precision?",
+        "answer": "Floating-point precision means floats are stored in binary, so simple decimals like 0.1 cannot be represented exactly and cause tiny rounding errors.\n\ncode:\nprint(0.1 + 0.2)\n\nreal example:\nCurrency math uses Decimal instead because float totals can look wrong."
+      },
+      {
+        "id": 6,
+        "question": "What is the result of 0.1 + 0.2?",
+        "answer": "0.1 + 0.2 gives 0.30000000000000004 because binary floating-point cannot represent 0.1 exactly.\n\ncode:\nprint(0.1 + 0.2)\n\nreal example:\nMoney sums look off if you use floats, so banks use Decimal."
+      },
+      {
+        "id": 7,
+        "question": "What is a boolean in Python?",
+        "answer": "A boolean is one of the two values True or False, used to represent truth.\n\ncode:\na = True\nb = False\nprint(a, b)\n\nreal example:\nStoring yes/no decisions like 'is the user subscribed'."
+      },
+      {
+        "id": 8,
+        "question": "Is bool a subclass of int?",
+        "answer": "Yes. bool is a subclass of int, so True == 1 and False == 0.\n\ncode:\nprint(True == 1)\nprint(True + True)\n\nreal example:\nCounts of True checks can be summed because bools act as 0 and 1."
+      },
+      {
+        "id": 9,
+        "question": "What are falsy values in Python?",
+        "answer": "Falsy values evaluate to False in a condition: False, 0, 0.0, '' (empty string), [], {}, (), set(), and None.\n\ncode:\nfor v in [0, '', [], None]:\n    if not v:\n        print(repr(v), 'is falsy')\n\nreal example:\nChecking 'if name:' requires the user to enter a non-empty value."
+      },
+      {
+        "id": 10,
+        "question": "What are truthy values?",
+        "answer": "Truthy values are anything not on the falsy list, like nonzero numbers and non-empty strings or collections.\n\ncode:\nfor v in [5, 'hi', [0]]:\n    if v:\n        print(repr(v), 'is truthy')\n\nreal example:\nUsing 'if value:' to quickly test whether data exists."
+      },
+      {
+        "id": 11,
+        "question": "What is a string in Python?",
+        "answer": "A string is an immutable sequence of Unicode characters, used for all text data.\n\ncode:\ns = 'hello'\nprint(len(s), type(s))\n\nreal example:\nText like names, messages, and addresses are strings."
+      },
+      {
+        "id": 12,
+        "question": "How do you create a string?",
+        "answer": "Create a string with single quotes, double quotes, triple quotes, or with str().\n\ncode:\na = 'hello'\nb = str(123)\nprint(a, b)\n\nreal example:\nConverting numbers to text so they can be displayed with letters."
+      },
+      {
+        "id": 13,
+        "question": "Are strings mutable in Python?",
+        "answer": "No. Strings are immutable; any operation that looks like a change returns a brand-new string.\n\ncode:\ns = 'hello'\nt = s.upper()  # new string\nprint(s, t)\n\nreal example:\nFixing a typo creates a new string while the original stays unchanged."
+      },
+      {
+        "id": 14,
+        "question": "How do you concatenate strings?",
+        "answer": "Use the + operator to join two strings, or join() to combine several with a separator.\n\ncode:\ngreeting = 'hi' + ' there'\nnames = '-'.join(['a', 'b'])\nprint(greeting, names)\n\nreal example:\nBuilding a sentence or full name from separate pieces of text."
+      },
+      {
+        "id": 15,
+        "question": "How do you get the length of a string?",
+        "answer": "len(string) returns the number of characters in the string.\n\ncode:\nprint(len('hello'))\n\nreal example:\nChecking that a password is at least 8 characters long."
+      },
+      {
+        "id": 16,
+        "question": "How do you slice a string?",
+        "answer": "Slicing extracts part of a string: string[start:end:step]. The end position is not included.\n\ncode:\ns = 'hello world'\nprint(s[0:5])\nprint(s[::-1])\n\nreal example:\nGrabbing a first name from a full name field, or reversing a word."
+      },
+      {
+        "id": 17,
+        "question": "What is string formatting?",
+        "answer": "String formatting inserts values into a string, using f-strings, the format() method, or the old % operator.\n\ncode:\nname = 'Ana'\nprint(f'Hi {name}')\nprint('Hi {}'.format(name))\n\nreal example:\nPersonalizing emails or reports with the reader's name."
+      },
+      {
+        "id": 18,
+        "question": "What is an f-string?",
+        "answer": "An f-string is a formatted string literal, prefixed with f, that evaluates expressions inside curly braces.\n\ncode:\nname = 'Ana'\nprint(f'Hello {name}')\n\nreal example:\nBuilding user-facing messages with live values inline."
+      },
+      {
+        "id": 19,
+        "question": "How do you remove whitespace from a string?",
+        "answer": "string.strip() removes leading and trailing whitespace; lstrip() and rstrip() remove from only one side.\n\ncode:\ns = '  hi  '\nprint(s.strip())\n\nreal example:\nCleaning a text box input before saving it to a database."
+      },
+      {
+        "id": 20,
+        "question": "How do you split a string?",
+        "answer": "string.split(separator) splits a string into a list of parts at each separator.\n\ncode:\nprint('a,b,c'.split(','))\n\nreal example:\nTurning one line of a CSV file into separate columns."
+      },
+      {
+        "id": 21,
+        "question": "How do you replace text in a string?",
+        "answer": "string.replace(old, new) returns a new string with every occurrence of old replaced by new.\n\ncode:\nprint('cat cat'.replace('cat', 'dog'))\n\nreal example:\nReplacing placeholder names in a document template."
+      },
+      {
+        "id": 22,
+        "question": "How do you check if a string contains a substring?",
+        "answer": "Use the in operator to check whether a string contains a substring; it gives a boolean result.\n\ncode:\nprint('llo' in 'hello')\n\nreal example:\nDetecting whether a keyword appears in a search box."
+      },
+      {
+        "id": 23,
+        "question": "What is a list in Python?",
+        "answer": "A list is a mutable, ordered collection that can hold any mixture of data types.\n\ncode:\nlst = [1, 'a', True]\nprint(lst)\n\nreal example:\nA to-do list that remembers the order items were added."
+      },
+      {
+        "id": 24,
+        "question": "How do you create a list?",
+        "answer": "Create a list by writing square brackets like [1, 2, 3] or by calling list() on an iterable.\n\ncode:\na = [1, 2, 3]\nb = list(range(3))\nprint(a, b)\n\nreal example:\nCollecting form answers into one changeable array."
+      },
+      {
+        "id": 25,
+        "question": "Are lists mutable?",
+        "answer": "Yes. Lists are mutable, so you can add, remove, or change elements in place.\n\ncode:\nlst = [1, 2]\nlst.append(3)\nlst[0] = 99\nprint(lst)\n\nreal example:\nA shopping cart that you keep adding items to."
+      },
+      {
+        "id": 26,
+        "question": "How do you add an element to a list?",
+        "answer": "append(item) adds at the end; insert(index, item) adds at a specific position.\n\ncode:\nlst = [1, 2]\nlst.append(3)\nlst.insert(0, 0)\nprint(lst)\n\nreal example:\nAdding new tasks to a task list at the right spot."
+      },
+      {
+        "id": 27,
+        "question": "How do you remove an element from a list?",
+        "answer": "remove(item) deletes the first matching value; pop(index) removes and returns by position; del lst[index] also works.\n\ncode:\nlst = [1, 2, 3]\nlst.remove(2)\npopped = lst.pop(1)\nprint(lst, popped)\n\nreal example:\nRemoving a canceled order from a list of orders."
+      },
+      {
+        "id": 28,
+        "question": "How do you access list elements?",
+        "answer": "Use list[index] to access an element. Negative indices start from the end, with -1 as the last element.\n\ncode:\nlst = ['a', 'b', 'c']\nprint(lst[0], lst[-1])\n\nreal example:\nGetting the first and last rows of a data table."
+      },
+      {
+        "id": 29,
+        "question": "How do you slice a list?",
+        "answer": "Slice a list with list[start:end:step]. The end index is exclusive.\n\ncode:\nlst = [0, 1, 2, 3, 4]\nprint(lst[1:3])\nprint(lst[::2])\n\nreal example:\nGetting a page of items or every second row from a list."
+      },
+      {
+        "id": 30,
+        "question": "What is list comprehension?",
+        "answer": "A list comprehension builds a list in one line: [expression for item in iterable if condition].\n\ncode:\nsquares = [n * n for n in range(5)]\nprint(squares)\n\nreal example:\nTransforming every item in a dataset with a single line."
+      },
+      {
+        "id": 31,
+        "question": "What is a tuple in Python?",
+        "answer": "A tuple is an immutable, ordered sequence of elements, often used for fixed records.\n\ncode:\nt = (1, 2, 3)\nprint(t)\n\nreal example:\nRepresenting a fixed record like a point (x, y) on a map."
+      },
+      {
+        "id": 32,
+        "question": "How do you create a tuple?",
+        "answer": "Create a tuple with parentheses like (1, 2, 3) or with the tuple() constructor.\n\ncode:\na = (1, 2)\nb = tuple([3, 4])\nprint(a, b)\n\nreal example:\nWrapping coordinates or settings into one fixed value."
+      },
+      {
+        "id": 33,
+        "question": "Are tuples mutable?",
+        "answer": "No. Tuples are immutable, so you cannot add, remove, or change their elements.\n\ncode:\nt = (1, 2)\n# t[0] = 5 -> TypeError\nprint(t)\n\nreal example:\nA date like (year, month, day) should never change."
+      },
+      {
+        "id": 34,
+        "question": "How do you unpack a tuple?",
+        "answer": "a, b, c = (1, 2, 3) unpacks the tuple, assigning each element to a separate variable.\n\ncode:\na, b, c = (1, 2, 3)\nprint(a, b, c)\n\nreal example:\nAssigning an RGB color to three channel variables."
+      },
+      {
+        "id": 35,
+        "question": "What is a set in Python?",
+        "answer": "A set is an unordered collection of unique elements, where duplicates are removed automatically.\n\ncode:\ns = {1, 2, 2, 3}\nprint(s)\n\nreal example:\nTracking which user IDs have already visited a page."
+      },
+      {
+        "id": 36,
+        "question": "How do you create a set?",
+        "answer": "Write braces {1, 2, 3} or call set(iterable) with any iterable.\n\ncode:\ns = {1, 2, 3}\nt = set('aab')\nprint(s, t)\n\nreal example:\nConverting a list of tags into unique values."
+      },
+      {
+        "id": 37,
+        "question": "Are set elements unique?",
+        "answer": "Yes. Sets automatically remove duplicates, and adding an existing item is silently ignored.\n\ncode:\ns = {1, 1, 2}\ns.add(1)\nprint(s)\n\nreal example:\nDe-duplicating the email addresses on a mailing list."
+      },
+      {
+        "id": 38,
+        "question": "What is the difference between remove and discard?",
+        "answer": "remove raises KeyError when the item is missing; discard does nothing at all if the item is not there.\n\ncode:\ns = {1}\ns.discard(99)\nprint(s)\n\nreal example:\nThe 'remove from favourites' button never crashes on absence."
+      },
+      {
+        "id": 39,
+        "question": "What is a dictionary in Python?",
+        "answer": "A dictionary maps unique keys to values and keeps items in insertion order.\n\ncode:\nd = {'name': 'Ana', 'age': 30}\nprint(d)\n\nreal example:\nA product catalogue where each SKU maps to product details."
+      },
+      {
+        "id": 40,
+        "question": "How do you create a dictionary?",
+        "answer": "Create a dictionary with braces {'a': 1} or with dict(a=1).\n\ncode:\na = {'a': 1, 'b': 2}\nb = dict(c=3)\nprint(a, b)\n\nreal example:\nBuilding a settings map of option names to values."
+      },
+      {
+        "id": 41,
+        "question": "How do you access a dictionary value?",
+        "answer": "Read a value with dict[key] or with the safer dict.get(key), which returns None for a missing key.\n\ncode:\nd = {'a': 1}\nprint(d['a'])\nprint(d.get('b'))\n\nreal example:\nReading a user setting by name without crashing when it is missing."
+      },
+      {
+        "id": 42,
+        "question": "What is the difference between dict[key] and dict.get(key)?",
+        "answer": "dict[key] raises KeyError for a missing key, while get() returns None or a default value instead.\n\ncode:\nd = {'a': 1}\nprint(d.get('b'))\nprint(d.get('b', 0))\n\nreal example:\nLooking up optional settings and using a fallback."
+      },
+      {
+        "id": 43,
+        "question": "How do you get all items from a dictionary?",
+        "answer": "dict.items() returns a view of (key, value) pairs.\n\ncode:\nd = {'a': 1}\nprint(list(d.items()))\n\nreal example:\nLooping through a config to log each setting and its value."
+      },
+      {
+        "id": 44,
+        "question": "What is None in Python?",
+        "answer": "None is a special constant representing the absence of a value, and is what functions return when there is no return statement.\n\ncode:\nx = None\nprint(x)\n\nreal example:\nAn optional form field that the user never filled in."
+      },
+      {
+        "id": 45,
+        "question": "How do you convert to integer?",
+        "answer": "int(value) converts a compatible string or number to an integer, truncating decimal parts.\n\ncode:\nprint(int('42'))\nprint(int(3.99))\n\nreal example:\nParsing a quantity from a text field before using it in math."
+      },
+      {
+        "id": 46,
+        "question": "How do you convert to float?",
+        "answer": "float(value) converts a compatible string or number into a float.\n\ncode:\nprint(float('3.5'))\n\nreal example:\nReading a price from a text file into a float for totals."
+      },
+      {
+        "id": 47,
+        "question": "How do you convert to string?",
+        "answer": "str(value) converts any value into its string representation.\n\ncode:\nprint(str(123))\nprint('age: ' + str(30))\n\nreal example:\nCombining numbers with text for display messages."
+      },
+      {
+        "id": 48,
+        "question": "What is the type() function?",
+        "answer": "type(obj) returns the exact type object of a value.\n\ncode:\nprint(type(3.14))\n\nreal example:\nInspecting data while debugging a program."
+      },
+      {
+        "id": 49,
+        "question": "What are mutable data types?",
+        "answer": "The mutable data types are list, dict, set, and bytearray, whose contents can change in place.\n\ncode:\nlst = [1, 2]\nlst.append(3)\nprint(lst)\n\nreal example:\nAn editable shopping cart is a mutable list."
+      },
+      {
+        "id": 50,
+        "question": "What are immutable data types?",
+        "answer": "Immutable data types cannot change after creation: int, float, complex, str, tuple, frozenset, bytes, bool, NoneType.\n\ncode:\ns = 'abc'\nprint(type(s))\n\nreal example:\nStrings holding IDs that must never change once stored."
+      }
+    ]
+  }
+}

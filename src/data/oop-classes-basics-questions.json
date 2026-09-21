@@ -1,0 +1,345 @@
+{
+  "description": "68 curated OOP CLASSES BASICS questions for Automation Testing interviews (trimmed from 100; removed 32 redundant near-duplicate questions that tested the same concept).",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What keyword is used to define a class in Python?",
+      "answer": "The keyword class is used to define a class in Python, followed by a name and a colon. A class is a blueprint that describes what kind of objects you want to create.\n\ncode:\nclass Dog:\n    pass\n\nreal example:\nA video game defines classes like Player and Enemy before creating many characters from those blueprints."
+    },
+    {
+      "id": 2,
+      "question": "What does `class Dog: pass` create?",
+      "answer": "class Dog: pass creates an empty class named Dog that can still be instantiated. The pass statement does nothing, so the body has no members yet.\n\ncode:\nclass Dog:\n    pass\n\nd = Dog()\n\nreal example:\nAn empty class can act as a simple container for grouping data before you add real methods."
+    },
+    {
+      "id": 3,
+      "question": "How do you create an object from the class Dog?",
+      "answer": "You create an object by writing the class name followed by parentheses, like calling a function. This returns a brand-new instance of the class.\n\ncode:\nclass Dog:\n    pass\n\nobj = Dog()\n\nreal example:\nOne class named Dog can create many pets, such as my_dog = Dog() and your_dog = Dog()."
+    },
+    {
+      "id": 4,
+      "question": "What does print(type(Dog())) output?",
+      "answer": "print(type(Dog())) outputs <class '__main__.Dog'>. type() reports the exact class of an object, and objects made in the main script show the __main__. prefix.\n\ncode:\nclass Dog:\n    pass\n\nprint(type(Dog()))\n\nreal example:\nA game uses type() to confirm which kind of sprite an object really is before acting on it."
+    },
+    {
+      "id": 5,
+      "question": "What does isinstance(Dog(), Dog) return?",
+      "answer": "isinstance(Dog(), Dog) returns True. isinstance checks whether an object is an instance of a given class (or one of its subclasses).\n\ncode:\nclass Dog:\n    pass\n\nprint(isinstance(Dog(), Dog))\n\nreal example:\nA program checks isinstance(vehicle, Car) before applying features that only cars support."
+    },
+    {
+      "id": 6,
+      "question": "What does type(Dog()) == Dog return?",
+      "answer": "type(Dog()) == Dog returns True because type gives the exact class of an object. Comparing the result directly with Dog confirms the match.\n\ncode:\nclass Dog:\n    pass\n\nprint(type(Dog()) == Dog)\n\nreal example:\nVerifying an object's exact type before running type-specific logic keeps code predictable."
+    },
+    {
+      "id": 7,
+      "question": "What does id(Dog()) == id(Dog()) return?",
+      "answer": "id(Dog()) == id(Dog()) is usually False because each call builds a completely separate object with its own memory address. It can become True only if the first object is garbage-collected right away.\n\ncode:\nclass Dog:\n    pass\n\nprint(id(Dog()) == id(Dog()))\n\nreal example:\nIdentity checks help detect whether two variables really point to the same object."
+    },
+    {
+      "id": 8,
+      "question": "What does a = Dog(); b = a; print(a is b) output?",
+      "answer": "a = Dog(); b = a; print(a is b) outputs True because b receives a reference to the same object as a. Both names point to one thing in memory.\n\ncode:\nclass Dog:\n    pass\n\na = Dog()\nb = a\nprint(a is b)\n\nreal example:\nAssigning one variable to another intentionally shares the same data, like an alias in a config system."
+    },
+    {
+      "id": 9,
+      "question": "What does a = Dog(); b = Dog(); print(a == b) output by default?",
+      "answer": "a = Dog(); b = Dog(); print(a == b) outputs False by default. Without a custom __eq__ method, equality falls back to identity, so different objects are never equal.\n\ncode:\nclass Dog:\n    pass\n\na = Dog()\nb = Dog()\nprint(a == b)\n\nreal example:\nTwo bank cards with the same number printed are still different physical objects by default."
+    },
+    {
+      "id": 10,
+      "question": "When does __init__ get called?",
+      "answer": "__init__ gets called automatically, exactly once, each time a class is instantiated. It runs right after the object is created to set up initial state.\n\ncode:\nclass Dog:\n    def __init__(self, name):\n        self.name = name\n\nd = Dog(\"Rex\")\n\nreal example:\n__init__ is where a new player profile gets its starting health and score."
+    },
+    {
+      "id": 11,
+      "question": "class P: def __init__(self, name): self.name = name. What does P() do?",
+      "answer": "class P: def __init__(self, name): self.name = name. P() raises TypeError: __init__() missing 1 required positional argument: 'name'. The constructor demands a value for name.\n\ncode:\nclass P:\n    def __init__(self, name):\n        self.name = name\n\nP()\n\nreal example:\nForgetting to pass a required setting when creating a config object fails loudly instead of silently."
+    },
+    {
+      "id": 12,
+      "question": "class P: def __init__(self, x=5): self.x = x. What does P().x return?",
+      "answer": "class P: def __init__(self, x=5): self.x = x. P().x returns 5 because the default value is used when no argument is given.\n\ncode:\nclass P:\n    def __init__(self, x=5):\n        self.x = x\n\nprint(P().x)\n\nreal example:\nDefault values make optional settings such as volume level=5 easy for callers to skip."
+    },
+    {
+      "id": 13,
+      "question": "class P: def __init__(self, x, y): self.x=x; self.y=y. How do you create it with keyword args?",
+      "answer": "You create it with keyword arguments: P(x=1, y=2). Passing arguments by name makes the call clear and independent of order.\n\ncode:\nclass P:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\np = P(x=1, y=2)\n\nreal example:\nNamed settings like create_user(name='Ana', age=30) are readable and impossible to misorder."
+    },
+    {
+      "id": 14,
+      "question": "class P: pass. Can you create P() without defining __init__?",
+      "answer": "Yes, you can create P() without defining __init__. If a class has no __init__, Python silently uses the default object.__init__, which takes no arguments.\n\ncode:\nclass P:\n    pass\n\np = P()\nprint(p)\n\nreal example:\nVery simple classes can rely on the built-in constructor until they need real setup."
+    },
+    {
+      "id": 15,
+      "question": "class P: def set(self, v): self.v = v. What does p.v raise before set() is called?",
+      "answer": "p.v raises AttributeError: 'P' object has no attribute 'v' before set() is called. The attribute does not exist until some code assigns it.\n\ncode:\nclass P:\n    def set(self, v):\n        self.v = v\n\np = P()\nprint(p.v)\n\nreal example:\nReading a form field before the user typed anything errors out until a default value exists."
+    },
+    {
+      "id": 16,
+      "question": "class P: def set(self, v): self.v = v. p = P(); p.set(10); print(p.v) outputs?",
+      "answer": "p = P(); p.set(10); print(p.v) outputs 10. Attributes can be created inside any method, and set() stores the value that the print later reads.\n\ncode:\nclass P:\n    def set(self, v):\n        self.v = v\n\np = P()\np.set(10)\nprint(p.v)\n\nreal example:\nA settings object can add new fields dynamically as the user configures them."
+    },
+    {
+      "id": 17,
+      "question": "Can you add a brand-new attribute to an object after creation, like p.color = 'red'?",
+      "answer": "Yes, you can add a brand-new attribute to an object after creation, like p.color = 'red'. Python objects allow dynamic attribute assignment at any time.\n\ncode:\nclass Box:\n    pass\n\nb = Box()\nb.color = 'red'\nprint(b.color)\n\nreal example:\nAn API response object gets extra fields appended as new data arrives from the server."
+    },
+    {
+      "id": 18,
+      "question": "What does p.missing raise when accessing an attribute that doesn't exist?",
+      "answer": "p.missing raises AttributeError when the attribute doesn't exist anywhere in lookup. Python cannot find a matching value on the instance or any class.\n\ncode:\nclass Box:\n    pass\n\np = Box()\np.missing\n\nreal example:\nReading a header that was never set errors out rather than silently returning nothing."
+    },
+    {
+      "id": 19,
+      "question": "What does getattr(p, 'x', 'nope') return when p has no x?",
+      "answer": "getattr(p, 'x', 'nope') returns 'nope' when p has no x. getattr looks up the attribute and falls back to the given default instead of raising.\n\ncode:\nclass P:\n    pass\n\nprint(getattr(P(), 'x', 'nope'))\n\nreal example:\nOptional config keys fall back to sensible defaults instead of crashing the program."
+    },
+    {
+      "id": 20,
+      "question": "What does hasattr(p, 'x') return when p has an x attribute?",
+      "answer": "hasattr(p, 'x') returns True when an x attribute exists. hasattr quietly checks whether the attribute is found, never raising an error.\n\ncode:\nclass P:\n    def __init__(self):\n        self.x = 1\n\nprint(hasattr(P(), 'x'))\n\nreal example:\nA program checks hasattr(user, 'email') to decide which profile fields to display."
+    },
+    {
+      "id": 21,
+      "question": "class A: def hi(self): return 'hi'. What does A().hi() return?",
+      "answer": "class A: def hi(self): return 'hi'. A().hi() returns 'hi'. Calling the method on the instance binds self and returns the stored string.\n\ncode:\nclass A:\n    def hi(self):\n        return 'hi'\n\nprint(A().hi())\n\nreal example:\nA greeting service's method returns a message string that any caller can print."
+    },
+    {
+      "id": 22,
+      "question": "class A: def hi(self): return 'hi'. What does A.hi(A()) return?",
+      "answer": "class A: def hi(self): return 'hi'. A.hi(A()) returns 'hi' because you pass the instance manually as self. Class-level access with an explicit argument works like a.hi().\n\ncode:\nclass A:\n    def hi(self):\n        return 'hi'\n\nprint(A.hi(A()))\n\nreal example:\nFramework code occasionally calls methods this way to control exactly which object acts as self."
+    },
+    {
+      "id": 23,
+      "question": "class A: def hi(self): return 'hi'. What does A.hi() raise?",
+      "answer": "class A: def hi(self): return 'hi'. A.hi() raises TypeError: hi() missing 1 required positional argument: 'self'. Through the class, no instance is automatically provided.\n\ncode:\nclass A:\n    def hi(self):\n        return 'hi'\n\nA.hi()\n\nreal example:\nCalling an instance method without an object errors out, reminding you that self is required."
+    },
+    {
+      "id": 24,
+      "question": "inside an instance method, what does self refer to?",
+      "answer": "Inside an instance method, self refers to the exact object on which the method was called. Python passes it in as the first argument automatically.\n\ncode:\nclass A:\n    def who(self):\n        return self\n\na = A()\nprint(a.who() is a)\n\nreal example:\nA car object's drive method uses self to update that specific car's fuel level."
+    },
+    {
+      "id": 25,
+      "question": "class A: x = 10. What does A.x return?",
+      "answer": "class A: x = 10. A.x returns 10. Class attributes are defined in the class body and can be read directly via the class name.\n\ncode:\nclass A:\n    x = 10\n\nprint(A.x)\n\nreal example:\nShared constants like max_players live on the class so every instance can reference them."
+    },
+    {
+      "id": 26,
+      "question": "class A: x = 10. What does A().x return?",
+      "answer": "class A: x = 10. A().x returns 10. An instance can read a class attribute because lookup falls back to the class when nothing is on the instance.\n\ncode:\nclass A:\n    x = 10\n\nprint(A().x)\n\nreal example:\nEvery bank account reads the shared interest rate from the class, not from a personal copy."
+    },
+    {
+      "id": 27,
+      "question": "class A: x = []. a=A(); b=A(); a.x.append(1); print(b.x) outputs?",
+      "answer": "class A: x = []. a=A(); b=A(); a.x.append(1); print(b.x) outputs [1]. A mutable class attribute is shared, so one instance's mutation is visible to all others.\n\ncode:\nclass A: x = []\n\na = A()\na.x.append(1)\nprint(A().x)\n\nreal example:\nA shared to-do list visible across all team members updates in place for everyone."
+    },
+    {
+      "id": 28,
+      "question": "class A: x = 10. a=A(); a.x = 5; print(A().x) outputs?",
+      "answer": "class A: x = 10. a=A(); a.x = 5; print(A().x) outputs 10. Assigning a.x creates an instance attribute that shadows the class one for that instance only.\n\ncode:\nclass A: x = 10\n\na = A()\na.x = 5\nprint(A().x)\n\nreal example:\nOverriding a theme color on one page does not change the default used by other pages."
+    },
+    {
+      "id": 29,
+      "question": "class A: x = 10. a=A(); a.x = 5; print(a.x) outputs?",
+      "answer": "class A: x = 10. a=A(); a.x = 5; print(a.x) outputs 5. The instance attribute now shadows the class attribute for that single object.\n\ncode:\nclass A: x = 10\n\na = A()\na.x = 5\nprint(a.x)\n\nreal example:\nA player with a custom nickname is the only one who sees it; others keep the default."
+    },
+    {
+      "id": 30,
+      "question": "class A: x = 10. a=A(); a.x = 5; del a.x; print(a.x) outputs?",
+      "answer": "class A: x = 10. a=A(); a.x = 5; del a.x; print(a.x) outputs 10. Deleting the instance attribute re-exposes the class attribute that was hidden underneath.\n\ncode:\nclass A: x = 10\n\na = A()\na.x = 5\ndel a.x\nprint(a.x)\n\nreal example:\nResetting an override restores the system-wide default for that user."
+    },
+    {
+      "id": 31,
+      "question": "What does every instance's `__dict__` contain?",
+      "answer": "Every instance's __dict__ contains a dictionary of only that instance's own data attributes. Class attributes and methods live on the class, not here.\n\ncode:\nclass A:\n    def __init__(self):\n        self.x = 5\n\nprint(A().__dict__)\n\nreal example:\nDebugging tools inspect __dict__ to see exactly what data an object currently stores."
+    },
+    {
+      "id": 32,
+      "question": "class A: def __init__(self): self.x = 1. print(A().__dict__) outputs?",
+      "answer": "class A: def __init__(self): self.x = 1. print(A().__dict__) outputs {'x': 1}. The __init__ method placed x directly into the instance dictionary.\n\ncode:\nclass A:\n    def __init__(self):\n        self.x = 1\n\nprint(A().__dict__)\n\nreal example:\nA form object's fields show up in __dict__ when debugging what a user submitted."
+    },
+    {
+      "id": 33,
+      "question": "Do methods appear in the instance's __dict__?",
+      "answer": "No, methods do not appear in the instance's __dict__. Methods live on the class; the instance dictionary holds only data attributes, keeping objects lightweight.\n\ncode:\nclass A:\n    def hi(self):\n        return 'hi'\n\nprint(A().__dict__)\n\nreal example:\nAll instances of a class share the same method code in memory, which saves RAM."
+    },
+    {
+      "id": 34,
+      "question": "What does dir(obj) return?",
+      "answer": "dir(obj) returns a sorted list of all accessible attribute and method names, including built-in dunder methods. It is handy for exploring an object's interface.\n\ncode:\nclass A:\n    def hi(self):\n        return 'hi'\n\nprint('hi' in dir(A()))\n\nreal example:\nExploratory code uses dir() to check what an imported object can do."
+    },
+    {
+      "id": 35,
+      "question": "What does object() create?",
+      "answer": "object() creates the simplest possible Python object with no instance attributes. It is the universal base of every other class.\n\ncode:\no = object()\nprint(type(o))\n\nreal example:\nobject() is rarely used directly, but it underpins every class you create."
+    },
+    {
+      "id": 36,
+      "question": "What does isinstance(Dog(), object) return?",
+      "answer": "isinstance(Dog(), object) returns True. Every class in Python ultimately inherits from object, so any instance passes this check.\n\ncode:\nclass Dog:\n    pass\n\nprint(isinstance(Dog(), object))\n\nreal example:\nUniversal base checks let utility code safely accept any Python object."
+    },
+    {
+      "id": 37,
+      "question": "class A: pass. What does bool(A()) return by default?",
+      "answer": "class A: pass. bool(A()) returns True. Objects are truthy by default unless the class defines __bool__ or __len__.\n\ncode:\nclass A:\n    pass\n\nprint(bool(A()))\n\nreal example:\nA custom object with no special truthiness is assumed to be present and usable."
+    },
+    {
+      "id": 38,
+      "question": "What does print(A()) output when A has no __str__ or __repr__?",
+      "answer": "print(A()) without __str__ or __repr__ outputs something like <__main__.A object at 0x...>. This is the default object representation with a memory address.\n\ncode:\nclass A:\n    pass\n\nprint(A())\n\nreal example:\nUnimplemented classes show their memory address, which is not useful to end users."
+    },
+    {
+      "id": 39,
+      "question": "class A: def __str__(self): return 'hello'. print(A()) outputs?",
+      "answer": "class A: def __str__(self): return 'hello'. print(A()) outputs hello. The __str__ method defines the friendly human-readable string for an object.\n\ncode:\nclass A:\n    def __str__(self):\n        return 'hello'\n\nprint(A())\n\nreal example:\nA Product class's __str__ might show 'Laptop - $999' on receipts."
+    },
+    {
+      "id": 40,
+      "question": "class A: def __repr__(self): return 'A()'. print(A()) outputs?",
+      "answer": "class A: def __repr__(self): return 'A()'. print(A()) outputs A(). When __str__ is absent, print falls back to __repr__.\n\ncode:\nclass A:\n    def __repr__(self):\n        return 'A()'\n\nprint(A())\n\nreal example:\nDevelopers rely on __repr__ to rebuild objects exactly in the debugger."
+    },
+    {
+      "id": 41,
+      "question": "What does type(A())() do for class A with no required args?",
+      "answer": "type(A())() creates a brand-new A instance by calling the class object itself. type(A()) is A, and calling that object creates a new A.\n\ncode:\nclass A:\n    pass\n\na2 = type(A())()\nprint(isinstance(a2, A))\n\nreal example:\nSerializers clone objects by calling their type to build fresh instances."
+    },
+    {
+      "id": 42,
+      "question": "class A: def hi(self): return 'hi'. print(type(A().hi)) outputs?",
+      "answer": "print(type(A().hi)) outputs <class 'method'>. Accessing a method through an instance returns a bound method object, not the raw function.\n\ncode:\nclass A:\n    def hi(self):\n        return 'hi'\n\nprint(type(A().hi))\n\nreal example:\nPassing a bound method to a callback keeps the object's identity attached."
+    },
+    {
+      "id": 43,
+      "question": "class A: def hi(self): return 'hi'. print(A().hi is A().hi) outputs?",
+      "answer": "print(A().hi is A().hi) outputs False. Every attribute access creates a fresh bound-method object, so the two sides are never identical.\n\ncode:\nclass A:\n    def hi(self):\n        return 'hi'\n\nprint(A().hi is A().hi)\n\nreal example:\nComparing methods with is always fails; compare behavior or attributes instead."
+    },
+    {
+      "id": 44,
+      "question": "What does callable(A().hi) return?",
+      "answer": "callable(A().hi) returns True. Bound methods are callable, so Python confirms you can invoke them with parentheses.\n\ncode:\nclass A:\n    def hi(self):\n        return 'hi'\n\nprint(callable(A().hi))\n\nreal example:\nUI frameworks accept any callable as a handler, including bound methods in Python."
+    },
+    {
+      "id": 45,
+      "question": "class A: def hi(self): return 'hi'. What does callable(A.hi) return?",
+      "answer": "callable(A.hi) returns True. Functions stored on a class are callable just like any other function.\n\ncode:\nclass A:\n    def hi(self):\n        return 'hi'\n\nprint(callable(A.hi))\n\nreal example:\nEvent systems check callable on every registered handler before invoking it."
+    },
+    {
+      "id": 46,
+      "question": "class A: count = 0; def __init__(self): A.count += 1. After [A() for _ in range(5)], what is A.count?",
+      "answer": "After [A() for _ in range(5)], A.count is 5. __init__ increments A.count for each new instance, and five creations make five.\n\ncode:\nclass A:\n    count = 0\n\n    def __init__(self):\n        A.count += 1\n\n[A() for _ in range(5)]\nprint(A.count)\n\nreal example:\nCounting how many order objects were created today via a class-level tally."
+    },
+    {
+      "id": 47,
+      "question": "class A: def __init__(self): self.n = 0. a=A(); a.n += 5; print(A().n) outputs?",
+      "answer": "class A: def __init__(self): self.n = 0. print(A().n) outputs 0. Instances are independent, so changing one instance's n affects nothing else.\n\ncode:\nclass A:\n    def __init__(self):\n        self.n = 0\n\na = A()\na.n += 5\nprint(A().n)\n\nreal example:\nTwo shopping carts keep separate item counts even though both come from the same class."
+    },
+    {
+      "id": 48,
+      "question": "What does A.__name__ return for class A?",
+      "answer": "A.__name__ returns 'A'. Every class stores its own name as a string attribute.\n\ncode:\nclass A:\n    pass\n\nprint(A.__name__)\n\nreal example:\nLogging and error messages use the class name to make debugging easier."
+    },
+    {
+      "id": 49,
+      "question": "Can a class method have any name as the first parameter instead of self?",
+      "answer": "Yes, the first parameter of a method can have any name instead of self. Python only cares about position, but self is the strong convention.\n\ncode:\nclass A:\n    def hi(this):\n        return 'hi'\n\nprint(A().hi())\n\nreal example:\nReadability is the real reason teams keep self everywhere for consistency."
+    },
+    {
+      "id": 50,
+      "question": "What happens if a class method raises an exception during instantiation?",
+      "answer": "If a method raises an exception during instantiation, the exception propagates and no object is returned. Construction fails cleanly.\n\ncode:\nclass A:\n    def __init__(self):\n        raise ValueError('bad')\n\nA()\n\nreal example:\nA database record creation rejects invalid rows by raising an error to the caller."
+    },
+    {
+      "id": 51,
+      "question": "class A: x = 1. print(A.x is A().x) outputs?",
+      "answer": "print(A.x is A().x) outputs True. Reading an immutable int does not copy it; both reads return the very same class-level value object.\n\ncode:\nclass A:\n    x = 1\n\nprint(A.x is A().x)\n\nreal example:\nShared immutable constants stay identical across all instances, saving memory."
+    },
+    {
+      "id": 52,
+      "question": "What does hash(obj) return by default for a user object?",
+      "answer": "hash(obj) returns an identity-derived integer by default for a user object. It stays stable for the life of the object when no custom __hash__ is defined.\n\ncode:\nclass A:\n    pass\n\na = A()\nprint(hash(a) == hash(a))\n\nreal example:\nObjects used as dictionary keys rely on their hash to be found quickly."
+    },
+    {
+      "id": 53,
+      "question": "class A: def m(self): return self.m() causes what?",
+      "answer": "class A: def m(self): return self.m() causes infinite recursion, raising RecursionError. The method calls itself forever with no stopping condition.\n\ncode:\nclass A:\n    def m(self):\n        return self.m()\n\nA().m()\n\nreal example:\nInfinite self-calls are a bug; real recursion always needs a base case to stop."
+    },
+    {
+      "id": 54,
+      "question": "Can two different classes define methods with the same name?",
+      "answer": "Yes, two different classes can define methods with the same name. Methods belong to their own class, so identical names do not clash.\n\ncode:\nclass A:\n    def m(self):\n        return 1\n\nclass B:\n    def m(self):\n        return 2\n\nreal example:\nDifferent payment providers each implement charge() their own way."
+    },
+    {
+      "id": 55,
+      "question": "What happens when you instantiate with too many args, e.g. P(1,2) when __init__ takes one?",
+      "answer": "P(1,2) when __init__ takes one argument raises TypeError: __init__() took N positional arguments but M were given. Too many arguments fail loudly.\n\ncode:\nclass A:\n    def __init__(self, x):\n        self.x = x\n\nA(1, 2)\n\nreal example:\nPassing the wrong number of constructor arguments surfaces bugs at the call site."
+    },
+    {
+      "id": 56,
+      "question": "What does `A` (without parentheses) refer to?",
+      "answer": "A without parentheses refers to the class object itself, not an instance. It is ready to be called whenever you want to build new objects.\n\ncode:\nclass A:\n    pass\n\nprint(A)\n\nreal example:\nStoring a class reference lets factories decide which class to instantiate later."
+    },
+    {
+      "id": 57,
+      "question": "Does defining a class execute its body?",
+      "answer": "Yes, defining a class executes its body. The body runs when the class statement executes, creating the class's attributes and methods.\n\ncode:\nclass A:\n    tag = 'made'\n\nprint(A.tag)\n\nreal example:\nA class that registers itself in a plugin system does so at import time."
+    },
+    {
+      "id": 58,
+      "question": "What does [-1] do on p = P() when P has no __getitem__?",
+      "answer": "p[-1] on a class with no __getitem__ raises TypeError: 'P' object is not subscriptable. Indexing is unsupported without that special method.\n\ncode:\nclass A:\n    pass\n\nA()[-1]\n\nreal example:\nTrying to index a non-collection object immediately flags the coding mistake."
+    },
+    {
+      "id": 59,
+      "question": "class A: def __getitem__(self, i): return i * 2. What does A()[5] return?",
+      "answer": "class A: def __getitem__(self, i): return i * 2. A()[5] returns 10. __getitem__ defines how indexing works for your objects.\n\ncode:\nclass A:\n    def __getitem__(self, i):\n        return i * 2\n\nprint(A()[5])\n\nreal example:\nCustom database rows support row[column_id] lookups through __getitem__."
+    },
+    {
+      "id": 60,
+      "question": "class A: def __len__(self): return 7. print(len(A())) outputs?",
+      "answer": "class A: def __len__(self): return 7. print(len(A())) outputs 7. __len__ lets the built-in len() ask your object for its size.\n\ncode:\nclass A:\n    def __len__(self):\n        return 7\n\nprint(len(A()))\n\nreal example:\nA shopping basket reports its item count through len()."
+    },
+    {
+      "id": 61,
+      "question": "class A: def __eq__(self, o): return True. print(A() == A()) outputs?",
+      "answer": "class A: def __eq__(self, o): return True. print(A() == A()) outputs True. A custom __eq__ replaces identity with your own comparison logic.\n\ncode:\nclass A:\n    def __eq__(self, o):\n        return True\n\nprint(A() == A())\n\nreal example:\nComparing invoices by number instead of by object identity."
+    },
+    {
+      "id": 62,
+      "question": "class A: def __init__(self, v): self.v = v. How do you compare two A instances by v?",
+      "answer": "Compare the attributes, for example a.v == b.v, or define an __eq__ method for cleaner syntax. Default equality only compares identity.\n\ncode:\nclass A:\n    def __init__(self, v):\n        self.v = v\n\na = A(1)\nb = A(1)\nprint(a.v == b.v)\n\nreal example:\nComparing order totals requires comparing the total attribute, not the order objects."
+    },
+    {
+      "id": 63,
+      "question": "class A: pass; A.new_method = lambda self: 1. What does A().new_method() return?",
+      "answer": "class A: pass; A.new_method = lambda self: 1. A().new_method() returns 1. Functions attached to a class later still bind self correctly.\n\ncode:\nclass A:\n    pass\n\nA.new_method = lambda self: 1\nprint(A().new_method())\n\nreal example:\nHot-patching adds a quick fix to a class without editing source files."
+    },
+    {
+      "id": 64,
+      "question": "What does object.__new__ do during instantiation?",
+      "answer": "object.__new__ allocates and returns the new instance before __init__ runs. It is the first step of object creation.\n\ncode:\nclass A:\n    def __new__(cls):\n        return super().__new__(cls)\n\na = A()\n\nreal example:\nSingletons and immutable types are controlled inside __new__."
+    },
+    {
+      "id": 65,
+      "question": "What order do __new__ and __init__ run when creating an object?",
+      "answer": "__new__ runs first to create the instance, then __init__ runs to initialize it. That ordering is how every object is built.\n\ncode:\nclass A:\n    def __new__(cls):\n        print('new')\n        return super().__new__(cls)\n\n    def __init__(self):\n        print('init')\n\nA()\n\nreal example:\nThe creation order matters when subclassing immutable types like tuple."
+    },
+    {
+      "id": 66,
+      "question": "class A: def m(self): return 'm'. What does 'm' in dir(A()) return?",
+      "answer": "class A: def m(self): return 'm'. 'm' in dir(A()) returns True. dir lists the method name m among the object's names.\n\ncode:\nclass A:\n    def m(self):\n        return 'm'\n\nprint('m' in dir(A()))\n\nreal example:\nCapability checks verify an object can do what the caller needs."
+    },
+    {
+      "id": 67,
+      "question": "class A: x = 5. What does 'x' in A.__dict__ return?",
+      "answer": "class A: x = 5. 'x' in A.__dict__ returns True. Class attributes are stored in the class's own dictionary.\n\ncode:\nclass A:\n    x = 5\n\nprint('x' in A.__dict__)\n\nreal example:\nIntrospection tools read the class dictionary to list available settings."
+    },
+    {
+      "id": 68,
+      "question": "What does 'x' in A().__dict__ return when x is only a class attribute?",
+      "answer": "'x' in A().__dict__ returns False when x is only a class attribute. The instance dict never copies class attributes for itself.\n\ncode:\nclass A:\n    x = 5\n\nprint('x' in A().__dict__)\n\nreal example:\nConfirming whether a value is stored per-instance or shared at class level."
+    }
+  ]
+}
