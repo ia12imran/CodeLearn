@@ -1,0 +1,30 @@
+{
+  "description": "5 HARD-level code questions on Basic Python Syntax (Part 2 of 2). print() separators/end, unexpected indent, the pass statement, and triple-quoted string semantics. Computed outputs verified with Python 3.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does this code print?\n\nprint(\"a\", \"b\")\nprint(\"c\")",
+      "answer": "OUTPUT:\na b\nc\n\nEXPLANATION:\nprint() separates multiple arguments with a space by default (sep=\" \") and appends a newline by default (end=\"\\n\"). The first call prints \"a b\" plus a newline; the second call prints \"c\" plus a newline, so the output is two lines.\n\ncode:\nprint(\"a\", \"b\")   # sep=\" \" -> \"a b\", end=\"\\n\"\nprint(\"c\")          # \"c\\n\"\n\n# Output:\n# a b\n# c\n\nWHY IT MATTERS:\nIn Python 2, print \"a\", \"b\" behaved differently than print(\"a\", \"b\") (which printed a tuple). Understanding the defaults of sep and end helps you predict output exactly and control formatting without string concatenation."
+    },
+    {
+      "id": 2,
+      "question": "What does this code print?\n\nprint(\"x\", \"y\", sep=\"-\", end=\"!\")\nprint(\"z\")",
+      "answer": "OUTPUT:\nx-y!z\n\nEXPLANATION:\nInside the first call, sep=\"-\" joins x and y with a dash -> \"x-y\". end=\"!\" replaces the usual newline, so the cursor stays on the same line after the \"!\". The second print(\"z\") then writes z and its own newline, giving one line: x-y!z.\n\ncode:\nprint(\"x\", \"y\", sep=\"-\", end=\"!\")  # \"x-y\" then \"!\" instead of \\n\nprint(\"z\")                            # \"z\\n\" continues on the same line\n\n# Output:\n# x-y!z\n\nWHY IT MATTERS:\nsep and end are how you build CSV-like lines, progress bars, and pretty logs without building strings manually:\nprint(*row, sep=\",\")          # CSV row\nprint(\"\\rLoading...\", end=\"\") # stay on the same line\nIf end is changed, the next print continues on the SAME line - many output-formatting bugs come from forgetting which print owns the newline."
+    },
+    {
+      "id": 3,
+      "question": "What happens when this code runs?\n\nx = 5\n  print(x)",
+      "answer": "OUTPUT:\nIndentationError: unexpected indent\n\nEXPLANATION:\nLine 2 has leading spaces, but it is not the start of an indented block - there is no header line ending with a colon (like if, for, def) above it. Python detects the stray indentation and raises IndentationError at parse time, so the program never runs.\n\ncode:\nx = 5\n  print(x)   # IndentationError: unexpected indent\n\nWHY IT MATTERS:\nThe error is raised at COMPILE time, before any line executes. Mixing tabs and spaces can also raise TabError: inconsistent use of tabs and spaces in indentation. The fix is always: 4 spaces everywhere, never tabs. Paste code between editors that convert tabs to spaces to avoid this class of bug."
+    },
+    {
+      "id": 4,
+      "question": "What does this code print?\n\nif 10 > 5:\n    pass\nprint(\"done\")",
+      "answer": "OUTPUT:\ndone\n\nEXPLANATION:\npass is a no-op statement - it does absolutely nothing but legally occupies the block, because an empty indented block is a SyntaxError. The condition 10 > 5 is True, so the block is entered, pass executes (no effect), then \"done\" prints.\n\ncode:\nif 10 > 5:\n    pass        # valid placeholder - empty blocks are NOT allowed\nprint(\"done\")   # done\n\nWHY IT MATTERS:\npass is used as a placeholder during development (stub bodies), in exception handlers you intend to ignore, and in abstract method stubs. It is different from continue (skips to the next loop iteration) and from a plain comment (a comment would NOT make a bare block valid)."
+    },
+    {
+      "id": 5,
+      "question": "This code looks like it has a comment. What does it print?\n\n\"\"\"This is documentation.\"\"\"\nprint(\"hello\")",
+      "answer": "OUTPUT:\nhello\n\nEXPLANATION:\nThe triple-quoted string is NOT a comment - it is a string expression statement. Python evaluates the string and immediately discards the value, so it has no visible effect, and \"hello\" prints normally. A real comment starts with # and produces no object.\n\ncode:\n\"\"\"This is documentation.\"\"\"  # a string object is created, then thrown away\nprint(\"hello\")                  # hello\n\nWHY IT MATTERS:\nThe same syntax becomes a docstring only when it is the FIRST statement of a module, class, or function - tooling then reads it via obj.__doc__. Somewhere else it is dead code. Putting a triple-quoted \"comment\" inside a loop is a real (if minor) performance anti-pattern because Python still allocates the string each iteration."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "description": "5 HARD-level code questions on Python Data Types (Part 2 of 2). isinstance with bool, string slicing, int() base conversion, int() truncation vs rounding, and None semantics. Computed outputs verified with Python 3.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does this code print?\n\nprint(isinstance(True, int))\nprint(isinstance(True, bool))",
+      "answer": "OUTPUT:\nTrue\nTrue\n\nEXPLANATION:\nIn Python, bool is a SUBCLASS of int. isinstance() walks the full inheritance chain, so True IS an instance of int AND of bool. This is different from a strict type check: type(True) == int is False, because the type is exactly bool.\n\ncode:\nprint(isinstance(True, int))   # True  - bool is a subclass of int\nprint(isinstance(True, bool))  # True  - it is also exactly bool\n\n# compare:\nprint(type(True) == int)       # False - exact type is bool, not int\n\nWHY IT MATTERS:\nBecause True is an int, all of these work:\nTrue + True == 2, sum([True, True, False]) == 2, [1, 2, 3][True] is 2 (index 1).\nPrefer isinstance(x, int) over type(x) == int - isinstance respects subclassing, so it won't misclassify booleans as non-ints (or custom int subclasses)."
+    },
+    {
+      "id": 2,
+      "question": "What does this code print?\n\nword = \"python\"\nprint(word[1:4])\nprint(word[-3:])",
+      "answer": "OUTPUT:\nyth\nhon\n\nEXPLANATION:\nIndexing starts at 0: p=0, y=1, t=2, h=3, o=4, n=5. word[1:4] takes indices 1, 2, 3 - up to but NOT including index 4 - giving \"yth\". Negative indices count from the end: -1 is n, -2 is o, -3 is h. word[-3:] starts at -3 and runs to the end, giving \"hon\".\n\ncode:\nword = \"python\"\nprint(word[1:4])    # y t h  (index 1 up to, but not including, 4)\nprint(word[-3:])    # h o n  (last three characters)\n\nWHY IT MATTERS:\nSlice bounds are clamped, never an error: word[50:] is \"\" and word[-100:] is the whole string - unlike single indexing word[50] which raises IndexError. The half-open [start:stop] convention makes a[start:stop] and b[:] idioms that API and algorithm code relies on. Slices also work identically on lists and tuples."
+    },
+    {
+      "id": 3,
+      "question": "What does this code print?\n\nprint(int(\"10\", 2))\nprint(int(\"1a\", 16))\nprint(int(\"77\", 8))",
+      "answer": "OUTPUT:\n2\n26\n63\n\nEXPLANATION:\nint(string, base) parses the string as a number written in the given base:\n- base 2 (binary): \"10\" = 1*2 + 0 = 2\n- base 16 (hex): \"1a\" = 1*16 + 10 = 26\n- base 8 (octal): \"77\" = 7*8 + 7 = 63\n\ncode:\nprint(int(\"10\", 2))   # 2    (binary)\nprint(int(\"1a\", 16))  # 26   (hex: 1*16 + 'a'=10)\nprint(int(\"77\", 8))   # 63   (octal: 7*8 + 7)\n\nWHY IT MATTERS:\nA ValueError is raised when the string has digits invalid for the base: int(\"2\", 2) raises (no '2' digit in binary). int() also accepts a base-0 hint: int(\"0x1a\", 0) == 26 and int(\"0b10\", 0) == 2 because the prefix tells the base. Parsing config values, flags, and hex color codes from strings is where this shows up daily."
+    },
+    {
+      "id": 4,
+      "question": "What does this code print?\n\nprint(int(3.99))\nprint(int(-2.7))\nprint(int(\"46\"))",
+      "answer": "OUTPUT:\n3\n-2\n46\n\nEXPLANATION:\nint() on a float TRUNCATES toward ZERO - it just drops the fractional part, it does NOT round: 3.99 -> 3 and -2.7 -> -2 (toward zero, not toward -infinity like floor division //). int(\"46\") converts a numeric STRING directly into an int.\n\ncode:\nprint(int(3.99))    # 3   (truncation: drop the .99, no rounding)\nprint(int(-2.7))    # -2  (toward zero, NOT floor: floor would be -3)\nprint(int(\"46\"))    # 46  (string -> int)\n\nWHY IT MATTERS:\nTo round instead: use round(3.99) == 4, math.floor(-2.7) == -3, math.ceil(-2.7) == -2. And int(\"4.6\") raises ValueError - int() expects an integer-looking string, not a float-looking one (use float() then int()). The truncation-vs-rounding distinction quietly changes quantities in financial and display code."
+    },
+    {
+      "id": 5,
+      "question": "What does this code print?\n\nprint(type(None).__name__)\nprint(None == 0)\nprint(None is None)",
+      "answer": "OUTPUT:\nNoneType\nFalse\nTrue\n\nEXPLANATION:\nNone is a singleton object of type NoneType - it represents \"no value\". It equals nothing except itself: None == 0 is False (and None == \"\", None == False, None == [] are all False too). Since None is a singleton, the identity check None is None is True, and this is the RECOMMENDED way to test it.\n\ncode:\nprint(type(None).__name__)  # NoneType\nprint(None == 0)            # False - None equals nothing but itself\nprint(None is None)         # True  - it is a singleton\n\nWHY IT MATTERS:\nEvery function that ends without an explicit return implicitly returns None. Database queries, .get() on dicts, and regex .match() all return None to signal \"nothing found\". The canonical test is x is None / x is not None - NOT x == None, because == can be overloaded by custom __eq__ methods and can give misleading results. Optional[T] in type hints is just T | None, i.e. the None singleton again."
+    }
+  ]
+}

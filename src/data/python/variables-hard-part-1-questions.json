@@ -1,0 +1,30 @@
+{
+  "description": "5 HARD-level code questions on Python Variables (Part 1 of 2). Dynamic typing, multiple assignment/unpacking, chained assignment, starred unpacking, and augmented assignment evaluation order. Computed outputs verified with Python 3.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does this code print?\n\nx = 42\nx = \"forty-two\"\nprint(x)",
+      "answer": "OUTPUT:\nforty-two\n\nEXPLANATION:\nPython is dynamically typed: a variable is just a name bound to an object. Reassigning x from an integer to a string is perfectly legal - Python never locks a name to a single type. The last assignment wins, so print(x) shows \"forty-two\".\n\ncode:\nx = 42          # x -> int 42\nx = \"forty-two\" # x -> str \"forty-two\" (rebinding is allowed)\nprint(x)        # forty-two\n\nWHY IT MATTERS:\nA C/Java developer can't imagine this, but it is exactly why Python lets you write defs that return different types. The trade-off: type errors surface at runtime, not compile time. The old int object (42) becomes garbage once no name references it."
+    },
+    {
+      "id": 2,
+      "question": "What does this code print?\n\na, b, c = 1, 2, 3\na, b = b, c\nprint(a, b, c)",
+      "answer": "OUTPUT:\n2 3 3\n\nEXPLANATION:\nThe right-hand side of an assignment is fully evaluated BEFORE any name is written. On the second line, b and c are read first (2 and 3), and only then are those values assigned - a becomes 2, b becomes 3. c is untouched and stays 3.\n\ncode:\na, b, c = 1, 2, 3   # a=1, b=2, c=3\na, b = b, c         # read (2, 3) first, then a=2, b=3\nprint(a, b, c)      # 2 3 3\n\nWHY IT MATTERS:\nThe \"read RHS before writing\" rule is what makes Python swaps, rotating values, and parallel iteration (for k, v in d.items()) safe and concise. Getting this wrong means expecting a=3 here (b was 2 when read - not a=... whatever you mutated). RHS is always the OLD state."
+    },
+    {
+      "id": 3,
+      "question": "What does this code print?\n\na = b = 5\nb = 10\nprint(a, b)",
+      "answer": "OUTPUT:\n5 10\n\nEXPLANATION:\na = b = 5 binds both names to the same integer object 5. Integers are IMMUTABLE, so b = 10 does not modify that object - it rebinds only b to a brand-new int object 10. a still refers to the original 5.\n\ncode:\na = b = 5   # both a and b point at the int object 5\nb = 10      # b now points at a new object; a is untouched\nprint(a, b) # 5 10\n\nWHY IT MATTERS:\nThis same pattern is a famous TRAP with mutable objects:\nx = y = []\nx.append(1)\nprint(y)   # [1] - x and y share the SAME list object!\nFor immutables (int, str, tuple) chained assignment is harmless; for mutables (list, dict, set) it creates shared references. Use x = []; y = [] to create independent lists."
+    },
+    {
+      "id": 4,
+      "question": "What does this code print?\n\nfirst, *rest = [10, 20, 30, 40]\nprint(first, rest)",
+      "answer": "OUTPUT:\n10 [20, 30, 40]\n\nEXPLANATION:\nIn a starred assignment, the *rest target collects ALL leftover items into a list. first gets the first element (10), rest gets everything after it as a list [20, 30, 40].\n\ncode:\nfirst, *rest = [10, 20, 30, 40]\nprint(first, rest)  # 10 [20, 30, 40]\n\n# Edge cases:\nfirst, *rest = [1]     # rest -> [] (empty list, no error)\nfirst, *rest = []      # ValueError: not enough values to unpack\n\nWHY IT MATTERS:\nStarred unpacking handles a variable-length head/tail without slicing:\nhead, *body, tail = rows     # first row, all middle rows, last row\nname, *tags, domain = email.split(\"@\")  # flexible splits\nThe star can appear exactly once per pattern but in any position (first, middle, or last)."
+    },
+    {
+      "id": 5,
+      "question": "What does this code print?\n\nx = 6\nx *= 3 + 1\nprint(x)",
+      "answer": "OUTPUT:\n24\n\nEXPLANATION:\nx *= 3 + 1 is shorthand for x = x * (3 + 1). The right-hand side is evaluated FIRST (3 + 1 = 4), then the multiplication happens: 6 * 4 = 24. The common wrong guess is 19 (6 * 3 + 1), which ignores the parentheses' precedence.\n\ncode:\nx = 6\nx *= 3 + 1        # x = x * (3 + 1) -> 6 * 4\nprint(x)          # 24\n\nWHY IT MATTERS:\nAugmented assignment evaluates the ENTIRE right side before combining. The same rule applies to lists with += (which also mutates in place via __iadd__) and to all operators: +=, -=, *=, /=, //=, %=, **=, &=, |=. Parenthesize the operand when in doubt."
+    }
+  ]
+}

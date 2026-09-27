@@ -1,0 +1,30 @@
+{
+  "description": "5 HARD-level code questions on Python Variables (Part 2 of 2). Tuple swap, cross-type rebinding, del/NameError, function-local vs global scope, and assigning to keywords. Computed outputs verified with Python 3.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does this code print?\n\na, b = 10, 20\na, b = b, a\nprint(a, b)",
+      "answer": "OUTPUT:\n20 10\n\nEXPLANATION:\nThe right-hand side (b, a) is fully evaluated to (20, 10) BEFORE the unpacking assignment writes anything. Then a gets 20 and b gets 10 - no temporary variable needed. This is the idiomatic Python swap.\n\ncode:\na, b = 10, 20\na, b = b, a    # reads (20, 10), then writes a=20, b=10\nprint(a, b)    # 20 10\n\nWHY IT MATTERS:\nIn C/Java you need a temp: tmp = a; a = b; b = tmp. In Python the tuple constructor + unpacking does it atomically in one statement. The same mechanism powers rotations: a, b, c = b, c, a - handy in circular buffer and state-machine code."
+    },
+    {
+      "id": 2,
+      "question": "What does this code print?\n\ndata = [1, 2, 3]\ndata = \"text\"\ndata = 9.5\nprint(type(data).__name__)",
+      "answer": "OUTPUT:\nfloat\n\nEXPLANATION:\nThe same name data is rebound to a list, then a string, then a float. Python tracks the TYPE OF THE OBJECT, not the name. After data = 9.5, the name points at a float, so type(data).__name__ returns the string \"float\".\n\ncode:\ndata = [1, 2, 3]   # data -> list\ndata = \"text\"      # data -> str (rebinding, not conversion)\ndata = 9.5         # data -> float\nprint(type(data).__name__)  # float\n\nWHY IT MATTERS:\nRebinding is NOT converting: the old objects are simply discarded (garbage-collected). This is different from int(data), which CREATES a new object and leaves the original untouched. Reusing names across types is legal but hurts readability - type hints (@dataclass, mypy) exist partly to keep yourself honest here."
+    },
+    {
+      "id": 3,
+      "question": "What happens when this code runs?\n\nx = 100\ndel x\nprint(x)",
+      "answer": "OUTPUT:\nNameError: name 'x' is not defined\n\nEXPLANATION:\ndel x unbinds the name x from its object (the object itself may survive if other references exist). After that, any use of x fails because no such name exists in the current scope - so print(x) raises NameError.\n\ncode:\nx = 100\ndel x        # remove the binding, not necessarily the object\nprint(x)     # NameError: name 'x' is not defined\n\nWHY IT MATTERS:\ndel is not just for variables:\ndel lst[0]       # remove list item by INDEX\nlst.remove(v)    # remove by VALUE (different!)\ndel d[\"key\"]     # remove a dict key\ndel obj.attr     # remove an attribute\nUsing a variable you deleted is a classic NameError; catch it by checking the name still exists or restructuring code so deletion is avoidable (e.g. just rebind instead)."
+    },
+    {
+      "id": 4,
+      "question": "What does this code print?\n\ncount = 10\n\ndef update():\n    count = 99\n    return count\n\nupdate()\nprint(count)",
+      "answer": "OUTPUT:\n10\n\nEXPLANATION:\nInside update(), the line count = 99 CREATES a new local variable - it does not touch the global count. Python decides a name is local to a function if it is assigned anywhere in that function (unless declared global/nonlocal). The returned 99 is discarded because the call update() is not assigned to anything, so the module-level count stays 10.\n\ncode:\ncount = 10            # module-level (global) variable\n\ndef update():\n    count = 99        # NEW local count - shadows the global\n    return count\n\nupdate()              # return value 99 is thrown away\nprint(count)          # 10 - the global was never modified\n\nWHY IT MATTERS:\nTo really modify the global you need: global count at the top of the function - or, much better, return the new value and assign it: count = update(). The local-shadowing rule is why a function can't \"accidentally\" clobber globals, and also why using a global without global inside a function raises UnboundLocalError."
+    },
+    {
+      "id": 5,
+      "question": "What happens when this code runs?\n\nTrue = 5",
+      "answer": "OUTPUT:\nSyntaxError: cannot assign to True\n\nEXPLANATION:\nTrue (and False, None) are reserved keywords in Python, not variables - assigning to them is illegal and the error is raised at PARSE time, before any code executes. The same happens for all keywords: if, for, class, def, import, while, return, etc.\n\ncode:\nTrue = 5   # SyntaxError: cannot assign to True\nif = 10    # SyntaxError: invalid syntax\n\nWHY IT MATTERS:\nBecause True/False/None are keywords, you can never shadow them (good). But note: True == 1 is True, so if someone accidentally redefines the name true (not True), Python happily creates a variable named true. Watch typo'd keywords and case variants - they silently become valid identifiers instead of errors."
+    }
+  ]
+}

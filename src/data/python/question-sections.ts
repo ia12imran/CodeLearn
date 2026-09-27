@@ -1,5 +1,11 @@
 import type { QuestionBankSection } from "@/data/types";
 
+import basicSyntaxHard1 from "./basic-syntax-hard-part-1-questions.json";
+import basicSyntaxHard2 from "./basic-syntax-hard-part-2-questions.json";
+import variablesHard1 from "./variables-hard-part-1-questions.json";
+import variablesHard2 from "./variables-hard-part-2-questions.json";
+import dataTypesHard1 from "./data-types-hard-part-1-questions.json";
+import dataTypesHard2 from "./data-types-hard-part-2-questions.json";
 import stringBasics from "./string-basics-questions.json";
 import stringMethods from "./string-methods-questions.json";
 import stringFormatting from "./string-formatting-questions.json";
@@ -21,6 +27,12 @@ import fileHandling from "./file-handling-questions.json";
 import questionBank from "./question-bank.json";
 
 const splitSections: Record<string, QuestionBankSection> = {
+  basic_syntax_hard_1: basicSyntaxHard1 as QuestionBankSection,
+  basic_syntax_hard_2: basicSyntaxHard2 as QuestionBankSection,
+  variables_hard_1: variablesHard1 as QuestionBankSection,
+  variables_hard_2: variablesHard2 as QuestionBankSection,
+  data_types_hard_1: dataTypesHard1 as QuestionBankSection,
+  data_types_hard_2: dataTypesHard2 as QuestionBankSection,
   string_basics: stringBasics as QuestionBankSection,
   string_methods: stringMethods as QuestionBankSection,
   string_formatting: stringFormatting as QuestionBankSection,

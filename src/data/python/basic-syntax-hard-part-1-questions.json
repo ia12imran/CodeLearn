@@ -1,0 +1,30 @@
+{
+  "description": "5 HARD-level code questions on Basic Python Syntax (Part 1 of 2). Tricky indentation, semicolons, string literal concatenation, line continuation, and case sensitivity. Computed outputs verified with Python 3.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does this code print?\n\nif True:\n    print(\"A\")\n    print(\"B\")\nprint(\"C\")",
+      "answer": "OUTPUT:\nA\nB\nC\n\nEXPLANATION:\nIn Python, indentation defines code blocks instead of braces. Lines 2 and 3 are indented with 4 spaces, so they belong to the if block. Line 4 has no indentation, so it is OUTSIDE the if block and always runs. Since the condition is True, all three lines execute.\n\ncode:\nif True:\n    print(\"A\")   # inside the if block\n    print(\"B\")   # inside the if block\nprint(\"C\")       # outside the if block - always runs\n\n# Output:\n# A\n# B\n# C\n\nWHY IT MATTERS:\nOne stray indent silently changes logic. If print(\"C\") were accidentally indented, it would run only when the condition is True. This is the single most common new-Python-dev bug in real code reviews."
+    },
+    {
+      "id": 2,
+      "question": "What does this code print?\n\na = 7; b = 3\nc = a * b\nprint(c)",
+      "answer": "OUTPUT:\n21\n\nEXPLANATION:\nA semicolon lets you put multiple simple statements on one line, so the first line performs two assignments: a = 7 and b = 3. Then c = a * b = 7 * 3 = 21, which is printed.\n\ncode:\na = 7; b = 3   # two statements on one line\nc = a * b      # 21\nprint(c)       # 21\n\nWHY IT MATTERS:\nSemicolons are valid but discouraged by PEP 8 - one statement per line is far more readable. You will still see them in legacy scripts, one-liners, and minified CI files, so you must be able to read them. Note the semicolon is NOT a statement terminator like in C - it is a separator."
+    },
+    {
+      "id": 3,
+      "question": "What does this code print?\n\nmessage = \"Py\" \"thon\"\nprint(message)",
+      "answer": "OUTPUT:\nPython\n\nEXPLANATION:\nTwo adjacent string literals are automatically concatenated at compile time - no + operator needed. \"Py\" \"thon\" becomes the single string \"Python\". This only works between literal values sitting next to each other; you cannot write \"Py\" name \"thon\" with a variable in between.\n\ncode:\nmessage = \"Py\" \"thon\"   # implicit concatenation\nprint(message)            # Python\n\nWHY IT MATTERS:\nThis behavior is used for splitting long string literals across lines:\nlong_sql = \"SELECT * FROM users \" \\\n           \"WHERE active = 1\"  # wait - the backslash is the continuation; adjacent literals also concatenate when inside parentheses:\nlong_sql = (\"SELECT * FROM users \"\n            \"WHERE active = 1\")   # -> one string\nIt also explains why a missing comma in a list of strings silently joins two items instead of erroring - a classic bug."
+    },
+    {
+      "id": 4,
+      "question": "What does this code print?\n\ntotal = 1 + 2 + \\\n        3 + 4\nprint(total)",
+      "answer": "OUTPUT:\n10\n\nEXPLANATION:\nA backslash at the end of a line is an explicit line continuation - the physical line break is ignored, so the statement reads 1 + 2 + 3 + 4 = 10.\n\ncode:\ntotal = 1 + 2 + \\\n        3 + 4        # reads as: total = 1 + 2 + 3 + 4\nprint(total)           # 10\n\nWHY IT MATTERS:\nInside brackets, braces, or parentheses the backslash is unnecessary - Python keeps parsing until the closing bracket:\nitems = [\n    1,\n    2,\n]  # no backslash needed\nOutside brackets (a bare arithmetic line) you MUST use the backslash, and the backslash must be the very last character on the line (no trailing space or you get \"unexpected character after line continuation character\")."
+    },
+    {
+      "id": 5,
+      "question": "What does this code print?\n\nname = \"ada\"\nName = \"ADA\"\nprint(name, Name)",
+      "answer": "OUTPUT:\nada ADA\n\nEXPLANATION:\nPython identifiers are case-sensitive, so name and Name are two completely different variables, each holding its own value. print(name, Name) outputs the first variable's value (\"ada\"), then a space, then the second variable's value (\"ADA\").\n\ncode:\nname = \"ada\"   # lowercase - different from:\nName = \"ADA\"   # this one - capital letter\nprint(name, Name)  # ada ADA\n\nWHY IT MATTERS:\nmyVar, MyVar and MYVAR are three distinct names. Autocomplete tools and find-replace 'fixes' often silently create a new variable (e.g. turning myvar into MyVar mid-file) which shadows rather than updates the intended one - a frequent, hard-to-spot source of bugs. Also note: print() puts a single space between multiple arguments by default."
+    }
+  ]
+}

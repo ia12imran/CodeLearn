@@ -1,0 +1,30 @@
+{
+  "description": "5 HARD-level code questions on Python Data Types (Part 1 of 2). type() of expressions, equality vs identity, division operators, truthiness, and mutability inside tuples. Computed outputs verified with Python 3.",
+  "questions": [
+    {
+      "id": 1,
+      "question": "What does this code print?\n\nprint(type(3).__name__)\nprint(type(3.0).__name__)\nprint(type(3 == 3).__name__)",
+      "answer": "OUTPUT:\nint\nfloat\nbool\n\nEXPLANATION:\n3 is an int, 3.0 is a float (a decimal number), and 3 == 3 is a comparison that evaluates to True - a bool. Each type() call reports the runtime type of the VALUE, and .__name__ gives just the class name string.\n\ncode:\nprint(type(3).__name__)      # int\nprint(type(3.0).__name__)    # float\nprint(type(3 == 3).__name__) # bool\n\nWHY IT MATTERS:\nTwo sneaky details:\n1) bool is a SUBCLASS of int in Python, so True acts like 1 (True + True == 2).\n2) type() is rarely the right check - isinstance(x, float) handles subclasses correctly.\nKnowing the exact type of each literal (3 vs 3.0 vs \"3\") avoids confusion with operators that behave differently per type (e.g. \"3\" + \"4\" is \"34\", 3 + 4 is 7)."
+    },
+    {
+      "id": 2,
+      "question": "What does this code print?\n\na = 1\nb = 1.0\nprint(a == b)\nprint(a is b)",
+      "answer": "OUTPUT:\nTrue\nFalse\n\nEXPLANATION:\n== compares VALUES: 1 and 1.0 are numerically equal, so a == b is True. is compares IDENTITY - whether both names point at the exact same object. a points at an int object, b at a float object, so they are different objects and a is b is False.\n\ncode:\na = 1      # int object\na = 1.0    # b - float object\nprint(a == b)   # True  (values equal)\nprint(a is b)   # False (different objects)\n\nWHY IT MATTERS:\nNever use is for number comparison: 1 is 1 is usually True only because CPython interns small ints, and 257 is 257 can be False - identical-looking code giving different answers is a real footgun. is is only correct for singletons: x is None, x is True (checking identity of the singleton object)."
+    },
+    {
+      "id": 3,
+      "question": "What does this code print?\n\nprint(7 / 2)\nprint(7 // 2)\nprint(-7 // 2)",
+      "answer": "OUTPUT:\n3.5\n3\n-4\n\nEXPLANATION:\n/ ALWAYS returns a float in Python 3: 7 / 2 = 3.5. // is floor division - it rounds DOWN to the nearest integer: 7 // 2 = 3. For negatives, \"floor\" means toward MINUS INFINITY, so -7 // 2 = -4 (not -3.5, and not -3 either).\n\ncode:\nprint(7 / 2)    # 3.5  (true division - always float)\nprint(7 // 2)   # 3    (floor division - round down)\nprint(-7 // 2)  # -4   (floor = toward -inf, NOT toward zero!)\n\nWHY IT MATTERS:\nThis is the classic interview trap. C/C++/Java truncate toward ZERO (-7 / 2 == -3); Python floors toward -inf. The two differ exactly for negative operands. divmod() gives both at once: divmod(-7, 2) == (-4, 1), and the invariant a == (a // b) * b + (a % b) always holds. % also follows the sign of the divisor in Python - yet another surprise for C refugees."
+    },
+    {
+      "id": 4,
+      "question": "What does this code print?\n\nprint(bool(0))\nprint(bool(\"0\"))\nprint(bool([]))",
+      "answer": "OUTPUT:\nFalse\nTrue\nFalse\n\nEXPLANATION:\nFalsy values in Python are: 0, 0.0, \"\" (empty string), None, False, and EMPTY containers ([], {}, (), set()). bool(0) is therefore False and bool([]) is False. But \"0\" is a NON-EMPTY string (it contains one character), so it is TRUTHY -> bool(\"0\") is True.\n\ncode:\nprint(bool(0))       # False - numeric zero is falsy\nprint(bool(\"0\"))     # True  - non-empty string, even if it looks like zero\nprint(bool([]))      # False - empty list is falsy\n\nWHY IT MATTERS:\nThe string \"0\", \"None\", \"False\" are all truthy - code like if user_answer: is truthiness, NOT \"is it a non-zero number\". A classic bug: if input == 0 will not catch input == \"0\". Use truthiness checks (if value:) as the default - they are more robust across types - and explicit checks only when the distinction matters."
+    },
+    {
+      "id": 5,
+      "question": "A tuple is supposed to be immutable. What does this code print?\n\nt = ([1, 2], 3)\nt[0].append(99)\nprint(t)",
+      "answer": "OUTPUT:\n([1, 2, 99], 3)\n\nEXPLANATION:\nThe tuple itself is immutable - you cannot add, remove, or replace its elements (t[0] = ... would raise TypeError). BUT the first element is a LIST, and lists are mutable. t[0].append(99) reaches INTO that list and mutates it. The tuple still references the same list object - only the list's contents changed, which the tuple does not forbid.\n\ncode:\nt = ([1, 2], 3)\nt[0].append(99)   # mutates the list INSIDE the tuple\nprint(t)          # ([1, 2, 99], 3)\n\n# Direct mutation of the tuple itself fails:\n# t[0] = [9]     -> TypeError: 'tuple' object does not support item assignment\n\nWHY IT MATTERS:\n\"Tuples are immutable\" is shorthand for \"the tuple's ELEMENT REFERENCES cannot change.\" Contained mutable objects are still mutable. That's why a tuple can never be used as a dict key or set element if it contains a list (unhashable), while a tuple of hashables works. Watch for nested mutable defaults and shared references in tests."
+    }
+  ]
+}
