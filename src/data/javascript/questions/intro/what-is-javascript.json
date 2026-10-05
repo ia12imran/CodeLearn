@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "question": "In one sentence, what is JavaScript?",
+    "answer": "JavaScript is the programming language that turns a static web page into a program that reacts to clicks, data and time. Every browser already knows how to run it, so no extra install is needed to use it in a page.\n\ncode:\nconst pageTitle = 'Checkout';\nconst itemsInCart = 3;\nconst message = pageTitle + ' has ' + itemsInCart + ' items waiting';\nconsole.log(message);\nconsole.log(typeof message);\n\nreal example:\nA Playwright test is a JavaScript file. The page you are testing and the script that clicks it speak exactly the same language, which removes a translation layer."
+  },
+  {
+    "id": 2,
+    "question": "Where can JavaScript code actually run?",
+    "answer": "Anywhere there is a JavaScript engine, which means a browser, a server, a mobile app, a desktop app or even a database engine. The language part is identical; only the extra tools around it change.\n\ncode:\nconsole.log('language needs: values, functions, an engine');\nconsole.log('hosts: browser window, Node process, Deno, a game engine, a database');\nconsole.log(typeof globalThis);\nconsole.log('one language, many hosts, slightly different extras');\n\nreal example:\nThe same assertion code runs against a Playwright page in the browser and against an HTTP response in Node, because both are plain JavaScript."
+  },
+  {
+    "id": 3,
+    "question": "What problem did JavaScript solve on a web page made only of HTML and CSS?",
+    "answer": "HTML gives structure and CSS gives looks, but neither can react to a user. JavaScript was the piece that could respond to a click, validate a form or fetch new data without reloading the whole page.\n\ncode:\nconst cart = [{ name: 'tea', qty: 1 }, { name: 'cake', qty: 2 }];\nconst view = cart.filter((item) => item.qty > 1);\nconsole.log(view);\nconsole.log('count and filter with no server round trip, which is the whole point');\n\nreal example:\nBefore JavaScript, every change to a page needed a server request. Today a test can drive that same logic directly and assert on the result instead of waiting for a response."
+  },
+  {
+    "id": 4,
+    "question": "What can JavaScript not do on its own inside a browser?",
+    "answer": "The language itself cannot open a socket, read a file from disk or paint pixels. Those abilities come from the host, meaning the browser or Node, not from the language.\n\ncode:\nconst languageAlone = { serverSocket: false, readDisk: false, drawPixels: false };\nconst hostAdds = { render: true, network: true, timers: true };\nconsole.log(languageAlone);\nconsole.log(hostAdds);\nconsole.log('the language is tiny, the host supplies almost everything useful');\n\nreal example:\nWhen a Playwright test works in Node but not in the browser, the missing piece is usually a host API such as reading a file, which is why you import it from Node modules."
+  },
+  {
+    "id": 5,
+    "question": "What is the difference between Java and JavaScript?",
+    "answer": "They are unrelated languages that share a name. Java is compiled to bytecode and runs on a virtual machine with static types, while JavaScript is read by an engine and uses dynamic typing.\n\ncode:\nconst java = { output: 'bytecode', needsJvm: true, typing: 'static' };\nconst js = { output: 'nothing ahead of time', needsAnyEngine: true, typing: 'dynamic' };\nconsole.log(java);\nconsole.log(js);\nconsole.log('the shared name was a marketing decision in 1995');\n\nreal example:\nA Selenium stack written in Java drives the same browser as a Playwright stack written in JavaScript. The tool is the browser, not the language."
+  },
+  {
+    "id": 6,
+    "question": "What is ECMAScript, and how is it different from JavaScript?",
+    "answer": "ECMAScript is the specification document that defines the language. JavaScript is the language that engines implement, so the correct phrase is implemented in accordance with the ECMAScript specification.\n\ncode:\nconst spec = { name: 'ECMAScript', job: 'define syntax and behaviour' };\nconst lang = { name: 'JavaScript', job: 'be the thing programmers write' };\nconsole.log(spec, lang);\nconsole.log('people say ES2020 when they mean the standard, and that is fine');\n\nreal example:\nWhen a Playwright release notes say the test runner needs ES2020 or newer, that means Node must implement that standard, not that a new browser is required."
+  },
+  {
+    "id": 7,
+    "question": "Who decides what new features go into JavaScript?",
+    "answer": "A committee of engine makers proposes, reviews and writes each feature into the specification, and then at least two engines implement it before it ships. Nothing becomes JavaScript because one company wanted it.\n\ncode:\nconst path = ['proposal', 'review', 'spec text', 'two implementations', 'ship'];\nconsole.log(path.join(' -> '));\nconsole.log('a committee writes the spec, engines implement it independently');\nconsole.log('the same reason lets three browsers agree on one language');\n\nreal example:\nA popular library may stop supporting an old engine because the engine never received the feature everyone else has, so a feature request and a browser support list look alike."
+  },
+  {
+    "id": 8,
+    "question": "What is the difference between ES5 and ES6?",
+    "answer": "ES5 came out in 2009 and stayed almost unchanged for years. ES6, released as ES2015 in 2015, added let and const, arrow functions, classes, template strings, destructuring, modules and Promise in one big step.\n\ncode:\nconst es5 = ['var', 'function', 'no classes', 'no Promise'];\nconst es6 = ['let', 'arrow function', 'class', 'Promise', 'template string'];\nconsole.log(es5.join(', '));\nconsole.log(es6.join(', '));\nconsole.log('six quiet years, then one release with most missing features');\n\nreal example:\nOld Selenium suites were written against ES5 because old browsers could not do more. A new Playwright suite can use arrow functions and destructuring freely."
+  },
+  {
+    "id": 9,
+    "question": "Name three ES6 features and what older code each one replaced.",
+    "answer": "Arrow functions replaced anonymous function expressions that relied on this, let and const replaced var, and template strings replaced string concatenation. Knowing the old form helps you read code in older suites.\n\ncode:\nconst oldJoin = function () {\n  return Array.prototype.slice.call(['a', 'b']).join('-');\n};\nconsole.log(oldJoin());\nconst newJoin = () => ['a', 'b'].join('-');\nconsole.log(newJoin());\nconst oldAdd = function (a, b) { var t = a + b; return t; };\nconsole.log(oldAdd(1, 2), ((a, b) => a + b)(1, 2));\n\nreal example:\nWhen converting a Protractor suite to Playwright you delete every page object helper written for function and this, and the replacement is a plain arrow or method."
+  },
+  {
+    "id": 10,
+    "question": "Why do people call the same release both ES6 and ES2015?",
+    "answer": "The committee decided to name releases after the year they were finished, so the big 2015 release is ES2015. ES6 stuck as an informal nickname because it arrived as the sixth version.\n\ncode:\nconst names = ['ES6', 'ES2015'];\nconsole.log(names, 'both mean the same release');\nconsole.log('later ones only have the year name: ES2020, ES2023');\nconsole.log('when precision matters, use the year form');\n\nreal example:\nA package README asking for ES2018 support is really asking for async iteration, so an ES6-only engine would fail the test suite."
+  },
+  {
+    "id": 11,
+    "question": "Is JavaScript interpreted or compiled?",
+    "answer": "Both, in stages. The engine parses the text into a syntax tree, compiles that tree into bytecode, and then runs the bytecode, so a syntax error is caught before any code runs.\n\ncode:\ntry {\n  new Function('return (')();\n} catch (err) {\n  console.log(err.constructor.name + ': the whole file is rejected');\n}\nconsole.log(1 + 1);\nconsole.log('a syntax error stops everything, a bad value fails only when reached');\n\nreal example:\nA test file with a missing bracket produces an immediate failure before a single test executes, which is why CI fails fast on a typo instead of reporting a mystery timeout."
+  },
+  {
+    "id": 12,
+    "question": "What does JIT mean, and why does it change how fast JavaScript is?",
+    "answer": "JIT stands for just in time compilation. The engine first runs code slowly as written, notices which functions run again and often, then compiles those into fast machine code while the program is running.\n\ncode:\nfunction add(a, b) { return a + b; }\nlet total = 0;\nfor (let i = 0; i < 200000; i += 1) total = add(total, i);\nconsole.log(total);\nconsole.log('first calls run as written, hot loops get compiled to machine code');\n\nreal example:\nA test suite that loops over a large data table speeds up after the first thousand rows, because that is the moment the engine optimises the loop body."
+  },
+  {
+    "id": 13,
+    "question": "What does it mean that JavaScript is dynamically typed?",
+    "answer": "It means the type lives in the value, not written in the program. A variable can hold a number on one line and a string on the next, with no declaration and no error.\n\ncode:\nlet value = 10;\nconsole.log(typeof value);\nvalue = 'ten';\nconsole.log(typeof value);\nvalue = true;\nconsole.log(typeof value);\nconsole.log('no type is written anywhere in the program');\n\nreal example:\nA helper that reads a page field and returns it works for a checkbox boolean and a text field string, so a typed language would have forced two separate helpers."
+  },
+  {
+    "id": 14,
+    "question": "What is the difference between dynamically typed and weakly typed?",
+    "answer": "Dynamic typing is about where the type is recorded. Weak typing is about the language converting values for you instead of complaining, so a number and text silently become text when you add them.\n\ncode:\nlet cell = '42';\nconsole.log(cell + 1);\ncell = cell * 1;\nconsole.log(cell + 1, typeof cell);\nconsole.log('the value changed category on its own and nothing was raised');\n\nreal example:\nA total column read from a page arrives as text, the assertion helper adds a shipping value, and the comparison against a number quietly fails instead of erroring."
+  },
+  {
+    "id": 15,
+    "question": "Why is it risky to do money maths with JavaScript numbers?",
+    "answer": "JavaScript stores numbers as binary floating point, so decimals cannot always be represented exactly. Totals drift by tiny amounts, which is unacceptable for prices and unacceptable for test assertions too.\n\ncode:\nconst total = 0.1 + 0.2;\nconsole.log(total);\nconsole.log(total === 0.3, total.toFixed(2));\nconsole.log('keep money as integer cents, never as floats');\n\nreal example:\nA cart total assertion of 0.1 + 0.2 === 0.3 fails on the first run and passes on a different machine, so tests compare a formatted string or integer cents instead."
+  },
+  {
+    "id": 16,
+    "question": "What does it mean that JavaScript is single-threaded?",
+    "answer": "Only one piece of JavaScript runs at a time inside one context. There is no shared state to corrupt, but any slow piece of code blocks everything else until it finishes.\n\ncode:\nconsole.log('one call stack, one job at a time');\nconsole.log('no locking and no race conditions inside a single context');\nconsole.log('the cost is that blocking work delays clicks, timers and tests');\n\nreal example:\nA Playwright test that loops over rows by reading a file inside the loop can time out on a slow run, while the same rows read once and kept in memory stay fast."
+  },
+  {
+    "id": 17,
+    "question": "What happens if a piece of JavaScript takes a very long time to finish?",
+    "answer": "Nothing else in that context can start until it returns, so the page stops responding or the test runner stops making progress. Splitting the work into smaller tasks is the fix.\n\ncode:\nconst rows = Array.from({ length: 5000 }, (_, i) => i);\nlet total = 0;\nrows.forEach((row) => { total += row; });\nconsole.log('rows handled:', total > 0);\nconsole.log('all of it ran as one task, so nothing else could run meanwhile');\n\nreal example:\nScraping ten thousand rows inside one synchronous loop starves the driver, and the click that was supposed to happen mid-way never gets a chance to run."
+  },
+  {
+    "id": 18,
+    "question": "What does it mean that JavaScript is prototype-based?",
+    "answer": "Objects do not inherit from a class definition at run time. They walk up a link to another object, called the prototype, and use whatever they find there for missing properties.\n\ncode:\nconst base = { describe() { return 'a button'; } };\nconst button = Object.create(base);\nbutton.text = 'Save';\nconsole.log(button.text, button.describe());\nconsole.log('button has no describe of its own, it borrows one');\n\nreal example:\nA page object class extends a shared base class so that every helper such as getText is available without any library, which is the prototype chain doing its job."
+  },
+  {
+    "id": 19,
+    "question": "Who created JavaScript, when, and why was it called JavaScript?",
+    "answer": "Brendan Eich wrote it in about ten days at Netscape in 1995. The name borrowed the word Java because Java was the hot language that year, and the resemblance stopped there.\n\ncode:\nconsole.log('1995, Brendan Eich, Netscape, roughly ten days');\nconsole.log('named to ride the Java hype, not because of any shared design');\nconsole.log('a browser scripting language was the original intent');\n\nreal example:\nThat original intent explains why JavaScript has no built-in way to read a file, while a language designed for servers would have shipped one on day one."
+  },
+  {
+    "id": 20,
+    "question": "What changed in JavaScript around 2008 and 2009 that made it worth learning properly?",
+    "answer": "Two things. A fast new engine made JavaScript quick enough for real applications, and Node released in 2009 brought the same language to servers. After that the language itself grew again with ES6 in 2015.\n\ncode:\nconsole.log('2008 fast engine -> 2009 Node on a server -> 2015 ES6 features');\nconsole.log('before that, JavaScript was the thing you tolerated for form validation');\nconsole.log('after that, it was a serious language for whole systems');\n\nreal example:\nThat server turn is the reason a JavaScript tester can run API tests, unit tests and browser tests with the same language and the same assertions."
+  },
+  {
+    "id": 21,
+    "question": "Why is JavaScript called a multi-paradigm language?",
+    "answer": "Because you can write in several styles and mix them. You can use plain loops step by step, or map and filter to pass values around, and both are considered normal in the same file.\n\ncode:\nconst data = [5, 3, 9];\nconst byLoop = [];\nfor (const n of data) byLoop.push(n * 2);\nconst byFunc = data.map((n) => n * 2);\nconsole.log(byLoop, byFunc);\nconsole.log('same job, two styles, choose the one that reads better');\n\nreal example:\nPlaywright test code often uses a for loop to build the list of rows and a map to build the expected values, because each fits the job better."
+  },
+  {
+    "id": 22,
+    "question": "What does high-level mean when people describe JavaScript?",
+    "answer": "It means the language hides the machine details. You never free memory, move bytes or manage addresses by hand, so you write less code and have fewer ways to break it.\n\ncode:\nconst nums = [3, 1, 2];\nconsole.log(nums.sort((a, b) => a - b));\nconsole.log('nothing here asks the machine to allocate or release memory');\nconsole.log('the trade is less control in exchange for far less to go wrong');\n\nreal example:\nA test helper can create a thousand objects per run and simply let them go, with no cleanup step and no leak to chase afterwards."
+  },
+  {
+    "id": 23,
+    "question": "Why does the same script often behave the same way in a browser and on a server?",
+    "answer": "Because both hosts run the same language and both must implement the same standard, including the shared built-ins such as JSON and Math. Only the host extras differ, such as document and process.\n\ncode:\nconsole.log('browser has document:', typeof document !== 'undefined');\nconsole.log('node has process:', typeof process !== 'undefined');\nconsole.log(typeof JSON, typeof Math, typeof Array);\nconsole.log('JSON and Math are language-level, document and process are not');\n\nreal example:\nAn assertion helper that only uses values, arrays and JSON runs unchanged in a Playwright browser test and in a Node API test."
+  },
+  {
+    "id": 24,
+    "question": "What is the host environment, and what does it give you on top of the language?",
+    "answer": "The host environment is whatever program is running your code, such as a browser window or a Node process. It supplies the standard library and the extra abilities like timers, network access and file reading.\n\ncode:\nconst browserGives = ['document', 'window', 'fetch', 'localStorage', 'alert'];\nconst nodeGives = ['process', 'Buffer', 'fetch', 'timers', 'file system'];\nconsole.log(browserGives.join(', '));\nconsole.log(nodeGives.join(', '));\nconsole.log('the language itself knows only values, functions and if/loops');\n\nreal example:\nYour test helper uses the fetch that both hosts provide, but the file-reading part has to be imported from Node, which is why running that helper in the browser fails."
+  },
+  {
+    "id": 25,
+    "question": "If every engine implements the same specification, why can two browsers ever disagree?",
+    "answer": "Engines agree on the specified behaviour but can differ in wording of errors, in formatting of console output and in which optional library features are present. Test behaviour, not the exact message text.\n\ncode:\nconsole.log([1, 2, 3].toReversed());\nconsole.log((-8).toString(2));\nconsole.log('specified behaviour matches, wording and library extras may not');\nconsole.log('assert on behaviour, match error messages loosely');\n\nreal example:\nA test that asserts Cannot read properties of undefined can pass in Chrome and fail in Firefox, so teams usually match on a substring like toBeVisible instead."
+  },
+  {
+    "id": 26,
+    "question": "What is the difference between the JavaScript language and the JavaScript ecosystem?",
+    "answer": "The language is small: values, functions, objects, and a handful of built-ins. The ecosystem is everything built on top, including package managers, test runners, bundlers and the standard library of each host.\n\ncode:\nconst language = { values: true, functions: true, objects: true, http: false };\nconst ecosystem = { http: 'fetch', files: 'Node built-ins', runner: 'node:test', bundler: 'your build' };\nconsole.log(language);\nconsole.log(ecosystem);\nconsole.log('when a tutorial shows you 20 tools, that is the ecosystem');\n\nreal example:\nAsking which one to learn first, the answer is the language, because Playwright only becomes useful once you can read the code your tests are written in."
+  },
+  {
+    "id": 27,
+    "question": "Why do people say JavaScript is easy to start and hard to master?",
+    "answer": "The first line runs in seconds with no setup, and there are only seven primitive types to learn. Mastery is where the rules pile up: coercion, scope, prototypes, asynchrony and a large tooling ecosystem.\n\ncode:\nconst quick = [1, 2, 3].map((n) => n * 2);\nconsole.log('hello world level:', quick);\nconst deeper = [typeof quick, Array.isArray(quick), Number.isInteger(quick.length)];\nconsole.log('same language, more questions:', deeper);\nconsole.log('the first hour is easy, the first year is a library of rules');\n\nreal example:\nThe first Playwright test clicks a button. The hundredth one waits for a request, retries a flaky assertion and understands why an await was forgotten."
+  },
+  {
+    "id": 28,
+    "question": "How is TypeScript related to JavaScript?",
+    "answer": "TypeScript is a superset that adds optional type annotations. Before anything runs, those annotations are stripped out, so what executes is ordinary JavaScript.\n\ncode:\nconst shipped = { note: 'annotations already removed' };\nconsole.log(shipped);\nconsole.log('type checking happens before execution, never during');\nconsole.log('the runtime you test in still only sees JavaScript');\n\nreal example:\nA typed page object catches a misspelled locator name at compile time, while the compiled output that Playwright drives the browser with is plain JavaScript."
+  },
+  {
+    "id": 29,
+    "question": "Why does JavaScript use a single number type instead of separate integer and decimal types?",
+    "answer": "One double-precision float covers both, which keeps the language small and the arithmetic fast. The price is that some decimals are inexact and very large integers lose their last digits.\n\ncode:\nconsole.log(typeof 7, typeof 7.5, typeof 7n);\nconsole.log(Number.MAX_SAFE_INTEGER);\nconsole.log(Number.MAX_SAFE_INTEGER + 2);\nconsole.log('one type is simple and fast, bigint and strings cover the rest');\n\nreal example:\nA test that generates an id with Date.now() in milliseconds is fine, but a test that counts items above MAX_SAFE_INTEGER needs bigint or text instead."
+  },
+  {
+    "id": 30,
+    "question": "What should you do if the engine running your code does not support a feature you used?",
+    "answer": "Check whether the feature exists before you call it, or provide a fallback. Guessing the version number from the user agent is unreliable, so ask the feature itself.\n\ncode:\nconst modern = typeof Array.prototype.toSorted === 'function';\nconsole.log('engine supports toSorted:', modern);\nconst sorted = modern ? [3, 1, 2].toSorted() : [3, 1, 2].slice().sort();\nconsole.log('sorted either way:', sorted);\n\nreal example:\nAn old Node version cannot parse optional chaining at all, which is a build error, while a missing Array method is only a runtime error, so those two need different guards."
+  },
+  {
+    "id": 31,
+    "question": "Why does it matter that one variable can hold different types over time?",
+    "answer": "Because nothing stops a later assignment from replacing a string with an object or a function, and every reader has to track that. Named helpers and assertions exist to pin the shape down.\n\ncode:\nlet status = 'pending';\nconsole.log(typeof status, status);\nstatus = { retry: 2 };\nconsole.log(typeof status, status.retry);\nstatus = () => 'done';\nconsole.log(typeof status, status());\nconsole.log('nothing stopped any of those changes');\n\nreal example:\nA test helper that once returned a string and later a promise silently breaks every caller, and the failures point at the callers instead of the helper."
+  },
+  {
+    "id": 32,
+    "question": "When an engineer says JavaScript is fast, what are the different things they might mean?",
+    "answer": "They may mean the parser is quick, or that hot code is compiled to machine code, or simply that the language is not the bottleneck. Those are three different claims, and none of them guarantee a fast test suite.\n\ncode:\nconst rows = [1, 2, 3].map((n) => n * 2);\nconsole.log(rows);\nconsole.log('quick to parse, quick once optimised, slow if you wait on IO per row');\nconsole.log('engine speed is not suite speed, the runner matters more');\n\nreal example:\nA suite that is slow because every test starts a browser is not slow because of JavaScript, and speeding up the engine would not change a single second of it."
+  }
+]

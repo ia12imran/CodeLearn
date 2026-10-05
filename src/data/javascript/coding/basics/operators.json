@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1,
+    "question": "Write calculate(op, a, b) that supports the operator strings add, subtract, multiply and divide and returns the result. Print calculate('add', 6, 4), calculate('subtract', 6, 4), calculate('multiply', 6, 4) and calculate('divide', 6, 4).",
+    "answer": "A small if chain that maps an operator name to an arithmetic symbol keeps the dispatch readable and gives one obvious place to add a new operator.\n\ncode:\nfunction calculate(op, a, b) {\n  if (op === 'add') return a + b;\n  if (op === 'subtract') return a - b;\n  if (op === 'multiply') return a * b;\n  if (op === 'divide') return a / b;\n  return null;\n}\nconsole.log(calculate('add', 6, 4), calculate('subtract', 6, 4)); // 10 2\nconsole.log(calculate('multiply', 6, 4), calculate('divide', 6, 4)); // 24 1.5\n\noutput:\n10 2\n24 1.5"
+  },
+  {
+    "id": 2,
+    "question": "Start a let price at 100, raise it by 10 percent with the compound assignment and print it, then take 20 percent off with another compound assignment and print it with toFixed(2). The first print is not exactly 110.",
+    "answer": "The compound assignment reads, calculates and writes in one step, but binary floating point cannot hold 1.1 exactly, so the raw value carries a long tail.\n\ncode:\nlet price = 100;\nprice *= 1.1;\nconsole.log(price); // 110.00000000000001\nprice -= price * 0.2;\nconsole.log(price.toFixed(2)); // 88.00\n\noutput:\n110.00000000000001\n88.00"
+  },
+  {
+    "id": 3,
+    "question": "Start a let score at 0, add 5, subtract 2, multiply by 10 and divide by 2 using the compound assignment operators in turn, then print the value after each step.",
+    "answer": "Reading a variable between steps shows you exactly what each compound operator did, which makes a mistake easy to spot.\n\ncode:\nlet score = 0;\nscore += 5;\nconsole.log(score); // 5\nscore -= 2;\nconsole.log(score); // 3\nscore *= 10;\nscore /= 2;\nconsole.log(score); // 15\n\noutput:\n5\n3\n15"
+  },
+  {
+    "id": 4,
+    "question": "Write isAdult(age) that returns true for 18 and above, and print its result for 17, 18 and 65. Use the greater-than-or-equal operator, not a strict equality check.",
+    "answer": "A boundary check needs greater-than-or-equal, because a strict check would throw away every valid age above the limit.\n\ncode:\nfunction isAdult(age) {\n  return age >= 18;\n}\nconsole.log(isAdult(17), isAdult(18), isAdult(65)); // false true true\n\noutput:\nfalse true true"
+  },
+  {
+    "id": 5,
+    "question": "Write isBetween(value, min, max) that uses chained comparison and returns true only when min is less than or equal to the value and the value is less than or equal to max. Test it with 5, 1, 10 and with 15, 1, 10.",
+    "answer": "Chained comparison reads like maths and works because the middle expression is evaluated once.\n\ncode:\nfunction isBetween(value, min, max) {\n  return min <= value && value <= max;\n}\nconsole.log(isBetween(5, 1, 10)); // true\nconsole.log(isBetween(15, 1, 10)); // false\n\noutput:\ntrue\nfalse"
+  },
+  {
+    "id": 6,
+    "question": "Write strictEquals(a, b) that returns whether two values are equal without converting them, then print it for the pairs 5 and 5, 5 and '5', and null and undefined.",
+    "answer": "The triple equals operator compares type and value together, so a number never matches the text that looks like it.\n\ncode:\nfunction strictEquals(a, b) {\n  return a === b;\n}\nconsole.log(strictEquals(5, 5)); // true\nconsole.log(strictEquals(5, '5')); // false\nconsole.log(strictEquals(null, undefined)); // false\n\noutput:\ntrue\nfalse\nfalse"
+  },
+  {
+    "id": 7,
+    "question": "Print the result of '5' == 5, '5' === 5, NaN === NaN and Object.is(NaN, NaN) so you can see where loose equality converts and where it cannot.",
+    "answer": "Loose equality tries to convert one side to the other type first. NaN is the one value that is never equal to itself, so Object.is is the tool for that case.\n\ncode:\nconsole.log('5' == 5, '5' === 5); // true false\nconsole.log(NaN === NaN, Object.is(NaN, NaN)); // false true\nconsole.log(null == undefined, null === undefined); // true false\nconsole.log('0' == false, '0' === false); // true false\n\noutput:\ntrue false\nfalse true\ntrue false\ntrue false"
+  },
+  {
+    "id": 8,
+    "question": "Write compare(a, b) that returns a negative number when a's ms field comes first, zero when they match and a positive number otherwise, converting the string values to numbers. Test it with { ms: '20' } against { ms: '100' }.",
+    "answer": "Convert inside the comparator so the subtraction works on numbers, and remember that a sort comparator must return a number rather than a boolean.\n\ncode:\nfunction compare(a, b) {\n  return Number(a.ms) - Number(b.ms);\n}\nconsole.log(compare({ ms: '20' }, { ms: '100' })); // -80\nconsole.log(compare({ ms: '100' }, { ms: '20' })); // 80\nconsole.log(compare({ ms: '5' }, { ms: '5' })); // 0\n\noutput:\n-80\n80\n0"
+  },
+  {
+    "id": 9,
+    "question": "Sort the runs [{ ms: '30' }, { ms: '5' }, { ms: '12' }] by their ms field as numbers into a new array, leaving the original array untouched, then print the ms values of the copy.",
+    "answer": "Copy the array with the spread syntax first, then sort the copy, because sort rearranges the array it is called on.\n\ncode:\nconst runs = [{ ms: '30' }, { ms: '5' }, { ms: '12' }];\nconst sorted = [...runs].sort((a, b) => Number(a.ms) - Number(b.ms));\nconsole.log(sorted.map((run) => run.ms).join(',')); // 5,12,30\nconsole.log(runs.map((run) => run.ms).join(',')); // 30,5,12\n\noutput:\n5,12,30\n30,5,12"
+  },
+  {
+    "id": 10,
+    "question": "Write toggle(flag) that flips a boolean with the not operator, and print the results for true and for false. Then print the not operator applied to the string 'false'.",
+    "answer": "The not operator always produces a real boolean, even when the value it was given was text.\n\ncode:\nfunction toggle(flag) {\n  return !flag;\n}\nconsole.log(toggle(true), toggle(false)); // false true\nconsole.log(!'false', !0, !''); // false false true\n\noutput:\nfalse true\nfalse true true"
+  },
+  {
+    "id": 11,
+    "question": "Write canSubmit(form) that returns true only when status is ready and the user typed a name, using the logical AND operator. Print it for { status: 'ready', name: 'Ana' } and for { status: 'draft', name: '' }.",
+    "answer": "The AND operator short-circuits, so the second condition is not even evaluated once the first one is false.\n\ncode:\nfunction canSubmit(form) {\n  return form.status === 'ready' && form.name !== '';\n}\nconsole.log(canSubmit({ status: 'ready', name: 'Ana' })); // true\nconsole.log(canSubmit({ status: 'draft', name: '' })); // false\n\noutput:\ntrue\nfalse"
+  },
+  {
+    "id": 12,
+    "question": "Write displayName(user) that falls back to Anonymous with the OR operator when the name is missing, and a second version that uses the nullish coalescing operator. Print both for { name: '' } and for {}.",
+    "answer": "The OR operator also falls back for any falsy value, which is why the empty string is replaced. The nullish operator only steps in for null and undefined.\n\ncode:\nfunction withOr(user) {\n  return user.name || 'Anonymous';\n}\nfunction withNullish(user) {\n  return user.name ?? 'Anonymous';\n}\nconsole.log(withOr({ name: '' }), withOr({})); // Anonymous Anonymous\nconsole.log(JSON.stringify([withNullish({ name: '' }), withNullish({})])); // [\"\",\"Anonymous\"]\nconsole.log(withNullish({ name: 'Cid' })); // Cid\n\noutput:\nAnonymous Anonymous\n[\"\",\"Anonymous\"]\nCid"
+  },
+  {
+    "id": 13,
+    "question": "Write retries(count) that returns count when it is a real number and the fallback when it is null or undefined, using the nullish operator. Print it for 0, null and undefined so the zero case is visible.",
+    "answer": "The nullish operator keeps a meaningful zero, which the OR operator would throw away. That is the whole reason to prefer it.\n\ncode:\nfunction retries(count) {\n  return count ?? 3;\n}\nconsole.log(retries(0), retries(null), retries(undefined)); // 0 3 3\n\noutput:\n0 3 3"
+  },
+  {
+    "id": 14,
+    "question": "Build a calls array plus two functions, one that pushes 'left' and one that pushes 'right'. Print the result of false AND the left function and then the array length, then print the result of null OR the right function and the array contents.",
+    "answer": "Logical operators only evaluate the right-hand side when they have to, so the array length tells you exactly what was skipped.\n\ncode:\nconst calls = [];\nconst left = () => { calls.push('left'); return 'from-left'; };\nconst right = () => { calls.push('right'); return 'from-right'; };\nconsole.log(false && left()); // false\nconsole.log(calls.length); // 0\nconsole.log(null || right()); // from-right\nconsole.log(calls.join(',')); // right\n\noutput:\nfalse\n0\nfrom-right\nright"
+  },
+  {
+    "id": 15,
+    "question": "Print the values of 0 && 'x', 1 || 'x' and '' || 'fallback', and show whether each of those results is truthy or falsy by wrapping each in Boolean.",
+    "answer": "The operators hand back one of their operands, so the Boolean wrapper shows what the result really means in a condition.\n\ncode:\nconsole.log(0 && 'x', Boolean(0 && 'x')); // 0 false\nconsole.log(1 || 'x', Boolean(1 || 'x')); // 1 true\nconsole.log('' || 'fallback', Boolean('' || 'fallback')); // fallback true\nconsole.log('value' && 'other', Boolean('value' && 'other')); // other true\n\noutput:\n0 false\n1 true\nfallback true\nother true"
+  },
+  {
+    "id": 16,
+    "question": "Declare let i = 0, then print the results of i++, i, ++i and i-- in that order, and print the final value of i. Work out the answer before you run it.",
+    "answer": "The postfix version hands back the old value and then changes the variable, while the prefix version changes first and hands back the new value.\n\ncode:\nlet i = 0;\nconsole.log(i++, i); // 0 1\nconsole.log(++i, i--, i); // 2 2 1\nconsole.log(i); // 1\n\noutput:\n0 1\n2 2 1\n1"
+  },
+  {
+    "id": 17,
+    "question": "Write cube(n) that returns n to the power of three, then print cube(3), (-2) ** 2 and -(2 ** 2) to show how the parentheses change the answer.",
+    "answer": "Exponentiation binds tighter than the unary minus, so the parentheses decide whether you negate the base or the whole result.\n\ncode:\nfunction cube(n) {\n  return n ** 3;\n}\nconsole.log(cube(3), (-2) ** 2, -(2 ** 2)); // 27 4 -4\nconsole.log(2 ** 3 ** 2); // 512\n\noutput:\n27 4 -4\n512"
+  },
+  {
+    "id": 18,
+    "question": "Print 7 % 2, -7 % 2, 7 % -2 and 2 ** 10, then write isEven(n) that uses the modulo operator and print its result for 4 and 5.",
+    "answer": "Modulo keeps the sign of the left operand, which is the detail that trips people up when a negative number turns up in test data.\n\ncode:\nconsole.log(7 % 2, -7 % 2, 7 % -2); // 1 -1 1\nconsole.log(2 ** 10); // 1024\nfunction isEven(n) {\n  return n % 2 === 0;\n}\nconsole.log(isEven(4), isEven(5)); // true false\n\noutput:\n1 -1 1\n1024\ntrue false"
+  },
+  {
+    "id": 19,
+    "question": "Write wrapIndex(index, length) that returns a valid position in a list of the given length, so index -1 becomes the last position and 4 becomes 0 for a list of 4. Print both results.",
+    "answer": "Take the modulo, then add the length and take the modulo again, which folds negative numbers back into the valid range.\n\ncode:\nfunction wrapIndex(index, length) {\n  return ((index % length) + length) % length;\n}\nconsole.log(wrapIndex(-1, 4)); // 3\nconsole.log(wrapIndex(4, 4)); // 0\nconsole.log(wrapIndex(6, 4)); // 2\n\noutput:\n3\n0\n2"
+  },
+  {
+    "id": 20,
+    "question": "Write splitAmount(total, people) that returns an object with the whole part and the cents left over when the total is split, using division and modulo. Test with 1000 cents between 3 people.",
+    "answer": "Integer division gives the share each person gets and the modulo gives what is left over, which together prove no cent is lost.\n\ncode:\nfunction splitAmount(total, people) {\n  const share = Math.floor(total / people);\n  return { share, leftOver: total % people };\n}\nconsole.log(splitAmount(1000, 3)); // { share: 333, leftOver: 1 }\n\noutput:\n{ share: 333, leftOver: 1 }"
+  },
+  {
+    "id": 21,
+    "question": "Write average(nums) that divides the total by the length and prints the result rounded to two decimals with toFixed, then convert it back to a number with Number. Use the numbers [1.005, 2, 2].",
+    "answer": "toFixed gives you a string for display, so wrap it in Number when you want to keep calculating with the value.\n\ncode:\nfunction average(nums) {\n  const total = nums.reduce((sum, n) => sum + n, 0);\n  return Number((total / nums.length).toFixed(2));\n}\nconsole.log(average([1.005, 2, 2])); // 1.67\nconsole.log((0.1 + 0.2).toFixed(2)); // 0.30\n\noutput:\n1.67\n0.30"
+  },
+  {
+    "id": 22,
+    "question": "Write maxOf(nums) and minOf(nums) that walk the array once each using the greater-than and less-than operators. Print both for [3, 9, 4, 9, 1].",
+    "answer": "Keeping a running best value beats sorting the array, because sorting copies data you do not need to change.\n\ncode:\nfunction maxOf(nums) {\n  let best = nums[0];\n  for (const n of nums) if (n > best) best = n;\n  return best;\n}\nfunction minOf(nums) {\n  let best = nums[0];\n  for (const n of nums) if (n < best) best = n;\n  return best;\n}\nconsole.log(maxOf([3, 9, 4, 9, 1]), minOf([3, 9, 4, 9, 1])); // 9 1\n\noutput:\n9 1"
+  },
+  {
+    "id": 23,
+    "question": "Write gradeLetter(score) that returns F below 60, D for 60 to 69, C for 70 to 79, B for 80 to 89 and A for 90 and above, using a chain of ternaries. Print the letters for 45, 65, 75, 85 and 95.",
+    "answer": "A ternary is an if in an expression, so a chain of them keeps the whole decision in one return statement.\n\ncode:\nfunction gradeLetter(score) {\n  return score < 60 ? 'F'\n    : score < 70 ? 'D'\n    : score < 80 ? 'C'\n    : score < 90 ? 'B' : 'A';\n}\nconsole.log([45, 65, 75, 85, 95].map(gradeLetter).join(' ')); // F D C B A\n\noutput:\nF D C B A"
+  },
+  {
+    "id": 24,
+    "question": "Print the values of three variables after using the compound logical assignment operators: a zero with ??=, a zero with ||= and a one with &&=. Show each variable after the change.",
+    "answer": "These three operators only write when their left side is missing, falsy or truthy respectively, which saves a whole if statement.\n\ncode:\nlet a = 0;\na ??= 9;\nlet b = 0;\nb ||= 7;\nlet c = 1;\nc &&= 4;\nconsole.log(a, b, c); // 0 7 4\n\noutput:\n0 7 4"
+  },
+  {
+    "id": 25,
+    "question": "Use the bitwise OR to build a flags number from 1, 2 and 4, then print it, the AND of it with 2, the XOR of it with 3 and the NOT of 5. Add a line of comments saying these are whole numbers.",
+    "answer": "Bitwise operators work on whole numbers only. They are handy for packing several yes or no switches into one number.\n\ncode:\n// Bitwise operators only work on whole numbers.\nconst READ = 1, WRITE = 2, EXECUTE = 4;\nconst flags = READ | WRITE | EXECUTE;\nconsole.log(flags, flags & WRITE, flags ^ 3, ~5); // 7 2 4 -6\n\noutput:\n7 2 4 -6"
+  },
+  {
+    "id": 26,
+    "question": "Print 5 << 1, -8 >> 1 and -8 >>> 1 to show the left shift, the signed right shift and the unsigned right shift. Note in a comment that >>> treats the number as unsigned.",
+    "answer": "The two right shifts differ only for negative numbers, because one copies the sign bit and the other treats the number as unsigned.\n\ncode:\n// >>> treats the number as unsigned and pads with zeroes.\nconsole.log(5 << 1); // 10\nconsole.log(-8 >> 1, -8 >>> 1); // -4 2147483644\nconsole.log(16 / 2, 16 % 5); // 8 1\n\noutput:\n10\n-4 2147483644\n8 1"
+  },
+  {
+    "id": 27,
+    "question": "Print the in operator for a missing key, for an existing key and for an array index, then print the instanceof check for a Date against Date and against Object.",
+    "answer": "The in operator asks whether a key exists, while instanceof asks where a value came from. Neither one reads the value.\n\ncode:\nconst config = { retries: 3 };\nconst steps = ['open', 'login'];\nconsole.log('retries' in config, 'timeout' in config); // true false\nconsole.log(1 in steps, 5 in steps); // true false\nconsole.log(new Date(0) instanceof Date, new Date(0) instanceof Object); // true true\n\noutput:\ntrue false\ntrue false\ntrue true"
+  },
+  {
+    "id": 28,
+    "question": "Delete the password field from a const settings object and print whether the key is still there, then delete the first element of a const array and print its length and its first slot. Report what delete does to an array.",
+    "answer": "Delete removes a property from an object but leaves a hole in an array, so the length stays the same and the missing slot reads as undefined.\n\ncode:\n'use strict';\nconst settings = { user: 'tester', password: 'pw' };\ndelete settings.password;\nconsole.log('password' in settings, settings.user); // false tester\nconst steps = ['open', 'login'];\ndelete steps[0];\nconsole.log(steps.length, steps[0]); // 2 undefined\n\noutput:\nfalse tester\n2 undefined"
+  },
+  {
+    "id": 29,
+    "question": "Print void 0 and typeof void 0, then write nothing() that returns void 'anything' and print its result to prove the function gives back undefined. Finish by printing Number('5') and 5 + ''.",
+    "answer": "The void operator throws the value away and always gives undefined, which is the only way to make a function return nothing on purpose.\n\ncode:\nconsole.log(void 0, typeof void 0); // undefined undefined\nfunction nothing() {\n  return void 'anything';\n}\nconsole.log(nothing()); // undefined\nconsole.log(Number('5'), 5 + ''); // 5 5\n\noutput:\nundefined undefined\nundefined\n5 5"
+  },
+  {
+    "id": 30,
+    "question": "Print the results of '5' != 5, '5' !== 5, 0 != false, 0 === false, null != 0 and [] == false so you can see where the loose forms convert and where the strict forms refuse.",
+    "answer": "The loose form converts before comparing, so it treats 0, false, null and an empty array as the same thing. The strict form keeps the types apart.\n\ncode:\nconsole.log('5' != 5, '5' !== 5); // false true\nconsole.log(0 != false, 0 === false); // false false\nconsole.log(null != 0, null === 0); // true false\nconsole.log([] == false, [] === false); // true false\n\noutput:\nfalse true\nfalse false\ntrue false\ntrue false"
+  },
+  {
+    "id": 31,
+    "question": "Print 1 + '1', '1' - 1, '3' * '4' and '10' / '2' and label which of the four results is text and which are numbers. Predict the answers before you run it.",
+    "answer": "The plus operator is overloaded: with any string operand it joins text. Every other arithmetic operator converts first, so the answer is a number.\n\ncode:\nconsole.log(1 + '1'); // 11 as text\nconsole.log('1' - 1); // 0\nconsole.log('3' * '4', '10' / '2'); // 12 5\nconsole.log(typeof (1 + '1'), typeof ('1' - 1)); // string number\n\noutput:\n11\n0\n12 5\nstring number"
+  },
+  {
+    "id": 32,
+    "question": "Write summarise(count) that returns empty for 0, one item for 1 and a count with the word items for anything else, using nested ternaries. Print the results for 0, 1 and 5.",
+    "answer": "Nested ternaries read from the outside in, so check the special cases first and let the default handle everything else.\n\ncode:\nfunction summarise(count) {\n  return count === 0 ? 'empty' : count === 1 ? 'one item' : count + ' items';\n}\nconsole.log(summarise(0)); // empty\nconsole.log(summarise(1)); // one item\nconsole.log(summarise(5)); // 5 items\n\noutput:\nempty\none item\n5 items"
+  },
+  {
+    "id": 33,
+    "question": "Write maxAttempts(a, b, limit) that returns the smallest of a and b but never more than limit, using Math.min. Print maxAttempts(9, 4, 5), maxAttempts(2, 3, 5) and maxAttempts(9, 8, 5) so the clamp is visible.",
+    "answer": "Math.min takes any number of arguments and returns the smallest of them, so passing all three values clamps in a single call.\n\ncode:\nfunction maxAttempts(a, b, limit) {\n  return Math.min(a, b, limit);\n}\nconsole.log(maxAttempts(9, 4, 5)); // 4\nconsole.log(maxAttempts(2, 3, 5)); // 2\nconsole.log(maxAttempts(9, 8, 5)); // 5\n\noutput:\n4\n2\n5"
+  },
+  {
+    "id": 34,
+    "question": "Start a let count at 0 and use the logical OR assignment to give it a default of 5 when it is zero, then use the increment operator inside a loop to count up to 3. Print the count after each loop step.",
+    "answer": "The logical OR assignment sets a default in one line, and the increment operator adds one without needing an extra line.\n\ncode:\nlet count = 0;\ncount ||= 5;\nconsole.log(count); // 5\nconst steps = [];\nwhile (count < 8) {\n  count++;\n  steps.push(count);\n}\nconsole.log(steps.join(',')); // 6,7,8\n\noutput:\n5\n6,7,8"
+  },
+  {
+    "id": 35,
+    "question": "Write describeBudget(spent, budget) that returns over by n, under by n or exactly on when the two amounts match. Print the three results for 120 against 100, 80 against 100 and 100 against 100.",
+    "answer": "Compare with the strict operators first, then split the remaining two cases with a ternary so the message never needs the wrong word.\n\ncode:\nfunction describeBudget(spent, budget) {\n  if (spent === budget) return 'exactly on';\n  return spent > budget ? 'over by ' + (spent - budget) : 'under by ' + (budget - spent);\n}\nconsole.log(describeBudget(120, 100)); // over by 20\nconsole.log(describeBudget(80, 100)); // under by 20\nconsole.log(describeBudget(100, 100)); // exactly on\n\noutput:\nover by 20\nunder by 20\nexactly on"
+  },
+  {
+    "id": 36,
+    "question": "Write the value of an assignment in a const, then print it: declare let x, then const y = (x = 5), and print both. Follow with a line showing that an assignment expression returns the value it stored.",
+    "answer": "An assignment is an expression, so it produces the value it just stored. That is why the parentheses are needed in a declaration.\n\ncode:\nlet x;\nconst y = (x = 5);\nconsole.log(x, y); // 5 5\nlet a = 1;\nlet b = (a += 2);\nconsole.log(a, b, (a = 9), a); // 3 3 9 9\n\noutput:\n5 5\n3 3 9 9"
+  },
+  {
+    "id": 37,
+    "question": "Print the truncation results Math.trunc(-4.7), Math.trunc(4.7) and Math.sign(-9), then print Math.max and Math.min for the array [2, 8, 5] using the spread syntax.",
+    "answer": "Truncation drops the decimal part without moving the value to the nearest whole number, and sign tells you which way a number points.\n\ncode:\nconsole.log(Math.trunc(-4.7), Math.trunc(4.7)); // -4 4\nconsole.log(Math.sign(-9), Math.sign(0)); // -1 0\nconst nums = [2, 8, 5];\nconsole.log(Math.max(...nums), Math.min(...nums)); // 8 2\n\noutput:\n-4 4\n-1 0\n8 2"
+  },
+  {
+    "id": 38,
+    "question": "Write countAbove(list, floor) that uses the greater-than operator and the increment operator to count the values above the floor, then print the count for [1, 5, 9, 3] with a floor of 4.",
+    "answer": "One pass with a strict comparison and an increment gives you the count without building a second array.\n\ncode:\nfunction countAbove(list, floor) {\n  let above = 0;\n  for (const value of list) {\n    if (value > floor) above++;\n  }\n  return above;\n}\nconsole.log(countAbove([1, 5, 9, 3], 4)); // 2\nconsole.log([1, 5, 9, 3].filter((v) => v > 4).length); // 2\n\noutput:\n2\n2"
+  },
+  {
+    "id": 39,
+    "question": "Predict and then print: create a const total of 0, then evaluate 5 || total++ and null && total++, and print total and both results. The counter should not move at all.",
+    "answer": "The OR operator stops at the first truthy value and the AND operator stops at the first falsy one, so the increment never runs.\n\ncode:\nlet total = 0;\nconst first = 5 || total++;\nconst second = null && total++;\nconsole.log(first, second, total); // 5 null 0\nlet calls = 0;\nconst third = 0 || ++calls;\nconsole.log(third, calls); // 1 1\n\noutput:\n5 null 0\n1 1"
+  },
+  {
+    "id": 40,
+    "question": "Write applyDiscount(price, percent) that uses the compound assignment inside the function and returns an object with the new price and the amount saved. Call it with 80 and 25, print the saving and the new price, then print the original value of price to show it did not change.",
+    "answer": "A number is passed by value, so changing the parameter inside the function never touches the caller's variable. Return the new values instead of relying on in-place edits.\n\ncode:\nfunction applyDiscount(price, percent) {\n  const saved = (price * percent) / 100;\n  price -= saved;\n  return { price, saved };\n}\nlet price = 80;\nconst result = applyDiscount(price, 25);\nconsole.log(result.saved, result.price); // 20 60\nconsole.log(price); // 80\n\noutput:\n20 60\n80"
+  }
+]

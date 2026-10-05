@@ -1,0 +1,172 @@
+[
+  {
+    "id": 1,
+    "question": "What is a function in JavaScript, in one plain sentence?",
+    "answer": "A function is a named piece of code you can run later by calling its name. It can take inputs, called parameters, and give a value back with return.\n\ncode:\nfunction add(a, b) {\n  return a + b;\n}\nconsole.log(add(2, 3));\nconsole.log(typeof add);\n\nreal example:\nIn a Playwright suite you keep helper functions like login(page, user) in one helpers file and call them from every spec, so the login steps are never copy-pasted."
+  },
+  {
+    "id": 2,
+    "question": "What is the difference between declaring a function and calling it?",
+    "answer": "Declaring gives the function a name and puts it in memory. Calling runs the body right now and hands back whatever it returns.\n\ncode:\nfunction buildUrl(base, path) {\n  return base + path;\n}\nconsole.log(buildUrl('https://shop.test', '/cart'));\nconst saved = buildUrl;\nconsole.log(saved('https://shop.test', '/cart'));\n\nreal example:\nA spec file declares the test callbacks once at the top and calls them by name inside each test when Playwright decides to run that test."
+  },
+  {
+    "id": 3,
+    "question": "What does the return keyword do, and what happens to the code after it?",
+    "answer": "return hands a value back to the caller and stops the function immediately. Nothing after that return line runs, unless the function is called again.\n\ncode:\nfunction firstEven(nums) {\n  for (const n of nums) {\n    if (n % 2 === 0) return n;\n  }\n  return undefined;\n}\nconsole.log(firstEven([1, 3, 4, 6]));\nconsole.log(firstEven([1, 3, 5]));\n\nreal example:\nA helper that finds the first failing locator can return it and stop, so the test does not spend time querying elements that are already gone."
+  },
+  {
+    "id": 4,
+    "question": "What happens if you forget to put a return statement inside a function?",
+    "answer": "The function still runs, but it hands back undefined when it finishes. That is the single most common reason a test helper looks like it does nothing.\n\ncode:\nfunction clean(value) {\n  value.trim();\n}\nconsole.log(clean('  hello  '));\nconst result = clean('  hello  ');\nconsole.log(result === undefined);\n\nreal example:\nA fixture helper that trims a token but forgets return gives you undefined, and the login step then sends the literal string undefined as the password."
+  },
+  {
+    "id": 5,
+    "question": "What is the difference between console.log and return?",
+    "answer": "console.log only writes to the terminal, it changes nothing you can use later. return gives the value to whoever called the function, so it can be stored, compared or chained.\n\ncode:\nfunction shout(text) {\n  return text.toUpperCase();\n}\nconst stored = shout('hello');\nconsole.log(typeof stored, stored);\nconsole.log(stored.length);\nshout('printed nothing above');\n\nreal example:\nassertion helpers should return the value so tests can chain them, while a debug-only log of the response body is fine to leave as console.log."
+  },
+  {
+    "id": 6,
+    "question": "What are parameters, and what are the arguments you pass?",
+    "answer": "Parameters are the names in the function's own list, like width and height. Arguments are the actual values you hand in at the call site.\n\ncode:\nfunction greet(greeting, name) {\n  return greeting + ', ' + name + '!';\n}\nconst args = ['Hello', 'Ana'];\nconsole.log(greet(...args));\nconsole.log(greet('Hey', 'Bo'));\n\nreal example:\nA reusable login helper takes user and pass as parameters so every spec can pass its own fixture credentials as arguments."
+  },
+  {
+    "id": 7,
+    "question": "What is hoisting, in plain words?",
+    "answer": "JavaScript reads your whole script before running any of it, so function declarations are put into memory at the top of their scope. That is why you can call them above the line where they are written.\n\ncode:\nconsole.log(sayHi());\nfunction sayHi() {\n  return 'hi';\n}\nconsole.log(add(1, 2));\nfunction add(a, b) {\n  return a + b;\n}\n\nreal example:\nA helpers file full of function declarations can be imported and used from the top of a spec without worrying about file order."
+  },
+  {
+    "id": 8,
+    "question": "What is the difference between a function declaration and a function expression, and which one hoists?",
+    "answer": "A declaration starts the line with the function keyword and a name, and it hoists so you can call it anywhere in that scope. An expression assigns a function to a variable, so the variable is the thing that gets hoisted, and calling it early throws.\n\ncode:\nconsole.log(declared());\nfunction declared() {\n  return 'I am hoisted';\n}\nconst expressed = function () {\n  return 'I am not hoisted';\n};\nconsole.log(expressed());\n\nreal example:\nIn a Playwright fixture file you can declare helper functions with function keyword and call them from a fixture defined above them."
+  },
+  {
+    "id": 9,
+    "question": "Why does calling a function expression stored in a const throw a ReferenceError?",
+    "answer": "Only the declaration is hoisted, not the assignment. The const binding exists but sits in the temporal dead zone until that exact line runs, so calling it earlier throws Cannot access before initialization.\n\ncode:\ntry {\n  notReady();\n} catch (err) {\n  console.log(err.constructor.name);\n  console.log(err.message);\n}\nconst notReady = function () {\n  return 'never reached';\n};\nfunction ready() {\n  return 'fine';\n}\nconsole.log(ready());\n\nreal example:\nExporting your auth helper as const login = async () => {} and importing it into a file that calls it during module load is the classic version of this error."
+  },
+  {
+    "id": 10,
+    "question": "What is a named function expression, and why is the inner name worth having?",
+    "answer": "It is a function expression that carries a name usable only inside its own body. That name is what lets the function call itself for recursion, and it shows up in stack traces.\n\ncode:\nconst factorial = function fact(n) {\n  if (n <= 1) return 1;\n  return n * fact(n - 1);\n};\nconsole.log(factorial(5));\nconst anon = function (n) {\n  return n * 2;\n};\nconsole.log(anon.name, factorial.name);\n\nreal example:\nA recursive helper that walks a nested response body reads better and debugs better with a named function expression than with an anonymous one."
+  },
+  {
+    "id": 11,
+    "question": "What is an anonymous function expression, and when would you write one?",
+    "answer": "It is a function expression with no name at all. You write it when the name would add nothing, which is usually when it is passed straight into something as a callback.\n\ncode:\nconst nums = [1, 2, 3];\nconsole.log(nums.map(function (n) {\n  return n * 10;\n}));\nconst named = function (n) {\n  return n + 1;\n};\nconsole.log(named.name);\n\nreal example:\nMost inline callbacks in an array map or filter in a test file are anonymous, because you only use them for that one call."
+  },
+  {
+    "id": 12,
+    "question": "What is an IIFE, and why did we need it before ES modules?",
+    "answer": "An IIFE is an immediately invoked function expression: you write the function and call it on the same line, so it runs once and then disappears. Before modules, it was the way to get a private scope, because every file shared one global scope.\n\ncode:\n(function () {\n  var secret = 'hidden';\n  console.log(typeof secret);\n})();\nconst runNow = () => {\n  console.log('I ran immediately');\n};\nrunNow();\n\nreal example:\nOld Cypress files wrapped the whole spec in an IIFE so the helper functions inside did not leak into the next spec file loaded on the same page."
+  },
+  {
+    "id": 13,
+    "question": "What do the wrapping parentheses in an IIFE actually do?",
+    "answer": "They turn the function into an expression, which is what lets you put a call right after it. Without them the parser expects a function declaration, sees a missing name, and throws a SyntaxError before any code runs.\n\ncode:\nconsole.log(!function () {\n  console.log('the ! makes it an expression, so it runs');\n}());\n(function () {\n  console.log('or wrap it in parentheses');\n})();\nconsole.log(typeof function () {});\n\nreal example:\nWhen you paste a snippet into the browser console you often see the ! or the parens, because the console evaluates each line on its own as an expression."
+  },
+  {
+    "id": 14,
+    "question": "If two function declarations in the same scope share a name, which one wins?",
+    "answer": "The last declaration wins, because the hoisting step copies them in order and the later copy overwrites the earlier one. Inside another function, an inner declaration shadows the outer name completely.\n\ncode:\nfunction role() {\n  return 'first';\n}\nfunction role() {\n  return 'second';\n}\nfunction show() {\n  function role() {\n    return 'inner wins';\n  }\n  return role();\n}\nconsole.log(role());\nconsole.log(show());\n\nreal example:\nTwo specs that both declare a function named login in the same global file will silently use the second one, which is why helpers live in their own module."
+  },
+  {
+    "id": 15,
+    "question": "Is a function declared inside a block still visible outside the block?",
+    "answer": "In strict mode it stays inside the block. In sloppy mode, which is the default for plain scripts, the browser still hoists it out to the function scope for old code that relied on it, so it can leak.\n\ncode:\nif (true) {\n  function blocky() {\n    return 'declared in a block';\n  }\n}\nconsole.log(typeof blocky);\nconsole.log(blocky());\nconsole.log('this file is sloppy mode; in a module blocky would not exist');\n\nreal example:\nA helper declared inside an if block inside a Cypress spec can leak to the next spec on the same page, and then two tests disagree about what the helper does."
+  },
+  {
+    "id": 16,
+    "question": "Why can a function be treated like any other value in JavaScript?",
+    "answer": "Functions are values, not just syntax. You can put them in arrays and objects, pass them around, and copy the reference, the same as you would with a string or a number.\n\ncode:\nconst utils = {\n  double: (n) => n * 2,\n  shout: function (s) {\n    return s + '!';\n  },\n};\nconst handlers = [utils.double, utils.shout];\nconsole.log(handlers[0](4));\nconsole.log(handlers[1]('go'));\nconsole.log(typeof handlers[0] === 'function');\n\nreal example:\nA Playwright page object stores its actions as methods on an object, and a test can pick one out and call it later, which only works because functions are values."
+  },
+  {
+    "id": 17,
+    "question": "How do you wrap an existing function so the original behaviour is still available?",
+    "answer": "Take the original as a value, then call it from inside your wrapper. Copying it with a second name makes a second reference to the same function, it does not clone the behaviour.\n\ncode:\nfunction original(n) {\n  return n + 1;\n}\nconst wrapped = function (n) {\n  return original(n) * 10;\n};\nconsole.log(original(1), wrapped(1));\nconst alias = original;\nconsole.log(alias === original);\n\nreal example:\nWrapping page.goto to add a screenshot on failure keeps the original navigation behaviour intact while adding your own reporting step."
+  },
+  {
+    "id": 18,
+    "question": "Can you reassign a function declaration while the program is running?",
+    "answer": "Yes. A function declaration behaves like a variable, so assigning to it swaps the function that later calls will use. Code that captured the old reference keeps the old one.\n\ncode:\nfunction greet() {\n  return 'first version';\n}\nconst before = greet;\ngreet = function () {\n  return 'patched version';\n};\nconsole.log(before());\nconsole.log(greet());\nconsole.log(before === greet);\n\nreal example:\nTest frameworks patch page methods by reassigning them, which is why an arrow or a bound copy taken earlier will not see the patch."
+  },
+  {
+    "id": 19,
+    "question": "What is a pure function, and why does it matter when you write tests?",
+    "answer": "A pure function gives the same output for the same inputs every time and changes nothing outside itself. Tests like that need no cleanup, can run in any order, and can be trusted in parallel.\n\ncode:\nfunction tax(subtotal, rate) {\n  return Math.round(subtotal * rate * 100) / 100;\n}\nconsole.log(tax(100, 0.2));\nconsole.log(tax(100, 0.2) === tax(100, 0.2));\nlet total = 0;\nfunction impure(n) {\n  total = total + n;\n  return total;\n}\nconsole.log(impure(5), impure(5));\n\nreal example:\nA pure statusToLabel mapping makes an expect(...).toBe(...) assertion deterministic, while a helper that writes to a module-level array will flake when tests run in parallel."
+  },
+  {
+    "id": 20,
+    "question": "What is a side effect, and name three you see in an automated test?",
+    "answer": "A side effect is any change your code makes outside of itself: writing to a file, changing a shared object, logging, or sending a request. Pure functions avoid them, most real code cannot.\n\ncode:\nconst sent = [];\nfunction sendReport(name) {\n  sent.push(name);\n  return sent.length;\n}\nsendReport('checkout');\nsendReport('login');\nconsole.log(sent);\nconsole.log(typeof console.log, Math.random() >= 0);\n\nreal example:\nA beforeEach hook that deletes files from the reports folder is a side effect, which is why tests using it must not run at the same time."
+  },
+  {
+    "id": 21,
+    "question": "Why is returning a new object safer than mutating the object you were handed?",
+    "answer": "Returning a new object leaves the original exactly as it was, so two callers holding the same object cannot fight over it. Mutation makes the result depend on the order tests happened to run in.\n\ncode:\nfunction addTag(user, tag) {\n  return Object.assign({}, user, { tags: user.tags.concat(tag) });\n}\nconst ana = { name: 'Ana', tags: ['admin'] };\nconst updated = addTag(ana, 'billing');\nconsole.log(ana.tags);\nconsole.log(updated.tags);\nconsole.log(ana === updated);\n\nreal example:\nBuild your Playwright storageState by copying the object instead of pushing into it, or the second spec that logs in will inherit the first spec's tokens."
+  },
+  {
+    "id": 22,
+    "question": "What is the difference between a plain function and a method?",
+    "answer": "Nothing about the code changes. A method is a function stored on an object, and when you call it as obj.name() it gets that object as this. Pull it off the object and this is lost.\n\ncode:\nconst cart = {\n  total: 10,\n  add(n) {\n    return this.total + n;\n  },\n};\nconst loose = cart.add;\nconsole.log(cart.add(5));\nconsole.log(loose(5));\n\nreal example:\nPassing page.waitForLoadState as a bare callback loses its this, which is why the Playwright wrappers take a function that receives the page instead."
+  },
+  {
+    "id": 23,
+    "question": "How does a function get its name property when you store it on an object?",
+    "answer": "The engine reads the name off the property key it was assigned to, or off the function keyword name for a declaration. Two functions stored under the same key get the same inferred name.\n\ncode:\nconst obj = {\n  greet: function () {\n    return 'hi ' + this.who;\n  },\n  who: 'cart',\n};\nconsole.log(obj.greet.name);\nfunction declaration() {}\nconst inferred = obj.greet;\nconsole.log(declaration.name, inferred.name);\n\nreal example:\nNaming your helpers meaningfully shows up in the stack trace Playwright prints when an expect fails, which saves a lot of guesswork."
+  },
+  {
+    "id": 24,
+    "question": "Why do function declarations hoist but const arrow functions do not?",
+    "answer": "Hoisting only copies function declarations up front. A const arrow function is an assignment, and const sits in the temporal dead zone until that line runs, so calling it earlier throws a ReferenceError.\n\ncode:\nconsole.log(early());\nfunction early() {\n  return 'declaration wins';\n}\ntry {\n  late();\n} catch (err) {\n  console.log(err.constructor.name);\n}\nconst late = () => 'arrow';\n\nreal example:\nDefining a page object with const methods at the bottom of the file and using it in a fixture defined at the top gives you this exact error."
+  },
+  {
+    "id": 25,
+    "question": "What is the temporal dead zone?",
+    "answer": "It is the stretch between the top of a scope and the line where a let or const is actually assigned. Reading the name in that stretch is a ReferenceError, unlike var which just gives undefined.\n\ncode:\ntry {\n  console.log(hoisted);\n} catch (err) {\n  console.log(err.constructor.name);\n}\nvar hoisted = 1;\ntry {\n  console.log(dead);\n} catch (err) {\n  console.log(err.constructor.name);\n}\nlet dead = 2;\n\nreal example:\nA fixtures map built with a const at the bottom of a file and destructured at the top fails with a ReferenceError, not a friendly undefined."
+  },
+  {
+    "id": 26,
+    "question": "What happens to a function you declare inside another function when the outer one runs twice?",
+    "answer": "Each call of the outer function creates a brand new inner function, so the two copies are different objects that remember their own parameters. The inner name does not survive the outer call, so nothing outside can reach it.\n\ncode:\nfunction outer(tag) {\n  function inner() {\n    return tag + '!';\n  }\n  return inner;\n}\nconst a = outer('a');\nconst b = outer('b');\nconsole.log(a(), b());\nconsole.log(a === b);\nconsole.log(typeof inner);\n\nreal example:\nA one-off snippet pasted into the Cypress browser console fails to parse if you drop the parens, because the console wraps each line as an expression."
+  },
+  {
+    "id": 27,
+    "question": "What does it mean that a function expression assigned to var is only half hoisted?",
+    "answer": "The variable is hoisted, so the name exists, but it holds undefined until the assignment runs. The name is there and still unusable, which is why const or let is the better choice.\n\ncode:\nconsole.log(typeof maybe);\nvar maybe = function () {\n  return 'assigned later';\n};\nconsole.log(typeof maybe);\nmaybe();\nconsole.log(maybe());\n\nreal example:\nA shared options object built with var in one file and read at the top of another gives you undefined and a confusing downstream failure."
+  },
+  {
+    "id": 28,
+    "question": "How do you tell a function declaration from a function expression just by reading the start of the line?",
+    "answer": "You often cannot. Both start with the word function, so the deciding factor is what comes before it: at the start of a statement it is a declaration, after an = or a comma it is an expression.\n\ncode:\nfunction declared() {}\nconst expressed = function () {};\nconst alsoExpression = function named() {};\nconst arrow = () => {};\nconsole.log(typeof declared, typeof expressed, typeof alsoExpression, typeof arrow);\nconsole.log(declared.name, expressed.name, alsoExpression.name, arrow.name);\n\nreal example:\nWhen you grep a helper file looking for where a function is defined, the keyword alone will not tell you if it can be called before that line."
+  },
+  {
+    "id": 29,
+    "question": "What is the difference between a function that returns undefined and one that returns nothing at all?",
+    "answer": "Nothing observable. Both hand back undefined and both keep running until the end, so the difference only matters when you read the source. Prefer returning nothing explicitly so the intent is clear.\n\ncode:\nfunction returnsUndefined() {\n  return;\n}\nfunction returnsNothing() {}\nconsole.log(returnsUndefined(), returnsNothing());\nconsole.log(returnsUndefined() === returnsNothing());\nconsole.log(typeof returnsNothing());\n\nreal example:\nA hook helper that returns undefined either way, so reading its output will not tell you whether the teardown step actually ran."
+  },
+  {
+    "id": 30,
+    "question": "Why does function.length stop counting at the first parameter with a default value?",
+    "answer": "length is defined as the number of parameters before the first one that has a default or a rest, because that is how many arguments the caller must supply. It is a hint about arity, not a count of the parameters.\n\ncode:\nfunction plain(a, b, c) {}\nfunction withDefault(a, b = 2, c) {}\nfunction withRest(a, ...rest) {}\nfunction withDestructured({ a }, b) {}\nconsole.log(plain.length, withDefault.length, withRest.length);\nconsole.log(withDestructured.length);\n\nreal example:\nA small validation helper checks fn.length to warn about a route handler that forgot its second parameter, so the count only makes sense with no defaults."
+  },
+  {
+    "id": 31,
+    "question": "What is new, what does it hand back, and how is that different from a plain call?",
+    "answer": "new creates an empty object, makes it this inside the function, runs the body, and gives you that object. If the body returns a plain object, that object wins instead; if it returns a primitive, the created object still wins.\n\ncode:\nfunction Box() {\n  this.tag = 'box';\n  return { tag: 'plain object wins' };\n}\nfunction Silent() {\n  this.tag = 'silent';\n}\nfunction Plain() {\n  return 42;\n}\nconsole.log(new Box().tag);\nconsole.log(new Silent().tag);\nconsole.log(Plain(), new (function () { return 42; })());\n\nreal example:\nConstructing a request helper with new gives every test its own config object, while calling it without new silently returns undefined and breaks the setup."
+  },
+  {
+    "id": 32,
+    "question": "How can a parameter and a function share a name, and who wins inside the body?",
+    "answer": "The parameter wins inside that function, because it is the nearest binding. The same-named function outside is still there, but the body can no longer reach it.\n\ncode:\nfunction total(items, sum) {\n  return items.reduce((acc, n) => acc + n, sum);\n}\nconsole.log(total([1, 2, 3], 10));\nfunction sum() {\n  return 'never reached';\n}\nconsole.log(typeof sum);\nconsole.log(total([1, 2], 0));\n\nreal example:\nA fixture that takes a callback parameter called fixture or run silently shadows the helper of the same name, and the fixture body then calls the parameter instead."
+  },
+  {
+    "id": 33,
+    "question": "What is the difference between throwing an error and returning an error value?",
+    "answer": "throw jumps straight out of the function and unwinds the call stack until something catches it, so the happy path code after it never runs. Returning an error keeps control in the function and forces every caller to check the value.\n\ncode:\nfunction parsePort(raw) {\n  const n = Number(raw);\n  if (!Number.isInteger(n)) throw new TypeError('bad port');\n  return n;\n}\nfunction tryParse(raw) {\n  try {\n    return { ok: true, value: parsePort(raw) };\n  } catch (err) {\n    return { ok: false, value: err.message };\n  }\n}\nconsole.log(parsePort('8080'));\nconsole.log(tryParse('abc'));\n\nreal example:\nA request helper that throws on a non-2xx response needs an expect around it, while one that returns { ok, value } can be asserted on line by line."
+  },
+  {
+    "id": 34,
+    "question": "Why can a function declaration not be wrapped in parentheses but a function expression can?",
+    "answer": "Parentheses are expression syntax. Wrapping a declaration turns it into an expression, so you must assign it to something for it to have a name. An expression is already an expression, so it can sit inside parentheses or a call.\n\ncode:\nfunction atTop() {\n  return 'declaration';\n}\nconst wrapped = (function () {\n  return 'expression, no name of its own';\n});\nconsole.log(atTop());\nconsole.log(wrapped());\nconsole.log(typeof (function () {}));\n\nreal example:\nDefault exporting a helper as export default (function () { return {} }) works because it is an expression, while export default function atTop also works but must keep its own name."
+  }
+]

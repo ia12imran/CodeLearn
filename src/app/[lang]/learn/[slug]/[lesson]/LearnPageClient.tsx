@@ -3,13 +3,25 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { getTopics, getTopicBySlug, getLessonBySlug, getNextLesson, getExtraQuiz, getQuestionSectionModule, isLanguage, Language } from "@/data/index";
+import {
+  getTopics,
+  getTopicBySlug,
+  getLessonBySlug,
+  getNextLesson,
+  getExtraQuiz,
+  getQuestionSectionModule,
+  getLessonPractice,
+  getLessonCoding,
+  isLanguage,
+  Language,
+} from "@/data/index";
 import { markLessonComplete, isLessonComplete } from "@/lib/progress";
 import Sidebar from "@/components/Sidebar";
 import Quiz from "@/components/Quiz";
 import PracticeQA from "@/components/PracticeQA";
+import CodingQuiz from "@/components/CodingQuiz";
 import ClientOnly from "@/components/ClientOnly";
-import { QAQuestion } from "@/data/types";
+import { QAQuestion, CodingQuestion } from "@/data/types";
 import { ChevronLeft, ChevronRight, CheckCircle2, ArrowRight, BookOpen, FlaskConical } from "lucide-react";
 
 const CodeEditor = dynamic(() => import("@/components/CodeEditor"), { ssr: false });
@@ -25,8 +37,11 @@ function EditorPlaceholder({ height }: { height: number }) {
   );
 }
 
-const qaSectionKeyMap: Record<Language, Record<string, string>> = {
-  python: {
+/**
+ * Python only. JavaScript uses the per-lesson banks in
+ * src/data/javascript/questions + src/data/javascript/coding instead.
+ */
+const pythonQaSectionKeyMap: Record<string, string> = {
     "syntax/basic-syntax": "basic_syntax",
     "syntax/variables": "variables",
     "syntax/data-types": "data_types",
@@ -48,55 +63,6 @@ const qaSectionKeyMap: Record<Language, Record<string, string>> = {
     "oop/inheritance": "oop_inheritance",
     "error-handling/try-except": "error_handling",
     "file-handling/file-operations": "file_handling",
-  },
-  javascript: {
-    "basics/variables": "js_basics",
-    "basics/data-types": "js_basics",
-    "basics/operators": "js_operators",
-    "basics/type-conversions": "js_operators",
-    "control-flow/if-else": "js_control_flow",
-    "control-flow/loops-iteration": "js_control_flow",
-    "strings/string-basics": "js_strings",
-    "strings/string-methods": "js_strings",
-    "strings/template-literals": "js_strings",
-    "functions/function-basics": "js_functions",
-    "functions/arrow-functions": "js_functions",
-    "functions/lexical-scope-closures": "js_functions",
-    "functions/callbacks": "js_functions",
-    "arrays/array-basics": "js_arrays",
-    "arrays/advanced-arrays": "js_arrays",
-    "arrays/reduce": "js_arrays",
-    "objects/object-basics": "js_objects",
-    "objects/destructuring": "js_objects",
-    "objects/optional-chaining-nullish": "js_objects",
-    "objects/map-set": "js_map_set",
-    "objects/arrays-of-objects": "js_objects",
-    "async/async-basics": "js_async",
-    "async/promises": "js_async",
-    "async/async-await": "js_async",
-    "async/fetch-apis": "js_json_fetch",
-    "async/event-loop": "js_async",
-    "classes/class-basics": "js_classes",
-    "classes/class-inheritance": "js_classes",
-    "classes/prototypal-inheritance": "js_classes",
-    "classes/json": "js_json_fetch",
-    "dom/dom-basics": "js_dom",
-    "dom/dom-selection": "js_dom",
-    "dom/dom-manipulation": "js_dom",
-    "dom/events": "js_dom",
-    "dom/forms": "js_dom",
-    "dom/window-object": "js_dom",
-    "modules/modules": "js_modules",
-    "modules/dynamic-imports": "js_modules",
-    "modules/package-managers": "js_modules",
-    "modules/module-bundlers": "js_modules",
-    "modules/ecmascript": "js_modules",
-    "advanced/regex-intro": "js_regex",
-    "advanced/generators": "js_regex",
-    "advanced/legacy-var": "js_interview",
-    "advanced/legacy-topics": "js_interview",
-    "advanced/interview-prep": "js_interview",
-  },
 };
 
 export default function LearnPageClient({ lang, slug, lesson }: { lang: string; slug: string; lesson: string }) {
@@ -145,29 +111,53 @@ function LessonView({ language, topicSlug, lessonSlug }: { language: Language; t
   const nextHref = next ? `/${language}/learn/${next.topicSlug}/${next.lessonSlug}` : null;
   const lessonQuiz = [...(lesson.quiz || []), ...(getExtraQuiz(language)[`${topicSlug}/${lessonSlug}`] || [])];
 
-  const qaSectionKey = qaSectionKeyMap[language][`${topicSlug}/${lessonSlug}`] || null;
+  const isJs = language === "javascript";
+  const lessonKey = `${topicSlug}/${lessonSlug}`;
+
+  // Python keeps the shared per-section banks. JavaScript has one bank per lesson.
+  const qaSectionKey = isJs ? null : pythonQaSectionKeyMap[lessonKey] || null;
 
   const [qaQuestions, setQaQuestions] = useState<QAQuestion[]>([]);
-  const [qaLoading, setQaLoading] = useState(Boolean(qaSectionKey));
+  const [qaLoading, setQaLoading] = useState(true);
+  const [codingQuestions, setCodingQuestions] = useState<CodingQuestion[]>([]);
+  const [codingLoading, setCodingLoading] = useState(isJs);
 
   useEffect(() => {
-    if (!qaSectionKey) return;
     let cancelled = false;
-    getQuestionSectionModule(language)()
-      .then((m) => {
-        const section = m.getSection(qaSectionKey);
-        if (!cancelled) setQaQuestions(section?.questions ?? []);
-      })
-      .catch(() => {
-        if (!cancelled) setQaQuestions([]);
-      })
-      .finally(() => {
-        if (!cancelled) setQaLoading(false);
-      });
+
+    if (isJs) {
+      setQaLoading(true);
+      getLessonPractice(language, topicSlug, lessonSlug)
+        .then((qs) => !cancelled && setQaQuestions(qs))
+        .catch(() => !cancelled && setQaQuestions([]))
+        .finally(() => !cancelled && setQaLoading(false));
+    } else if (qaSectionKey) {
+      getQuestionSectionModule(language)()
+        .then((m) => {
+          const section = m.getSection(qaSectionKey);
+          if (!cancelled) setQaQuestions(section?.questions ?? []);
+        })
+        .catch(() => {
+          if (!cancelled) setQaQuestions([]);
+        })
+        .finally(() => {
+          if (!cancelled) setQaLoading(false);
+        });
+    } else {
+      setQaLoading(false);
+    }
+
+    if (isJs) {
+      getLessonCoding(language, topicSlug, lessonSlug)
+        .then((qs) => !cancelled && setCodingQuestions(qs))
+        .catch(() => !cancelled && setCodingQuestions([]))
+        .finally(() => !cancelled && setCodingLoading(false));
+    }
+
     return () => {
       cancelled = true;
     };
-  }, [language, qaSectionKey]);
+  }, [language, topicSlug, lessonSlug, isJs, qaSectionKey]);
 
   const handleMarkComplete = () => {
     markLessonComplete(language, topicSlug, lessonSlug);
@@ -323,25 +313,27 @@ function LessonView({ language, topicSlug, lessonSlug }: { language: Language; t
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Practice: {lesson.title}</h1>
 
-              {qaSectionKey && (
-                <div className="mb-10">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-3">Practice Questions & Answers</h2>
-                  <p className="text-gray-500 mb-6">
-                    Answer each question by writing and running your code. Use Previous/Next to navigate.
-                  </p>
-                  {qaLoading ? (
-                    <div className="bg-white border border-gray-200 rounded-2xl p-10 text-center text-gray-500">
-                      Loading questions...
-                    </div>
-                  ) : qaQuestions.length > 0 ? (
-                    <PracticeQA questions={qaQuestions} language={language} />
-                  ) : (
-                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-amber-700 text-sm">
-                      Practice questions are temporarily unavailable. Please try again later.
-                    </div>
-                  )}
-                </div>
-              )}
+              <div className="mb-10">
+                <h2 className="text-lg font-semibold text-gray-900 mb-3">
+                  {isJs ? "Top Interview Questions for This Topic" : "Practice Questions & Answers"}
+                </h2>
+                <p className="text-gray-500 mb-6">
+                  {isJs
+                    ? `The ${qaQuestions.length || 30}+ questions interviewers actually ask on ${lesson.title}. Write your answer in the editor, run it, then compare it with the reference solution.`
+                    : "Answer each question by writing and running your code. Use Previous/Next to navigate."}
+                </p>
+                {qaLoading ? (
+                  <div className="bg-white border border-gray-200 rounded-2xl p-10 text-center text-gray-500">
+                    Loading questions...
+                  </div>
+                ) : qaQuestions.length > 0 ? (
+                  <PracticeQA questions={qaQuestions} language={language} />
+                ) : (
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-amber-700 text-sm">
+                    Practice questions are temporarily unavailable. Please try again later.
+                  </div>
+                )}
+              </div>
 
               <div className="mt-8 flex space-x-4">
                 <button
@@ -350,7 +342,7 @@ function LessonView({ language, topicSlug, lessonSlug }: { language: Language; t
                   className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl transition cursor-pointer"
                 >
                   <FlaskConical size={18} />
-                  Take the Quiz
+                  {isJs ? "Go to Coding Quiz" : "Take the Quiz"}
                 </button>
               </div>
             </div>
@@ -359,14 +351,34 @@ function LessonView({ language, topicSlug, lessonSlug }: { language: Language; t
           {/* Quiz tab */}
           {activeTab === "quiz" && (
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Quick Quiz: {lesson.title}</h1>
-              <p className="text-gray-500 mb-6">Test your understanding of this lesson.</p>
-              <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8">
-                <Quiz
-                  questions={lessonQuiz}
-                  onComplete={handleQuizComplete}
-                />
-              </div>
+              {isJs ? (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">Coding Quiz: {lesson.title}</h1>
+                  <p className="text-gray-500 mb-6">
+                    {codingQuestions.length || 30} pure coding challenges. Try to solve each one on your own before
+                    opening the reference solution.
+                  </p>
+                  <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8">
+                    {codingLoading ? (
+                      <div className="p-10 text-center text-gray-500">Loading challenges...</div>
+                    ) : codingQuestions.length > 0 ? (
+                      <CodingQuiz questions={codingQuestions} onComplete={handleQuizComplete} />
+                    ) : (
+                      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-amber-700 text-sm">
+                        Coding challenges for this lesson are on the way. Please check back soon.
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">Quick Quiz: {lesson.title}</h1>
+                  <p className="text-gray-500 mb-6">Test your understanding of this lesson.</p>
+                  <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8">
+                    <Quiz questions={lessonQuiz} onComplete={handleQuizComplete} />
+                  </div>
+                </>
+              )}
               {quizScore !== null && nextHref && (
                 <div className="mt-6 text-center">
                   <Link

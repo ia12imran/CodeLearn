@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1,
+    "question": "Write describeType(value) that returns null for null, array for arrays, date for Date objects, object for other objects and the typeof string for everything else. Print the result for 1, 'a', null, [1], new Date(0) and { a: 1 }.",
+    "answer": "Check the special cases first, because typeof reports them all as object and hides the difference. Only then fall back to typeof.\n\ncode:\nfunction describeType(value) {\n  if (value === null) return 'null';\n  if (Array.isArray(value)) return 'array';\n  if (value instanceof Date) return 'date';\n  return typeof value;\n}\nconst samples = [1, 'a', null, [1], new Date(0), { a: 1 }];\nconsole.log(samples.map(describeType).join(', ')); // number, string, null, array, date, object\n\noutput:\nnumber, string, null, array, date, object"
+  },
+  {
+    "id": 2,
+    "question": "Print the typeof of seven values: the string hi, the number 42, true, undefined, Symbol('id'), 10n and null, joined by a pipe. Predict which one will surprise you.",
+    "answer": "typeof reports the tag the engine stored, and null shares the object tag, so it is the last entry that comes out wrong.\n\ncode:\nconst types = ['hi', 42, true, undefined, Symbol('id'), 10n, null];\nconst tags = types.map((value) => typeof value);\nconsole.log(tags.join(' | ')); // string | number | boolean | undefined | symbol | bigint | object\nconsole.log(new Set(tags).size + ' distinct tags from ' + types.length + ' values'); // 7 distinct tags from 7 values\n\noutput:\nstring | number | boolean | undefined | symbol | bigint | object\n7 distinct tags from 7 values"
+  },
+  {
+    "id": 3,
+    "question": "Write isPrimitive(value) that returns true for strings, numbers, booleans, null and undefined but false for objects, arrays and functions. Run it over [1, 'a', true, null, undefined, {}, () => 1] and print the results.",
+    "answer": "Null counts as a primitive even though its typeof says object, so test for null separately before ruling out object and function.\n\ncode:\nfunction isPrimitive(value) {\n  return value === null || (typeof value !== 'object' && typeof value !== 'function');\n}\nconst samples = [1, 'a', true, null, undefined, {}, () => 1];\nconsole.log(samples.map(isPrimitive).join(', ')); // true, true, true, true, true, false, false\n\noutput:\ntrue, true, true, true, true, false, false"
+  },
+  {
+    "id": 4,
+    "question": "Show three ways to recognise the array [1, 2] as an array: typeof, Array.isArray and instanceof. Print them, then print Array.isArray for the string 'abc' and for the array-like object { length: 2, 0: 1, 1: 2 }.",
+    "answer": "typeof only says object, so you need Array.isArray for a real check. instanceof works too but fails across separate copies of the code.\n\ncode:\nconst value = [1, 2];\nconst lookalike = { length: 2, 0: 1, 1: 2 };\nconsole.log(typeof value, Array.isArray(value), value instanceof Array); // object true true\nconsole.log(Array.isArray('abc'), Array.isArray(lookalike)); // false false\n\noutput:\nobject true true\nfalse false"
+  },
+  {
+    "id": 5,
+    "question": "Turn the string 'abc' into a number, print the value and its typeof, then print Number.isNaN of it and the global isNaN of it. Also print isNaN('12'). Expected: NaN, number, true, true, then false.",
+    "answer": "NaN has the number tag, so typeof cannot spot it. Number.isNaN only accepts real numbers while the global isNaN converts its argument first.\n\ncode:\nconst bad = Number('abc');\nconsole.log(typeof bad, bad); // number NaN\nconsole.log(Number.isNaN(bad), isNaN(bad)); // true true\nconsole.log(isNaN('12')); // false\n\noutput:\nnumber NaN\ntrue true\nfalse"
+  },
+  {
+    "id": 6,
+    "question": "Print the typeof of a declared but unassigned let variable and of a name that was never declared at all. Expected: undefined for both, with no ReferenceError.",
+    "answer": "typeof is the only operator that is allowed to look at a name that does not exist, which makes it safe for feature checks.\n\ncode:\nlet declared;\nconsole.log(typeof declared); // undefined\nconsole.log(typeof neverDeclared); // undefined, no ReferenceError\nconsole.log(typeof declared + '|' + typeof neverDeclared); // undefined|undefined\n\noutput:\nundefined\nundefined\nundefined|undefined"
+  },
+  {
+    "id": 7,
+    "question": "Print Object.prototype.toString.call for null, an empty array and a Date, then print typeof for the same three values to show where the two disagree.",
+    "answer": "The internal tag survives null and arrays, so the toString call gives a sharper label than typeof when you need to log what really came back.\n\ncode:\nconst values = [null, [], new Date(0)];\nconst internal = values.map((value) => Object.prototype.toString.call(value));\nconsole.log(internal.join(' ')); // [object Null] [object Array] [object Date]\nconsole.log(values.map((value) => typeof value).join(' ')); // object object object\n\noutput:\n[object Null] [object Array] [object Date]\nobject object object"
+  },
+  {
+    "id": 8,
+    "question": "Compare the primitive string 'chrome' with new String('chrome'). Print both typeof values, then print whether they are loosely equal, strictly equal and equal after unboxing with valueOf.",
+    "answer": "The boxed version is a real object, so strict equality fails while valueOf hands back the primitive text underneath.\n\ncode:\nconst primitive = 'chrome';\nconst boxed = new String('chrome');\nconsole.log(typeof primitive, typeof boxed); // string object\nconsole.log(boxed == primitive, boxed === primitive, boxed.valueOf() === primitive); // true false true\n\noutput:\nstring object\ntrue false true"
+  },
+  {
+    "id": 9,
+    "question": "Declare a normal function, an arrow function and a class, print the typeof of all three, then print whether each one has a prototype property.",
+    "answer": "typeof says function for all three, so only the prototype property tells an arrow function apart from a normal function.\n\ncode:\nfunction named() {}\nconst arrow = () => {};\nclass Suite {}\nconsole.log(typeof named, typeof arrow, typeof Suite); // function function function\nconsole.log(Boolean(named.prototype), Boolean(arrow.prototype), Boolean(Suite.prototype)); // true false true\n\noutput:\nfunction function function\ntrue false true"
+  },
+  {
+    "id": 10,
+    "question": "Create the regular expression /abc/, a Map with one entry and a Set with two entries. Print their typeof values and their instanceof results.",
+    "answer": "All three are objects to typeof, so an instanceof check is the honest way to prove what a value actually is.\n\ncode:\nconst pattern = /abc/;\nconst store = new Map([['a', 1]]);\nconst unique = new Set([1, 2]);\nconsole.log(typeof pattern, typeof store, typeof unique); // object object object\nconsole.log(pattern instanceof RegExp, store instanceof Map, unique instanceof Set); // true true true\n\noutput:\nobject object object\ntrue true true"
+  },
+  {
+    "id": 11,
+    "question": "Create a symbol with the label token, then print its typeof and its toString result, the typeof of its description, and whether it equals a second Symbol('token') you make.",
+    "answer": "A symbol is a primitive with a unique hidden identity. Two symbols with the same label are still different values, which is what makes them safe as map keys.\n\ncode:\nconst token = Symbol('token');\nconsole.log(typeof token, token.toString()); // symbol Symbol(token)\nconsole.log(token.description, typeof token.description); // token string\nconsole.log(token === Symbol('token')); // false\n\noutput:\nsymbol Symbol(token)\ntoken string\nfalse"
+  },
+  {
+    "id": 12,
+    "question": "Print the typeof of the bigint literal 9007199254740993n and of the number 42, then add 1n to the bigint and print the result next to Number.isInteger of it.",
+    "answer": "Bigint and number look alike in code but carry different tags, which is why mixing them in one arithmetic expression is a mistake.\n\ncode:\nconst big = 9007199254740993n;\nconst small = 42;\nconsole.log(typeof big, typeof small); // bigint number\nconsole.log(big + 1n, Number.isInteger(Number(big))); // 9007199254740994n true\n\noutput:\nbigint number\n9007199254740994n true"
+  },
+  {
+    "id": 13,
+    "question": "Create a TypeError with the message boom and a plain Error with the same message. Print the TypeError typeof, whether it is an instance of Error, its name, its message and whether the two errors are equal.",
+    "answer": "Errors are objects with extra fields, so typeof calls them plain objects and you need instanceof to recognise one. Each new error is a separate object.\n\ncode:\nconst failure = new TypeError('boom');\nconst plain = new Error('boom');\nconsole.log(typeof failure, failure instanceof Error); // object true\nconsole.log(failure.name, failure.message); // TypeError boom\nconsole.log(failure === plain); // false\n\noutput:\nobject true\nTypeError boom\nfalse"
+  },
+  {
+    "id": 14,
+    "question": "Write countTypes(values) that returns an object counting how many values of each typeof the array holds. Run it on [1, 'a', true, 2, 'b'] and print the JSON.",
+    "answer": "One pass with a running object keyed by the typeof string is enough, and JSON.stringify gives you a stable order for the log line.\n\ncode:\nconst values = [1, 'a', true, 2, 'b'];\nconst counts = {};\nfor (const value of values) {\n  const type = typeof value;\n  counts[type] = (counts[type] || 0) + 1;\n}\nconsole.log(JSON.stringify(counts)); // {\"number\":2,\"string\":2,\"boolean\":1}\n\noutput:\n{\"number\":2,\"string\":2,\"boolean\":1}"
+  },
+  {
+    "id": 15,
+    "question": "Write firstTypeMismatch(a, b) that returns the index where the two arrays first hold values of different typeof, or -1 when they agree. Test [1,2,3] against [1,'2',3] and [1] against [1,'x'].",
+    "answer": "Walk both arrays together and compare tags, stopping at the first place they differ. Stopping early is what makes this cheap on long payloads.\n\ncode:\nfunction firstTypeMismatch(a, b) {\n  const limit = Math.min(a.length, b.length);\n  for (let i = 0; i < limit; i++) {\n    if (typeof a[i] !== typeof b[i]) return i;\n  }\n  return -1;\n}\nconsole.log(firstTypeMismatch([1, 2, 3], [1, '2', 3])); // 1\nconsole.log(firstTypeMismatch([1], [1, 'x'])); // -1\n\noutput:\n1\n-1"
+  },
+  {
+    "id": 16,
+    "question": "Write describeList(values) that maps every value to the text value:typeof, and print the result for [1, '1', null] joined by spaces.",
+    "answer": "Turning each value into text with String keeps null readable instead of crashing the way a plain string join would not.\n\ncode:\nfunction describeList(values) {\n  return values.map((value) => String(value) + ':' + typeof value);\n}\nconsole.log(describeList([1, '1', null]).join(' ')); // 1:number 1:string null:object\n\noutput:\n1:number 1:string null:object"
+  },
+  {
+    "id": 17,
+    "question": "Write typeSummary(values) that reports how many values there are, how many distinct typeof tags they use and the tags in alphabetical order. Example: [1, 'a', 2, true] gives 4 values, 3 types: boolean,number,string.",
+    "answer": "Collect the tags in a Set so each one is counted once, then copy the Set into an array so it can be sorted without changing the Set.\n\ncode:\nfunction typeSummary(values) {\n  const tags = new Set(values.map((value) => typeof value));\n  return values.length + ' values, ' + tags.size + ' types: ' + [...tags].sort().join(',');\n}\nconsole.log(typeSummary([1, 'a', 2, true])); // 4 values, 3 types: boolean,number,string\n\noutput:\n4 values, 3 types: boolean,number,string"
+  },
+  {
+    "id": 18,
+    "question": "Write groupByType(values) that returns an object whose keys are the typeof tags and whose values are arrays of the string versions of the matching values. Run it on [1, 'a', 2] and print the JSON.",
+    "answer": "Create the bucket on first sight with a logical assignment, then push into it. That avoids a hasOwnProperty check on every value.\n\ncode:\nfunction groupByType(values) {\n  const groups = {};\n  for (const value of values) {\n    (groups[typeof value] ||= []).push(String(value));\n  }\n  return groups;\n}\nconsole.log(JSON.stringify(groupByType([1, 'a', 2]))); // {\"number\":[\"1\",\"2\"],\"string\":[\"a\"]}\n\noutput:\n{\"number\":[\"1\",\"2\"],\"string\":[\"a\"]}"
+  },
+  {
+    "id": 19,
+    "question": "Print the typeof of 0 / 0 and of Infinity, then print whether Infinity is bigger than Number.MAX_SAFE_INTEGER and whether Number.isNaN and Number.isFinite approve of the two values.",
+    "answer": "Both of these odd numbers are still numbers as far as the type tag is concerned, which is why typeof alone cannot guard your arithmetic.\n\ncode:\nconst notANumber = 0 / 0;\nconst tooBig = Infinity;\nconsole.log(typeof notANumber, notANumber); // number NaN\nconsole.log(typeof tooBig, tooBig > Number.MAX_SAFE_INTEGER); // number true\nconsole.log(Number.isNaN(notANumber), Number.isFinite(tooBig)); // true false\n\noutput:\nnumber NaN\nnumber true\ntrue false"
+  },
+  {
+    "id": 20,
+    "question": "Write isFiniteNumber(value) that is true only for real finite numbers, and run it over [1, 1.5, NaN, Infinity, '2']. Expected: true, true, false, false, false.",
+    "answer": "Check the tag first so strings are never converted, then check the value so NaN and Infinity are rejected too.\n\ncode:\nfunction isFiniteNumber(value) {\n  return typeof value === 'number' && Number.isFinite(value);\n}\nconst samples = [1, 1.5, NaN, Infinity, '2'];\nconsole.log(samples.map(isFiniteNumber).join(', ')); // true, true, false, false, false\n\noutput:\ntrue, true, false, false, false"
+  },
+  {
+    "id": 21,
+    "question": "Write describeSize(value) that returns bigint:10 for the bigint 10n and number:true for the number 10, so a caller can tell the two apart. Print both results.",
+    "answer": "Branch on the typeof tag first, and only treat a value as a number once you know the tag really is number.\n\ncode:\nfunction describeSize(value) {\n  if (typeof value === 'bigint') return 'bigint:' + value.toString();\n  return typeof value + ':' + Number.isInteger(value);\n}\nconsole.log(describeSize(10n)); // bigint:10\nconsole.log(describeSize(10)); // number:true\n\noutput:\nbigint:10\nnumber:true"
+  },
+  {
+    "id": 22,
+    "question": "Write typeMap(obj) that turns the keys and values of an object into key:typeof strings joined by commas. Run it on { id: 7, name: 'cart', items: [], paid: false, note: null }.",
+    "answer": "Object.entries gives you the key and the value together, so one map produces the whole report line.\n\ncode:\nfunction typeMap(obj) {\n  return Object.entries(obj).map(([key, value]) => key + ':' + typeof value).join(', ');\n}\nconst response = { id: 7, name: 'cart', items: [], paid: false, note: null };\nconsole.log(typeMap(response)); // id:number, name:string, items:object, paid:boolean, note:object\n\noutput:\nid:number, name:string, items:object, paid:boolean, note:object"
+  },
+  {
+    "id": 23,
+    "question": "Take the response { data: { id: 1 } } and print the typeof of a missing items field and of a missing error field. Then read one level deeper and catch the error that reading a field of undefined throws.",
+    "answer": "A missing field is undefined rather than a crash, but reading a field of undefined is a TypeError. That is why optional chaining exists.\n\ncode:\nconst response = { data: { id: 1 } };\nconsole.log(typeof response.data.items); // undefined\nconsole.log(typeof response.error); // undefined\ntry {\n  console.log(typeof response.error.code);\n} catch (err) {\n  console.log(err.constructor.name); // TypeError\n}\n\noutput:\nundefined\nundefined\nTypeError"
+  },
+  {
+    "id": 24,
+    "question": "Write display(value) that returns MISSING for undefined, NULL for null and tag:value for everything else, then print the results for [undefined, null, 'undefined', 0].",
+    "answer": "The string 'undefined' and the real undefined are different values with the same typeof. Comparing against undefined first tells them apart.\n\ncode:\nfunction display(value) {\n  if (value === undefined) return 'MISSING';\n  if (value === null) return 'NULL';\n  return typeof value + ':' + String(value);\n}\nconsole.log([undefined, null, 'undefined', 0].map(display).join(' | ')); // MISSING | NULL | string:undefined | number:0\n\noutput:\nMISSING | NULL | string:undefined | number:0"
+  },
+  {
+    "id": 25,
+    "question": "Write isEmptyValue(value) that returns true for null, undefined, a blank string and an empty array but false for the number 0. Print the results for '', ' ', 0, [], null and 'x'.",
+    "answer": "Handle each type on its own terms instead of relying on a single truthiness test, because 0 is a real value that happens to look falsy.\n\ncode:\nfunction isEmptyValue(value) {\n  if (value === null || value === undefined) return true;\n  if (typeof value === 'string') return value.trim() === '';\n  if (Array.isArray(value)) return value.length === 0;\n  return false;\n}\nconsole.log(['', ' ', 0, [], null, 'x'].map(isEmptyValue).join(', ')); // true, true, false, true, true, false\n\noutput:\ntrue, true, false, true, true, false"
+  },
+  {
+    "id": 26,
+    "question": "Write countObjects(values) that counts only the values whose typeof is object and that are not null. Run it on [{}, [], null, 'x', 5] and print the count.",
+    "answer": "typeof object alone is not enough because null shares the tag, so add a null check before you count.\n\ncode:\nfunction countObjects(values) {\n  return values.filter((value) => typeof value === 'object' && value !== null).length;\n}\nconsole.log(countObjects([{}, [], null, 'x', 5])); // 2\n\noutput:\n2"
+  },
+  {
+    "id": 27,
+    "question": "Write typeOfItems(list) that returns the shared typeof when every element has the same type and the word mixed when they do not. Test [1,2,3] and [1,'2'].",
+    "answer": "Put the tags into a Set: one entry means the array is uniform, more than one means it is mixed.\n\ncode:\nfunction typeOfItems(list) {\n  const tags = new Set(list.map((item) => typeof item));\n  return tags.size === 1 ? [...tags][0] : 'mixed';\n}\nconsole.log(typeOfItems([1, 2, 3])); // number\nconsole.log(typeOfItems([1, '2'])); // mixed\n\noutput:\nnumber\nmixed"
+  },
+  {
+    "id": 28,
+    "question": "Write describeDeep(value) that reports array of number for [1, 2], date for a Date, null for null and the plain typeof for anything else. Print all four results.",
+    "answer": "Look at the array case first, then reuse the same function on the first item so nested shapes describe themselves.\n\ncode:\nfunction describeDeep(value) {\n  if (value === null) return 'null';\n  if (Array.isArray(value)) return 'array of ' + describeDeep(value[0]);\n  if (value instanceof Date) return 'date';\n  return typeof value;\n}\nconsole.log(describeDeep([1, 2]), describeDeep(new Date(0))); // array of number date\nconsole.log(describeDeep(null), describeDeep({ a: 1 })); // null object\n\noutput:\narray of number date\nnull object"
+  },
+  {
+    "id": 29,
+    "question": "Write describeCollection(value) that returns array of arrays of length 2 for [[1], [2]] and flat array of length 2 for [1, 2], and falls back to typeof for anything that is not an array.",
+    "answer": "Use every to check the shape of the contents, then report the length so the log line tells you how much data came back.\n\ncode:\nfunction describeCollection(value) {\n  if (!Array.isArray(value)) return typeof value;\n  const shape = value.every((item) => Array.isArray(item)) ? 'array of arrays' : 'flat array';\n  return shape + ' of length ' + value.length;\n}\nconsole.log(describeCollection([[1], [2]])); // array of arrays of length 2\nconsole.log(describeCollection([1, 2])); // flat array of length 2\n\noutput:\narray of arrays of length 2\nflat array of length 2"
+  },
+  {
+    "id": 30,
+    "question": "Write sameDeepType(a, b) that is true when both values have the same typeof and are both arrays of the same length with matching element types. Test [1,2] against [1,2] and [1] against ['1'].",
+    "answer": "Recurse into arrays element by element and compare tags at every level, so a nested shape mismatch is caught too.\n\ncode:\nfunction sameDeepType(a, b) {\n  if (Array.isArray(a) !== Array.isArray(b)) return false;\n  if (Array.isArray(a)) {\n    return a.length === b.length && a.every((item, i) => sameDeepType(item, b[i]));\n  }\n  return typeof a === typeof b;\n}\nconsole.log(sameDeepType([1, 2], [1, 2]), sameDeepType([1], ['1'])); // true false\n\noutput:\ntrue false"
+  },
+  {
+    "id": 31,
+    "question": "Write isText(value) that is true only for real string primitives, and run it over ['a', new String('a'), 1, ['a']]. Expected: true, false, false, false.",
+    "answer": "typeof on the primitive string is string and on the boxed version it is object, so the check also catches wrongly wrapped data.\n\ncode:\nfunction isText(value) {\n  return typeof value === 'string';\n}\nconst samples = ['a', new String('a'), 1, ['a']];\nconsole.log(samples.map(isText).join(', ')); // true, false, false, false\n\noutput:\ntrue, false, false, false"
+  },
+  {
+    "id": 32,
+    "question": "Parse the JSON string {\"id\":1,\"tags\":[\"a\"],\"ok\":true} and print the typeof of every field as key:type pairs. Then print Array.isArray of the tags field next to its typeof.",
+    "answer": "JSON gives back plain objects, arrays and primitives, and an array lands on the object tag just like a null would.\n\ncode:\nconst payload = JSON.parse('{\"id\":1,\"tags\":[\"a\"],\"ok\":true}');\nconst lines = Object.entries(payload).map(([key, value]) => key + ':' + typeof value);\nconsole.log(lines.join(' ')); // id:number tags:object ok:boolean\nconsole.log(Array.isArray(payload.tags), typeof payload.tags); // true object\n\noutput:\nid:number tags:object ok:boolean\ntrue object"
+  },
+  {
+    "id": 33,
+    "question": "Put JSON, Math and console.log in an array and print the typeof of each, then print the typeof of Math.max and of JSON.stringify.",
+    "answer": "JSON and Math are plain objects that hold functions as properties, so only the individual methods are functions. Check the tag of the value you are about to call.\n\ncode:\nconst builtins = [JSON, Math, console.log];\nconsole.log(builtins.map((item) => typeof item).join(', ')); // object, object, function\nconsole.log(typeof Math.max, typeof JSON.stringify); // function function\nconsole.log(typeof JSON.parse('{}'), typeof JSON.stringify({})); // object string\n\noutput:\nobject, object, function\nfunction function\nobject string"
+  },
+  {
+    "id": 34,
+    "question": "Declare a class Checkout with a total of 0 on the instance, create one, and print its typeof, the typeof of the class itself, and whether the instance is an instance of the class.",
+    "answer": "An instance is an object even though the class is a function, and instanceof is the check that links the two back together.\n\ncode:\nclass Checkout {\n  constructor() {\n    this.total = 0;\n  }\n}\nconst page = new Checkout();\nconsole.log(typeof page, typeof Checkout); // object function\nconsole.log(page instanceof Checkout, page.constructor === Checkout); // true true\n\noutput:\nobject function\ntrue true"
+  },
+  {
+    "id": 35,
+    "question": "Write groupCount(values) that returns an object with the keys primitive and object counting how many values fall in each group, treating functions as objects. Run it on [1, 'a', {}, null, () => 1] and check where null lands.",
+    "answer": "Decide the group from the tag itself, which puts null in the object group because typeof calls null an object. That surprise is the reason to test for null separately.\n\ncode:\nfunction groupCount(values) {\n  const groups = { primitive: 0, object: 0 };\n  for (const value of values) {\n    const tag = typeof value;\n    groups[tag === 'object' || tag === 'function' ? 'object' : 'primitive'] += 1;\n  }\n  return groups;\n}\nconsole.log(JSON.stringify(groupCount([1, 'a', {}, null, () => 1]))); // {\"primitive\":2,\"object\":3}\n\noutput:\n{\"primitive\":2,\"object\":3}"
+  },
+  {
+    "id": 36,
+    "question": "Create the values 0xff, 0b101, 0o17, 1e3 and 1_000, print their typeof values joined by commas and the values themselves, then print whether 0o17 equals 15 and 1_000 equals 1000.",
+    "answer": "Every literal form is stored as a plain number, so the printed values prove the source notation does not survive into the type tag.\n\ncode:\nconst values = [0xff, 0b101, 0o17, 1e3, 1_000];\nconst tags = values.map((value) => typeof value);\nconsole.log(tags.join(',')); // number,number,number,number,number\nconsole.log(values.join(',')); // 255,5,15,1000,1000\nconsole.log(0o17 === 15, 1_000 === 1000); // true true\n\noutput:\nnumber,number,number,number,number\n255,5,15,1000,1000\ntrue true"
+  },
+  {
+    "id": 37,
+    "question": "Write typeOfNumber(value) that returns integer, decimal or not-a-number for 7, 7.5 and 'abc'. Print all three results.",
+    "answer": "Start from the tag so strings are rejected, then use Number.isNaN and Number.isInteger to split the numbers into two groups.\n\ncode:\nfunction typeOfNumber(value) {\n  if (typeof value !== 'number') return 'not-a-number';\n  if (Number.isNaN(value)) return 'not-a-number';\n  return Number.isInteger(value) ? 'integer' : 'decimal';\n}\nconsole.log([7, 7.5, 'abc'].map(typeOfNumber).join(', ')); // integer, decimal, not-a-number\n\noutput:\ninteger, decimal, not-a-number"
+  },
+  {
+    "id": 38,
+    "question": "Write describeFn(fn) that returns not a function for a string, has prototype for a normal function and arrow or method for an arrow function. Print all three results.",
+    "answer": "Return early when the tag is not function, then use the missing prototype property as the tell between a normal function and an arrow function.\n\ncode:\nfunction describeFn(fn) {\n  if (typeof fn !== 'function') return 'not a function';\n  return fn.prototype ? 'has prototype' : 'arrow or method';\n}\nconsole.log(describeFn(function () {}), describeFn(() => {})); // has prototype arrow or method\nconsole.log(describeFn('x')); // not a function\n\noutput:\nhas prototype arrow or method\nnot a function"
+  },
+  {
+    "id": 39,
+    "question": "Declare const browser = 'chrome' and print the result of !typeof browser, of typeof browser === 'string' and of typeof browser.length.",
+    "answer": "typeof is a unary operator, so it binds tightly to the value and the result can be compared straight away.\n\ncode:\nconst browser = 'chrome';\nconsole.log(!typeof browser); // false\nconsole.log(typeof browser === 'string'); // true\nconsole.log(typeof browser.length); // number\n\noutput:\nfalse\ntrue\nnumber"
+  },
+  {
+    "id": 40,
+    "question": "Write sameType(a, b) and use it on the pairs [1, 2], [1, '2'] and [null, {}]. Expected: true, false, true, because null and an object share the object tag.",
+    "answer": "Compare the tags directly. The last pair is the reminder that typeof hides the difference between null and a real object.\n\ncode:\nfunction sameType(a, b) {\n  return typeof a === typeof b;\n}\nconst pairs = [[1, 2], [1, '2'], [null, {}]];\nconsole.log(pairs.map(([a, b]) => sameType(a, b)).join(', ')); // true, false, true\n\noutput:\ntrue, false, true"
+  }
+]

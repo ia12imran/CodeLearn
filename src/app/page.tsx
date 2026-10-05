@@ -7,7 +7,7 @@ export default function Home() {
     const topics = getTopics(lang);
     const totalLessons = getTotalLessons(lang);
     const totalQuiz = topics.reduce(
-      (a, t) => a + t.lessons.reduce((b, l) => b + l.quiz.length, 0),
+      (a, t) => a + t.lessons.reduce((b, l) => b + (l.quiz?.length ?? 0), 0),
       0
     );
     return {

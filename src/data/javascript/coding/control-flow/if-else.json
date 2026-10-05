@@ -1,0 +1,192 @@
+[
+  {
+    "id": 1,
+    "question": "Write a function describeAge(age) that returns child for under 13, teen for under 18 and adult otherwise. Example: describeAge(15) returns teen.",
+    "answer": "Read the age from the top down and return as soon as a rule matches, so the widest range is checked first.\n\ncode:\nfunction describeAge(age) {\n  if (age < 13) return 'child';\n  else if (age < 18) return 'teen';\n  else return 'adult';\n}\nconsole.log(describeAge(8), describeAge(15), describeAge(40)); // child teen adult\n\noutput:\nchild teen adult"
+  },
+  {
+    "id": 2,
+    "question": "Write statusLabel(code) that returns OK for 200, Not Found for 404, Server Error for any code of 500 or above, and Other for everything else. Print the label for 200, 404, 503 and 302.",
+    "answer": "Each if handles one case, and the last one tests a range with >= instead of an exact match. The final return is the fallback that runs when no rule matched.\n\ncode:\nfunction statusLabel(code) {\n  if (code === 200) return 'OK';\n  if (code === 404) return 'Not Found';\n  if (code >= 500) return 'Server Error';\n  return 'Other';\n}\nconsole.log(statusLabel(200)); // OK\nconsole.log(statusLabel(404), statusLabel(503), statusLabel(302)); // Not Found Server Error Other\n\noutput:\nOK\nNot Found Server Error Other"
+  },
+  {
+    "id": 3,
+    "question": "Build the same status mapping as a lookup object called labels with keys 200 and 404, then walk the array [200, 404, 503, 302] and print each code with its label, falling back to Other when the key is missing.",
+    "answer": "A plain object works as a lookup table. The nullish coalescing operator supplies Other when the key is not in the object.\n\ncode:\nconst labels = { 200: 'OK', 404: 'Not Found' };\nfor (const code of [200, 404, 503, 302]) {\n  console.log(code, labels[code] ?? 'Other');\n}\n\noutput:\n200 OK\n404 Not Found\n503 Other\n302 Other"
+  },
+  {
+    "id": 4,
+    "question": "Build a fizzbuzz variant from a rules array of two objects, one with word Fizz and a test for divisibility by 3 and one with word Buzz and a test for divisibility by 5. Function label(n) joins every matching word, or returns the number as a string when nothing matches. Example: label(15) returns FizzBuzz.",
+    "answer": "Keep the words and the tests in data instead of hard-coding them. Loop over the rules, append the word of each rule whose test passes.\n\ncode:\nconst rules = [\n  { word: 'Fizz', test: (n) => n % 3 === 0 },\n  { word: 'Buzz', test: (n) => n % 5 === 0 },\n];\nfunction label(n) {\n  let out = '';\n  for (const rule of rules) if (rule.test(n)) out += rule.word;\n  return out === '' ? String(n) : out;\n}\nconsole.log([1, 3, 5, 15].map(label).join(' ')); // 1 Fizz Buzz FizzBuzz\n\noutput:\n1 Fizz Buzz FizzBuzz"
+  },
+  {
+    "id": 5,
+    "question": "Write grade(score) that returns A for 90 and up, B for 80, C for 70, D for 60 and F below that. Print the grades for the scores 95, 83, 71, 60 and 12 in one line.",
+    "answer": "An else-if chain checks the highest band first and stops at the first match. Ordering matters: a lower band checked earlier would swallow every higher score.\n\ncode:\nfunction grade(score) {\n  if (score >= 90) return 'A';\n  else if (score >= 80) return 'B';\n  else if (score >= 70) return 'C';\n  else if (score >= 60) return 'D';\n  else return 'F';\n}\nconsole.log([95, 83, 71, 60, 12].map(grade).join(' ')); // A B C D F\n\noutput:\nA B C D F"
+  },
+  {
+    "id": 6,
+    "question": "Write a one-line function verdict(score) that returns the string pass when the score is 70 or higher and fail otherwise, then print the verdict for 88 and for 45 joined by the word and.",
+    "answer": "A ternary is the short form of a single if/else. Keep it to one true branch and one false branch so it stays readable.\n\ncode:\nfunction verdict(score) {\n  return score >= 70 ? 'pass' : 'fail';\n}\nconsole.log([88, 45].map(verdict).join(' and ')); // pass and fail\n\noutput:\npass and fail"
+  },
+  {
+    "id": 7,
+    "question": "Write access(user) that returns full for an active admin, write for an active editor, read for any other active user and none for an inactive user. Print the result for an active admin and for an inactive admin.",
+    "answer": "Nest the second decision inside the first so the inactive case is decided once, up front, and never reaches the role checks.\n\ncode:\nfunction access(user) {\n  if (user.active) {\n    if (user.role === 'admin') return 'full';\n    if (user.role === 'editor') return 'write';\n    return 'read';\n  }\n  return 'none';\n}\nconsole.log(access({ active: true, role: 'admin' })); // full\nconsole.log(access({ active: false, role: 'admin' })); // none\n\noutput:\nfull\nnone"
+  },
+  {
+    "id": 8,
+    "question": "Predict the output: walk the array [0, '0', '', [], 'false', null] and print each value next to the word truthy or falsy, using an if/else or a ternary.",
+    "answer": "Only a handful of values are falsy in JavaScript: false, 0, empty string, null, undefined and NaN. Empty arrays and objects are objects, and an object is always truthy, so [] is truthy.\n\ncode:\nconst values = [0, '0', '', [], 'false', null];\nfor (const value of values) {\n  console.log(JSON.stringify(value), value ? 'truthy' : 'falsy');\n}\n\noutput:\n0 falsy\n\"0\" truthy\n\"\" falsy\n[] truthy\n\"false\" truthy\nnull falsy"
+  },
+  {
+    "id": 9,
+    "question": "Write validateEmail(email) that returns email is required for an empty string, email needs an @ when there is no @, email needs a name before @ when the string starts with @, and ok when the address passes. Print the result for all four cases.",
+    "answer": "This is the guard clause pattern. Each bad case returns immediately, so the final return is only reached by a valid address and the code never nests.\n\ncode:\nfunction validateEmail(email) {\n  if (email === '') return 'email is required';\n  if (!email.includes('@')) return 'email needs an @';\n  if (email.startsWith('@')) return 'email needs a name before @';\n  return 'ok';\n}\nconsole.log(validateEmail(''), '|', validateEmail('a@b'), '|', validateEmail('@b'));\nconsole.log(validateEmail('ana@b.com')); // ok\n\noutput:\nemail is required | ok | email needs a name before @\nok"
+  },
+  {
+    "id": 10,
+    "question": "Write inRange(value, min, max) that returns true only when value is at or above min and at or below max. Print the result for inRange(5, 1, 10) and inRange(50, 1, 10).",
+    "answer": "Join the two comparisons with the logical and operator so both must hold. Two separate ifs would be wrong, because the first one alone is enough to pass.\n\ncode:\nfunction inRange(value, min, max) {\n  return value >= min && value <= max;\n}\nconsole.log(inRange(5, 1, 10), inRange(50, 1, 10)); // true false\n\noutput:\ntrue false"
+  },
+  {
+    "id": 11,
+    "question": "Write isLeap(year) using early returns: a year divisible by 400 is a leap year, a year divisible by 100 is not, otherwise it is a leap year only when divisible by 4. Print the answers for 2024, 1900 and 2023.",
+    "answer": "Test the strictest rule first and return straight away. Order matters because every year divisible by 400 is also divisible by 100.\n\ncode:\nfunction isLeap(year) {\n  if (year % 400 === 0) return true;\n  if (year % 100 === 0) return false;\n  return year % 4 === 0;\n}\nconsole.log(isLeap(2024), isLeap(1900), isLeap(2023)); // true false false\n\noutput:\ntrue false false"
+  },
+  {
+    "id": 12,
+    "question": "Write discount(total) that returns 0.2 for totals of 200 and up, 0.1 for 100 and up, 0.05 for 50 and up and 0 below that. Walk the cart totals 35, 120 and 260 and print each total with its percentage.",
+    "answer": "Read the tiers from the biggest down. Return the number 0.2 style rate and let the caller turn it into a percentage.\n\ncode:\nfunction discount(total) {\n  if (total >= 200) return 0.2;\n  if (total >= 100) return 0.1;\n  if (total >= 50) return 0.05;\n  return 0;\n}\nfor (const total of [35, 120, 260]) console.log(total, discount(total) * 100 + '%');\n\noutput:\n35 0%\n120 10%\n260 20%"
+  },
+  {
+    "id": 13,
+    "question": "Write action(colour) for a traffic light that returns stop for red, caution for amber, go for green and unknown for anything else. Print the three answers for amber, green and blue.",
+    "answer": "Map each known value to its label and keep one final return as the fallback for unexpected input.\n\ncode:\nfunction action(colour) {\n  if (colour === 'red') return 'stop';\n  if (colour === 'amber') return 'caution';\n  if (colour === 'green') return 'go';\n  return 'unknown';\n}\nconsole.log(action('amber'), action('green'), action('blue')); // caution go unknown\n\noutput:\ncaution go unknown"
+  },
+  {
+    "id": 14,
+    "question": "Write versionCompare(a, b) that returns -1 when a is older, 1 when a is newer and 0 when they match, comparing two version strings split on the dot. Example: versionCompare('1.2.0', '1.10.0') returns -1.",
+    "answer": "Split both strings into numbers, then walk the parts and return at the first difference. Numeric comparison is what stops 1.10 sorting before 1.2.\n\ncode:\nfunction versionCompare(a, b) {\n  const left = a.split('.').map(Number);\n  const right = b.split('.').map(Number);\n  for (let i = 0; i < left.length; i++) {\n    if (left[i] > right[i]) return 1;\n    if (left[i] < right[i]) return -1;\n  }\n  return 0;\n}\nconsole.log(versionCompare('1.2.0', '1.10.0'), versionCompare('2.0', '2.0.0')); // -1 0\n\noutput:\n-1 0"
+  },
+  {
+    "id": 15,
+    "question": "Write safeDivide(a, b) that returns the number a divided by b, or the string cannot divide by zero when b is 0. Print the result of safeDivide(9, 3) and safeDivide(9, 0).",
+    "answer": "Check the bad case first with a guard clause, so the division line can assume a safe divisor.\n\ncode:\nfunction safeDivide(a, b) {\n  if (b === 0) return 'cannot divide by zero';\n  return a / b;\n}\nconsole.log(safeDivide(9, 3)); // 3\nconsole.log(safeDivide(9, 0)); // cannot divide by zero\n\noutput:\n3\ncannot divide by zero"
+  },
+  {
+    "id": 16,
+    "question": "Write taxFor(amount) for three brackets: 0 up to 100, 5 percent above 100, and 10 percent above 500. Print the tax rounded to two decimals for the amounts 80, 250 and 900.",
+    "answer": "Check the top bracket first and return from inside each branch, so each rate only ever sees the part that belongs to it.\n\ncode:\nfunction taxFor(amount) {\n  if (amount > 500) return amount * 0.1;\n  if (amount > 100) return (amount - 100) * 0.05;\n  return 0;\n}\nfor (const amount of [80, 250, 900]) console.log(amount, taxFor(amount).toFixed(2));\n\noutput:\n80 0.00\n250 7.50\n900 90.00"
+  },
+  {
+    "id": 17,
+    "question": "Predict the output: config holds retries 0 and an empty label. Print config.retries || 3, config.retries ?? 3, the label with ?? and the label with ||, using JSON.stringify so empty output is visible.",
+    "answer": "The or operator treats 0 and the empty string as absent and swaps in the right-hand value. Nullish coalescing only swaps in when the left side is null or undefined, so a real 0 survives.\n\ncode:\nconst config = { retries: 0, label: '' };\nconsole.log(config.retries || 3); // 3\nconsole.log(config.retries ?? 3); // 0\nconsole.log(JSON.stringify(config.label ?? 'none'), JSON.stringify(config.label || 'none'));\n\noutput:\n3\n0\n\"\" \"none\""
+  },
+  {
+    "id": 18,
+    "question": "Write shippingCost(total, express) that returns 0 for orders under 20, 4.99 for standard shipping and 12.99 for express. Print the cost for 10, 50 and 50 with express set to true.",
+    "answer": "Free shipping wins over express, so check the free threshold first and only then look at the express flag.\n\ncode:\nfunction shippingCost(total, express) {\n  if (total < 20) return 0;\n  if (express) return 12.99;\n  return 4.99;\n}\nconsole.log(shippingCost(10, false), shippingCost(50, false), shippingCost(50, true));\n\noutput:\n0 4.99 12.99"
+  },
+  {
+    "id": 19,
+    "question": "Predict the output: an if statement tests the string '0' and logs truthy in the branch, else logs falsy. Write that if/else and run it.",
+    "answer": "The string '0' is not empty, so it is an object-like value that JavaScript treats as truthy. Only the number 0 and the empty string are falsy numbers and strings.\n\ncode:\nconst input = '0';\nif (input) {\n  console.log('truthy');\n} else {\n  console.log('falsy');\n}\n\noutput:\ntruthy"
+  },
+  {
+    "id": 20,
+    "question": "Build a validate(payload) function for an object with email and retries. Collect messages into an errors array for a missing email, a non-number retries and a negative retries, then print the joined errors or payload ok. Example payload: email ana@test.dev and retries 0.",
+    "answer": "Accumulate every problem instead of returning at the first one, so the caller sees the whole list of what needs fixing.\n\ncode:\nconst payload = { email: 'ana@test.dev', retries: 0 };\nconst errors = [];\nif (!payload.email) errors.push('email missing');\nif (typeof payload.retries !== 'number') errors.push('retries must be a number');\nif (payload.retries < 0) errors.push('retries cannot be negative');\nconsole.log(errors.length ? errors.join('; ') : 'payload ok');\n\noutput:\npayload ok"
+  },
+  {
+    "id": 21,
+    "question": "Write strength(password) that scores 1 point for 8 characters or more, 1 more for 12 or more, 1 for containing a digit and 1 for containing both a lower and an upper case letter. Print the score for Passw0rd and for abc.",
+    "answer": "Four independent if statements each add to a counter. They are not an else-if chain, because a password can satisfy several rules at once.\n\ncode:\nfunction strength(password) {\n  let score = 0;\n  if (password.length >= 8) score++;\n  if (password.length >= 12) score++;\n  if (/[0-9]/.test(password)) score++;\n  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;\n  return score;\n}\nconsole.log(strength('Passw0rd'), strength('abc')); // 3 0\n\noutput:\n3 0"
+  },
+  {
+    "id": 22,
+    "question": "Write majority(flags) that returns yes when more than half of the values are true and no otherwise. Print the result for [true, false, true] and for [false, false].",
+    "answer": "Count the trues in a loop, then compare that count with half the length. Comparing with > instead of >= keeps a dead tie on the no side.\n\ncode:\nfunction majority(flags) {\n  let yes = 0;\n  for (const flag of flags) if (flag) yes++;\n  return yes > flags.length / 2 ? 'yes' : 'no';\n}\nconsole.log(majority([true, false, true]), majority([false, false])); // yes no\n\noutput:\nyes no"
+  },
+  {
+    "id": 23,
+    "question": "Write describe(value) that returns missing key for undefined, null for null, empty string for an empty string and has a value for anything else. Print the three cases side by side and then print the answer for the number 0.",
+    "answer": "Strict equality against undefined and null tells those two apart. Checking a value is falsy instead would lump 0 and the empty string in with null.\n\ncode:\nfunction describe(value) {\n  if (value === undefined) return 'missing key';\n  if (value === null) return 'null';\n  if (value === '') return 'empty string';\n  return 'has a value';\n}\nconsole.log(describe(undefined), '|', describe(null), '|', describe(''));\nconsole.log(describe(0)); // has a value\n\noutput:\nmissing key | null | empty string\nhas a value"
+  },
+  {
+    "id": 24,
+    "question": "Write pickLabel(config, fallback) that returns config.label when it is a non-empty string and the fallback otherwise. Print the result for a config with label ok and for an empty config.",
+    "answer": "One condition combines a type test and a length test. That keeps out undefined, null and the empty string in a single rule.\n\ncode:\nfunction pickLabel(config, fallback) {\n  if (typeof config.label === 'string' && config.label.length > 0) return config.label;\n  return fallback;\n}\nconsole.log(pickLabel({ label: 'ok' }, 'none')); // ok\nconsole.log(pickLabel({}, 'none')); // none\n\noutput:\nok\nnone"
+  },
+  {
+    "id": 25,
+    "question": "Write logLevel(level) that returns 10 for error, 20 for warn, 30 for info and 40 for debug. Walk the levels error, info, warn and debug and print each level with its number on one line each.",
+    "answer": "An else-if chain maps names to numbers, and a loop walks the data so the function stays independent of the sample.\n\ncode:\nfunction logLevel(level) {\n  if (level === 'error') return 10;\n  else if (level === 'warn') return 20;\n  else if (level === 'info') return 30;\n  else return 40;\n}\nfor (const level of ['error', 'info', 'warn', 'debug']) console.log(level, logLevel(level));\n\noutput:\nerror 10\ninfo 30\nwarn 20\ndebug 40"
+  },
+  {
+    "id": 26,
+    "question": "Predict the output: number 'abc' with Number gives NaN. Print whether NaN equals itself, whether Number.isNaN finds it, and the results of NaN === 0 and NaN < 1.",
+    "answer": "NaN means not a number, and it is the only value in JavaScript that is not equal to itself, so no equality test can find it. Number.isNaN is the only reliable check.\n\ncode:\nconst value = Number('abc');\nconsole.log(value === value); // false\nconsole.log(Number.isNaN(value)); // true\nconsole.log(value === 0, value < 1); // false false\n\noutput:\nfalse\ntrue\nfalse false"
+  },
+  {
+    "id": 27,
+    "question": "Write bucket(score) returning excellent for 90 and up, good for 75 and up, ok for 50 and up and fail below that, then walk the scores 95, 80, 60 and 40 and print each score with its bucket.",
+    "answer": "The same descending chain as a grade function. The loop over the sample data keeps the printing separate from the decision.\n\ncode:\nfunction bucket(score) {\n  if (score >= 90) return 'excellent';\n  if (score >= 75) return 'good';\n  if (score >= 50) return 'ok';\n  return 'fail';\n}\nfor (const score of [95, 80, 60, 40]) console.log(score, bucket(score));\n\noutput:\n95 excellent\n80 good\n60 ok\n40 fail"
+  },
+  {
+    "id": 28,
+    "question": "Write sameTag(a, b) that returns true when the two strings match after trimming and lowercasing. Print the result for ' Smoke ' and 'SMOKE', and for 'Smoke' and 'soak'.",
+    "answer": "Normalise both sides before comparing. Trim removes the ends, toLowerCase removes the case difference.\n\ncode:\nfunction sameTag(a, b) {\n  return a.trim().toLowerCase() === b.trim().toLowerCase();\n}\nconsole.log(sameTag(' Smoke ', 'SMOKE'), sameTag('Smoke', 'soak')); // true false\n\noutput:\ntrue false"
+  },
+  {
+    "id": 29,
+    "question": "Write minOf(a, b, c) that returns the smallest of three numbers without Math.min. Print the result for 9, 4, 7 and for 2, 2, 1.",
+    "answer": "Test the first value against both others at once. If it is not the smallest, compare the remaining two and pick the smaller one.\n\ncode:\nfunction minOf(a, b, c) {\n  if (a <= b && a <= c) return a;\n  if (b <= c) return b;\n  return c;\n}\nconsole.log(minOf(9, 4, 7), minOf(2, 2, 1)); // 4 1\n\noutput:\n4 1"
+  },
+  {
+    "id": 30,
+    "question": "Predict the output: a ternary calls the function bump only when calls is under 2, and bump itself increments calls and returns 5. Print the label and the value of calls.",
+    "answer": "A ternary evaluates one branch only, so bump runs once and calls stays at 1. The condition is false on any later call, so the string branch is returned instead.\n\ncode:\nlet calls = 0;\nfunction bump() {\n  calls++;\n  return 5;\n}\nconst label = calls < 2 ? bump() : 'many';\nconsole.log(label, calls); // 5 1\n\noutput:\n5 1"
+  },
+  {
+    "id": 31,
+    "question": "Write clamp(value, min, max) that returns value pushed inside the range. Print clamp(15, 0, 10), clamp(-3, 0, 10) and clamp(7, 0, 10).",
+    "answer": "Two guards handle the two ends. The plain return at the end is the value that was already inside the range.\n\ncode:\nfunction clamp(value, min, max) {\n  if (value < min) return min;\n  if (value > max) return max;\n  return value;\n}\nconsole.log(clamp(15, 0, 10), clamp(-3, 0, 10), clamp(7, 0, 10)); // 10 0 7\n\noutput:\n10 0 7"
+  },
+  {
+    "id": 32,
+    "question": "Write retryHint(attempt) that returns retrying once for attempt 1, still retrying for attempts 2 and 3, and giving up for 4 and above. Print the hints for 1, 3 and 9.",
+    "answer": "Exact match first, then a range, then the fallback. Ordered this way the exact case never falls through into the range case.\n\ncode:\nfunction retryHint(attempt) {\n  if (attempt === 1) return 'retrying once';\n  if (attempt < 4) return 'still retrying';\n  return 'giving up';\n}\nconsole.log(retryHint(1), retryHint(3), retryHint(9)); // retrying once still retrying giving up\n\noutput:\nretrying once still retrying giving up"
+  },
+  {
+    "id": 33,
+    "question": "Write assertSame(actual, expected, name) that logs PASS name when the two values match and FAIL name got value wanted value when they do not. Run it once with 2 + 2 against 4 and once with describeAge(30) against grown.",
+    "answer": "The if/else only chooses the message. Naming each check means a failing run tells you which expectation broke.\n\ncode:\nfunction assertSame(actual, expected, name) {\n  if (actual === expected) console.log('PASS', name);\n  else console.log('FAIL', name, 'got', actual, 'wanted', expected);\n}\nassertSame(2 + 2, 4, 'adds');\nassertSame(describeAge(30), 'adult', 'describeAge');\nfunction describeAge(age) {\n  return age < 18 ? 'young' : 'grown';\n}\n\noutput:\nPASS adds\nFAIL describeAge got grown wanted adult"
+  },
+  {
+    "id": 34,
+    "question": "Write fizzbuzzOne(n) that returns FizzBuzz for multiples of 15, Fizz for multiples of 3, Buzz for multiples of 5 and the number as a string otherwise. Map it over 5, 9 and 15 and print the three labels in one line.",
+    "answer": "The most specific rule is checked first, because 15 is also a multiple of 3 and would otherwise be labelled Fizz.\n\ncode:\nfunction fizzbuzzOne(n) {\n  if (n % 15 === 0) return 'FizzBuzz';\n  if (n % 3 === 0) return 'Fizz';\n  if (n % 5 === 0) return 'Buzz';\n  return String(n);\n}\nconsole.log([5, 9, 15].map(fizzbuzzOne).join(' ')); // Buzz Fizz FizzBuzz\n\noutput:\nBuzz Fizz FizzBuzz"
+  },
+  {
+    "id": 35,
+    "question": "Write describeResult(response) that returns network down when ok is false and status is 0, redirect when the status is 301 or 302, missing when the status is 404 and ok for any other status from 200 to 299. Print the label for { ok: false, status: 0 }, { ok: true, status: 302 } and { ok: true, status: 404 }.",
+    "answer": "The two failures are checked first with a combined condition, then the redirects, then the success range checked with a double comparison.\n\ncode:\nfunction describeResult(response) {\n  if (!response.ok && response.status === 0) return 'network down';\n  if (response.status === 301 || response.status === 302) return 'redirect';\n  if (response.status === 404) return 'missing';\n  if (response.status >= 200 && response.status < 300) return 'ok';\n  return 'error';\n}\nconsole.log(describeResult({ ok: false, status: 0 })); // network down\nconsole.log(describeResult({ ok: true, status: 302 }), describeResult({ ok: true, status: 404 }));\n\noutput:\nnetwork down\nredirect missing"
+  },
+  {
+    "id": 36,
+    "question": "Write needsRetry(error) for a failed request. Return no network when the message contains network, no credentials for status 401 or 403, retry for status 429 or any status of 500 and above, and give up otherwise. Print the answer for a Network down error with status 0, a 401 error and a 503 error.",
+    "answer": "Read the message and the status with separate rules, cheapest first. The final return is the catch-all for errors nobody planned for.\n\ncode:\nfunction needsRetry(error) {\n  const message = error.message.toLowerCase();\n  if (message.includes('network')) return 'no network';\n  if (error.status === 401 || error.status === 403) return 'no credentials';\n  if (error.status === 429 || error.status >= 500) return 'retry';\n  return 'give up';\n}\nconsole.log(needsRetry({ message: 'Network down', status: 0 })); // no network\nconsole.log(needsRetry({ message: 'bad token', status: 401 }), needsRetry({ message: 'boom', status: 503 }));\n\noutput:\nno network\nno credentials retry"
+  },
+  {
+    "id": 37,
+    "question": "Predict the output: a loop over the numbers 1 to 5 prints each number only when it is not equal to 3, using if with a continue. Print the count of numbers that were printed as well.",
+    "answer": "continue jumps to the next iteration, so the count only grows on the iterations that were not skipped. The loop itself keeps running to the end.\n\ncode:\nlet printed = 0;\nfor (let n = 1; n <= 5; n++) {\n  if (n === 3) continue;\n  console.log(n);\n  printed++;\n}\nconsole.log('printed', printed); // printed 4\n\noutput:\n1\n2\n4\n5\nprinted 4"
+  },
+  {
+    "id": 38,
+    "question": "Write applyCoupon(total, coupon) that returns the total after a percentage coupon, or the total unchanged when the coupon is the empty string. Print the result for 200 with 10 and for 200 with an empty coupon.",
+    "answer": "One guard for the missing coupon, then the arithmetic for the normal case. This keeps the happy path unindented.\n\ncode:\nfunction applyCoupon(total, coupon) {\n  if (coupon === '') return total;\n  return total - (total * coupon) / 100;\n}\nconsole.log(applyCoupon(200, 10)); // 180\nconsole.log(applyCoupon(200, '')); // 200\n\noutput:\n180\n200"
+  }
+]

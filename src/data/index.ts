@@ -1,6 +1,6 @@
-import { Topic, Lesson, QuizQuestion } from "./types";
+import { Topic, Lesson, QuizQuestion, QAQuestion, CodingQuestion } from "./types";
 import { topics as pythonTopics } from "./python/topics";
-import { topics as javascriptTopics } from "./javascript/topics";
+import { topics as javascriptTopics } from "./javascript/topics/index";
 import { extraQuiz as pythonExtraQuiz } from "./python/extra-quiz";
 import { extraQuiz as javascriptExtraQuiz } from "./javascript/extra-quiz";
 import { practiceExercises as pythonPracticeExercises } from "./python/practice-exercises";
@@ -59,6 +59,20 @@ export function getQuestionSectionModule(lang: Language) {
   return lang === "python"
     ? () => import("./python/question-sections")
     : () => import("./javascript/question-sections");
+}
+
+/** JavaScript only: the per-lesson practice (interview Q&A) bank loader. */
+export async function getLessonPractice(lang: Language, topicSlug: string, lessonSlug: string): Promise<QAQuestion[]> {
+  if (lang !== "javascript") return [];
+  const m = await import("./javascript/questions/registry");
+  return m.getPracticeQuestions(`${topicSlug}/${lessonSlug}`);
+}
+
+/** JavaScript only: the per-lesson coding quiz bank loader. */
+export async function getLessonCoding(lang: Language, topicSlug: string, lessonSlug: string): Promise<CodingQuestion[]> {
+  if (lang !== "javascript") return [];
+  const m = await import("./javascript/coding/registry");
+  return m.getCodingQuestions(`${topicSlug}/${lessonSlug}`);
 }
 
 export function getTopicBySlug(lang: Language, slug: string): Topic | undefined {

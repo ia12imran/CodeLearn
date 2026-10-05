@@ -1,0 +1,192 @@
+[
+  {
+    "id": 1,
+    "question": "What are the arithmetic operators in JavaScript and what does each one do?",
+    "answer": "Plus, minus, asterisk, slash and percent. Asterisk multiplies, slash divides and gives a decimal, and percent gives the remainder after division.\n\ncode:\nconsole.log(2 + 3, 7 - 2, 3 * 4, 10 / 4);\nconsole.log('remainder:', 10 % 3, 10 % 2);\nconsole.log('division always gives a decimal:', 6 / 3);\nconsole.log('and it can go wrong:', 0 / 0);\n\nreal example:\nPagination checks are the classic use of percent. Page 3 of a 10 item list is 10 % 3 === 1, so a leftover row tells you the last page was short."
+  },
+  {
+    "id": 2,
+    "question": "What happens when you use the plus operator with a string and a number?",
+    "answer": "The plus operator changes job when one side is a string. It joins the two as text instead of adding them, and the number becomes text.\n\ncode:\nconsole.log(2 + 3);\nconsole.log('2' + 3);\nconsole.log('items: ' + 3);\nconsole.log('2' + 3 + 4);\nconsole.log(2 + 3 + '4');\n\nreal example:\nA log line reading count: plus a counter silently turns count into text, so a later numeric comparison on that log value fails."
+  },
+  {
+    "id": 3,
+    "question": "What is the difference between the double equals sign and the triple equals sign?",
+    "answer": "Triple equals compares type and value with no conversion. Double equals converts one side first, so a text 10 matches the number 10.\n\ncode:\nconsole.log('10' === 10);\nconsole.log('10' == 10);\nconsole.log(0 === false);\nconsole.log(0 == false);\nconsole.log(null === undefined);\nconsole.log(null == undefined);\n\nreal example:\nAssertions are comparisons, and the text 10 from a page is never strictly equal to the number 10 in your fixture. Convert one side or the test lies to you."
+  },
+  {
+    "id": 4,
+    "question": "Why do most style guides ban the double equals sign in test code?",
+    "answer": "Because its conversion rules are hard to remember and the surprise always shows up in production data, not in the happy path. Strict equality has no rules to memorise.\n\ncode:\nconst cases = [[0, ''], [0, '0'], [0, false], [0, []], ['', []]];\ncases.forEach(([a, b]) => console.log(JSON.stringify(a), '==', JSON.stringify(b), 'is', a == b));\nconsole.log('with strict equality none of them match:');\ncases.forEach(([a, b]) => console.log(JSON.stringify(a), '===', JSON.stringify(b), 'is', a === b));\n\nreal example:\nA helper written with == passes on an empty field and a zero interchangeably, so the test stops telling you which one the bug is. Strict equality keeps the message honest."
+  },
+  {
+    "id": 5,
+    "question": "List every falsy value in JavaScript.",
+    "answer": "Six values are falsy: false, 0, an empty string, null, undefined and NaN. Everything else is truthy, including the text 0 and a string of spaces.\n\ncode:\nconst falsy = [false, 0, '', null, undefined, NaN];\nconst truthy = ['0', ' ', 'false', [], {}, 42];\nconsole.log('falsy count:', falsy.filter((v) => !v).length);\nconsole.log('truthy count:', truthy.filter((v) => Boolean(v)).length);\nconsole.log('the trap pair:', Boolean('0'), Boolean(0));\n\nreal example:\nif (searchBox.value) never runs when the field holds the text 0. Guard on a length or trim test instead of on truthiness."
+  },
+  {
+    "id": 6,
+    "question": "What does short-circuit evaluation mean for the && operator?",
+    "answer": "When the left side is falsy, && gives that falsy value back and never looks at the right side. The right side is only evaluated if it has to be.\n\ncode:\nlet calls = 0;\nfunction probe() {\n  calls++;\n  return true;\n}\nconst left = false;\nconsole.log('result:', left && probe());\nconsole.log('probe ran', calls, 'times');\nconst right = 'ready';\nconsole.log('with a truthy left:', right && probe());\nconsole.log('probe ran', calls, 'times');\n\nreal example:\nuser && user.getToken() avoids a crash on a null user because the right side never runs. That idiom exists because of short circuiting, and nothing else."
+  },
+  {
+    "id": 7,
+    "question": "Does the && operator return a boolean, or does it return one of the two values?",
+    "answer": "It returns one of the two values, never a boolean. If the left is falsy you get the left, otherwise you get the right.\n\ncode:\nconsole.log('a' && 'b');\nconsole.log(0 && 'b');\nconsole.log('left' || 'right');\nconsole.log('' || 'right');\nconsole.log('so a chain can leak a value:');\nconst chain = 'title' && 'ready' && 42;\nconsole.log(chain, typeof chain);\n\nreal example:\nexpect(page.title && 'ready') does not assert a boolean, it asserts that the value equals the truthy left side. The test passes or fails for reasons the author never intended."
+  },
+  {
+    "id": 8,
+    "question": "What does the || operator return, and how is that different from a ternary fallback check?",
+    "answer": "It returns the left value when that value is falsy, otherwise the right one. So it is a fallback, and it cannot tell you whether the fallback was used.\n\ncode:\nfunction label(name) {\n  return name || 'guest';\n}\nconsole.log(label('Ana'), label(''), label(undefined));\nconst value = 0;\nconsole.log('zero takes the fallback:', value || 10);\nconsole.log('a ternary can see the zero:', value === 0 ? 'zero' : 'other');\n\nreal example:\nA user name of 0 or an empty string takes the fallback with ||. If that difference matters, compare against undefined explicitly instead."
+  },
+  {
+    "id": 9,
+    "question": "What problem does the nullish coalescing operator solve that the || operator does not?",
+    "answer": "It only falls back for null and undefined. Zero, an empty string and false survive, which is exactly what a default value usually wants.\n\ncode:\nconst zero = 0;\nconst blank = '';\nconsole.log('with or:', zero || 7, blank || 'default');\nconsole.log('with nullish:', zero ?? 7, blank ?? 'default');\nconsole.log('both agree on null:', null || 7, null ?? 7);\nconsole.log('preferred in tests:', (zero ?? 7) === 0);\n\nreal example:\nA retry count of zero is meaningful. A helper using || turns a deliberate no retries into five retries, so the test waits and then times out."
+  },
+  {
+    "id": 10,
+    "question": "What does optional chaining do when a property in the middle is undefined?",
+    "answer": "It stops the chain there and gives undefined instead of throwing. The whole chain becomes a short circuit.\n\ncode:\nconst response = { data: { user: null } };\nconsole.log(response?.data?.user?.name);\nconsole.log('normal access throws:');\ntry {\n  console.log(response.data.user.name);\n} catch (e) {\n  console.log(e.name);\n}\nconst missing = null;\nconsole.log(missing?.deep?.deeper);\n\nreal example:\nOptional chaining is the fix for a locator that may not be rendered yet. It returns undefined, so pair it with an explicit expect to make the wait visible."
+  },
+  {
+    "id": 11,
+    "question": "What is the remainder operator good for, and what does it do with a negative number?",
+    "answer": "It gives what is left after dividing, which is how you test for even numbers and how you wrap values. The sign of the result follows the left value, not the divisor.\n\ncode:\nconsole.log(10 % 3, 10 % 2);\nconsole.log('negative dividend keeps its sign:', -10 % 3);\nconsole.log('wrapping an index:', 11 % 4);\nconsole.log('and negative wrapping:', -1 % 4);\nconsole.log('checking for even:', 4 % 2 === 0, 5 % 2 === 0);\n\nreal example:\nRotating through a list of browsers uses a positive modulo and a guard for negative steps, otherwise the first item in the cycle is wrong."
+  },
+  {
+    "id": 12,
+    "question": "What is the exponentiation operator, and does it work with a negative exponent?",
+    "answer": "Two asterisks raise the left value to the power of the right one. It binds tighter than multiplication and works with negative and fractional exponents.\n\ncode:\nconsole.log(2 ** 10);\nconsole.log(2 ** 3 ** 2);\nconsole.log('negative exponent:', 2 ** -2);\nconsole.log('precedence vs multiply:', 3 * 2 ** 2);\nconsole.log('in a helper:', Math.pow(2, 8) === 2 ** 8);\n\nreal example:\nBit shifts for a file size calculation are clearer with the exponentiation operator, and 2 ** 31 avoids the confusing 1 << 31 idiom in test helpers."
+  },
+  {
+    "id": 13,
+    "question": "What is the difference between prefix and postfix increment?",
+    "answer": "Both add one. Postfix hands back the old value and then updates the variable, prefix updates first and then hands back the new value.\n\ncode:\nlet a = 1;\nconst after = a++;\nconsole.log(a, after);\nlet b = 1;\nconst before = ++b;\nconsole.log(b, before);\nlet i = 0;\nconsole.log(i++ + i++, i);\nconsole.log('mixing them is a bad idea in a test');\n\nreal example:\nA retry helper written as return retries++ returns the old count, so the first call reports 0 attempts even though it just made one."
+  },
+  {
+    "id": 14,
+    "question": "What do the logical assignment operators do?",
+    "answer": "They combine a logical test with an assignment in one step. The right side only runs when the left side needs to change, so nothing is computed for nothing.\n\ncode:\nlet cache = null;\ncache ??= { id: 7 };\nconsole.log('filled once:', cache.id);\ncache ??= { id: 99 };\nconsole.log('kept the first value:', cache.id);\nlet label = '';\nlabel ||= 'fallback';\nconsole.log(label);\nlet retries = 5;\nretries &&= 3;\nconsole.log('kept because truthy:', retries);\nlet skip = false;\nskip &&= console.log('never printed');\nconsole.log('skip is still', skip);\n\nreal example:\nSetting up a lazy fixture with config ||= defaults avoids an unconditional second object literal, which matters when the default is expensive to build."
+  },
+  {
+    "id": 15,
+    "question": "Why does the not operator return a real boolean while the other logical operators return values?",
+    "answer": "Not is a question about one value, so it answers yes or no. And and or are choices between two values, so they hand you back the value they picked.\n\ncode:\nconsole.log(!0, !'', !null, !'0');\nconsole.log('typeof the result:', typeof !0);\nconsole.log('and or give values:');\nconsole.log(typeof (0 && 'x'), typeof (1 || 'x'));\nconsole.log('Boolean forces the answer:', Boolean(1 || 'x'));\n\nreal example:\nif (!response.ok) works because not gives you true or false. Writing if (!(response.ok && retries > 0)) mixes both styles and is where the confusion starts."
+  },
+  {
+    "id": 16,
+    "question": "What is the ternary operator, and when do you prefer a plain if statement?",
+    "answer": "It is a one line if and else. Read it as question then value if yes then value if no. Use an if when the two branches need statements, not just values.\n\ncode:\nconst retries = 3;\nconst label = retries > 0 ? 'will retry' : 'giving up';\nconsole.log(label);\nfunction describe(count) {\n  let text;\n  if (count === 0) {\n    text = 'nothing ran';\n  } else {\n    console.log('logging side effect');\n    text = count + ' ran';\n  }\n  return text;\n}\nconsole.log(describe(0));\n\nreal example:\nMapping a status code to a readable message in a test reporter is a good ternary. Building a request body with several properties is not, and reads better as an object literal."
+  },
+  {
+    "id": 17,
+    "question": "What is the precedence rule that explains `2 + 3 * 4`?",
+    "answer": "Multiplication binds tighter than addition, so the multiplication happens first. Parentheses are the only reliable way to override it.\n\ncode:\nconsole.log(2 + 3 * 4);\nconsole.log((2 + 3) * 4);\nconsole.log('unary minus binds tight:');\nconsole.log(-3 * 2, 3 * -2);\nconsole.log('not binds looser than arithmetic:');\nconsole.log(!true + true);\nconsole.log(typeof 1 + 1);\n\nreal example:\nA price formula like total - discount * rate silently applies the discount to only part of the total if you forget the parentheses."
+  },
+  {
+    "id": 18,
+    "question": "Why does `1 + 2 + '3'` give the string '33' while `1 + '2' + 3` gives the string '123'?",
+    "answer": "Addition runs left to right. The first version adds 1 and 2 as numbers, then meets a string and concatenates 33. The second version hits the string immediately and everything after it is text.\n\ncode:\nconsole.log(1 + 2 + '3');\nconsole.log(1 + '2' + 3);\nconsole.log('both are text:', typeof (1 + 2 + '3'), typeof (1 + '2' + 3));\nconsole.log('convert first to keep it numeric:');\nconsole.log(1 + 2 + Number('3'));\n\nreal example:\nBuilding an id like order- plus a counter plus a suffix drops the numeric add and silently changes what the id looks like."
+  },
+  {
+    "id": 19,
+    "question": "What does the comma operator do, and why is it almost never worth using?",
+    "answer": "It evaluates the left side, throws the value away, and returns the right side. It shows up in for loops to allow two update expressions, which is a readability trap.\n\ncode:\nlet a = (1, 2, 3);\nconsole.log('only the last one survives:', a);\nlet i = 0;\nlet j = 0;\nfor (i = 0, j = 10; i < j; i++, j--) {}\nconsole.log(i, j);\nfunction sideEffect() {\n  console.log('this ran');\n  return 'ignored';\n}\nconst value = (sideEffect(), 'done');\nconsole.log('the return value is:', value);\n\nreal example:\nA helper that relies on the comma operator to run two statements looks like it returns something it does not. Rewrite it as separate lines."
+  },
+  {
+    "id": 20,
+    "question": "What does the in operator do, and what is the difference between for...in and for...of?",
+    "answer": "The in operator checks whether a key exists on an object. for...in walks the keys, for...of walks the values of anything iterable.\n\ncode:\nconst user = { name: 'Ana', role: 'admin' };\nconsole.log('name' in user, 'age' in user);\nconst keys = [];\nfor (const key in user) keys.push(key);\nconsole.log('for...in gives keys:', keys);\nconst values = [];\nfor (const value of Object.values(user)) values.push(value);\nconsole.log('for...of gives values:', values);\nconst steps = ['login', 'logout'];\nfor (const step of steps) console.log('step', step);\n\nreal example:\nGuarding a fixture with if ('id' in response) tells you a field is genuinely missing, which is stronger than checking its value for truthiness."
+  },
+  {
+    "id": 21,
+    "question": "What does the void operator return, and what old trick does it support?",
+    "answer": "It throws the value away and always gives undefined. It was used to mark a javascript link as a placeholder so the page does not jump to the top.\n\ncode:\nconsole.log(void 0);\nconsole.log(void 'anything');\nconsole.log(typeof void (() => 1));\nconst value = 42;\nconsole.log('the value still exists:', value);\nfunction stopDefault(event) {\n  event && event.preventDefault();\n  return undefined;\n}\nconsole.log('helper returns:', stopDefault(null));\n\nreal example:\nVoid is mostly a readability trap in test code. Any expression statement that returns something on its own line is better written as a plain assignment."
+  },
+  {
+    "id": 22,
+    "question": "What do the bitwise operators convert my numbers into, and why does that break large values?",
+    "answer": "They convert each side to a 32 bit signed integer first. Anything past about two billion, or any decimal, gets truncated before the operator runs.\n\ncode:\nconsole.log(5 & 3, 5 | 3, 5 ^ 3, ~5, 5 << 1, 5 >> 1);\nconsole.log('decimals are chopped:', 5.9 & 3);\nconsole.log('big numbers wrap:', 2147483647 + 1 | 0);\nconsole.log('text is converted too:', '5' | 0);\nconsole.log('do not use bitwise for ids:', '9007199254740993' | 0);\n\nreal example:\nA quick parseInt replacement with the bitwise OR silently returns 0 for a large id, and the test then looks up a record that does not exist."
+  },
+  {
+    "id": 23,
+    "question": "Why does `'5' | 2` give 7?",
+    "answer": "The bitwise operators convert text to a number first, then work on the binary bits. 5 is 101 and 2 is 010, so or-ing them gives 111, which is 7.\n\ncode:\nconsole.log(5 | 2);\nconsole.log('binary:', (5).toString(2), (2).toString(2), (5 | 2).toString(2));\nconsole.log('and:', 5 & 3, (5).toString(2), (3).toString(2));\nconsole.log('xor:', 5 ^ 1);\nconsole.log('the safe way to parse:', Number('5') | 0, Number.parseInt('5', 10));\n\nreal example:\nThe idiom number | 0 was a popular fast integer cast. It is no longer faster than Number or parseInt and it breaks on decimals, so use those instead."
+  },
+  {
+    "id": 24,
+    "question": "Why is every comparison involving NaN false, even NaN compared with itself?",
+    "answer": "NaN means not a number, so it is not equal to anything including itself. Greater than and less than also fail because there is no ordering for a value that is not a number.\n\ncode:\nconst n = Number('abc');\nconsole.log(n === n, n !== n);\nconsole.log(n > 1, n < 1, n >= 1);\nconsole.log('sorting puts NaN at the end:');\nconsole.log([3, n, 1].sort((x, y) => x - y));\nconsole.log('that is why you filter first:');\nconsole.log([3, n, 1].filter(Number.isFinite).sort((x, y) => x - y));\n\nreal example:\nSorting expected durations with a comparator that hits NaN leaves the order unchanged, so the diff report lists the failures in a random order."
+  },
+  {
+    "id": 25,
+    "question": "Why does `[] == ![]` evaluate to true?",
+    "answer": "An empty array is truthy, so the not operator turns it into false. Then an empty array is loosely equal to false, so the whole expression is true.\n\ncode:\nconst list = [];\nconsole.log(list == !list);\nconsole.log('the steps:', Boolean(list), !list, list == false);\nconsole.log('but strict equality says no:', list === false);\nconsole.log('with a real array:');\nconst rows = [1];\nconsole.log(rows == !rows);\n\nreal example:\nThis is the clearest demonstration that == has conversion rules nobody remembers. Rewrite the check as an explicit length test and it becomes obvious."
+  },
+  {
+    "id": 26,
+    "question": "Why is `'' == 0` true but `'' === 0` false?",
+    "answer": "Loose equality converts the empty string to a number, and an empty string converts to zero. Strict equality compares types first and stops there.\n\ncode:\nconsole.log('' == 0, '' === 0);\nconsole.log('the conversions:', Number(''), Number('0'), Number(' '));\nconsole.log('null too:', null == 0, null === 0, null == false);\nconsole.log('undefined:', undefined == 0);\nconsole.log('the safe emptiness test:');\nconst input = '';\nconsole.log(input.trim() === '');\n\nreal example:\nA guard written as if (value) to detect an empty field also fires for 0 and false. Explicitly compare the trimmed string to an empty string instead."
+  },
+  {
+    "id": 27,
+    "question": "Predict the output of a program that mixes plus with two strings and a number.",
+    "answer": "Once a string appears, plus concatenates from that point on. The earlier numbers were already added, so the order of the operands changes the result.\n\ncode:\nconsole.log('a' + 1 + true);\nconsole.log(1 + true + 'a');\nconsole.log('count: ' + 3 + 4);\nconsole.log(3 + 4 + ' count');\nconsole.log('null joins as text:', 'value: ' + null);\nconsole.log('undefined too:', 'value: ' + undefined);\n\nreal example:\nAsserting on a log line built with plus and two placeholders gives you one number and a mess. Use template literals so every value is clearly text."
+  },
+  {
+    "id": 28,
+    "question": "Rewrite this loose equality check so it is correct for null, zero and an empty string.",
+    "answer": "Decide what you actually mean. If you mean both are absent, compare for null or undefined. If you mean same value, use triple equals, and handle NaN separately.\n\ncode:\nfunction sameValue(a, b) {\n  return a === b || (Number.isNaN(a) && Number.isNaN(b));\n}\nconsole.log(sameValue(0, 0), sameValue('', ''), sameValue(null, null));\nconsole.log('no more surprises:', sameValue(0, ''), sameValue(0, '0'));\nfunction bothAbsent(v) {\n  return v === null || v === undefined;\n}\nconsole.log(bothAbsent(null), bothAbsent(0), bothAbsent(''));\n\nreal example:\nA generic deep equal helper with == passes for 0 and an empty string and fails for two NaNs. Strict equality plus a NaN check is the version worth shipping."
+  },
+  {
+    "id": 29,
+    "question": "Why does triple equals say two identical looking objects are not equal?",
+    "answer": "Strict equality on objects compares the reference, not the contents. Two objects are only equal if they are literally the same object in memory.\n\ncode:\nconst expected = { id: 7, tags: ['a'] };\nconst actual = { id: 7, tags: ['a'] };\nconsole.log('strict:', expected === actual);\nconsole.log('but contents match:', JSON.stringify(expected) === JSON.stringify(actual));\nconst shared = expected;\nconsole.log('same reference:', shared === expected);\nconst copy = { ...expected };\nconsole.log('a spread copy:', copy === expected);\n\nreal example:\nexpect(response.body).toEqual(expected) in Playwright does a deep comparison, which is why it passes while a triple equals on the same objects fails."
+  },
+  {
+    "id": 30,
+    "question": "How do I avoid the bitwise or operator when I only want to truncate to an integer?",
+    "answer": "Use Math.trunc, Math.floor, or parseInt with an explicit radix. They handle large numbers and decimals the way you actually mean.\n\ncode:\nconst values = [5.9, -5.9, '42.7px', 9007199254740993];\nconsole.log('bitwise:', values.map((v) => v | 0));\nconsole.log('trunc:', values.map((v) => Math.trunc(Number(v))));\nconsole.log('floor:', Math.floor(5.9), Math.floor(-5.9));\nconsole.log('parseInt with radix:', Number.parseInt('42.7', 10));\n\nreal example:\nReading a scroll offset or a pixel position from the page and truncating it with a bitwise operator gives a negative number for small offsets on some browsers."
+  },
+  {
+    "id": 31,
+    "question": "What breaks if you remove the parentheses from a chained logical fallback?",
+    "answer": "Mixing the nullish operator with and or without parentheses is a SyntaxError, because the language will not guess which one you meant.\n\ncode:\nconst count = 0;\nconst label = count ?? (count || 'unknown');\nconsole.log(label);\n// uncommenting the next line is a SyntaxError for the whole file\n// const broken = count ?? count || 'unknown';\nconst wrapped = (count || count) ?? 'unknown';\nconsole.log('parentheses fix it:', wrapped);\n\nreal example:\nA test file that mixes a nullish fallback with a truthy fallback will not parse at all, so the runner reports a syntax error instead of a failing test."
+  },
+  {
+    "id": 32,
+    "question": "Why is `&&` the wrong operator for a default value when the value can be 0?",
+    "answer": "And returns the left value when it is falsy, so a legitimate zero gets thrown away and you get the default instead of the value you passed.\n\ncode:\nfunction withAnd(retries) {\n  return retries && 3;\n}\nfunction withNullish(retries) {\n  return retries ?? 3;\n}\nconsole.log('and:', withAnd(0), withAnd(5));\nconsole.log('nullish:', withNullish(0), withNullish(5));\nconsole.log('same for booleans:', false && true, false ?? true);\nconsole.log('truthy fallback still fine with or:', withAnd(1));\n\nreal example:\nA retry helper written with and returns three for every input, including zero retries, so the test never actually checks the no-retry path."
+  },
+  {
+    "id": 33,
+    "question": "How do I combine a nullish fallback with a truthy fallback safely?",
+    "answer": "Put parentheses around whichever call comes first. The nullish fallback should go outside when zero is a value you want to keep.\n\ncode:\nconst count = 0;\nconsole.log('nullish first:', count ?? (count || 'none'));\nconsole.log('or first, parenthesised:', (count || count) ?? 'none');\nconsole.log('and here both give none:', 0 ?? (0 || 'none'));\nconst missing = null;\nconsole.log('null case:', missing ?? (missing || 'none'));\nconsole.log('clean rule: value ?? default, and use || only for blank strings');\n\nreal example:\nReading a count from the page with a fallback needs the nullish version, while reading a label with a blank fallback needs the or version. Mixing them needs the parentheses."
+  },
+  {
+    "id": 34,
+    "question": "What is the difference between greater than and greater than or equal when one side is null or undefined?",
+    "answer": "Null converts to zero for a comparison, so null is not greater than zero but is greater than or equal to zero. Undefined converts to NaN, which fails every comparison.\n\ncode:\nconsole.log(null > 0, null >= 0, null > -1);\nconsole.log(undefined > 0, undefined >= 0);\nconsole.log('mixed:', null > undefined, null == undefined);\nconsole.log('the readable version:');\nconst limit = null;\nconsole.log(limit === null || limit === undefined ? 'no limit' : limit);\n\nreal example:\nChecking an optional timeout with if (timeout > 0) silently passes when the timeout is null, so a missing timeout looks like a huge one."
+  },
+  {
+    "id": 35,
+    "question": "What does the plus sign do with a Date object and a string?",
+    "answer": "Date has a toString method, so the plus sign uses it and joins the text. That is why date plus anything becomes text and stops being usable as a date.\n\ncode:\nconst due = new Date('2024-05-01T00:00:00Z');\nconsole.log('with a string:', due + '!');\nconsole.log('with a number:', due + 1);\nconsole.log('to be a date again:', new Date('2024-05-01') + 1);\nconst ms = new Date('2024-05-01T00:00:00Z').getTime();\nconsole.log('arithmetic on the timestamp works:', ms + 1);\n\nreal example:\nComparing a due date read from the API against a fixture date with plus builds a string, so the comparison silently becomes a text comparison."
+  },
+  {
+    "id": 36,
+    "question": "Why does multiplying a price that is still a string give NaN with no warning?",
+    "answer": "Multiplication, division and subtraction force a numeric conversion, which gives NaN for text that is not a number. The result is NaN and nothing warns you.\n\ncode:\nconst total = '19.99';\nconsole.log(total * 2);\nconsole.log(total / 2);\nconsole.log('this is the fix:');\nconsole.log(Number(total) * 2);\nconsole.log('and the guard:', Number.isNaN(Number(total)) ? 'bad value' : 'ok');\n\nreal example:\nA tax helper that multiplies a price read from the page by a rate returns NaN, and the failing assertion shows NaN instead of pointing at the missing Number call."
+  },
+  {
+    "id": 37,
+    "question": "Why does `!'0'` return false, and what should you write instead?",
+    "answer": "A non-empty string is truthy whatever it contains, so not gives false. To test for emptiness, check the length or compare against an empty string.\n\ncode:\nconst input = '0';\nconsole.log('not is:', !input);\nconsole.log('what you probably wanted:', input === '');\nconsole.log('empty check:', input.length === 0);\nconsole.log('blank check:', input.trim().length === 0);\nconsole.log('and for numbers:', !0, 0 === 0);\n\nreal example:\nA validation helper built on not value accepts the text 0 as a filled field and rejects the number 0. Use a trim length test on strings."
+  },
+  {
+    "id": 38,
+    "question": "What does the exponentiation operator do with a negative base and a fractional exponent, and why is that a trap?",
+    "answer": "It gives NaN, because a fractional power of a negative number has no real answer. Math.pow throws in that case while the operator just gives NaN.\n\ncode:\nconsole.log((-8) ** (1 / 3));\nconsole.log(Math.pow(-8, 1 / 3));\nconsole.log('integer power is fine:', (-8) ** 3);\nconsole.log('guard before you compute:');\nconst value = -8;\nconsole.log(Number.isInteger(value) ? Math.sign(value) * Math.abs(value) ** (1 / 3) : 'NaN path');\n\nreal example:\nA helper that computes a cube root for a test fixture returns NaN on negative inputs, and the report shows NaN rather than the value that caused it."
+  }
+]

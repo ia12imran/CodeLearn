@@ -1,0 +1,197 @@
+[
+  {
+    "id": 1,
+    "question": "Print slice(0, 4), slice(-3), slice(2, -2), substring(4, 1), substr(1, 3) and slice(0, 99) of the word 'playwright'. Explain how the three cutters treat negative numbers and swapped arguments.",
+    "answer": "slice counts from the end when it gets a negative number, substring swaps arguments that are the wrong way round, and substr is the old form that takes a length. Both clamp the end instead of throwing.\n\ncode:\nconst text = 'playwright';\nconsole.log(text.slice(0, 4)); // play\nconsole.log(text.slice(-3)); // ght\nconsole.log(text.slice(2, -2)); // aywrig\nconsole.log(text.substring(4, 1)); // lay the arguments are swapped for you\nconsole.log(text.substr(1, 3)); // lay the old form takes a length\nconsole.log(text.slice(0, 99)); // playwright the end is clamped\n\noutput:\nplay\nght\naywrig\nlay\nlay\nplaywright"
+  },
+  {
+    "id": 2,
+    "question": "Print 'abc'.charAt(99), String('abc'.at(99)) and '[' + 'abc'.at(-1) + ']' to show that charAt gives an empty string where at gives undefined.",
+    "answer": "charAt was written when a missing character should look like nothing at all. at is the modern way to read from the end, and it says undefined when the index does not exist.\n\ncode:\nconst abc = 'abc';\nconsole.log('[' + abc.charAt(99) + ']'); // []\nconsole.log(String(abc.at(99))); // undefined\nconsole.log('[' + abc.at(-1) + ']'); // [c] reading from the end works\n\noutput:\n[]\nundefined\n[c]"
+  },
+  {
+    "id": 3,
+    "question": "Print 'abc'.startsWith('b', 1), 'banana'.indexOf('a', 2), 'banana'.lastIndexOf('a'), 'banana'.lastIndexOf('a', 3) and 'abc'.indexOf('') so the from-position argument and the empty string surprise are both visible.",
+    "answer": "The second argument of startsWith, indexOf and lastIndexOf says where to start looking. An empty search string is found immediately at position 0, which is why empty needles are worth avoiding.\n\ncode:\nconsole.log('abc'.startsWith('b', 1)); // true the check starts at 1\nconsole.log('banana'.indexOf('a', 2)); // 3\nconsole.log('banana'.lastIndexOf('a')); // 5\nconsole.log('banana'.lastIndexOf('a', 3)); // 3 backwards from 3\nconsole.log('abc'.indexOf('')); // 0 the empty string matches at once\n\noutput:\ntrue\n3\n5\n3\n0"
+  },
+  {
+    "id": 4,
+    "question": "Print 'Playwright'.includes('play'), the same test after toLowerCase, 'playwright'.search('w'), 'abc'.match('b') and 'abc'.match(/z/) so the differences between includes, search and match are obvious.",
+    "answer": "includes answers yes or no. search gives the position of the first match or -1. match gives an array with the matches, or null when nothing matched.\n\ncode:\nconsole.log('Playwright'.includes('play')); // false case matters\nconsole.log('Playwright'.toLowerCase().includes('play')); // true\nconsole.log('playwright'.search('w')); // 4\nconsole.log('abc'.match(/b/g)); // [ 'b' ] the g flag gives plain matches\nconsole.log('abc'.match(/b/)[0]); // b element zero is the first match\nconsole.log('abc'.match(/z/)); // null nothing matched\n\noutput:\nfalse\ntrue\n4\n[ 'b' ]\nb\nnull"
+  },
+  {
+    "id": 5,
+    "question": "Print 'a-b-c'.replace('-', '+'), the same with a regular expression and the g flag, 'John Smith'.replace(/(\\w+) (\\w+)/, '$2 $1') and 'cat'.replace('cat', '[$&]'). Explain first-only versus every match.",
+    "answer": "A string pattern replaces only the first match, while a regular expression with the g flag replaces all of them. In the replacement you can use dollar and digit references to reuse what matched.\n\ncode:\nconsole.log('a-b-c'.replace('-', '+')); // a+b-c only the first dash\nconsole.log('a-b-c'.replace(/-/g, '+')); // a+b+c the g flag replaces all\nconsole.log('John Smith'.replace(/(\\w+) (\\w+)/, '$2 $1')); // Smith John\nconsole.log('cat'.replace('cat', '[$&]')); // [cat] $& is the whole match\n\noutput:\na+b-c\na+b+c\nSmith John\n[cat]"
+  },
+  {
+    "id": 6,
+    "question": "Replace the a letters in 'JavaScript' with a callback that upper cases them, and double the number in 'cost: 5' with a callback. Show why a plain string replacement cannot do either.",
+    "answer": "A replacement function is called once per match and can compute the new text from the old. That is how you transform values instead of writing them out by hand.\n\ncode:\nconsole.log('JavaScript'.replace(/a/g, (ch) => ch.toUpperCase())); // JAvAScript\nconsole.log('cost: 5'.replace(/\\d+/, (n) => String(Number(n) * 2))); // cost: 10\nconsole.log('a-b-c'.replace('-', '+')); // a+b-c a string pattern has no callback\nconsole.log('a-b-c'.replace(/-/g, (ch) => ch.toUpperCase())); // a-B-c\n\noutput:\nJAvAScript\ncost: 10\na+b-c\na-b-c"
+  },
+  {
+    "id": 7,
+    "question": "Print 'a,b,c,d'.split(',', 2), 'a1b2c'.split(/(\\d)/), 'a,'.split(',') and ''.split(','). Explain the limit argument, the capture groups and the trailing empty piece.",
+    "answer": "The second argument to split caps the number of pieces. Parentheses in a regular expression keep the separators in the result. A trailing separator produces a final empty string.\n\ncode:\nconsole.log('a,b,c,d'.split(',', 2)); // [ 'a', 'b' ]\nconsole.log('a1b2c'.split(/(\\d)/)); // [ 'a', '1', 'b', '2', 'c' ]\nconsole.log('a,'.split(',')); // [ 'a', '' ]\nconsole.log(''.split(',')); // [ '' ]\n\noutput:\n[ 'a', 'b' ]\n[ 'a', '1', 'b', '2', 'c' ]\n[ 'a', '' ]\n[ '' ]"
+  },
+  {
+    "id": 8,
+    "question": "Print the trimmed, left-trimmed and right-trimmed forms of '   padded   ' wrapped in square brackets, plus the length of the trimmed value. Show that trim does not touch spaces in the middle.",
+    "answer": "trim removes whitespace at both ends, trimStart and trimEnd work on one side only. Spaces between words are left exactly where they are.\n\ncode:\nconst line = '   padded   ';\nconsole.log('[' + line.trim() + ']'); // [padded]\nconsole.log('[' + line.trimStart() + ']'); // [padded   ]\nconsole.log('[' + line.trimEnd() + ']'); // [   padded]\nconsole.log(line.trim().length); // 6\n\noutput:\n[padded]\n[padded   ]\n[   padded]\n6"
+  },
+  {
+    "id": 9,
+    "question": "Print 'ab'.repeat(3), '[' + 'ab'.repeat(0) + ']' and the error name that 'x'.repeat(-1) throws inside a try and catch. Show why repeat is safer than a loop for a count.",
+    "answer": "repeat builds the string in one step and refuses negative counts with a RangeError. A hand written loop has no such guard and happily produces nonsense.\n\ncode:\nconsole.log('ab'.repeat(3)); // ababab\nconsole.log('[' + 'ab'.repeat(0) + ']'); // []\ntry {\n  'x'.repeat(-1);\n} catch (err) {\n  console.log(err.constructor.name); // RangeError\n}\nconsole.log('a'.concat('b', 1)); // ab1 concat can take several values\n\noutput:\nababab\n[]\nRangeError\nab1"
+  },
+  {
+    "id": 10,
+    "question": "Print '#'.repeat(8) + '-'.repeat(12), the length of that bar and the finished percentage for 8 of 20 steps. This is how a command line progress bar is usually drawn.",
+    "answer": "Two repeat calls draw the filled and empty halves in one step each. Computing the percentage separately keeps the bar and the number in charge of one source of truth.\n\ncode:\nconst total = 20;\nconst done = 8;\nconst bar = '#'.repeat(done) + '-'.repeat(total - done);\nconsole.log(bar); // ########------------\nconsole.log(bar.length); // 20\nconsole.log(Math.round((done / total) * 100) + '%'); // 40%\n\noutput:\n########------------\n20\n40%"
+  },
+  {
+    "id": 11,
+    "question": "Pad the grid rows [['id','name'],['1','Ana'],['22','Bo']] to the width of the widest cell with padEnd and print each row joined by a pipe. Show the rule that keeps the columns straight.",
+    "answer": "Find the widest cell once, then pad every cell to that width. Padding to one global number is what keeps a console table lined up.\n\ncode:\nfunction padRows(rows) {\n  const width = Math.max(...rows.map((row) => row.map((cell) => cell.length)));\n  return rows.map((row) => row.map((cell) => cell.padEnd(width)).join(' | '));\n}\nconst rows = [['id', 'name'], ['1', 'Ana'], ['22', 'Bo']];\npadRows(rows).forEach((row) => console.log(row));\nconsole.log('-'.repeat(15));\n\noutput:\nid | name\n1 | Ana\n22 | Bo\n---------------"
+  },
+  {
+    "id": 12,
+    "question": "Print String.fromCodePoint(128512).padStart(3, '.') wrapped in brackets, its length and the length after spreading it. Show that padding counts code units, so an emoji fills two slots.",
+    "answer": "padStart works on the length property, which counts UTF-16 code units. An emoji takes two of them, so the padding is one character short of what your eyes expect.\n\ncode:\nconst emoji = String.fromCodePoint(128512);\nconst padded = emoji.padStart(3, '.');\nconsole.log('[' + padded + ']'); // [.😀]\nconsole.log(padded.length); // 3 the emoji fills two of them\nconsole.log([...padded].length); // 2 what a human counts\n\noutput:\n[.😀]\n3\n2"
+  },
+  {
+    "id": 13,
+    "question": "Write extensionOf(file) with lastIndexOf and slice, then print it for 'report.pdf', for 'archive.tar.gz' and for 'README'. Show that the last dot wins and a missing dot gives an empty string.",
+    "answer": "Work from the end with lastIndexOf and slice everything after the dot. When there is no dot, indexOf and lastIndexOf both give -1 and you return an empty string.\n\ncode:\nfunction extensionOf(file) {\n  const at = file.lastIndexOf('.');\n  return at === -1 ? '' : file.slice(at + 1);\n}\nconsole.log(extensionOf('report.pdf')); // pdf\nconsole.log(extensionOf('archive.tar.gz')); // gz the last dot wins\nconsole.log('[' + extensionOf('README') + ']'); // []\n\noutput:\npdf\ngz\n[]"
+  },
+  {
+    "id": 14,
+    "question": "Print 'hello world'.replace(/\\b\\w/g, upperFirst) and the same on 'iPhone rocks', then print 'level'.replace(/(l)(e)/, '$2$1'). Show why the word boundary anchor matters.",
+    "answer": "The boundary anchor stops the pattern matching in the middle of a word, so you only touch the first letter of each word. That is what turns a sentence into title case with one call.\n\ncode:\nconst upperFirst = (ch) => ch.toUpperCase();\nconsole.log('hello world'.replace(/\\b\\w/g, upperFirst)); // Hello World\nconsole.log('iPhone rocks'.replace(/\\b\\w/g, upperFirst)); // IPhone Rocks\nconsole.log('level'.replace(/(l)(e)/, '$2$1')); // leveswaps the first le\n\noutput:\nHello World\nIPhone Rocks\nelvel"
+  },
+  {
+    "id": 15,
+    "question": "Write stripHtml(html) with a regular expression that removes tags, then collapses runs of whitespace. Print it for '<p>Hello <b>World</b></p>' and for '<div><a href=\"#\">Link</a></div>'.",
+    "answer": "A pattern of less than, anything that is not a greater than sign, then a greater than sign matches any tag without knowing the tag names. The second pattern tidies the whitespace the tags left behind.\n\ncode:\nfunction stripHtml(html) {\n  return html.replace(/<[^>]*>/g, '').replace(/\\s+/g, ' ').trim();\n}\nconsole.log(stripHtml('<p>Hello <b>World</b></p>')); // Hello World\nconsole.log(stripHtml('<div><a href=\"#\">Link</a></div>')); // Link\n\noutput:\nHello World\nLink"
+  },
+  {
+    "id": 16,
+    "question": "Write formatDuration(ms) that turns milliseconds into minutes and padded seconds. Print it for 65000, for 1500 and for 3600000 so the padding and the minutes are both visible.",
+    "answer": "Floor the value to whole seconds first, then divide for the minutes. padStart keeps the seconds two digits wide so the numbers line up.\n\ncode:\nfunction formatDuration(ms) {\n  const total = Math.floor(ms / 1000);\n  const minutes = Math.floor(total / 60);\n  return minutes + 'm ' + String(total % 60).padStart(2, '0') + 's';\n}\nconsole.log(formatDuration(65000)); // 1m 05s\nconsole.log(formatDuration(1500)); // 0m 01s\nconsole.log(formatDuration(3600000)); // 60m 00s\n\noutput:\n1m 05s\n0m 01s\n60m 00s"
+  },
+  {
+    "id": 17,
+    "question": "Write findIndexes(text, letter) that uses indexOf in a loop to return every position of a letter. Print it for 'banana' with a, and for 'banana' with z.",
+    "answer": "indexOf takes a start position, so loop by searching again from just after the last hit. Stop when it returns -1. This is how you replace a naive indexOf-in-a-for loop.\n\ncode:\nfunction findIndexes(text, letter) {\n  const spots = [];\n  let from = 0;\n  let at = text.indexOf(letter, from);\n  while (at !== -1) {\n    spots.push(at);\n    at = text.indexOf(letter, at + 1);\n  }\n  return spots;\n}\nconsole.log(findIndexes('banana', 'a')); // [ 1, 3, 5 ]\nconsole.log(findIndexes('banana', 'z')); // []\n\noutput:\n[ 1, 3, 5 ]\n[]"
+  },
+  {
+    "id": 18,
+    "question": "Print every match of the pattern letter plus digits in 'a1 b22' using matchAll, the number of matches, and the matched pairs joined with commas. Show what the extra argument in the pattern keeps.",
+    "answer": "matchAll returns an iterator of match objects, and spreading it turns that into an array. The brackets in the pattern keep the letter and the digits as separate groups.\n\ncode:\nconst pairs = [...'a1 b22'.matchAll(/(\\w)(\\d+)/g)];\nconsole.log(pairs.length); // 2\nconsole.log(pairs.map((m) => m[1] + '=' + m[2]).join(', ')); // a=1, b=22\nconsole.log(pairs[0][0]); // a1 the whole match\n\noutput:\n2\na=1, b=22\na1"
+  },
+  {
+    "id": 19,
+    "question": "Print the digit groups found in 'order 12 for 3 items on 2024-05-06' joined with commas, and print the hashtags of 'loving #cypress and #e2e, no #tests today' as an array and as a count.",
+    "answer": "match with the g flag returns every match as an array, or null when there is nothing. That makes it the shortest way to pull numbers or tags out of a sentence.\n\ncode:\nconst order = 'order 12 for 3 items on 2024-05-06';\nconsole.log(order.match(/\\d+/g).join(', ')); // 12, 3, 2024, 05, 06\nconst post = 'loving #cypress and #e2e, no #tests today';\nconsole.log(post.match(/#\\w+/g)); // [ '#cypress', '#e2e', '#tests' ]\nconsole.log(post.match(/#\\w+/g).length); // 3\n\noutput:\n12, 3, 2024, 05, 06\n[ '#cypress', '#e2e', '#tests' ]\n3"
+  },
+  {
+    "id": 20,
+    "question": "Match /(\\d{4})-(\\d{2})-(\\d{2})/ against '2024-05-06' and print the whole match, the first and third group joined with a slash, the index and the length of the match array.",
+    "answer": "A match array is element zero is the whole match, then one element per group, then the position and the original text. Group one in brackets is what you reach for in real parsing.\n\ncode:\nconst found = '2024-05-06'.match(/(\\d{4})-(\\d{2})-(\\d{2})/);\nconsole.log(found[0]); // 2024-05-06\nconsole.log(found[1] + '/' + found[3]); // 2024/06\nconsole.log(found.index); // 0\nconsole.log(found.length); // 4 the whole match plus three groups\n\noutput:\n2024-05-06\n2024/06\n0\n4"
+  },
+  {
+    "id": 21,
+    "question": "Print the object that 'mississippi'.split('').reduce builds when every letter counts up, then count the letters of 'the tester ran the test twice' the same way for t. Show what reduce needs from you.",
+    "answer": "reduce carries a value forward. Start it with an empty object, add one for each letter and return the same object every time so the count survives.\n\ncode:\nconst counts = 'mississippi'.split('').reduce((acc, ch) => {\n  acc[ch] = (acc[ch] || 0) + 1;\n  return acc;\n}, {});\nconsole.log(counts); // { m: 1, i: 4, s: 4, p: 2 }\nconst sentence = 'the tester ran the test twice';\nconsole.log(sentence.split('').filter((ch) => ch === 't').length); // 7\n\noutput:\n{ m: 1, i: 4, s: 4, p: 2 }\n7"
+  },
+  {
+    "id": 22,
+    "question": "Print ['Zoe','ana','Bob'].sort() and the same list sorted with localeCompare, plus 'Zoe' < 'ana'. Explain why the two sorts disagree about where capitals go.",
+    "answer": "A plain sort compares code points, so every capital letter comes first. localeCompare uses the rules of a language, which is what a list of real names wants.\n\ncode:\nconst names = ['Zoe', 'ana', 'Bob'];\nconsole.log([...names].sort()); // [ 'Bob', 'Zoe', 'ana' ]\nconsole.log([...names].sort((a, b) => a.localeCompare(b))); // [ 'ana', 'Bob', 'Zoe' ]\nconsole.log('Zoe' < 'ana'); // true code points put capitals first\nconsole.log(names); // [ 'Zoe', 'ana', 'Bob' ] sort works on a copy here\n\noutput:\n[ 'Bob', 'Zoe', 'ana' ]\n[ 'ana', 'Bob', 'Zoe' ]\ntrue\n[ 'Zoe', 'ana', 'Bob' ]"
+  },
+  {
+    "id": 23,
+    "question": "Print ['b','a','c'].sort() and the array afterwards, then print [3,1,2].reverse() twice. Show that sort and reverse change the array they were called on.",
+    "answer": "Both array methods work in place and give the same array back. That is the difference between them and string methods, which never touch anything because strings cannot change.\n\ncode:\nconst items = ['b', 'a', 'c'];\nconsole.log(items.sort()); // [ 'a', 'b', 'c' ]\nconsole.log(items); // [ 'a', 'b', 'c' ] changed in place\nconst nums = [3, 1, 2];\nconsole.log(nums.reverse()); // [ 2, 1, 3 ]\nconsole.log(nums); // [ 2, 1, 3 ] also changed in place\n\noutput:\n[ 'a', 'b', 'c' ]\n[ 'a', 'b', 'c' ]\n[ 2, 1, 3 ]\n[ 2, 1, 3 ]"
+  },
+  {
+    "id": 24,
+    "question": "Print the length of 'a1b2c' and of the spread version of the same text with the grinning face emoji in the middle, then print the spread version joined with a pipe.",
+    "answer": "String length counts UTF-16 code units. Spreading the string iterates real characters, so emoji stay whole and any counting of user text should use spread.\n\ncode:\nconst text = 'a' + String.fromCodePoint(128512) + 'b';\nconsole.log(text.length); // 4 code units, emoji is two\nconsole.log([...text].length); // 3 real characters\nconsole.log([...text].join('|')); // a|😀|b\nconsole.log(text.split('').length); // 4 split also counts code units\n\noutput:\n4\n3\na|😀|b\n4"
+  },
+  {
+    "id": 25,
+    "question": "Print the length of the text 'cafe' plus a combining accent, the length of the same text after normalize('NFC'), and whether it equals the precomposed word. Show how one character can be two code units.",
+    "answer": "Some languages write an accent as a separate mark that follows the letter. normalize('NFC') folds those pairs into one precomposed character so comparisons and searches work.\n\ncode:\nconst accented = 'cafe' + String.fromCharCode(769);\nconsole.log(accented.length); // 5 the accent is a code unit of its own\nconsole.log(accented.normalize('NFC').length); // 4 the pair folded to one letter\nconsole.log(accented.normalize('NFC') === 'caf' + String.fromCharCode(233)); // true\n\noutput:\n5\n4\ntrue"
+  },
+  {
+    "id": 26,
+    "question": "Try 'abc'.includes(/a/) inside a try and catch and print the error name, whether the message mentions a regular expression, and then show that /a/.test('abc') works.",
+    "answer": "includes only accepts text on purpose, so a regular expression is a bug rather than a slow path. Catch the mistake or use test when you really want a pattern.\n\ncode:\ntry {\n  'abc'.includes(/a/);\n} catch (err) {\n  console.log(err.constructor.name); // TypeError\n  console.log(err.message.includes('regular expression')); // true\n}\nconsole.log(/a/.test('abc')); // true\nconsole.log('abc'.includes('a')); // true\n\noutput:\nTypeError\ntrue\ntrue\ntrue"
+  },
+  {
+    "id": 27,
+    "question": "Print the right trimmed length of '   padded   ', the length after trim, and the length after trimStart plus trimEnd. Show that doing both trims by hand is pointless.",
+    "answer": "trimStart followed by trimEnd gives the same result as trim, with two passes instead of one. When the source is already clean, trim is a no-op and costs almost nothing.\n\ncode:\nconst line = '   padded   ';\nconsole.log(line.trim().length); // 6\nconsole.log(line.trimStart().trimEnd().length); // 6 the slow way round\nconsole.log('   x   '.trim().length); // 1 already clean input\n\noutput:\n6\n6\n1"
+  },
+  {
+    "id": 28,
+    "question": "Print 'abcd'.slice(1), 'abcd'.slice(1, 3), 'abcd'.slice(-2, -1) and the length of 'abcd'.slice(0, 4). Use one index, two indexes and negative indexes so the three forms are side by side.",
+    "answer": "slice with one argument runs to the end of the string. Two negative indexes count back from the end, and the first one must come before the second.\n\ncode:\nconst text = 'abcd';\nconsole.log(text.slice(1)); // bcd\nconsole.log(text.slice(1, 3)); // bc\nconsole.log(text.slice(-2, -1)); // c\nconsole.log(text.slice(0, 4).length); // 4 the whole string\n\noutput:\nbcd\nbc\nc\n4"
+  },
+  {
+    "id": 29,
+    "question": "Print the number of words in 'a b  c' with split(' ') and with split on any whitespace, then print both arrays so the extra empty pieces are visible.",
+    "answer": "A string separator cuts at every single match, so two spaces make an empty piece. The whitespace pattern matches a whole run of spaces and skips them.\n\ncode:\nconst text = 'a b  c';\nconsole.log(text.split(' ').length); // 4\nconsole.log(text.split(/\\s+/).length); // 3\nconsole.log(JSON.stringify(text.split(' '))); // [\"a\",\"b\",\"\",\"c\"]\nconsole.log(JSON.stringify(text.split(/\\s+/))); // [\"a\",\"b\",\"c\"]\n\noutput:\n4\n3\n[\"a\",\"b\",\"\",\"c\"]\n[\"a\",\"b\",\"c\"]"
+  },
+  {
+    "id": 30,
+    "question": "Print the longest word of 'the longest word wins here' using split and reduce, then the same using for of. Show that both ways return identical text and length.",
+    "answer": "split and reduce are compact but allocate an array of words. for of over the split words avoids the callback. Both are one pass, and both need a rule for ties.\n\ncode:\nconst text = 'the longest word wins here';\nconst byReduce = text.split(' ').reduce((a, b) => (b.length > a.length ? b : a));\nlet byLoop = '';\nfor (const word of text.split(' ')) {\n  if (word.length > byLoop.length) byLoop = word;\n}\nconsole.log(byReduce); // longest\nconsole.log(byLoop); // longest\nconsole.log(byReduce === byLoop && byReduce.length === 7); // true\n\noutput:\nlongest\nlongest\ntrue"
+  },
+  {
+    "id": 31,
+    "question": "Print 'a1 b22'.replace(/([a-z])(d+)/g, '$2:$1'), the same with a callback that adds one to the digits, and the count of replacements the callback actually made.",
+    "answer": "The reference form reuses the groups, and the callback form can compute. A callback also gets an extra argument, the offset, which you can collect to count the hits.\n\ncode:\nconst text = 'a1 b22';\nconsole.log(text.replace(/([a-z])(\\d+)/g, '$2:$1')); // 1:a 22:b\nconsole.log(text.replace(/(\\d+)/g, (n) => String(Number(n) + 1))); // a2 b23\nlet hits = 0;\ntext.replace(/\\d/g, () => { hits += 1; return ''; });\nconsole.log(hits); // 3\n\noutput:\n1:a 22:b\na2 b23\n3"
+  },
+  {
+    "id": 32,
+    "question": "Print 'Hello World'.replace(/o/g, '0'), 'hello'.replace('l', 'L') and 'hello'.replaceAll('l', 'L'). Show what the g flag and replaceAll each add.",
+    "answer": "A plain pattern replaces the first hit only. Adding the g flag replaces every hit, and replaceAll does the same for a plain text pattern without writing a pattern.\n\ncode:\nconsole.log('Hello World'.replace(/o/g, '0')); // Hell0 W0rld\nconsole.log('hello'.replace('l', 'L')); // heLlo first only\nconsole.log('hello'.replaceAll('l', 'L')); // heLLo\nconsole.log('hello'.replaceAll('z', 'Z')); // hello nothing to replace\n\noutput:\nHell0 W0rld\nheLlo\nheLLo\nhello"
+  },
+  {
+    "id": 33,
+    "question": "Print '  Title Case  '.trim().toLowerCase() and the same after replacing the spaces with dashes, plus the length of the untrimmed text. Show why trim has to come first.",
+    "answer": "Padding characters become part of any replacement, so clean the edges before you transform. Trim once at the boundary and pass the clean value on.\n\ncode:\nconst raw = '  Title Case  ';\nconsole.log(raw.trim().toLowerCase()); // title case\nconsole.log(raw.trim().toLowerCase().replace(/\\s+/g, '-')); // title-case\nconsole.log(raw.length); // 14 before cleaning\nconsole.log(raw.trim().length); // 10 after cleaning\n\noutput:\ntitle case\ntitle-case\n14\n10"
+  },
+  {
+    "id": 34,
+    "question": "Build a fixed width table with padStart so the numbers line up on the right: rows ['7','Ana'] and ['123','Bo'] under the headings 'id' and 'name'. Print both rows and the heading.",
+    "answer": "padStart pads on the left, which is what numbers want, while padEnd pads on the right, which is what words want. Deciding per column type is the whole trick.\n\ncode:\nfunction row(left, right) {\n  return left.padStart(6) + ' | ' + right.padEnd(6);\n}\nconsole.log(row('id', 'name'));\nconsole.log(row('7', 'Ana'));\nconsole.log(row('123', 'Bo'));\nconsole.log(row('7', 'Ana').length); // 15 both rows are the same width\n\noutput:\n    id | name  \n     7 | Ana   \n   123 | Bo    \n15"
+  },
+  {
+    "id": 35,
+    "question": "Write a snake_case to Title Case converter using split('_'), map and join, then run it on 'first_name' and on 'the_nasa_rocket'. Show what happens to a word that is already capitalised.",
+    "answer": "Split on the separator, capitalise the first letter of every piece and join with single spaces. A piece that already starts with a capital keeps it and only gets a space in front.\n\ncode:\nfunction titleFromSnake(text) {\n  return text.split('_').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');\n}\nconsole.log(titleFromSnake('first_name')); // First Name\nconsole.log(titleFromSnake('the_nasa_rocket')); // The Nasa Rocket\nconsole.log(titleFromSnake('the_NASA_rocket')); // The NASA Rocket\n\noutput:\nFirst Name\nThe Nasa Rocket\nThe NASA Rocket"
+  },
+  {
+    "id": 36,
+    "question": "Print 'a'.padStart(3, '0'), '5'.padEnd(3, '0'), 'ab'.padStart(5) and 'ab'.padEnd(5).length. Show what happens when the string is already long enough and when no filler is given.",
+    "answer": "Padding never shortens a string, so a value wider than the target is returned untouched. Without a filler the method uses a space, which is easy to miss in console output.\n\ncode:\nconsole.log('a'.padStart(3, '0')); // 00a\nconsole.log('5'.padEnd(3, '0')); // 500\nconsole.log('ab'.padStart(5)); // '   ab' spaces by default\nconsole.log('ab'.padEnd(5).length); // 5\nconsole.log('abcdef'.padStart(3)); // abc already long enough\n\noutput:\n00a\n500\n   ab\n5\nabcdef"
+  },
+  {
+    "id": 37,
+    "question": "Print 'One, two, three'.split(',').map with trim, then join with ' | ', and print the length of the array before and after filtering the empty pieces. Show the shape of a text to columns pipeline.",
+    "answer": "Split makes the columns, map cleans each one, filter drops the blanks and join puts the row back together. Each step is small and testable on its own.\n\ncode:\nconst row = 'One, Two ,, three';\nconst cells = row.split(',').map((cell) => cell.trim());\nconsole.log(cells); // [ 'One', 'Two', '', 'three' ]\nconst filled = cells.filter((cell) => cell !== '');\nconsole.log(filled.length); // 3 the blank cell is gone\nconsole.log(filled.join(' | ')); // One | Two | three\n\noutput:\n[ 'One', 'Two', '', 'three' ]\n3\nOne | Two | three"
+  },
+  {
+    "id": 38,
+    "question": "Print the upper case code of 'b' with charCodeAt, the character made from 66 with String.fromCharCode, and the same two values for the letter at position 1 of 'abc'. Round trip a letter through its code.",
+    "answer": "A character is a number underneath. charCodeAt reads the number and String.fromCharCode writes it back, which is how you do arithmetic on letters.\n\ncode:\nconsole.log('b'.charCodeAt(0)); // 98\nconsole.log(String.fromCharCode(66)); // B\nconsole.log('abc'.charCodeAt(1)); // 98\nconsole.log('abc'.charCodeAt(0) + 1 === 'abc'.charCodeAt(1)); // true codes sit next to each other\n\noutput:\n98\nB\n98\ntrue"
+  },
+  {
+    "id": 39,
+    "question": "Print 'banana'.indexOf('na'), the indexOf with a from position that skips the first hit, and 'banana'.split('na').length. Show two ways to count occurrences of a pattern.",
+    "answer": "indexOf with a from position steps past the first hit, and split counts occurrences by counting separators plus one. Both avoid a loop.\n\ncode:\nconsole.log('banana'.indexOf('na')); // 2\nconsole.log('banana'.indexOf('na', 3)); // 4 the second one\nconsole.log('banana'.split('na').length); // 3 two separators mean three pieces\nconsole.log('banana'.includes('nan')); // true overlapping text still counts\n\noutput:\n2\n4\n3\ntrue"
+  }
+]

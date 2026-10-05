@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "question": "What is the difference between a falsy value and undefined?",
+    "answer": "Falsy is a label for the eight values JavaScript treats as no. undefined is only one of those eight, and it specifically means a value was never assigned.\n\ncode:\nconst falsy = [false, 0, -0, 0n, '', null, undefined, NaN, [], {}, '0', 'false'];\nfalsy.forEach((v) => console.log(typeof v, String(v), '->', Boolean(v)));\nconsole.log('how many are falsy:', falsy.filter((v) => !v).length);\nconsole.log('undefined means missing, NaN means broken:');\nconsole.log('let a; ->', a, '| Number(\"12px\") ->', Number('12px'));\n\nreal example:\nA Playwright helper reads text from a field. An empty string means the user typed nothing, while undefined means your selector never matched, and treating them the same hides a broken selector."
+  },
+  {
+    "id": 2,
+    "question": "Why does if (arr.length = 0) skip the block, when 0 is what it should be testing for?",
+    "answer": "A single equals is an assignment. It stores 0 into arr.length and the whole expression evaluates to the value it stored, which is 0, and 0 is falsy.\n\ncode:\nconst arr = ['a', 'b', 'c'];\nlet message = 'the block ran';\nif (arr.length = 0) {\n  message = 'still not reached';\n}\nconsole.log('arr is now:', JSON.stringify(arr));\nconsole.log(message);\nconsole.log('with two equals it compares instead:', arr.length === 0, arr.length > 5);\n\nreal example:\nA cleanup step guarded by if (browser = null) assigns null instead of testing, so the block never runs and every later line in the test keeps using a stale page object."
+  },
+  {
+    "id": 3,
+    "question": "Rewrite a chain of if and else if statements as a lookup object. When is the object version worse?",
+    "answer": "The chain maps each value to a fixed result, and a plain object does the same job in one expression. It is worse when a branch needs a range check, two conditions, or an early break, because the object can hold data but not logic.\n\ncode:\nfunction chain(role) {\n  if (role === 'admin') return 'delete-all';\n  if (role === 'editor') return 'publish';\n  if (role === 'viewer') return 'read';\n  return 'none';\n}\nconst actions = { admin: 'delete-all', editor: 'publish', viewer: 'read' };\n['admin', 'viewer', 'ghost'].forEach((r) => {\n  console.log(r, '-> chain:', chain(r), '| lookup:', actions[r] ?? 'none');\n});\n\nreal example:\nMapping HTTP methods to Playwright helper names is a clean lookup. Deciding pass or fail from a response time range is not, so that stays an if statement."
+  },
+  {
+    "id": 4,
+    "question": "What happens when you leave the braces off a single-line if statement?",
+    "answer": "Only the next statement becomes the body of the if. Any following line you thought was inside the if is a separate statement and always runs.\n\ncode:\nconst total = 5;\nlet hits = 0;\nif (total > 3) hits = hits + 1;\nconsole.log('hits after the braced-looking if:', hits);\nif (total > 3)\n  hits = hits + 1;\n  console.log('this line is NOT inside the if, but it still runs');\nconsole.log('hits at the end:', hits);\n\nreal example:\nA multi-line guard written without braces quietly runs its last line in every case, so the test cleans up even when the element it was checking for was there."
+  },
+  {
+    "id": 5,
+    "question": "Why is if (value) dangerous when the value is the text 'false'?",
+    "answer": "The text false is a non-empty string, and every non-empty string is truthy. Only the boolean false is falsy, so a value read out of HTML never behaves like the boolean you expect.\n\ncode:\nconst fromHtml = 'false';\nconst fromJson = false;\nconsole.log('html value is', typeof fromHtml, '-> truthy?', Boolean(fromHtml));\nconsole.log('json value is', typeof fromJson, '-> truthy?', Boolean(fromJson));\nif (fromHtml) console.log('the page value takes the true branch');\nif (fromHtml === 'false') console.log('a strict compare sees the text properly');\n\nreal example:\nA checkbox value attribute arrives as the string \"false\" when it is off, so if (checkbox.value) always passes and the test never notices the box is unchecked."
+  },
+  {
+    "id": 6,
+    "question": "What does the nullish coalescing operator do that the or operator does not?",
+    "answer": "The or operator falls back on any falsy value, including 0 and the empty string. The nullish operator falls back only on null and undefined, so it keeps a real zero or empty string.\n\ncode:\nconst orOld = (count) => count || 10;\nconst orNew = (count) => count ?? 10;\n[0, '', null, undefined, 7].forEach((v) => {\n  console.log(String(v).padEnd(9), '|| 10 =', String(orOld(v)), '| ?? 10 =', String(orNew(v)));\n});\nconsole.log('Number of an empty string is', Number(''), 'so it is not missing either');\n\nreal example:\nA retry count of 0 read from a config file is a real value, not a missing one. With || the helper silently turns it into the default and retries forever."
+  },
+  {
+    "id": 7,
+    "question": "Why does if (NaN) never run the block, even though typeof NaN is number?",
+    "answer": "NaN means not-a-number and it is the only JavaScript value that is not equal to itself, so it is falsy by design. typeof cannot see that, which is why the check surprises people.\n\ncode:\nconst bad = Number('12px');\nconsole.log('value:', bad, '| isNaN:', Number.isNaN(bad), '| equals itself:', bad === bad);\nif (bad) console.log('this line never runs');\nconsole.log('use Number.isNaN instead:', Number.isNaN(bad));\nconsole.log('parseInt is more forgiving:', parseInt('12px', 10));\n\nreal example:\nA helper runs Number(text) on a CSS value like 12px, gets NaN, skips its own guard because NaN is falsy, and then fails later with a message that points at the wrong line."
+  },
+  {
+    "id": 8,
+    "question": "Explain short-circuit evaluation of the logical and and or operators.",
+    "answer": "The and operator stops at the first falsy value and the or operator stops at the first truthy one. The right side only runs when the left side has not already decided the answer.\n\ncode:\nfunction log(label, value) { console.log(label, 'ran with', value); return value; }\nconst a = log('left-a', 0) && log('right-a', 'x');\nconst b = log('left-b', 5) && log('right-b', 'x');\nconst c = log('left-c', 0) || log('right-c', 'fallback');\nconsole.log('a:', a, '| b:', b, '| c:', c);\n\nreal example:\nThe pattern response.ok && response.json() skips reading the body when the request failed, which is why the safer style throws on !response.ok before touching the body."
+  },
+  {
+    "id": 9,
+    "question": "What is an early return, and why does it beat nesting the conditions instead?",
+    "answer": "An early return leaves the function as soon as it finds a bad case, instead of wrapping the rest of the work in an else block. The happy path then sits at the left margin where you can read it top to bottom.\n\ncode:\nfunction pageTitle(body, loggedIn) {\n  if (body === undefined || body === null) return 'error: no body';\n  if (typeof body !== 'string') return 'error: wrong type';\n  if (!loggedIn) return 'login page';\n  if (body.trim().length < 5) return 'too short';\n  return 'welcome: ' + body.trim();\n}\n[undefined, '   ', 'hi', 'a full dashboard body'].forEach((t) => console.log(JSON.stringify(t), '->', pageTitle(t, true)));\nconsole.log('logged out ->', pageTitle('a full dashboard body', false));\n\nreal example:\nA page-object method guards on a missing locator first, so a failure reads element not found instead of the generic cannot read property of null message."
+  },
+  {
+    "id": 10,
+    "question": "When should you prefer a ternary expression over an if statement?",
+    "answer": "Use a ternary when there is exactly one condition and both results are simple values, because then it reads as a single sentence. Keep the if statement when either branch needs a second condition or a statement of its own.\n\ncode:\nconst retries = 0;\nconst files = ['a.txt', 'b.txt'];\nconst label = retries > 0 ? 'has retries' : 'no retries left';\nconst first = files.length ? files[0] : 'no files';\nconst size = files.length > 5 ? 'many files' : 'few files';\nconsole.log(label, '|', first, '|', size);\nconsole.log('a ternary always returns a value, so this cannot be empty:', JSON.stringify('' || 'fallback'));\n\nreal example:\nAn assertion helper builds its failure message with a ternary so both halves of the sentence stay on one line and the report reads well."
+  },
+  {
+    "id": 11,
+    "question": "Why can a plain if statement never be used inside a ternary expression?",
+    "answer": "A ternary has one else slot and it must hold an expression that produces a value. Statements such as if and for produce no value, so the language has nowhere to put them.\n\ncode:\nconst score = 72;\nconst grade = score >= 90 ? 'A'\n  : score >= 80 ? 'B'\n  : score >= 70 ? 'C' : 'F';\nconsole.log('grade:', grade);\nconst note = grade === 'F' ? 'see the retake page' : 'no action needed';\nconsole.log('note:', note);\nconsole.log('nested ternaries lean right, which gets hard to read past three');\n\nreal example:\nA deep nested ternary in a status mapper becomes unreadable by the third level, and the reviewer stops trusting it. A plain if chain or a lookup object is clearer there."
+  },
+  {
+    "id": 12,
+    "question": "What is the difference between if (!value) and if (value === undefined)?",
+    "answer": "The not operator rejects every falsy value, so 0, the empty string and false all fail that check. Comparing against undefined rejects only missing values, which is usually what you mean for optional data.\n\ncode:\nconst values = [0, '', false, null, undefined, NaN, 'ok'];\nvalues.forEach((v) => {\n  console.log(String(v).padEnd(9), 'rejected by !v:', !v, '| is undefined:', v === undefined);\n});\nconsole.log('null is not undefined:', null === undefined);\n\nreal example:\nA fixture field of 0 retries is valid. if (!retries) throws that away while if (retries === undefined) lets it through and the test waits the full timeout for nothing."
+  },
+  {
+    "id": 13,
+    "question": "How does using double equals instead of triple equals change a status check on an API response?",
+    "answer": "Double equals converts the text to a number first, so the string 200 matches the number 200. It also makes unrelated values match, such as an empty string and 0, which is where the surprise shows up.\n\ncode:\nconst body = { status: '200' };\nif (body.status == 200) console.log('loose compare matched the text 200');\nif (body.status === 200) console.log('strict compare did not match');\nconsole.log('but 0 == an empty string is', 0 == '', '| and null == undefined is', null == undefined);\nconsole.log('the string fix is to convert first:', Number(body.status) === 200);\n\nreal example:\nAn API client checks res.status == 200 and also passes on 0 or an empty value, so a broken response body looks exactly like a success to the test."
+  },
+  {
+    "id": 14,
+    "question": "Why does if ([]) run the block, even though the array is empty?",
+    "answer": "An empty array is still an object, and objects are truthy. A truthiness test looks at what the value is, not at how many items it holds.\n\ncode:\nconst noRows = [];\nconst holes = Array(3);\nconsole.log('empty array is truthy:', Boolean(noRows), '| length', noRows.length);\nconsole.log('an array of 3 holes has length', holes.length, 'and holds no items');\nif (noRows) console.log('the block still runs - test the length instead');\nif (noRows.length) console.log('this one does not run');\n\nreal example:\nA helper guards with if (results) before iterating, and an empty result list sails straight past the guard into a branch that assumed there was work to do."
+  },
+  {
+    "id": 15,
+    "question": "What happens if you write if (i = 5) when you meant if (i === 5)?",
+    "answer": "The single equals overwrites i with 5 and the expression evaluates to 5, which is truthy. So the block always runs and your variable is silently replaced.\n\ncode:\nlet i = 1;\nlet ran = 0;\nif (i = 5) ran = ran + 1;\nconsole.log('i is now', i, 'and the block ran', ran, 'time');\nlet j = 1;\nif (j === 5) console.log('this line never runs');\nconsole.log('j is untouched:', j);\nconsole.log('the safe version reports a boolean:', typeof (j === 5));\n\nreal example:\nA retry counter written as if (attempt = 0) is reset on every check, so the test retries forever and the suite only ends when CI times out."
+  },
+  {
+    "id": 16,
+    "question": "Is there a risk in a correct single-line if without braces, or only when it is wrong?",
+    "answer": "The risk is in the next edit, not in the current code. The next person adds a second line under what looks like a block and it silently escapes the if, so braces cost nothing and survive edits.\n\ncode:\nconst ready = false;\nfunction step() { return 'did the work'; }\nif (ready) step();\nconsole.log('ready was false, so step never ran');\nif (ready)\n  console.log('first line of a no-brace body');\n  console.log('but this second line runs anyway');\nfunction safe() {\n  if (!ready) return 'skipped';\n  return step();\n}\nconsole.log(safe());\n\nreal example:\nA teardown line written after a one-line guard runs even when setup failed, so the next test starts with a dirty browser context and a mysterious failure."
+  },
+  {
+    "id": 17,
+    "question": "How do you check that a value is a real number and not the text of a number?",
+    "answer": "Check the type with typeof first, because text passes a truthiness check. Then rule out NaN, because typeof NaN is also number. Number.isFinite does both checks in one call.\n\ncode:\nfunction isRealNumber(value) {\n  return typeof value === 'number' && Number.isFinite(value);\n}\n['42', 42, '', null, NaN, Infinity, '4px'].forEach((v) => {\n  console.log(String(v).padEnd(8), 'usable:', isRealNumber(v));\n});\nconsole.log('the naive check lets NaN through:', typeof NaN === 'number');\n\nreal example:\nA CSV cell of 12 passes the amount check with Number(cell) alone, the running total becomes NaN, and the assertion message prints NaN instead of the real price."
+  },
+  {
+    "id": 18,
+    "question": "Why check value.trim() === '' instead of !value when validating a form field?",
+    "answer": "A field full of spaces is a non-empty string, so the truthy check lets it through and the server rejects it later. Trimming first catches whitespace-only input, which is the most common form bug.\n\ncode:\nfunction validate(text) {\n  if (text === undefined || text === null) return 'field is missing';\n  if (typeof text !== 'string') return 'not text';\n  if (text.trim() === '') return 'field is blank';\n  return 'ok: ' + text.trim();\n}\n[undefined, null, '   ', '  hello  '].forEach((v) => {\n  console.log(JSON.stringify(v), '->', validate(v));\n});\n\nreal example:\nPlaywright types into a search box, the value comes back as three spaces, the truthy check passes, and the results assertion waits for a page that will never load."
+  },
+  {
+    "id": 19,
+    "question": "What happens if the condition is a bare object literal, like if ({})?",
+    "answer": "The braces are read as an empty block rather than an object, so the condition becomes whatever the next statement evaluates to. An object literal needs its own parentheses to be used as a value.\n\ncode:\nconst config = { retries: 3 };\nif (config.retries === 3) console.log('this prints, the condition was the next statement');\nif (({ retries: 0 })) console.log('with parentheses the object is a real condition');\nconsole.log('an empty object is truthy:', Boolean({}), '| an array too:', Boolean([]));\n\nreal example:\nA validation helper written as if ({ errors: errors.length }) looks like it tests an object but actually tests the length, so an empty error object takes the wrong branch."
+  },
+  {
+    "id": 20,
+    "question": "Explain the difference between if (list.indexOf(x) > -1) and if (~list.indexOf(x)).",
+    "answer": "indexOf returns -1 when the item is missing. Bitwise not turns -1 into 0, which is falsy, so the tilde form works. The explicit comparison is readable and the tilde is old code you will meet in libraries.\n\ncode:\nconst roles = ['admin', 'viewer'];\nconst readable = (list, x) => list.indexOf(x) > -1;\nconst old = (list, x) => ~list.indexOf(x);\n['admin', 'ghost'].forEach((r) => {\n  console.log(r, '| > -1:', readable(roles, r), '| tilde:', old(roles, r));\n});\nconsole.log('not of -1 is', ~(-1), 'and not of 0 is', ~0, '- both are falsy or truthy as needed');\n\nreal example:\nA permission helper written with the tilde check passes review, and nobody can tell whether it is a bug or a trick, so every future reader stops trusting the whole file."
+  },
+  {
+    "id": 21,
+    "question": "How do you write an if chain so it fails loudly when no branch matches?",
+    "answer": "Add a final else that throws. Then a new value in production cannot slip through silently and leave you with an undefined return value three frames away.\n\ncode:\nfunction feeFor(plan) {\n  if (plan === 'free') return 0;\n  if (plan === 'pro') return 12;\n  if (plan === 'team') return 30;\n  throw new Error('unknown plan: ' + plan);\n}\n['free', 'pro', 'enterprise'].forEach((p) => {\n  try { console.log(p, '->', feeFor(p)); }\n  catch (e) { console.log(p, '->', e.message); }\n});\n\nreal example:\nA page-object method returns undefined for an unrecognised button name, the test clicks undefined, and the stack trace points at the helper instead of the missing selector."
+  },
+  {
+    "id": 22,
+    "question": "Why wrap a condition in Boolean() when you are storing the result in a flag?",
+    "answer": "The or operator returns an operand rather than a boolean, so the flag can end up holding 0 or the empty string. Boolean makes the flag always true or false, which is what a later if expects.\n\ncode:\nconst count = 0;\nconst raw = count || 'empty';\nconst clean = Boolean(count);\nconsole.log('raw flag is', JSON.stringify(raw), '| typeof', typeof raw);\nconsole.log('Boolean flag is', clean, '| typeof', typeof clean);\nconsole.log('a comparison is the other clean option:', count > 0, typeof (count > 0));\n\nreal example:\nA test stores hasData = rows.length || false, so the report prints hasData: 0 for a failed run instead of false, and nobody notices until the dashboard looks healthy."
+  },
+  {
+    "id": 23,
+    "question": "Why can putting an assignment inside an if condition still be a good idea?",
+    "answer": "An assignment evaluates to the value it stored, so one line both assigns and tests. Do it only when the stored value is exactly the thing you want to check on.\n\ncode:\nlet id;\nfunction readId() { return 42; }\nif ((id = readId())) console.log('assigned and checked in one line:', id);\nlet label = '';\nif ((label = '  ')) console.log('this still runs: a non-empty string is truthy');\nconsole.log('label is', JSON.stringify(label), '- the check did not mean what you hoped');\n\nreal example:\nif ((token = getToken())) reads well as one line, but if getToken returns an empty object the guard passes and the API call comes back unauthorised ten minutes later."
+  },
+  {
+    "id": 24,
+    "question": "How do you guard a value that may be undefined before you read a property on it?",
+    "answer": "Check explicitly for null or undefined, or use optional chaining and capture the result in a named variable. The named variable makes the fallback visible instead of hiding it inside an expression.\n\ncode:\nconst res = { data: { user: { name: 'Ana' } } };\nconsole.log('safe read:', res?.data?.user?.name ?? 'anonymous');\nconst broken = {};\nconsole.log('safe read of a missing chain:', broken?.data?.user?.name ?? 'anonymous');\ntry { console.log(broken?.data.user.name); }\ncatch (e) { console.log('only the first ?. was guarded, so this threw:', e.constructor.name); }\n\nreal example:\nAn API helper reads res.body.user.name with no guard. On an error-shaped response the test dies with a TypeError instead of a readable assertion failure that names the endpoint."
+  },
+  {
+    "id": 25,
+    "question": "When does a lookup object read better than a long chain of if statements?",
+    "answer": "When every branch returns a fixed value for a fixed key. The object removes the repeated comparisons and puts the whole mapping in one place you can read and edit at a glance.\n\ncode:\nconst labels = { ok: 'PASSED', fail: 'FAILED', skip: 'SKIPPED' };\nfunction chainChain(result) {\n  if (result.ok) return 'PASSED';\n  if (result.fail) return 'FAILED';\n  return 'SKIPPED';\n}\nconst outcomes = [{ ok: true }, { fail: true }, {}];\noutcomes.forEach((o) => {\n  const key = o.ok ? 'ok' : o.fail ? 'fail' : 'skip';\n  console.log('if chain:', chainChain(o), '| lookup:', labels[key]);\n});\n\nreal example:\nA reporter maps status names to badge text. The lookup table is one line, while the if chain repeats the same three comparisons every time someone adds a status."
+  },
+  {
+    "id": 26,
+    "question": "Why does if (a && b) skip b entirely when a is 0?",
+    "answer": "The and operator only evaluates the right side when the left side is truthy. That is the guard pattern: put a cheap check in front of a risky or expensive call.\n\ncode:\nconst items = [];\nfunction step(label) { console.log(label, 'ran'); return true; }\nif (items.length && step('inside the guard')) console.log('never');\nif (items.length > 0 && step('second guard')) console.log('never either');\nif (items.length || step('with or it does run')) console.log('this line prints');\nconsole.log('so the guard is what decided, not the step');\n\nreal example:\npage.locator(row).count() && click(row) skips the click when there is no row, but if count() returns 0 the or-branch also fails and the test hangs instead of failing fast."
+  },
+  {
+    "id": 27,
+    "question": "Does the or operator short-circuit in the same way, and why does it matter?",
+    "answer": "Yes. The or operator stops at the first truthy value, so the right side only runs on a miss. It only matters when the right side has a side effect or is expensive.\n\ncode:\nfunction open(name) { console.log('opening', name); return name; }\nconst cached = open('dashboard');\nconst a = cached || open('login');\nconst b = open('dashboard') || open('login');\nconsole.log('a:', a, '| b:', b);\nconsole.log('the second call in each pair never ran');\n\nreal example:\ncache.get(key) || fetchAndCache(key) only hits the network on a cache miss, which is the entire point of the pattern and the reason the order matters."
+  },
+  {
+    "id": 28,
+    "question": "How do you turn a boolean into readable text for a test report?",
+    "answer": "Map the two booleans to strings, usually with a small lookup or a ternary. Printing the boolean itself wastes the reader's time because true tells nobody what happened.\n\ncode:\nconst results = { login: true, checkout: false, logout: true };\nconst words = { true: 'PASSED', false: 'FAILED' };\nObject.keys(results).forEach((name) => {\n  const value = results[name];\n  console.log(name.padEnd(10), words[String(value)]);\n});\nconsole.log('raw output would have been:', JSON.stringify(results));\n\nreal example:\nAn Allure step name built from a boolean reads checkout true, which tells nobody anything. PASSED or FAILED is what belongs in a report someone reads on a Monday morning."
+  },
+  {
+    "id": 29,
+    "question": "What does the in operator actually check inside an if, such as if ('id' in user)?",
+    "answer": "It asks whether the property exists on the object or somewhere on its prototype, even if the value is undefined. That is a different question from whether the value is truthy.\n\ncode:\nconst user = { name: 'Ana', id: undefined };\nconst keys = ['id', 'email'];\nkeys.forEach((k) => console.log(k + ' in user:', k in user, '| Boolean value:', Boolean(user[k])));\nconsole.log('own keys only:', Object.hasOwn(user, 'id'), Object.hasOwn(user, 'email'));\nif ('id' in user && user.id !== undefined) console.log('present and filled in');\nconsole.log('that line did not run, and this one always does');\n\nreal example:\nAn API returns a field with a null value. The in check says it exists, so the fixture builder stores null where the page code expects a string, and the test fails at render time."
+  },
+  {
+    "id": 30,
+    "question": "When should you deliberately leave the else off an if statement?",
+    "answer": "Leave it off when the if branch returns or throws. An else after a return is dead weight that the reader has to skip, and it pushes the real code to the right.\n\ncode:\nfunction describe(n) {\n  if (n < 0) return 'negative';\n  if (n === 0) return 'zero';\n  return 'positive';\n}\n[-1, 0, 7].forEach((n) => console.log(n, '->', describe(n)));\nfunction classify(role) {\n  if (role !== 'admin') return 'normal user';\n  else return 'admin';\n}\nconsole.log(classify('admin'), '- the else there is pointless');\n\nreal example:\nA helper ends every branch with return, so adding else after them just nests the code and hides the real exit points from anyone debugging a failed run."
+  },
+  {
+    "id": 31,
+    "question": "How do you convert a chain of ifs that all return into a Map?",
+    "answer": "Build the Map once, outside the function, then look the value up. Map keys are compared by identity, so a number and its text version stay separate entries.\n\ncode:\nconst feeByPlan = new Map([['free', 0], ['pro', 12], ['team', 30]]);\nfunction fee(plan) {\n  if (feeByPlan.has(plan)) return feeByPlan.get(plan);\n  throw new Error('unknown plan: ' + plan);\n}\n['free', 'team', 'gold'].forEach((p) => {\n  try { console.log(p, '->', fee(p)); }\n  catch (e) { console.log(p, '->', e.message); }\n});\nconsole.log('keys keep types apart, 12 is not the key \"12\":', feeByPlan.has(12));\n\nreal example:\nA pricing helper built from a Map keeps the number 12 and the text 12 apart, so a numeric plan id from JSON never silently matches a string key in the table."
+  },
+  {
+    "id": 32,
+    "question": "Why can a single if statement change the type of a variable without any warning?",
+    "answer": "The branch that assigns replaces the old value completely. The name stays the same, so nothing warns you that the value inside the branch is now a different type.\n\ncode:\nlet value = 10;\nif (value > 5) {\n  value = 'more than five';\n}\nconsole.log('value is now', typeof value, ':', value);\nfunction mixed(flag) {\n  let out = 0;\n  if (flag) out = 'none';\n  return out;\n}\nconsole.log('mixed(true):', typeof mixed(true), '| mixed(false):', typeof mixed(false));\n\nreal example:\nA counter declared as let 0 becomes a string on one branch, the next strict comparison against 0 fails, and the test never reaches its summary step."
+  },
+  {
+    "id": 33,
+    "question": "What does if (arr.length) evaluate to, and why does it skip the body for an empty array?",
+    "answer": "The condition is the number itself rather than a boolean. Zero is falsy, so the body is skipped, and any positive length runs it.\n\ncode:\nconst rows = [];\nconst users = ['Ana', 'Bo'];\nfunction summary(list) {\n  if (list.length) return 'rows to check: ' + list.length;\n  return 'nothing to do';\n}\nconsole.log(summary(rows));\nconsole.log(summary(users));\nconsole.log('direct truthiness:', Boolean(0), Boolean(3), Boolean(''), Boolean('0'));\n\nreal example:\nA teardown helper guards with if (page.elements.length) before closing them, so an already-closed page object is skipped instead of throwing on an empty list."
+  }
+]

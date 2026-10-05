@@ -9,7 +9,11 @@
     "start": "next start",
     "lint": "eslint",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d out --dotfiles"
+    "deploy": "gh-pages -d out --dotfiles",
+    "validate:curriculum": "node scripts/validate-curriculum.mjs",
+    "validate:qa-map": "node scripts/validate-qa-map.mjs",
+    "validate": "npm run validate:curriculum && npm run validate:qa-map",
+    "seed:banks": "node scripts/seed-banks.mjs"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.3",

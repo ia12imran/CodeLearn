@@ -27,7 +27,7 @@ export default function LangHomeClient({ lang }: { lang: Language }) {
 
   const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
   const totalQuiz = topics.reduce(
-    (a, t) => a + t.lessons.reduce((b, l) => b + l.quiz.length + (extraQuiz[`${t.slug}/${l.slug}`]?.length || 0), 0),
+    (a, t) => a + t.lessons.reduce((b, l) => b + (l.quiz?.length ?? 0) + (extraQuiz[`${t.slug}/${l.slug}`]?.length || 0), 0),
     0
   );
   const practiceExercises = getPracticeExercises(lang);

@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "question": "Write httpLabel(code) as a switch that returns OK for 200, Created for 201, No Content for 204, Not Found for 404, Server Error for 500 and unknown for anything else. Print the label for 200, 204, 500 and 418.",
+    "answer": "A switch compares the value with every case label in turn using strict equality. The default branch is the fallback that runs when no case matched.\n\ncode:\nfunction httpLabel(code) {\n  switch (code) {\n    case 200: return 'OK';\n    case 201: return 'Created';\n    case 204: return 'No Content';\n    case 404: return 'Not Found';\n    case 500: return 'Server Error';\n    default: return 'unknown';\n  }\n}\nconsole.log(httpLabel(200), httpLabel(204), httpLabel(500), httpLabel(418)); // OK No Content Server Error unknown\n\noutput:\nOK No Content Server Error unknown"
+  },
+  {
+    "id": 2,
+    "question": "Build the same status mapping as a lookup object called labels, then loop over the codes 200, 404, 500 and 418 and print each code with its label or unknown when the key is missing. Print one final line saying both approaches can drift apart.",
+    "answer": "An object lookup and a switch can both hold the mapping. The printed warning is the point: keeping two copies of the same table is how they drift apart.\n\ncode:\nconst labels = { 200: 'OK', 404: 'Not Found', 500: 'Server Error' };\nfor (const code of [200, 404, 500, 418]) {\n  console.log(code, labels[code] ?? 'unknown');\n}\nconsole.log('both approaches can drift apart');\n\noutput:\n200 OK\n404 Not Found\n500 Server Error\n418 unknown\nboth approaches can drift apart"
+  },
+  {
+    "id": 3,
+    "question": "Write dayName(index) as a switch that turns 0 into Sunday through 6 into Saturday and returns bad day for anything else. Print the names for 0, 3 and 6.",
+    "answer": "Cases run top to bottom until one matches. The default catches both numbers outside 0 to 6 and any other type.\n\ncode:\nfunction dayName(index) {\n  switch (index) {\n    case 0: return 'Sunday';\n    case 1: return 'Monday';\n    case 2: return 'Tuesday';\n    case 3: return 'Wednesday';\n    case 4: return 'Thursday';\n    case 5: return 'Friday';\n    case 6: return 'Saturday';\n    default: return 'bad day';\n  }\n}\nconsole.log(dayName(0), dayName(3), dayName(6)); // Sunday Wednesday Saturday\n\noutput:\nSunday Wednesday Saturday"
+  },
+  {
+    "id": 4,
+    "question": "Build a tiny test-run state machine. Start in idle, then run a switch over the command list ['start', 'pass'] that moves the run to running and then to passed, and print the state after every command.",
+    "answer": "A switch over the command drives the state, and the loop prints the state each turn so you can watch the machine walk through its steps.\n\ncode:\nlet state = 'idle';\nconst commands = ['start', 'pass'];\nfor (const command of commands) {\n  switch (command) {\n    case 'start': state = 'running'; break;\n    case 'fail': state = 'failed'; break;\n    case 'pass': state = state === 'running' ? 'passed' : 'ignored'; break;\n    default: console.log('unknown command', command);\n  }\n  console.log(command, '->', state);\n}\n\noutput:\nstart -> running\npass -> passed"
+  },
+  {
+    "id": 5,
+    "question": "Write calculate(op, a, b) as a switch on op that adds, subtracts, multiplies and divides, and returns the string unknown operator for anything else. Print all four results including the unknown operator case.",
+    "answer": "Each case returns straight away, so there is no shared statement to fall into by accident. Division by zero is handled inside its own case.\n\ncode:\nfunction calculate(op, a, b) {\n  switch (op) {\n    case '+': return a + b;\n    case '-': return a - b;\n    case '*': return a * b;\n    case '/': return b === 0 ? 'divide by zero' : a / b;\n    default: return 'unknown operator';\n  }\n}\nconsole.log(calculate('+', 6, 3), calculate('-', 6, 3), calculate('*', 6, 3)); // 3 3 18\nconsole.log(calculate('/', 6, 0), calculate('%', 6, 3)); // divide by zero unknown operator\n\noutput:\n9 3 18\ndivide by zero unknown operator"
+  },
+  {
+    "id": 6,
+    "question": "Write describeToken(kind) as a switch that returns bearer token, basic token, cookie session and no token for anything else. Print the answer for bearer, cookie and digest.",
+    "answer": "Match the string values exactly. The default branch catches token kinds your code has never heard of.\n\ncode:\nfunction describeToken(kind) {\n  switch (kind) {\n    case 'bearer': return 'bearer token';\n    case 'basic': return 'basic token';\n    case 'cookie': return 'cookie session';\n    default: return 'no token';\n  }\n}\nconsole.log(describeToken('bearer'), describeToken('cookie'), describeToken('digest'));\n\noutput:\nbearer token cookie session no token"
+  },
+  {
+    "id": 7,
+    "question": "Write quarterFor(month) as a switch where cases 1 to 3 return Q1, 4 to 6 return Q2, 7 to 9 return Q3 and 10 to 12 return Q4, with bad month as the default. Print the quarter for 1, 5, 11 and 13.",
+    "answer": "Stack several case labels on top of one another so they all jump to the same return. That is grouped matching, not fall-through.\n\ncode:\nfunction quarterFor(month) {\n  switch (month) {\n    case 1: case 2: case 3: return 'Q1';\n    case 4: case 5: case 6: return 'Q2';\n    case 7: case 8: case 9: return 'Q3';\n    case 10: case 11: case 12: return 'Q4';\n    default: return 'bad month';\n  }\n}\nconsole.log(quarterFor(1), quarterFor(5), quarterFor(11), quarterFor(13));\n\noutput:\nQ1 Q2 Q4 bad month"
+  },
+  {
+    "id": 8,
+    "question": "Write describeType(value) as a switch on typeof value with a case per typeof name and a default for anything unexpected. Run it over the values 'text', 42, true, null and an array, printing one line each.",
+    "answer": "typeof always returns one of a small set of strings, so a switch over it is a tidy way to name them. An array reports object, which is the surprise worth showing.\n\ncode:\nfunction describeType(value) {\n  switch (typeof value) {\n    case 'string': return 'a string';\n    case 'number': return 'a number';\n    case 'boolean': return 'a boolean';\n    case 'object': return Array.isArray(value) ? 'an array' : 'an object';\n    default: return 'something else';\n  }\n}\nfor (const value of ['text', 42, true, null, [1]]) console.log(typeof value, describeType(value));\n\noutput:\nstring a string\nnumber a number\nboolean a boolean\nobject an object\nobject an array"
+  },
+  {
+    "id": 9,
+    "question": "Write daysInMonth(month, leap) as a switch over the month number that returns the right length, using 29 for February when leap is true, and bad month for numbers outside 1 to 12. Print the length for February leap and February not leap.",
+    "answer": "One case per month keeps the table readable. February reads the leap flag from inside its own case.\n\ncode:\nfunction daysInMonth(month, leap) {\n  switch (month) {\n    case 1: case 3: case 5: case 7: case 8: case 10: case 12: return 31;\n    case 4: case 6: case 9: case 11: return 30;\n    case 2: return leap ? 29 : 28;\n    default: return 'bad month';\n  }\n}\nconsole.log(daysInMonth(2, true), daysInMonth(2, false), daysInMonth(4), daysInMonth(13));\n\noutput:\n29 28 30 bad month"
+  },
+  {
+    "id": 10,
+    "question": "Write gradePoint(letter) as a switch that maps A to 4, B to 3, C to 2, D to 1 and F to 0, and returns the number -1 for any other letter. Print the points for A, C, F and X.",
+    "answer": "The switch has no default here on purpose: the final return covers every unlisted value, which keeps the valid cases short.\n\ncode:\nfunction gradePoint(letter) {\n  switch (letter) {\n    case 'A': return 4;\n    case 'B': return 3;\n    case 'C': return 2;\n    case 'D': return 1;\n    case 'F': return 0;\n  }\n  return -1;\n}\nconsole.log(gradePoint('A'), gradePoint('C'), gradePoint('F'), gradePoint('X'));\n\noutput:\n4 2 0 -1"
+  },
+  {
+    "id": 11,
+    "question": "Predict the output: a switch is given the string '2' and has cases for the numbers 2 and 3 plus a default. Print the default message and then the result with the number 2 to show the difference.",
+    "answer": "switch uses strict equality, and a string is never strictly equal to a number, so the string skips every numeric case and lands on default.\n\ncode:\nfunction classify(input) {\n  switch (input) {\n    case 2: return 'number two';\n    case 3: return 'number three';\n    default: return 'default';\n  }\n}\nconsole.log(classify('2')); // default\nconsole.log(classify(2)); // number two\n\noutput:\ndefault\nnumber two"
+  },
+  {
+    "id": 12,
+    "question": "Predict the output: a switch declares let doubled inside case 1 and a second case tries to read doubled without declaring it. Show the program and print the line that reads doubled after the case that declares it.",
+    "answer": "Every case shares one block scope, so a let declared in one case is normally visible in another. Declare it before the switch when you want that, otherwise wrap the case body in braces.\n\ncode:\nlet doubled;\nswitch (1) {\n  case 1:\n    doubled = 'from case one';\n    break;\n  case 2:\n    console.log(doubled);\n    break;\n}\nconsole.log(doubled); // from case one\n\noutput:\nfrom case one"
+  },
+  {
+    "id": 13,
+    "question": "Write handleEvent(event) as a switch on event.type with a nested switch on event.action for a click action that opens or closes a panel and a key action that saves or ignores. Print the result for a click open and a key flush.",
+    "answer": "The outer switch picks the kind of event, then an inner switch picks what happened inside it. Two switches read better than an if with a flag.\n\ncode:\nfunction handleEvent(event) {\n  switch (event.type) {\n    case 'click':\n      switch (event.action) {\n        case 'open': return 'panel opened';\n        case 'close': return 'panel closed';\n        default: return 'nothing to click';\n      }\n    case 'key':\n      switch (event.action) {\n        case 'save': return 'saved';\n        default: return 'ignored key';\n      }\n    default:\n      return 'unhandled event';\n  }\n}\nconsole.log(handleEvent({ type: 'click', action: 'open' })); // panel opened\nconsole.log(handleEvent({ type: 'key', action: 'flush' })); // ignored key\n\noutput:\npanel opened\nignored key"
+  },
+  {
+    "id": 14,
+    "question": "Write nextState(state, event) as a switch on event that returns running after start, passed or failed after finish depending on state, idle after reset, and the same state for anything else. Walk the steps start, finish, reset with a loop and print the state each time.",
+    "answer": "One switch holds every transition. The loop feeds it a list of events, which is exactly how you drive a state machine from test code.\n\ncode:\nfunction nextState(state, event) {\n  switch (event) {\n    case 'start': return 'running';\n    case 'finish': return state === 'running' ? 'passed' : 'idle';\n    case 'reset': return 'idle';\n    default: return state;\n  }\n}\nlet state = 'idle';\nfor (const event of ['start', 'finish', 'reset']) {\n  state = nextState(state, event);\n  console.log(event, '->', state);\n}\n\noutput:\nstart -> running\nfinish -> passed\nreset -> idle"
+  },
+  {
+    "id": 15,
+    "question": "Write gradeBand(gpa) using switch with a condition of true, so you can compare ranges, returning excellent for 3.5 and up, good for 3 and up, ok for 2 and up and needs work below that. Print the band for 3.7 and 1.8.",
+    "answer": "A plain switch can only match exact values. Putting true in the switch position turns every case label into a normal condition.\n\ncode:\nfunction gradeBand(gpa) {\n  switch (true) {\n    case gpa >= 3.5: return 'excellent';\n    case gpa >= 3: return 'good';\n    case gpa >= 2: return 'ok';\n    default: return 'needs work';\n  }\n}\nconsole.log(gradeBand(3.7), gradeBand(1.8)); // excellent needs work\n\noutput:\nexcellent needs work"
+  },
+  {
+    "id": 16,
+    "question": "Write fizzbuzzSwitch(n) as a switch on n % 15 with cases for 0 returning FizzBuzz, plus separate switches' worth of handling for multiples of 3 and 5. Keep it to one switch by switching on the string of the remainder, and print the labels for 3, 5 and 15.",
+    "answer": "Switch on the string remainder so 0 can be matched. Anything other than 0 falls to default, which prints the number itself.\n\ncode:\nfunction fizzbuzzSwitch(n) {\n  const both = n % 15 === 0;\n  const three = n % 3 === 0;\n  const five = n % 5 === 0;\n  switch (String(both || (three && five))) {\n    case 'true': return 'FizzBuzz';\n    default:\n      if (three) return 'Fizz';\n      if (five) return 'Buzz';\n      return String(n);\n  }\n}\nconsole.log([3, 5, 15].map(fizzbuzzSwitch).join(' ')); // Fizz Buzz FizzBuzz\n\noutput:\nFizz Buzz FizzBuzz"
+  },
+  {
+    "id": 17,
+    "question": "Predict the output: a switch is given the number 0 and its first case is the empty string. Print what happens, then print the result for the string zero-length value so the two differ clearly.",
+    "answer": "The number 0 is never strictly equal to the empty string, so default runs. This is the same strict equality rule that catches the switch on null problem.\n\ncode:\nfunction describe(input) {\n  switch (input) {\n    case '': return 'empty string';\n    case 0: return 'the number zero';\n    default: return 'default';\n  }\n}\nconsole.log(describe(0)); // default\nconsole.log(describe('')); // empty string\n\noutput:\nthe number zero\nempty string"
+  },
+  {
+    "id": 18,
+    "question": "Write flagLabel(flag) as a switch with a case for true, a case for false and a default for anything that is neither, using two nested switches so undefined and null reach the default. Print the label for true, false and undefined.",
+    "answer": "Two switches let you test the boolean first and then the reason it is not a boolean. Splitting them keeps each switch short.\n\ncode:\nfunction flagLabel(flag) {\n  switch (flag) {\n    case true: return 'on';\n    case false: return 'off';\n    default:\n      switch (flag) {\n        case undefined: return 'not set';\n        case null: return 'null';\n        default: return 'not a flag';\n      }\n  }\n}\nconsole.log(flagLabel(true), flagLabel(false), flagLabel(undefined));\n\noutput:\non off not set"
+  },
+  {
+    "id": 19,
+    "question": "Write permissionsFor(role) as a switch returning the array of allowed actions for admin, editor, viewer and nobody, with nobody getting an empty array. Print each role with its actions joined by a comma.",
+    "answer": "Each case returns its own array. Building the array inside the case means each caller gets a fresh one instead of a shared value.\n\ncode:\nfunction permissionsFor(role) {\n  switch (role) {\n    case 'admin': return ['read', 'write', 'delete'];\n    case 'editor': return ['read', 'write'];\n    case 'viewer': return ['read'];\n    case 'nobody': return [];\n    default: return [];\n  }\n}\nfor (const role of ['admin', 'editor', 'viewer', 'nobody']) {\n  console.log(role, permissionsFor(role).join(',') || '(none)');\n}\n\noutput:\nadmin read,write,delete\neditor read,write\nviewer read\nnobody (none)"
+  },
+  {
+    "id": 20,
+    "question": "Write formatMoney(cents, currency) as a switch on the currency code that divides by 100 for usd, does nothing for eur and throws the string unsupported for anything else. Print the two results for 1250 and 1250 euro.",
+    "answer": "Switch on the unit, then do the maths in each branch. The default throws so an unknown currency can never pass silently.\n\ncode:\nfunction formatMoney(cents, currency) {\n  switch (currency) {\n    case 'usd': return '$' + (cents / 100).toFixed(2);\n    case 'eur': return cents.toFixed(2) + ' EUR';\n    default: throw new Error('unsupported');\n  }\n}\nconsole.log(formatMoney(1250, 'usd')); // $12.50\nconsole.log(formatMoney(1250, 'eur')); // 1250.00 EUR\ntry {\n  formatMoney(1250, 'gbp');\n} catch (err) {\n  console.log('threw', err.message);\n}\n\noutput:\n$12.50\n1250.00 EUR\nthrew unsupported"
+  },
+  {
+    "id": 21,
+    "question": "Predict the output: a for loop over 1 to 3 has a switch on the number with a break inside each case. Print what the program prints and explain why the break leaves the switch but not the loop.",
+    "answer": "break always jumps to the end of the nearest breakable statement, which here is the switch. The loop keeps going, so the log after the switch runs three times.\n\ncode:\nfor (let n = 1; n <= 3; n++) {\n  switch (n) {\n    case 1: console.log('one'); break;\n    case 2: console.log('two'); break;\n    default: console.log('many');\n  }\n  console.log('end of turn', n);\n}\n\noutput:\none\nend of turn 1\ntwo\nend of turn 2\nmany\nend of turn 3"
+  },
+  {
+    "id": 22,
+    "question": "Write httpClass(code) as a switch on Math.floor(code / 100) that returns success for 2, redirect for 3, client error for 4, server error for 5 and unknown for anything else. Print the class for 200, 404 and 700.",
+    "answer": "Divide first, then switch on the family digit. One case per family covers hundreds of status codes.\n\ncode:\nfunction httpClass(code) {\n  switch (Math.floor(code / 100)) {\n    case 2: return 'success';\n    case 3: return 'redirect';\n    case 4: return 'client error';\n    case 5: return 'server error';\n    default: return 'unknown';\n  }\n}\nconsole.log(httpClass(200), httpClass(404), httpClass(700)); // success client error unknown\n\noutput:\nsuccess client error unknown"
+  },
+  {
+    "id": 23,
+    "question": "Write quarterByName(name) as a switch on the first letter of a quarter name, mapping Q to quarter 1 to 4 by reading the number, and unknown for any other input. Print the quarter for Q1, Q4 and X9.",
+    "answer": "A switch on one letter keeps the cases short. The value after the letter is taken from the rest of the string and validated separately.\n\ncode:\nfunction quarterByName(name) {\n  switch (name[0]) {\n    case 'Q': {\n      const number = Number(name.slice(1));\n      return number >= 1 && number <= 4 ? 'quarter ' + number : 'unknown';\n    }\n    default:\n      return 'unknown';\n  }\n}\nconsole.log(quarterByName('Q1'), quarterByName('Q4'), quarterByName('Q9'), quarterByName('X9'));\n\noutput:\nquarter 1 quarter 4 unknown unknown"
+  },
+  {
+    "id": 24,
+    "question": "Write seasonFor(month) as a switch where cases 12, 1 and 2 return winter, 3 to 5 return spring, 6 to 8 return summer and 9 to 11 return autumn, with an unknown default. Print the season for 1, 7 and 13.",
+    "answer": "Stack the case labels so a season that wraps the year end still shares one return. Check the wrap-around months first.\n\ncode:\nfunction seasonFor(month) {\n  switch (month) {\n    case 12: case 1: case 2: return 'winter';\n    case 3: case 4: case 5: return 'spring';\n    case 6: case 7: case 8: return 'summer';\n    case 9: case 10: case 11: return 'autumn';\n    default: return 'unknown';\n  }\n}\nconsole.log(seasonFor(1), seasonFor(7), seasonFor(13)); // winter summer unknown\n\noutput:\nwinter summer unknown"
+  },
+  {
+    "id": 25,
+    "question": "Build a command loop that reads from the array ['add 3', 'list', 'quit'] and uses a switch on the first word of each command to add a number to a total, print the total, or stop the loop. Print each line the loop produces.",
+    "answer": "Split the command into a verb and its argument, then let the switch decide. Setting a flag for quit is what ends the loop cleanly.\n\ncode:\nconst commands = ['add 3', 'add 4', 'list', 'quit'];\nlet total = 0;\nlet running = true;\nfor (const command of commands) {\n  const [verb, arg] = command.split(' ');\n  switch (verb) {\n    case 'add': total += Number(arg); break;\n    case 'list': console.log('total', total); break;\n    case 'quit': running = false; break;\n    default: console.log('unknown', verb);\n  }\n  if (!running) break;\n}\nconsole.log('final total', total);\n\noutput:\ntotal 7\nfinal total 7"
+  },
+  {
+    "id": 26,
+    "question": "Write speedLimit(zone) as a switch that returns 30 for slow, 50 for city, 70 for road and 130 for motorway, and unknown for anything else. Print the limits for slow, road and parking.",
+    "answer": "A switch on a string key is the natural shape for a lookup like this. Keep the default so bad data shows up.\n\ncode:\nfunction speedLimit(zone) {\n  switch (zone) {\n    case 'slow': return 30;\n    case 'city': return 50;\n    case 'road': return 70;\n    case 'motorway': return 130;\n    default: return 'unknown';\n  }\n}\nconsole.log(speedLimit('slow'), speedLimit('road'), speedLimit('parking'));\n\noutput:\n30 70 unknown"
+  },
+  {
+    "id": 27,
+    "question": "Write summariseLog(lines) that switches on each line's level of info, warn or error, counts them and prints the three counts plus a total. Use one switch inside the loop over the sample lines.",
+    "answer": "The switch does the routing, the loop does the counting. One switch per line beats an if chain that grows with every new level.\n\ncode:\nconst lines = ['info ready', 'error timeout', 'info step 2', 'warn slow', 'error crash'];\nconst counts = { info: 0, warn: 0, error: 0 };\nfor (const line of lines) {\n  switch (line.split(' ')[0]) {\n    case 'info': counts.info++; break;\n    case 'warn': counts.warn++; break;\n    case 'error': counts.error++; break;\n    default: console.log('skipped', line);\n  }\n}\nconsole.log('info', counts.info, 'warn', counts.warn, 'error', counts.error);\nconsole.log('total', lines.length);\n\noutput:\ninfo 2 warn 1 error 2\ntotal 5"
+  },
+  {
+    "id": 28,
+    "question": "Write menu(order) as a switch that totals an order string like 'pizza 12' or 'salad 8', returns unknown item for anything it does not recognise, and ignores an empty string. Print the total for pizza, salad and sushi.",
+    "answer": "One case per item with the price written next to it. Returning unknown item keeps the caller in control instead of crashing.\n\ncode:\nfunction menu(order) {\n  if (order === '') return 0;\n  const [item, price] = order.split(' ');\n  switch (item) {\n    case 'pizza': return Number(price) * 1;\n    case 'salad': return Number(price);\n    case 'coffee': return 3;\n    default: return 'unknown item';\n  }\n}\nconsole.log(menu('pizza 12'), menu('salad 8'), menu('sushi 4'));\n\noutput:\n12 8 unknown item"
+  },
+  {
+    "id": 29,
+    "question": "Predict the output: a switch is given null and has separate cases for null and undefined, each with its own message and a default. Print the message for null and for undefined.",
+    "answer": "null and undefined are only loosely equal to each other, so a switch with strict matching sends each one to its own case.\n\ncode:\nfunction describeMissing(value) {\n  switch (value) {\n    case null: return 'null is present';\n    case undefined: return 'undefined is present';\n    default: return 'a real value';\n  }\n}\nconsole.log(describeMissing(null)); // null is present\nconsole.log(describeMissing(undefined)); // undefined is present\n\noutput:\nnull is present\nundefined is present"
+  },
+  {
+    "id": 30,
+    "question": "Write retryPlan(attempt) as a switch on the attempt number that returns immediate for 1, waits 1s for 2, waits 5s for 3 and stops for 4 and above. Print the plan for 1, 2, 3 and 5.",
+    "answer": "Cases 1 to 3 map one to one, and the default covers everything larger so new callers do not need a code change.\n\ncode:\nfunction retryPlan(attempt) {\n  switch (attempt) {\n    case 1: return 'retry immediately';\n    case 2: return 'wait 1s';\n    case 3: return 'wait 5s';\n    default: return 'stop retrying';\n  }\n}\nconsole.log(retryPlan(1), '|', retryPlan(2), '|', retryPlan(3), '|', retryPlan(5));\n\noutput:\nretry immediately | wait 1s | wait 5s | stop retrying"
+  },
+  {
+    "id": 31,
+    "question": "Write letterCount(text) that switches on each character to count vowels in one case group and consonants in another, ignoring spaces with a third group. Print the counts for the sentence the quick brown fox.",
+    "answer": "A switch per character with grouped cases keeps the vowel and consonant lists in one readable place instead of two big if conditions.\n\ncode:\nconst text = 'the quick brown fox';\nlet vowels = 0;\nlet consonants = 0;\nfor (const char of text) {\n  switch (char.toLowerCase()) {\n    case 'a': case 'e': case 'i': case 'o': case 'u':\n      vowels++;\n      break;\n    case ' ':\n      break;\n    default:\n      consonants++;\n  }\n}\nconsole.log('vowels', vowels, 'consonants', consonants);\n\noutput:\nvowels 5 consonants 11"
+  },
+  {
+    "id": 32,
+    "question": "Write roleLabel(user) as a switch on user.type that returns different labels for admin, member and guest, and unknown for a missing type. Print the labels for an admin, a guest and an object with no type.",
+    "answer": "Switching on one field of the object is enough. The default protects you from test data that forgot the field.\n\ncode:\nfunction roleLabel(user) {\n  switch (user.type) {\n    case 'admin': return 'Administrator';\n    case 'member': return 'Member';\n    case 'guest': return 'Guest';\n    default: return 'unknown';\n  }\n}\nconsole.log(roleLabel({ type: 'admin' })); // Administrator\nconsole.log(roleLabel({ type: 'guest' }), '|', roleLabel({})); // Guest | unknown\n\noutput:\nAdministrator\nGuest | unknown"
+  },
+  {
+    "id": 33,
+    "question": "Write factorFor(value) as a switch on the string length that returns none for 0, one for 1, many for 2 and a big pile for 3 or more. Run it over the strings '', 'x', 'xy' and 'xyz' and print one line each.",
+    "answer": "Stack the small cases and let the default take everything else. The switch is on a computed string, which is still just a value.\n\ncode:\nfunction factorFor(value) {\n  switch (String(value.length)) {\n    case '0': return 'none';\n    case '1': return 'one';\n    case '2': return 'many';\n    default: return 'a big pile';\n  }\n}\nfor (const value of ['', 'x', 'xy', 'xyz']) console.log(JSON.stringify(value), factorFor(value));\n\noutput:\n\"\" none\n\"x\" one\n\"xy\" many\n\"xyz\" a big pile"
+  },
+  {
+    "id": 34,
+    "question": "Predict the output: a switch on the string abc has cases for abc, ab and a with break after each, and a default. Show the switch and print what it returns, then print what it returns with the input ab.",
+    "answer": "Matching stops at the first case that equals the value, so a and ab are never reached. Order the specific labels first when a switch sits on the same prefix.\n\ncode:\nfunction matchPrefix(input) {\n  switch (input) {\n    case 'abc': return 'three letters';\n    case 'ab': return 'two letters';\n    case 'a': return 'one letter';\n    default: return 'no match';\n  }\n}\nconsole.log(matchPrefix('abc')); // three letters\nconsole.log(matchPrefix('ab')); // two letters\nconsole.log(matchPrefix('zz')); // no match\n\noutput:\nthree letters\ntwo letters\nno match"
+  },
+  {
+    "id": 35,
+    "question": "Write fileTypeFor(extension) as a switch on the file extension without the dot that returns text, image, archive or unknown. Print the type for png, zip, md and exe.",
+    "answer": "Normalise the input before switching so a leading dot or capital letter does not break the lookup.\n\ncode:\nfunction fileTypeFor(extension) {\n  switch (extension.replace('.', '').toLowerCase()) {\n    case 'txt': case 'md': return 'text';\n    case 'png': case 'jpg': return 'image';\n    case 'zip': case 'gz': return 'archive';\n    default: return 'unknown';\n  }\n}\nconsole.log(fileTypeFor('png'), fileTypeFor('zip'), fileTypeFor('md'), fileTypeFor('exe'));\n\noutput:\nimage archive text unknown"
+  },
+  {
+    "id": 36,
+    "question": "Write stateFromResponse(response) with a switch that returns offline when ok is false and status is 0, forbidden for 401 or 403, missing for 404, too many requests for 429, server error for 500 and above, and ok otherwise. Print the answer for 0, 403, 429 and 204.",
+    "answer": "A switch with a condition of true turns the response checks into readable case labels. Put the most specific failures first.\n\ncode:\nfunction stateFromResponse(response) {\n  switch (true) {\n    case !response.ok && response.status === 0: return 'offline';\n    case response.status === 401 || response.status === 403: return 'forbidden';\n    case response.status === 404: return 'missing';\n    case response.status === 429: return 'too many requests';\n    case response.status >= 500: return 'server error';\n    default: return 'ok';\n  }\n}\nconsole.log(stateFromResponse({ ok: false, status: 0 })); // offline\nconsole.log(stateFromResponse({ ok: false, status: 403 }), stateFromResponse({ ok: false, status: 429 }));\n\noutput:\noffline\nforbidden too many requests"
+  }
+]

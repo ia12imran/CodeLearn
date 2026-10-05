@@ -1,0 +1,172 @@
+[
+  {
+    "id": 1,
+    "question": "How do you write a function as an arrow function?",
+    "answer": "You put the parameters, then a fat arrow, then the body. There is no function keyword and no return keyword needed for a one-line body.\n\ncode:\nconst double = (n) => n * 2;\nconst shout = (text) => {\n  return text.toUpperCase();\n};\nconsole.log(double(4));\nconsole.log(shout('go'));\n\nreal example:\nMost helpers in a Playwright spec are arrow functions like const login = async (page, user) => {} because they never need their own this."
+  },
+  {
+    "id": 2,
+    "question": "When can you drop the parentheses around a single arrow function parameter?",
+    "answer": "Only when there is exactly one parameter and it has no default, no destructuring and no rest. With zero parameters, or two parameters, or any decoration, the parentheses are required.\n\ncode:\nconst one = (n) => n + 1;\nconst alsoOne = n => n + 1;\nconst none = () => 'nothing in, one value out';\nconst two = (a, b) => a + b;\nconsole.log(one(1), alsoOne(1));\nconsole.log(none());\nconsole.log(two(1, 2));\n\nreal example:\nA tiny helper written as const slug = (s) => s.toLowerCase() still needs its parens once someone adds a second parameter later."
+  },
+  {
+    "id": 3,
+    "question": "What is the one real behavioural difference between an arrow function and a normal function?",
+    "answer": "It is this. A normal function gets its own this, set by whoever calls it, while an arrow has none and borrows the this of the code around it. Everything else you have heard, arguments, new, prototype, hoisting, comes back to that one fact.\n\ncode:\nconst counter = {\n  count: 7,\n  readNormal() {\n    return this.count;\n  },\n  readArrow: () => {\n    return this.count;\n  },\n};\nfunction applyTo(fn) {\n  return fn.call(counter);\n}\nconsole.log(applyTo(counter.readNormal));\nconsole.log(typeof applyTo(counter.readArrow));\n\nreal example:\nA page object method that reads this.page has to be a normal function or an arrow with no this, otherwise the test runner gets undefined instead of the page."
+  },
+  {
+    "id": 4,
+    "question": "Why do arrow functions have no this of their own?",
+    "answer": "Because this is not a normal variable, it is filled in by the engine at call time. An arrow function has no call site to read this from, so it looks one scope outwards and borrows whatever it finds there.\n\ncode:\nfunction normal() {\n  return this && this.tag;\n}\nconst arrow = () => (this && this.tag) || 'borrowed from the file';\nconst obj = { tag: 'widget', normal, arrow };\nconsole.log(obj.normal());\nconsole.log(obj.arrow());\nconsole.log(obj.normal() === obj.arrow());\n\nreal example:\nInside a describe block an arrow callback sees the file's this, which is why helpers written as arrows cannot reach the fixture object they are nested in."
+  },
+  {
+    "id": 5,
+    "question": "Why can an arrow function not use arguments?",
+    "answer": "arguments is filled in by the engine the same way this is, and an arrow has no call of its own to be numbered. If you need the list of arguments, use a rest parameter instead.\n\ncode:\nconst rest = (...args) => args.length;\nfunction normal() {\n  return arguments.length;\n}\nconsole.log(rest(1, 2, 3));\nconsole.log(normal(1, 2, 3));\ntry {\n  const bad = () => arguments[0];\n  console.log(bad());\n} catch (err) {\n  console.log(err.constructor.name);\n}\n\nreal example:\nA wrapper that logs every call needs the real argument list, so it uses (...args) instead of arguments, which arrow functions do not have."
+  },
+  {
+    "id": 6,
+    "question": "Why can you not use new with an arrow function?",
+    "answer": "new needs to give the function a this to build an object with. An arrow function refuses to be given a this, so there is nothing to construct and the call is a TypeError.\n\ncode:\nconst makeWidget = (id) => ({ id });\ntry {\n  new makeWidget(1);\n} catch (err) {\n  console.log(err.constructor.name + ': ' + err.message);\n}\nconsole.log(makeWidget(1));\n\nreal example:\nWrapping a constructor like function Page() in an arrow function breaks every new Page() in the suite with a not-a-constructor TypeError."
+  },
+  {
+    "id": 7,
+    "question": "Why does an arrow function not have a prototype property?",
+    "answer": "The prototype object is what new uses to look up inherited methods, and new is exactly what an arrow function refuses. A normal function also has prototype.constructor pointing back at itself.\n\ncode:\nfunction normal() {}\nconst arrow = () => {};\nconsole.log(normal.prototype.constructor === normal);\nconsole.log(arrow.prototype);\nconsole.log(typeof normal, typeof arrow);\n\nreal example:\nCode that does Object.getPrototypeOf(fn).constructor to rebuild a function breaks when fn is an arrow, which is why class methods are preferred over arrows for that."
+  },
+  {
+    "id": 8,
+    "question": "Why can you not write yield inside an arrow function?",
+    "answer": "A generator needs to pause in the middle of its own body, which means it needs its own execution frame and its own this and arguments. An arrow has none of those, so yield is a SyntaxError.\n\ncode:\nfunction* counter() {\n  yield 1;\n  yield 2;\n}\nconst notAGenerator = () => [1, 2, 3];\nconsole.log([...counter()]);\nconsole.log(notAGenerator());\nconsole.log(typeof counter().next);\n\nreal example:\nA pagination helper that walks a cursor with a generator must be a function declaration, an arrow version fails to parse the whole file."
+  },
+  {
+    "id": 9,
+    "question": "When would you deliberately NOT use an arrow function?",
+    "answer": "Whenever you need your own this or your own arguments: object methods, prototype methods, class methods, event handler callbacks that need the element, and anything you want to call with new.\n\ncode:\nfunction Timer() {\n  this.seconds = 0;\n}\nTimer.prototype.tick = function () {\n  this.seconds += 1;\n  return this.seconds;\n};\nconst t = new Timer();\nconsole.log(t.tick(), t.seconds);\nconst broken = function () {\n  return this.seconds;\n};\nconsole.log(typeof broken());\n\nreal example:\nThe page object that drives Playwright must be a class or a normal function, because every action inside it reads this.page."
+  },
+  {
+    "id": 10,
+    "question": "Why does an arrow function break when you put it in an object as a method that needs this?",
+    "answer": "The arrow function was written outside the object literal, so its this is the surrounding file, not the object. The object property is just storage, it does not change which this an arrow looks at.\n\ncode:\nconst widget = {\n  label: 'cart',\n  bad: () => typeof this,\n  good() {\n    return this.label;\n  },\n};\nconsole.log(widget.good());\nconsole.log(widget.bad() === 'object' || widget.bad() === 'undefined');\nconst arrowAsMethod = widget.bad;\nconsole.log(arrowAsMethod === widget.bad);\n\nreal example:\nA helper object with add: () => this.items.push(x) silently pushes onto the wrong place, and the test fails only when the data is empty."
+  },
+  {
+    "id": 11,
+    "question": "Does an arrow function get a name, and where does that name come from?",
+    "answer": "Yes. An arrow function has no name of its own, but if you store it in a const or a property, the engine copies that name onto the function, which is what you see in stack traces.\n\ncode:\nconst named = () => 'stored in a const';\nconst holder = { onClick: () => 'stored as a property' };\nconsole.log(named.name);\nconsole.log(holder.onClick.name);\nconsole.log((() => {}).name);\n\nreal example:\nNaming the const that holds an arrow function is what makes a Playwright trace readable, because the frame shows the const name."
+  },
+  {
+    "id": 12,
+    "question": "Why do arrow functions not hoist the way function declarations do?",
+    "answer": "An arrow function is a value assigned to a variable, and a const assignment is not hoisted as a usable function. Calling it above its own line throws a ReferenceError from the temporal dead zone.\n\ncode:\ntry {\n  early();\n} catch (err) {\n  console.log(err.constructor.name);\n}\nfunction early() {\n  return 'declaration';\n}\nconst late = () => 'arrow';\nconsole.log(early(), late());\n\nreal example:\nA spec that calls a const arrow helper from a describe body declared below it fails at collection time, before any test runs."
+  },
+  {
+    "id": 13,
+    "question": "Can you reassign an arrow function, or change the variable that holds it?",
+    "answer": "You can point the variable at a different function at any time, exactly like any other const variable. You cannot change the arrow function itself, and you cannot add new behaviour to it.\n\ncode:\nlet current = () => 'version one';\nconsole.log(current());\ncurrent = () => 'version two';\nconsole.log(current());\nconst holder = { run: () => 'stored in an object' };\nholder.run = () => 'replaced in the object';\nconsole.log(holder.run());\n\nreal example:\nSwapping the test-data generator between runs is done by reassigning the variable that holds the arrow function, which works fine."
+  },
+  {
+    "id": 14,
+    "question": "Do call, apply and bind work on an arrow function?",
+    "answer": "They run the function, but they cannot change this, because the arrow has no this to change. To use a chosen this, write a normal function and bind it.\n\ncode:\nconst owner = { name: 'cart' };\nconst arrow = () => typeof this;\nfunction normal() {\n  return this.name;\n}\nconsole.log(arrow.call(owner));\nconsole.log(normal.call(owner));\nconst bound = normal.bind(owner);\nconsole.log(bound());\n\nreal example:\nA table row handler that needs the row's data uses a normal function, because bind on an arrow function will not give it the row."
+  },
+  {
+    "id": 15,
+    "question": "Why does an arrow function stored in a class field still work when you pass it as a bare callback?",
+    "answer": "The arrow is created inside the constructor, so the this it borrows is the instance being built, and it keeps that reference. Pull a normal method off the object instead and this is lost, which is the difference the arrow was hiding.\n\ncode:\nclass Checkout {\n  constructor(total) {\n    this.total = total;\n    this.getTotal = () => this.total;\n  }\n  withTax(rate) {\n    return this.total * (1 + rate);\n  }\n}\nconst c = new Checkout(100);\nconst asCallback = c.getTotal;\nconsole.log(asCallback());\nconsole.log(c.withTax(0.2));\nconsole.log(c.getTotal === c.getTotal);\n\nreal example:\nA Playwright page object class stores bound actions as arrow fields so they can be passed as bare callbacks without losing the page."
+  },
+  {
+    "id": 16,
+    "question": "When do you need curly braces in an arrow function?",
+    "answer": "Whenever you want more than one statement, or no return value, or an explicit return, or a block that declares its own variables. The braces also make the function body a normal block you can put new lines in.\n\ncode:\nconst short = (n) => n * 2;\nconst block = (n) => {\n  const doubled = n * 2;\n  return doubled + 1;\n};\nconst silent = (n) => {\n  n * 2;\n};\nconsole.log(short(2));\nconsole.log(block(2));\nconsole.log(silent(2));\n\nreal example:\nA multi-step login helper needs braces, because the arrow body in a one-liner form can only be a single expression."
+  },
+  {
+    "id": 17,
+    "question": "Why does an arrow function returning an object literal need parentheses around the braces?",
+    "answer": "The parser reads a bare { after the arrow as the start of the function body, not as an object. Wrapping the object in parentheses makes it a single expression, so you can return it.\n\ncode:\nconst makeUser = (name) => ({ name, role: 'tester' });\nconst makeUserWithBody = (name) => {\n  return { name, role: 'tester' };\n};\nconsole.log(makeUser('Ana'));\nconsole.log(makeUserWithBody('Bo'));\nconsole.log(typeof makeUser('Ana'));\n\nreal example:\nA tiny factory returning { page, context } on one line needs those parens, without them the file will not parse."
+  },
+  {
+    "id": 18,
+    "question": "Is an arrow function a closure, and what does it hold on to?",
+    "answer": "Yes. An arrow function that reads a variable from an outer scope keeps that scope alive as long as the arrow exists, which is how small helpers remember state between calls.\n\ncode:\nfunction makeCounter() {\n  let count = 0;\n  const next = () => {\n    count += 1;\n    return count;\n  };\n  return next;\n}\nconst first = makeCounter();\nconst second = makeCounter();\nconsole.log(first(), first(), first());\nconsole.log(second());\n\nreal example:\nA retry helper built as an arrow over a counter resets per test as long as each test calls the factory again."
+  },
+  {
+    "id": 19,
+    "question": "How does an arrow function behave as a callback in map, filter and reduce?",
+    "answer": "Those methods call your function with a this of undefined, which is what arrow functions assume anyway, so an arrow is the shortest option there. The only difference is that the arrow cannot use arguments, so use the parameters you are given.\n\ncode:\nconst prices = [10, 20, 30, 5];\nconst doubled = prices.map((p) => p * 2);\nconst cheap = prices.filter((p) => p < 20);\nconst total = prices.reduce((acc, p) => acc + p, 0);\nconsole.log(doubled);\nconsole.log(cheap);\nconsole.log(total);\n\nreal example:\nBuilding the expected price list for an API assertion with map and an arrow keeps the test readable in one line per case."
+  },
+  {
+    "id": 20,
+    "question": "How do the map, filter and reduce callbacks differ in what they must return?",
+    "answer": "map must return one value per item, filter must return true or false, and reduce must return the accumulator every single time. Forget the return in map or reduce and you silently get undefined.\n\ncode:\nconst nums = [1, 2, 3, 4];\nconsole.log(nums.map((n) => {\n  n * 2;\n}));\nconsole.log(nums.filter((n) => n > 2));\nconsole.log(nums.reduce((acc, n) => {\n  acc.push(n);\n  return acc;\n}, []));\n\nreal example:\nA helper built with reduce but missing the return line gives every test an empty array and no error message at all."
+  },
+  {
+    "id": 21,
+    "question": "Why is a nested arrow function not an IIFE if you leave off the call parentheses?",
+    "answer": "Writing an arrow function creates a function value, it does not run it. The parentheses after the body are what actually call it, which is why the two forms look so similar but behave differently.\n\ncode:\nconst notRunYet = () => 'I am a value';\nconst runNow = (() => 'I already ran')();\nconsole.log(typeof notRunYet, notRunYet());\nconsole.log(runNow);\nconst doubled = ((n) => {\n  const inner = () => n * 2;\n  return inner();\n})(4);\nconsole.log(doubled);\n\nreal example:\nPassing an arrow function into a helper and forgetting the call gives you a function printed into the assertion failure instead of a value."
+  },
+  {
+    "id": 22,
+    "question": "What exactly is the error message when you try to use new on an arrow function?",
+    "answer": "It is TypeError: makeWidget is not a constructor. The word constructor matters, because the engine checks the prototype chain and an arrow has nothing there to build from.\n\ncode:\nconst makeWidget = () => ({ id: 1 });\ntry {\n  new makeWidget();\n} catch (err) {\n  console.log(err.message);\n}\nfunction makeReal() {}\nconsole.log(typeof makeReal.prototype);\n\nreal example:\nA fixture that constructs a helper with new fails with that message, and grepping for constructor in your helper file is the quickest way to find the arrow."
+  },
+  {
+    "id": 23,
+    "question": "Can an arrow function call itself for recursion?",
+    "answer": "Not by its own name, because it has none. Give it a name by storing it in a const, then reference that const inside the body.\n\ncode:\nconst walk = (node) => {\n  if (!node) return 0;\n  return 1 + walk(node.child);\n};\nconsole.log(walk({ child: { child: null } }));\nconst self = (n) => (n <= 0 ? 0 : 1 + self(n - 1));\nconsole.log(self(3));\n\nreal example:\nA recursive helper that flattens a nested API response is usually clearer as a const arrow that references itself by name."
+  },
+  {
+    "id": 24,
+    "question": "Why do people say arrow functions are shorter, and what can they not shorten?",
+    "answer": "They drop the function keyword, the parens around a single parameter and the return keyword. They cannot drop the parens on an object property, and they cannot be used with new, so the shortest form is not always the right form.\n\ncode:\nconst utils = {\n  price: (n) => n * 1.2,\n  label: function (n) {\n    return 'item ' + n;\n  },\n};\nconsole.log(utils.price(10));\nconsole.log(utils.label(1));\n\nreal example:\nIn a page object you often see both styles in the same file, arrow for simple helpers and normal functions for anything that reads this."
+  },
+  {
+    "id": 25,
+    "question": "Why can a class field hold an arrow function and use this, and is that a good idea?",
+    "answer": "The arrow is created inside the constructor, so the this it borrows is the instance being built, and that reference is kept forever. It is handy for callbacks, but it makes every instance hold its own copy of the function.\n\ncode:\nclass Suite {\n  constructor(name) {\n    this.name = name;\n    this.run = async () => 'running ' + this.name;\n  }\n}\nconst a = new Suite('checkout');\nconst b = new Suite('login');\nconst tasks = [a.run, b.run];\nconsole.log(a.run === b.run);\nPromise.all(tasks.map((t) => t())).then(console.log);\n\nreal example:\nPlaywright fixtures are often classes whose arrow fields hand you ready-to-run steps, which is the one place this pattern earns its keep."
+  },
+  {
+    "id": 26,
+    "question": "What is the difference between an arrow function and a shorthand method in an object?",
+    "answer": "The shorthand method is a normal function that happens to live on an object, so it gets its own this. The arrow gets the this of the file, which is almost never what the object method wants.\n\ncode:\nconst box = {\n  value: 42,\n  readMethod() {\n    return this.value;\n  },\n  readArrow: () => 'no object this here',\n};\nconsole.log(box.readMethod());\nconsole.log(box.readArrow());\nconsole.log(typeof box.readMethod, typeof box.readArrow);\n\nreal example:\nPage object actions written as shorthand methods can use this.page, while the same action written as an arrow property has to be passed the page explicitly."
+  },
+  {
+    "id": 27,
+    "question": "Why does an arrow function with an expression body skip braces for the return?",
+    "answer": "The engine treats a bare expression after the arrow as an implicit return, which is why adding a second statement silently removes the value. This is the one place where the short form hides logic.\n\ncode:\nconst tax = (subtotal, rate) => Math.round(subtotal * rate * 100) / 100;\nconst taxWithBlock = (subtotal, rate) => {\n  return Math.round(subtotal * rate * 100) / 100;\n};\nconsole.log(tax(100, 0.2));\nconsole.log(taxWithBlock(100, 0.2));\nconsole.log(tax.length, taxWithBlock.length);\n\nreal example:\nA one-line price helper is fine as an implicit return, but the moment you add a console.log you must add braces and the return back."
+  },
+  {
+    "id": 28,
+    "question": "Why do some teams ban arrow functions in class fields, and what breaks?",
+    "answer": "Because the arrow captures the instance at construction time, so subclass overrides and prototype patches never apply, and spying on the method is harder. The method call happens once and is then locked in.\n\ncode:\nclass Base {\n  label() {\n    return 'base';\n  }\n}\nclass Child extends Base {\n  label = () => 'frozen at construction';\n}\nconst child = new Child();\nBase.prototype.label = () => 'patched later';\nconsole.log(child.label());\nconsole.log(new Base().label());\nconsole.log(child.label === child.label);\n\nreal example:\nA test that stubs a page object method after the fixture built it will not affect an arrow field, so the stub seems to do nothing."
+  },
+  {
+    "id": 29,
+    "question": "How do you give an arrow function a name so error messages stay readable?",
+    "answer": "Store it in a const with a meaningful name, or as a named property of an object. The engine reads the name off that storage, so you never have to declare it twice.\n\ncode:\nconst parseHeaders = (raw) => raw.split(',');\nconst helpers = { parseHeaders };\ntry {\n  parseHeaders();\n} catch (err) {\n  console.log(err.constructor.name);\n}\nconsole.log(parseHeaders.name);\nconsole.log(helpers.parseHeaders.name);\n\nreal example:\nA stack trace from a failing API helper is far easier to follow when the arrow is stored as parseHeaders rather than passed in anonymously."
+  },
+  {
+    "id": 30,
+    "question": "What is the practical performance difference between an arrow function and a normal function?",
+    "answer": "In modern engines there is none that you can measure in a test. Arrow functions allocate a little differently, but the old advice that they are slower only applied to engines from before 2015.\n\ncode:\nfunction add(a, b) {\n  return a + b;\n}\nconst addArrow = (a, b) => a + b;\nconst pairs = Array.from({ length: 100000 }, (_, i) => i);\nlet t = Date.now();\nconst a = pairs.map((n) => add(n, 1)).reduce((x, y) => x + y, 0);\nconst t1 = Date.now() - t;\nt = Date.now();\nconst b = pairs.map((n) => addArrow(n, 1)).reduce((x, y) => x + y, 0);\nconsole.log(a === b);\nconsole.log(typeof t1, typeof (Date.now() - t));\n\nreal example:\nOptimising a test suite by swapping arrows for function keyword because of speed myths is wasted effort, since the time goes into the browser not the callback."
+  },
+  {
+    "id": 31,
+    "question": "Why does this inside an arrow function in an ES module come back as undefined?",
+    "answer": "Every ES module runs in strict mode, and in strict mode a function called with no receiver gets this as undefined. A normal function lets you supply a receiver with call or bind, an arrow has none to supply, so it stays undefined.\n\ncode:\n'use strict';\nconst arrow = () => typeof this;\nfunction normal() {\n  return typeof this;\n}\nconsole.log(normal());\nconsole.log(arrow());\nconsole.log(normal.call({}));\n\nreal example:\nA config helper written as an arrow in a Node script can accidentally read module.exports, so it changes when another file imports the script."
+  },
+  {
+    "id": 32,
+    "question": "Can an arrow function be the base class that another class extends?",
+    "answer": "No. extends needs something it can call with new to build the parent part of the instance, and an arrow refuses that. You get a TypeError at class definition time saying the value is not a constructor.\n\ncode:\nclass Base {\n  constructor() {\n    this.ok = true;\n  }\n}\ntry {\n  class Bad extends (() => Base) {}\n  console.log(new Bad());\n} catch (err) {\n  console.log(err.constructor.name);\n}\nconsole.log(new Base().ok);\n\nreal example:\nTrying to build a shared base page object as an arrow and extend it fails at import time, so every spec in the run reports the same file-level error."
+  },
+  {
+    "id": 33,
+    "question": "What happens to extra arguments you pass to an arrow function?",
+    "answer": "They are silently dropped, because an arrow has no arguments object to collect them in. The extra values only matter if you declared a rest parameter, and then they arrive as an array.\n\ncode:\nconst first = (a) => a;\nconsole.log(first(1, 2, 3));\nfunction second(a) {\n  return [a, arguments.length];\n}\nconsole.log(second(1, 2, 3));\nfunction withRest(...rest) {\n  return rest.length;\n}\nconsole.log(withRest(1, 2, 3));\n\nreal example:\nA helper called with a third retry-count argument keeps working after someone rewrites it as an arrow, it just quietly stops seeing the count."
+  },
+  {
+    "id": 34,
+    "question": "Why does an arrow defined inside a class method still see the right this?",
+    "answer": "The method's this is the instance, and the arrow is created while the method runs, so the arrow borrows the instance rather than the file. The same trick in a plain function needs a saved self reference.\n\ncode:\nclass Cart {\n  items = ['apple'];\n  withArrow() {\n    const count = () => this.items.length;\n    return count();\n  }\n  withSelf() {\n    const self = this;\n    return function () {\n      return self.items.length;\n    }();\n  }\n}\nconst c = new Cart();\nconsole.log(c.withArrow(), c.withSelf());\nconsole.log(c.withArrow === c.withSelf);\n\nreal example:\nInside a class page object every helper can be a bare arrow and still reach this.page, which is why class based page objects read so cleanly."
+  }
+]

@@ -4,7 +4,8 @@ export interface Lesson {
   description: string;
   content: string;
   codeExample: string;
-  quiz: QuizQuestion[];
+  /** Optional multiple-choice refresher. The Quiz tab now runs coding Q&A. */
+  quiz?: QuizQuestion[];
 }
 
 export interface Topic {
@@ -24,10 +25,28 @@ export interface QuizQuestion {
   explanation: string;
 }
 
+/**
+ * A coding challenge: a prompt the learner solves by writing code,
+ * paired with a verified working answer.
+ */
+export interface CodingQuestion {
+  id: number;
+  question: string;
+  answer: string;
+}
+
+/**
+ * An interview-flavoured question with a deep, code-backed answer.
+ */
 export interface QAQuestion {
   id: number;
   question: string;
   answer: string;
+}
+
+/** Per-lesson question banks, keyed by "topic/lesson". */
+export interface LessonQuestionBank {
+  [lessonKey: string]: CodingQuestion[];
 }
 
 export interface QuestionBankSection {

@@ -4,63 +4,10 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { QAQuestion } from "@/data/types";
+import AnswerBlock from "@/components/AnswerBlock";
 import { ChevronLeft, ChevronRight, Eye, EyeOff, ArrowRight, CornerDownLeft } from "lucide-react";
 
 const CodeEditor = dynamic(() => import("@/components/CodeEditor"), { ssr: false });
-
-function AnswerBlock({ answer }: { answer: string }) {
-  const lines = answer.split("\n");
-  const nodes: React.ReactNode[] = [];
-  let i = 0;
-  let key = 0;
-
-  while (i < lines.length) {
-    const trimmed = lines[i].trim();
-
-    if (trimmed === "code:" || trimmed === "real example:") {
-      const label = trimmed === "code:" ? "Code Example" : "Real-World Example";
-      i++;
-      const block: string[] = [];
-      while (i < lines.length) {
-        const t = lines[i].trim();
-        if (t === "code:" || t === "real example:") break;
-        block.push(lines[i]);
-        i++;
-      }
-      const content = block.join("\n").trim();
-      if (trimmed === "code:") {
-        nodes.push(
-          <div key={key++} className="mt-3">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald-600 mb-1">
-              {label}
-            </div>
-            <pre className="bg-slate-900 text-emerald-100 text-[12.5px] leading-relaxed rounded-lg p-3 overflow-x-auto whitespace-pre-wrap break-words font-mono">
-              {content}
-            </pre>
-          </div>
-        );
-      } else {
-        nodes.push(
-          <div key={key++} className="mt-3">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-emerald-600 mb-1">
-              {label}
-            </div>
-            <p className="text-emerald-800">{content}</p>
-          </div>
-        );
-      }
-    } else {
-      if (trimmed.length > 0) {
-        nodes.push(<p key={key++} className="text-emerald-800">{lines[i]}</p>);
-      } else {
-        nodes.push(<div key={key++} className="h-2" />);
-      }
-      i++;
-    }
-  }
-
-  return <div>{nodes}</div>;
-}
 
 function EditorPlaceholder({ height }: { height: number }) {
   return (
@@ -126,7 +73,7 @@ export default function PracticeQA({ questions, language = "python" }: PracticeQ
     if (current < total - 1) {
       goTo(current + 1);
     } else {
-      router.push("/practice");
+      router.push(`/${language}/practice`);
     }
   };
 

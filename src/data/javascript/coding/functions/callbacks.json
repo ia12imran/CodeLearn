@@ -1,0 +1,207 @@
+[
+  {
+    "id": 1,
+    "question": "Write a function applyAll that takes an array and a callback, and calls the callback on every item. Log it with an array of numbers and n => n * 2.",
+    "answer": "forEach is the simplest place to pass a callback around. The callback receives the item, and its index if you want it.\n\ncode:\nfunction applyAll(items, cb) {\n  items.forEach((item, i) => {\n    console.log(i + ': ' + cb(item));\n  });\n}\n\napplyAll([1, 2, 3], (n) => n * 2);\n\noutput:\n0: 2\n1: 4\n2: 6"
+  },
+  {
+    "id": 2,
+    "question": "Write a higher-order function called run that takes a callback and calls it with 'hello', then log run(msg => console.log('got ' + msg)).",
+    "answer": "A function that takes a function is higher-order. Calling the parameter inside makes it a callback.\n\ncode:\nfunction run(cb) {\n  cb('hello');\n}\n\nrun((msg) => console.log('got ' + msg));\nrun((msg) => console.log(msg.length));\n\noutput:\ngot hello\n5"
+  },
+  {
+    "id": 3,
+    "question": "Write a function mapAll that takes an array and a callback and returns a new array of results. Log mapAll over ['a','b'] with s => s.toUpperCase().",
+    "answer": "map returns a new array of the same length. That makes it the right choice when later code needs the results.\n\ncode:\nfunction mapAll(items, cb) {\n  return items.map(cb);\n}\n\nconsole.log(mapAll(['a', 'b'], (s) => s.toUpperCase()));\nconsole.log(mapAll([1, 2, 3], (n) => n * 10));\n\noutput:\n[ 'A', 'B' ]\n[ 10, 20, 30 ]"
+  },
+  {
+    "id": 4,
+    "question": "Write a function retry that takes a callback and a number of attempts, calls it, and logs 'attempt n' on each failure. Use it on a callback that fails twice then returns 'ok'.",
+    "answer": "Try and catch inside a loop covers the case where a callback may fail. A counter in the loop decides when to stop.\n\ncode:\nfunction retry(cb, times) {\n  let lastErr;\n  for (let i = 1; i <= times; i++) {\n    try {\n      console.log('attempt ' + i);\n      return cb(i);\n    } catch (err) {\n      lastErr = err;\n    }\n  }\n  throw lastErr;\n}\n\nlet calls = 0;\nconst flaky = () => {\n  calls += 1;\n  if (calls < 3) throw new Error('boom');\n  return 'ok';\n};\nconsole.log(retry(flaky, 3));\n\noutput:\nattempt 1\nattempt 2\nattempt 3\nok"
+  },
+  {
+    "id": 5,
+    "question": "Write a function attempt that takes a promise-returning callback, an attempt number and a total, and returns a promise resolving on success or retrying after a rejection. Log it for a fake that rejects twice then resolves.",
+    "answer": "Attaching catch to the callback's promise lets you decide what happens next. Recursing with attempt plus one is the retry; give up once n reaches times.\n\ncode:\nfunction attempt(cb, n, times) {\n  return cb(n).catch(() => {\n    if (n >= times) return Promise.reject(new Error('gave up'));\n    console.log('retrying attempt ' + (n + 1));\n    return attempt(cb, n + 1, times);\n  });\n}\n\nlet calls = 0;\nconst flaky = () => {\n  calls += 1;\n  return calls < 3 ? Promise.reject(new Error('boom')) : Promise.resolve('ok');\n};\n\nattempt(flaky, 1, 3).then((v) => console.log('value ' + v));\n\noutput:\nretrying attempt 2\nretrying attempt 3\nvalue ok"
+  },
+  {
+    "id": 6,
+    "question": "Write a debounce function that takes a callback and a delay, and only calls it after the delay has passed with no new calls. Log it with a fake clock.",
+    "answer": "Each call clears the pending timer and sets a new one, so only the last call in a burst survives. A fake clock lets you test it without waiting.\n\ncode:\nfunction debounce(cb, ms) {\n  let timer = null;\n  return function (...args) {\n    if (timer) clearTimeout(timer);\n    timer = setTimeout(() => cb(...args), ms);\n  };\n}\n\nconst log = debounce((msg) => console.log('ran: ' + msg), 50);\nlog('a');\nlog('b');\nlog('c');\nconsole.log('scheduled');\n\noutput:\nscheduled\nran: c"
+  },
+  {
+    "id": 7,
+    "question": "Write a debounce function and drive it with a fake clock so you can log exactly when the callback fires after three rapid calls. Show the fake clock advancing.",
+    "answer": "Replace setTimeout with a clock you control so the test is instant and deterministic. Only one timer survives the burst.\n\ncode:\nfunction makeClock() {\n  let now = 0;\n  const timers = [];\n  const setT = (fn, ms) => {\n    const t = { at: now + ms, fn };\n    timers.push(t);\n    return t;\n  };\n  const clearT = (t) => timers.splice(timers.indexOf(t), 1);\n  const advance = (ms) => {\n    const end = now + ms;\n    while (timers.length && timers[0].at <= end) {\n      const t = timers.shift();\n      now = t.at;\n      t.fn();\n    }\n    now = end;\n  };\n  return { setT, clearT, advance };\n}\n\nconst clock = makeClock();\nfunction debounce(cb, ms) {\n  let timer = null;\n  return (...args) => {\n    if (timer) clock.clearT(timer);\n    timer = clock.setT(() => cb(...args), ms);\n  };\n}\n\nconst log = debounce((m) => console.log('fired ' + m), 30);\nlog('a');\nlog('b');\nlog('c');\nclock.advance(29);\nconsole.log('still waiting');\nclock.advance(1);\n\noutput:\nstill waiting\nfired c"
+  },
+  {
+    "id": 8,
+    "question": "Write a throttle function that runs a callback immediately, then ignores calls for a window. Drive it with a fake clock and log which calls win.",
+    "answer": "Remember the time of the last run and skip anything inside the window. Unlike debounce, the first call is not delayed.\n\ncode:\nfunction makeClock() {\n  const state = { now: 0 };\n  const timers = [];\n  const setT = (fn, ms) => {\n    timers.push({ at: state.now + ms, fn });\n  };\n  const advance = (ms) => {\n    const end = state.now + ms;\n    while (timers.length && timers[0].at <= end) {\n      const t = timers.shift();\n      state.now = t.at;\n      t.fn();\n    }\n    state.now = end;\n  };\n  return { now: () => state.now, setT, advance };\n}\n\nconst clock = makeClock();\nfunction throttle(cb, ms) {\n  let last = -Infinity;\n  return (arg) => {\n    if (clock.now() - last >= ms) {\n      last = clock.now();\n      cb(arg);\n    } else {\n      console.log('skipped ' + arg);\n    }\n  };\n}\n\nconst log = throttle((msg) => console.log('ran ' + msg), 100);\nlog('a');\nlog('b');\nclock.advance(100);\nlog('c');\n\noutput:\nran a\nskipped b\nran c"
+  },
+  {
+    "id": 9,
+    "question": "Write a withLogging wrapper using a rest parameter that logs the arguments before calling the original and the result after. Log it with a two-argument function.",
+    "answer": "A rest parameter captures whatever the caller passed, so one wrapper works for any signature. Return the original result to keep behaviour.\n\ncode:\nfunction withLogging(fn) {\n  return function (...args) {\n    console.log('call with ' + args.join(','));\n    const result = fn(...args);\n    console.log('returned ' + result);\n    return result;\n  };\n}\n\nfunction add(a, b) {\n  return a + b;\n}\n\nconsole.log(withLogging(add)(1, 2));\n\noutput:\ncall with 1,2\nreturned 3\n3"
+  },
+  {
+    "id": 10,
+    "question": "Write a function once that takes a callback and returns a function that runs it only the first time, logging on every call. Call the wrapped callback three times.",
+    "answer": "A flag in the closure marks that the work already ran. Later calls return the saved result without repeating the work.\n\ncode:\nfunction once(fn) {\n  let ran = false;\n  let saved;\n  return (...args) => {\n    if (!ran) {\n      saved = fn(...args);\n      ran = true;\n    }\n    console.log('returned cached ' + saved);\n    return saved;\n  };\n}\n\nconst init = once(() => {\n  console.log('running initialiser');\n  return 'ready';\n});\n\nconsole.log(init());\nconsole.log(init());\n\noutput:\nrunning initialiser\nreturned cached ready\nready\nreturned cached ready\nready"
+  },
+  {
+    "id": 11,
+    "question": "Write a spy function that wraps a callback, logs each call with its argument, keeps a count, and returns the original result. Log it twice then print the report.",
+    "answer": "The count and last argument live in the closure, so the caller can inspect the history without the wrapped function knowing.\n\ncode:\nfunction spy(fn) {\n  let calls = 0;\n  let last;\n  const wrapped = (arg) => {\n    calls += 1;\n    last = arg;\n    console.log('call ' + calls + ' with ' + arg);\n    return fn(arg);\n  };\n  wrapped.report = () => ({ calls: calls, last: last });\n  return wrapped;\n}\n\nconst save = spy((n) => 'saved ' + n);\nconsole.log(save(1));\nconsole.log(save(2));\nconsole.log(save.report());\n\noutput:\ncall 1 with 1\nsaved 1\ncall 2 with 2\nsaved 2\n{ calls: 2, last: 2 }"
+  },
+  {
+    "id": 12,
+    "question": "Write a memoize function that caches callback results in a Map, logging 'hit' or 'miss'. Call the memoized double with 5, 5 and 6.",
+    "answer": "A Map is keyed by the arguments you choose. Anything already cached skips the callback and returns the stored value.\n\ncode:\nfunction memoize(fn) {\n  const cache = new Map();\n  return function (n) {\n    if (cache.has(n)) {\n      console.log('hit');\n      return cache.get(n);\n    }\n    console.log('miss');\n    const value = fn(n);\n    cache.set(n, value);\n    return value;\n  };\n}\n\nconst double = memoize((n) => n * 2);\nconsole.log(double(5));\nconsole.log(double(5));\nconsole.log(double(6));\n\noutput:\nmiss\n10\nhit\n10\nmiss\n12"
+  },
+  {
+    "id": 13,
+    "question": "Write a groupBy that takes an array and a selector callback, returning an object of arrays keyed by the selector result. Log it over [1,2,3,4] with a parity selector.",
+    "answer": "reduce walks the array once and pushes each item into its bucket. The selector callback decides which bucket.\n\ncode:\nfunction groupBy(items, selector) {\n  return items.reduce((acc, item) => {\n    const key = selector(item);\n    (acc[key] = acc[key] || []).push(item);\n    return acc;\n  }, {});\n}\n\nconsole.log(groupBy([1, 2, 3, 4], (n) => (n % 2 ? 'odd' : 'even')));\nconsole.log(groupBy(['a', 'bb', 'c'], (s) => s.length));\n\noutput:\n{ odd: [ 1, 3 ], even: [ 2, 4 ] }\n{ '1': [ 'a', 'c' ], '2': [ 'bb' ] }"
+  },
+  {
+    "id": 14,
+    "question": "Write a function sortBy that returns a comparator built from a selector callback, then log people sorted by age. People: [{n:'B',age:30},{n:'A',age:20}].",
+    "answer": "The selector turns each object into a number, then the comparator subtracts. That lets you sort by any field without writing a new comparator.\n\ncode:\nfunction sortBy(selector) {\n  return (a, b) => selector(a) - selector(b);\n}\n\nconst people = [\n  { name: 'B', age: 30 },\n  { name: 'A', age: 20 },\n];\n\nconsole.log(people.slice().sort(sortBy((p) => p.age)).map((p) => p.name));\nconsole.log(people.slice().sort(sortBy((p) => p.name)).map((p) => p.name));\n\noutput:\n[ 'A', 'B' ]\n[ 'B', 'A' ]"
+  },
+  {
+    "id": 15,
+    "question": "Write a function makeTimer that takes a callback and ms and returns a function starting the callback after that delay with setTimeout. Log 'done' after 5 milliseconds.",
+    "answer": "The delay is captured when makeTimer runs, and the message is captured when the returned function runs. setTimeout returns a handle you can cancel.\n\ncode:\nfunction makeTimer(cb, ms) {\n  return (...args) => setTimeout(() => cb(...args), ms);\n}\n\nconst start = makeTimer((msg) => console.log('done ' + msg), 5);\nstart('first');\nconsole.log('scheduled');\n\noutput:\nscheduled\ndone first"
+  },
+  {
+    "id": 16,
+    "question": "Write a function take that returns a function that calls the callback with the next value in a list, and logs 'done' when the list runs out. Log four pulls.",
+    "answer": "A closure can hold a position counter, giving each returned function its own private cursor through the data.\n\ncode:\nfunction take(values, onDone) {\n  let i = 0;\n  return function next() {\n    if (i >= values.length) {\n      onDone();\n      return undefined;\n    }\n    const value = values[i];\n    i += 1;\n    return value;\n  };\n}\n\nconst next = take([1, 2, 3], () => console.log('done'));\nconsole.log(next(), next(), next());\nconsole.log(next());\n\noutput:\n1 2 3\ndone\nundefined"
+  },
+  {
+    "id": 17,
+    "question": "Write a function chain that takes two callbacks and returns a function running the first then feeding its result into the second. Log chain(addOne, double)(5).",
+    "answer": "Returning a function that composes two callbacks keeps the steps separate and testable on their own.\n\ncode:\nfunction chain(first, second) {\n  return function (value) {\n    const mid = first(value);\n    console.log('after first ' + mid);\n    return second(mid);\n  };\n}\n\nconst addOne = (n) => n + 1;\nconst double = (n) => n * 2;\n\nconsole.log(chain(addOne, double)(5));\nconsole.log(chain(double, addOne)(5));\n\noutput:\nafter first 6\n12\nafter first 10\n11"
+  },
+  {
+    "id": 18,
+    "question": "Predict the output. Define an array of three arrow functions that each log their index, then call them in a for loop and log the order of the messages.",
+    "answer": "The callbacks run when you call them, not when you build them. The loop order decides the log order.\n\ncode:\nconst fns = [0, 1, 2].map((i) => () => console.log('from ' + i));\n\nfor (const fn of fns) {\n  fn();\n}\nconsole.log('all done');\n\noutput:\nfrom 0\nfrom 1\nfrom 2\nall done"
+  },
+  {
+    "id": 19,
+    "question": "Write a function eachSeries that takes an array of callbacks and calls them one by one, collecting the results. Log it with three small callbacks.",
+    "answer": "A for loop keeps the calls in order and synchronous. Reduce does the same job in one expression.\n\ncode:\nfunction eachSeries(fns) {\n  const results = [];\n  for (let i = 0; i < fns.length; i++) {\n    results.push(fns[i](i));\n  }\n  return results;\n}\n\nconsole.log(\n  eachSeries([\n    (i) => 'a' + i,\n    (i) => 'b' + i,\n    (i) => 'c' + i,\n  ])\n);\n\noutput:\n[ 'a0', 'b1', 'c2' ]"
+  },
+  {
+    "id": 20,
+    "question": "Write a function curry that turns a three-argument callback into nested single-argument functions. Log curried(1)(2)(3) for a sum of three numbers.",
+    "answer": "Each level stores the argument it was given and returns a function waiting for the next one. The work happens on the last call.\n\ncode:\nfunction curry(fn) {\n  return function curried(a) {\n    return (b) => (c) => fn(a, b, c);\n  };\n}\n\nconst add3 = (a, b, c) => a + b + c;\nconst curried = curry(add3);\nconsole.log(curried(1)(2)(3));\nconsole.log(curried(10)(20)(30));\n\noutput:\n6\n60"
+  },
+  {
+    "id": 21,
+    "question": "Write a function compose that takes callbacks and returns one applying them right to left. Log compose(double, addOne)(5) and compose(addOne, double)(5).",
+    "answer": "reduceRight builds the composition from the inside out, so the last callback runs first. Swap the order and the result changes.\n\ncode:\nfunction compose(...fns) {\n  return (value) => fns.reduceRight((acc, fn) => fn(acc), value);\n}\n\nconst double = (n) => n * 2;\nconst addOne = (n) => n + 1;\n\nconsole.log(compose(double, addOne)(5));\nconsole.log(compose(addOne, double)(5));\nconsole.log(compose()(7));\n\noutput:\n12\n11\n7"
+  },
+  {
+    "id": 22,
+    "question": "Write a function pipe that takes callbacks and returns one applying them left to right, then log the same two callbacks to contrast with compose.",
+    "answer": "pipe uses reduce instead of reduceRight, so the first callback runs first. The same pair of functions gives a different answer.\n\ncode:\nfunction pipe(...fns) {\n  return (value) => fns.reduce((acc, fn) => fn(acc), value);\n}\n\nconst double = (n) => n * 2;\nconst addOne = (n) => n + 1;\n\nconsole.log(pipe(double, addOne)(5));\nconsole.log(pipe(addOne, double)(5));\nconsole.log(pipe()(7));\n\noutput:\n11\n12\n7"
+  },
+  {
+    "id": 23,
+    "question": "Write a function composeAll that applies three callbacks right to left and logs the running value at each step. Log it for double, addOne, squared on 3.",
+    "answer": "Logging inside the composition makes the order visible, which is the only way to see the difference between pipe and compose.\n\ncode:\nfunction composeAll(...fns) {\n  return function (value) {\n    let acc = value;\n    for (let i = fns.length - 1; i >= 0; i--) {\n      acc = fns[i](acc);\n      console.log('step ' + i + ' -> ' + acc);\n    }\n    return acc;\n  };\n}\n\nconsole.log(composeAll((n) => n * 2, (n) => n + 1, (n) => n * n)(3));\n\noutput:\nstep 2 -> 9\nstep 1 -> 10\nstep 0 -> 20\n20"
+  },
+  {
+    "id": 24,
+    "question": "Predict the output. Build an array of callbacks from a map over numbers where each one logs its number, then call only the middle one and log how many callbacks exist.",
+    "answer": "Building callbacks is cheap and does nothing on its own. Only calling one runs it, so exactly one line prints.\n\ncode:\nconst fns = [1, 2, 3].map((n) => () => console.log('callback ' + n));\n\nconsole.log('built ' + fns.length);\nfns[1]();\nconsole.log('after call');\n\noutput:\nbuilt 3\ncallback 2\nafter call"
+  },
+  {
+    "id": 25,
+    "question": "Write a function reduceRightFn that takes a list of callbacks and a starting value, applying them from the right, then log the result for three doublers and addOne.",
+    "answer": "reduceRight is the built-in version of right-to-left composition, and it works with any callback shape.\n\ncode:\nconst double = (n) => n * 2;\nconst addOne = (n) => n + 1;\n\nfunction applyRight(value, fns) {\n  return fns.reduceRight((acc, fn) => fn(acc), value);\n}\n\nconsole.log(applyRight(3, [double, double, addOne]));\nconsole.log(applyRight(3, [addOne, double, double]));\nconsole.log(applyRight(3, []));\n\noutput:\n16\n13\n3"
+  },
+  {
+    "id": 26,
+    "question": "Write a function race that takes an array of promise-returning callbacks and returns a promise resolving with the first one to settle, logging the winner's label.",
+    "answer": "Promise.race already does the work, so the callback is just a small wrapper that labels its result.\n\ncode:\nfunction race(tasks) {\n  return Promise.race(tasks);\n}\n\nconst slow = new Promise((resolve) => setTimeout(() => resolve('slow'), 20));\nconst fast = new Promise((resolve) => setTimeout(() => resolve('fast'), 5));\n\nrace([slow, fast]).then((winner) => console.log('winner ' + winner));\n\noutput:\nwinner fast"
+  },
+  {
+    "id": 27,
+    "question": "Write a function allSettledLite that takes an array of promise-returning callbacks and returns a promise with each result or error message. Log it for one resolve and one reject.",
+    "answer": "Mapping each task to a then and catch pair turns a mix of outcomes into one array of plain strings.\n\ncode:\nfunction settle(tasks) {\n  return Promise.all(\n    tasks.map((task) => task().then((v) => 'ok ' + v, (e) => 'err ' + e.message))\n  );\n}\n\nsettle([\n  () => Promise.resolve('a'),\n  () => Promise.reject(new Error('boom')),\n]).then((rows) => console.log(rows));\n\noutput:\n[ 'ok a', 'err boom' ]"
+  },
+  {
+    "id": 28,
+    "question": "Write a function debounceCount that debounces a callback and also logs how many calls were dropped. Drive it with a fake clock and log the dropped count.",
+    "answer": "Counting the calls that get cleared by the next call tells you what debounce is doing for you.\n\ncode:\nfunction makeClock() {\n  let now = 0;\n  const timers = [];\n  return {\n    setT: (fn, ms) => timers.push({ at: now + ms, fn }),\n    clearT: (t) => {\n      const i = timers.indexOf(t);\n      if (i >= 0) timers.splice(i, 1);\n    },\n    advance(ms) {\n      const end = now + ms;\n      while (timers.length && timers[0].at <= end) {\n        const t = timers.shift();\n        now = t.at;\n        t.fn();\n      }\n      now = end;\n    },\n  };\n}\n\nconst clock = makeClock();\nlet dropped = 0;\nfunction debounceCount(cb, ms) {\n  let timer = null;\n  return function (...args) {\n    if (timer) {\n      clock.clearT(timer);\n      dropped += 1;\n    }\n    timer = clock.setT(() => cb(...args), ms);\n  };\n}\n\nconst log = debounceCount((v) => console.log('ran ' + v), 20);\nlog('a');\nlog('b');\nclock.advance(20);\nconsole.log('dropped ' + dropped);\n\noutput:\nran a\nran b\ndropped 1"
+  },
+  {
+    "id": 29,
+    "question": "Write a function createQueue that takes a worker callback and returns enqueue and size, running the callback for each item. Log enqueuing two items.",
+    "answer": "The items array and the worker are captured together, so the queue owns both the data and the way it is processed.\n\ncode:\nfunction createQueue(worker) {\n  const items = [];\n  return {\n    enqueue(item) {\n      items.push(item);\n      return worker(item);\n    },\n    size() {\n      return items.length;\n    },\n  };\n}\n\nconst q = createQueue((item) => console.log('working on ' + item));\nq.enqueue('a');\nq.enqueue('b');\nconsole.log('size ' + q.size());\n\noutput:\nworking on a\nworking on b\nsize 2"
+  },
+  {
+    "id": 30,
+    "question": "Write a function createEmitter with on and emit methods closing over a map of event names to callbacks. Log one listener firing on emit.",
+    "answer": "An object of arrays holds the listeners. emit looks the array up and calls everything registered for that name.\n\ncode:\nfunction createEmitter() {\n  const listeners = {};\n  return {\n    on(name, fn) {\n      (listeners[name] = listeners[name] || []).push(fn);\n      return this;\n    },\n    emit(name, payload) {\n      (listeners[name] || []).forEach((fn) => fn(payload));\n      console.log('emitted ' + name);\n    },\n  };\n}\n\nconst bus = createEmitter();\nbus.on('done', (id) => console.log('job ' + id + ' finished'));\nbus.emit('done', 7);\nbus.emit('missing', 1);\n\noutput:\njob 7 finished\nemitted done\nemitted missing"
+  },
+  {
+    "id": 31,
+    "question": "Write a function flattenDeep that takes a nested array and a depth, and flattens up to that depth using flat. Log it for [1,[2,[3,[4]]]] with depth 2.",
+    "answer": "Array.prototype.flat takes a depth argument. Depth 1 is the default, so passing 2 reaches one more level.\n\ncode:\nfunction flattenDeep(nested, depth) {\n  return nested.flat(depth);\n}\n\nconst data = [1, [2, [3, [4]]]];\nconsole.log(flattenDeep(data, 2));\nconsole.log(flattenDeep(data, 1));\nconsole.log(flattenDeep(data, Infinity));\n\noutput:\n[ 1, 2, 3, [ 4 ] ]\n[ 1, 2, [ 3, [ 4 ] ] ]\n[ 1, 2, 3, 4 ]"
+  },
+  {
+    "id": 32,
+    "question": "Predict the output. Show that map passes three arguments to its callback, by logging an arrow that takes only the first and one that names all three.",
+    "answer": "map calls the callback with item, index and the whole array. Extra arguments are ignored unless the callback declares them.\n\ncode:\nconst items = ['a', 'b'];\n\nconsole.log(items.map((item) => item));\nconsole.log(items.map((item, i) => item + i));\nconsole.log(items.map((item, i, arr) => arr.length));\nconsole.log(items.map((item, i, arr) => item).length);\n\noutput:\n[ 'a', 'b' ]\n[ 'a0', 'b1' ]\n[ 2, 2 ]\n2"
+  },
+  {
+    "id": 33,
+    "question": "Write a function repeatEach that takes a number and a callback, and runs the callback that many times passing the step number. Log repeatEach(3) with a logging callback.",
+    "answer": "A plain for loop drives the calls. The callback only has to care about the step it is handed.\n\ncode:\nfunction repeatEach(times, cb) {\n  for (let i = 1; i <= times; i++) {\n    cb(i);\n  }\n}\n\nrepeatEach(3, (step) => console.log('step ' + step));\nrepeatEach(0, (step) => console.log('never ' + step));\n\noutput:\nstep 1\nstep 2\nstep 3"
+  },
+  {
+    "id": 34,
+    "question": "Write a function that returns an object with a run method closing over an array of callbacks, then logs the results of running all of them. Log three callbacks.",
+    "answer": "Putting the callbacks in a closure and returning a run method gives you a small, testable task list.\n\ncode:\nfunction createRunner(tasks) {\n  return {\n    run() {\n      return tasks.map((task) => task());\n    },\n  };\n}\n\nconst runner = createRunner([\n  () => 1 + 1,\n  () => 'two',\n  () => [3],\n]);\n\nconsole.log(runner.run());\nconsole.log(Object.keys(runner));\n\noutput:\n[ 2, 'two', [ 3 ] ]\n[ 'run' ]"
+  },
+  {
+    "id": 35,
+    "question": "Write a function guard that takes a value and a fallback callback, returning the value unless it is null or undefined. Log it with null and with 0.",
+    "answer": "Comparing against null catches null and undefined in one check. A fallback callback avoids computing a default you may not need.\n\ncode:\nfunction guard(value, fallback) {\n  if (value === null || value === undefined) {\n    return fallback();\n  }\n  return value;\n}\n\nconsole.log(guard(null, () => 'from fallback'));\nconsole.log(guard(undefined, () => 'from fallback'));\nconsole.log(guard(0, () => 'from fallback'));\n\noutput:\nfrom fallback\nfrom fallback\n0"
+  },
+  {
+    "id": 36,
+    "question": "Write a function mapKeys that takes an object and a callback returning new key names, and returns a new object. Log it over {first: 1, last: 2} with k => k.toUpperCase().",
+    "answer": "Entries gives key and value pairs, and the callback renames the key. Building a new object keeps the input safe.\n\ncode:\nfunction mapKeys(obj, fn) {\n  const out = {};\n  Object.entries(obj).forEach(([key, value]) => {\n    out[fn(key)] = value;\n  });\n  return out;\n}\n\nconsole.log(mapKeys({ first: 1, last: 2 }, (k) => k.toUpperCase()));\nconsole.log(Object.keys(mapKeys({ a: 1 }, (k) => k + '1')));\n\noutput:\n{ FIRST: 1, LAST: 2 }\n[ 'a1' ]"
+  },
+  {
+    "id": 37,
+    "question": "Write a function throttleLeading that runs a callback on the first call and then at most once per window, driven by a fake clock. Log four calls spaced by the clock.",
+    "answer": "Compare the clock value with the last run time and skip anything inside the window. Only the first call runs immediately.\n\ncode:\nfunction makeClock() {\n  const state = { now: 0 };\n  return {\n    now: () => state.now,\n    advance(ms) {\n      state.now += ms;\n      console.log('clock at ' + state.now);\n    },\n  };\n}\n\nconst clock = makeClock();\nfunction throttleLeading(cb, ms) {\n  let last = -Infinity;\n  return function (arg) {\n    if (clock.now() - last >= ms) {\n      last = clock.now();\n      cb(arg);\n    } else {\n      console.log('skipped ' + arg);\n    }\n  };\n}\n\nconst log = throttleLeading((msg) => console.log('ran ' + msg), 100);\nlog('a');\nlog('b');\nclock.advance(100);\nlog('c');\n\noutput:\nran a\nskipped b\nclock at 100\nran c"
+  },
+  {
+    "id": 38,
+    "question": "Write a function applyAsync that takes an array of promise-returning callbacks and a mapper callback, then logs each mapped result in order. Log two tasks.",
+    "answer": "Promise.all keeps the input order in its results, so the mapper can run over them in sequence even if tasks finish out of order.\n\ncode:\nfunction applyAsync(tasks, mapper) {\n  return Promise.all(tasks.map((task) => task())).then((values) => {\n    values.forEach((v, i) => console.log(i + ': ' + mapper(v, i)));\n  });\n}\n\napplyAsync([() => Promise.resolve('a'), () => Promise.resolve('b')], (v, i) => v + i);\n\noutput:\n0: a0\n1: b1"
+  },
+  {
+    "id": 39,
+    "question": "Predict the output. Log a callback passed straight into forEach without wrapping, and log what Array.from does with a callback on the string 'abc'.",
+    "answer": "Array.from accepts a map callback and applies it while building the array, which is a neat one-step transform.\n\ncode:\n['a', 'b'].forEach((c) => console.log('forEach ' + c));\n\nconsole.log(Array.from('abc', (c) => c.toUpperCase()));\nconsole.log(Array.from('abc').length);\n\noutput:\nforEach a\nforEach b\n[ 'A', 'B', 'C' ]\n3"
+  },
+  {
+    "id": 40,
+    "question": "Write a function createScheduler that takes a callback and returns a run method which collects calls made in the same tick and logs them together. Log a run and three pushes.",
+    "answer": "Batch the work inside run, then flush it. That is the shape of a tiny event loop used in tests.\n\ncode:\nfunction createScheduler(cb) {\n  let queue = [];\n  return {\n    push(item) {\n      queue.push(item);\n      return queue.length;\n    },\n    run() {\n      cb(queue);\n      queue = [];\n    },\n  };\n}\n\nconst sched = createScheduler((items) => console.log('flushing ' + items.length));\nsched.push('a');\nsched.push('b');\nconsole.log('queued ' + sched.push('c'));\nsched.run();\nsched.run();\n\noutput:\nqueued 3\nflushing 3\nflushing 0"
+  },
+  {
+    "id": 41,
+    "question": "Write a function applyWithIndex that takes an array and a callback, and logs 'item:index' for each. Log it for ['x', 'y'].",
+    "answer": "The index is the second argument every array method passes. Taking it explicitly is all you need.\n\ncode:\nfunction applyWithIndex(items, cb) {\n  items.forEach((item, i) => cb(item, i));\n}\n\napplyWithIndex(['x', 'y'], (item, i) => {\n  console.log(item + ':' + i);\n});\n\noutput:\nx:0\ny:1"
+  }
+]

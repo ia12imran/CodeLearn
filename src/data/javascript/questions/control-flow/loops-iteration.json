@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "question": "What is the difference between a value that is falsy and a value that is undefined?",
+    "answer": "Falsy is a label for the eight values JavaScript treats as no. undefined is one of those eight and specifically means a value was never assigned. Truthiness is about the value, not about the type name.\n\ncode:\nconst falsy = [false, 0, -0, '', null, undefined, NaN, 0n];\nconst truthy = [1, '0', 'false', [], {}, -1];\nfalsy.forEach((v) => console.log('falsy  ->', String(v), typeof v));\ntruthy.forEach((v) => console.log('truthy ->', String(v), typeof v));\nconsole.log('count of falsy:', falsy.length, '| undefined is one of them:', falsy.includes(undefined));\n\nreal example:\nA poll loop guards with if (item.text) and an empty string skips the item, while undefined means your selector never matched and the test should fail loudly instead."
+  },
+  {
+    "id": 2,
+    "question": "What does a for loop's update expression actually do, and why does continue still run it?",
+    "answer": "The three parts of a for loop are setup, condition, update. continue means go to the next iteration, and the next iteration starts by running the update, so the counter still advances and the loop ends.\n\ncode:\nconst seen = [];\nfor (let i = 0; i < 5; i++) {\n  if (i === 2) continue;\n  seen.push(i);\n}\nconsole.log('visited:', seen.join(', '));\nlet bodyRuns = 0;\nfor (let j = 0; j < 5; j++) { if (j === 1) continue; bodyRuns = bodyRuns + 1; }\nconsole.log('body ran', bodyRuns, 'times out of 5, so continue did not freeze i');\n\nreal example:\nA scan skips hidden rows with continue and still counts through the page correctly, so the pagination counter lands on the last visible row and not before it."
+  },
+  {
+    "id": 3,
+    "question": "How do you break out of the outer of two nested loops without a flag variable?",
+    "answer": "Put a label on the outer loop with a colon after its name, then break that label. The label names the loop you want to leave, so a plain break inside the inner loop is no longer ambiguous.\n\ncode:\nconst grid = [[1, 2], [3, 4], [5, 6]];\nlet hit = null;\nouter: for (let i = 0; i < grid.length; i++) {\n  for (let j = 0; j < grid[i].length; j++) {\n    if (grid[i][j] === 4) { hit = [i, j]; break outer; }\n  }\n}\nconsole.log('found 4 at', hit);\nlet flat = 0;\nouter2: for (const row of grid) { for (const n of row) { flat = flat + n; break outer2; } }\nconsole.log('stopped after one cell, sum so far', flat);\n\nreal example:\nA helper searches a results table for the first row above a threshold and stops the whole scan, instead of reading every remaining row over a slow API."
+  },
+  {
+    "id": 4,
+    "question": "Predict the output of a loop that removes items from the array it is iterating.",
+    "answer": "Deleting at index i shifts every later item one place to the left. The loop counter then moves to the next index, which now holds an item it already passed, so items get skipped.\n\ncode:\nconst rows = ['a', 'b', 'c', 'd'];\nconst seen = [];\nrows.forEach((r, i) => { seen.push(r); if (r === 'b') rows.splice(i, 1); });\nconsole.log('forEach saw:', seen.join(', '));\nconsole.log('rows left:', rows.join(', '));\nconst again = ['a', 'b', 'c', 'd'];\nconst seen2 = [];\nfor (let i = 0; i < again.length; i++) {\n  seen2.push(again[i]);\n  if (again[i] === 'b') again.splice(i, 1);\n}\nconsole.log('plain for saw:', seen2.join(', '), '- d was skipped');\n\nreal example:\nA teardown list drops a closed handle while walking it, the entry after it is skipped, and the next test file starts with a browser handle that was never released."
+  },
+  {
+    "id": 5,
+    "question": "Why does a for...in loop pick up inherited keys, and when does that break you?",
+    "answer": "for...in walks the whole prototype chain, so inherited and enumerable properties show up next to your own data. It breaks you when you iterate data you did not create and assume every key is yours.\n\ncode:\nconst base = { inherited: 'from the prototype' };\nconst data = Object.create(base);\ndata.own = 'mine';\nfor (const key in data) console.log('for...in sees:', key);\nconsole.log('own keys only:', Object.keys(data).join(', '));\nconsole.log('hasOwn guard:', Object.hasOwn(data, 'inherited'));\n\nreal example:\nA fixture built with Object.create picks up a polluted prototype key, a for...in loop treats it as a test case, and the report shows a row with an undefined name."
+  },
+  {
+    "id": 6,
+    "question": "Why does for (var i...) share one i across every closure, and what does let change?",
+    "answer": "var is function scoped, so every closure created in the loop captures the same variable and sees its final value. let is block scoped, so each iteration gets a fresh binding with its own value.\n\ncode:\nconst withVar = [];\nfor (var i = 0; i < 3; i++) withVar.push(() => i);\nconsole.log('var:', withVar.map((f) => f()).join(', '));\nconst withLet = [];\nfor (let j = 0; j < 3; j++) withLet.push(() => j);\nconsole.log('let:', withLet.map((f) => f()).join(', '));\nconsole.log('var is function scoped, so i also escaped the loop:', i);\n\nreal example:\nA retry helper built with var and arrow functions returns the same final attempt number for every queued request, so an assertion checks the wrong value on every retry."
+  },
+  {
+    "id": 7,
+    "question": "When should you use for...of, when forEach, and when a plain for loop?",
+    "answer": "Use for...of when you only need the values, forEach for a short pass with a side effect, and the plain for loop when you need the index, an early exit, or the fastest option.\n\ncode:\nconst rows = ['a', 'b', 'c'];\nconst byOf = [];\nfor (const r of rows) byOf.push(r.toUpperCase());\nconst byEach = [];\nrows.forEach((r) => byEach.push(r.toUpperCase()));\nconst byFor = [];\nfor (let i = 0; i < rows.length; i++) byFor.push(rows[i].toUpperCase() + i);\nconsole.log('for...of:', byOf.join(', '));\nconsole.log('forEach:', byEach.join(', '));\nconsole.log('plain for:', byFor.join(', '));\n\nreal example:\nA locator helper collects text with for...of, a report formatter uses forEach for its logging, and a retry counter uses a plain for loop because it has to stop early."
+  },
+  {
+    "id": 8,
+    "question": "What is the difference between a while loop and a do-while loop?",
+    "answer": "A while loop checks the condition before the body, so it may run zero times. A do-while loop runs the body first and checks afterwards, so it always runs at least once.\n\ncode:\nlet a = 10;\nconst whileTrace = [];\nwhile (a > 5) { whileTrace.push(a); a = a - 3; }\nlet b = 10;\nconst doTrace = [];\ndo { doTrace.push(b); b = b - 3; } while (b > 5);\nconsole.log('while:', whileTrace.join(', '));\nconsole.log('do-while:', doTrace.join(', '));\nlet ran = 0;\ndo { ran = ran + 1; } while (false);\nconsole.log('do-while with a false condition still ran', ran, 'time');\n\nreal example:\nA form helper uses do-while so the validation message always prints once, then keeps looping while the input is still invalid."
+  },
+  {
+    "id": 9,
+    "question": "Why does a for loop reading arr.length keep working when the array shrinks during the loop?",
+    "answer": "The condition is re-evaluated on every pass, so it always reads the current length. Caching the length in a variable avoids repeated reads but freezes that value and changes the behaviour.\n\ncode:\nconst list = [1, 2, 3];\nconst seen = [];\nfor (let i = 0; i < list.length; i++) {\n  seen.push(list[i]);\n  if (list[i] === 1) list.push(4);\n}\nconsole.log('live length read:', seen.join(', '), '| list now', list.join(', '));\nconst frozen = [1, 2, 3];\nconst seen2 = [];\nfor (let j = 0, n = frozen.length; j < n; j++) seen2.push(frozen[j]);\nconsole.log('cached length:', seen2.join(', '), '| n stayed', n);\n\nreal example:\nA loop over a response list that appends filtered rows keeps reading the live length, so rows pushed during iteration are processed in the same pass."
+  },
+  {
+    "id": 10,
+    "question": "What happens if you try to iterate a plain object with for...of?",
+    "answer": "You get a TypeError, because a plain object has no iterator method. for...of needs something it can pull values from, and for...in is the loop that walks object keys instead.\n\ncode:\nconst settings = { timeout: 1000 };\ntry {\n  for (const entry of settings) console.log(entry);\n} catch (e) {\n  console.log('for...of on an object throws:', e.constructor.name);\n}\nfor (const key in settings) console.log('for...in works:', key, '=', settings[key]);\nconsole.log('Object.entries is the iterable path:', Object.entries(settings).length, 'entry');\n\nreal example:\nA config loader tries for...of over a plain settings object and the whole suite crashes before a single test runs, so the error appears with no test name attached."
+  },
+  {
+    "id": 11,
+    "question": "How do you safely remove items from an array while you are looping over it?",
+    "answer": "Build a new array with filter, or iterate backwards. Both avoid the shifting problem, because filter never touches the original array and a backwards loop visits higher indexes first.\n\ncode:\nconst rows = ['keep', 'drop', 'keep2', 'drop2', 'keep3'];\nconsole.log('filter kept:', rows.filter((r) => !r.startsWith('drop')).join(', '));\nconst backwards = [];\nfor (let i = rows.length - 1; i >= 0; i--) {\n  if (rows[i].startsWith('keep')) backwards.unshift(rows[i]);\n}\nconsole.log('backwards kept:', backwards.join(', '));\nconsole.log('original untouched by either approach:', rows.join(', '));\n\nreal example:\nA cleanup step drops closed handles from a list while walking it and skips the next entry, so one handle leaks into the next test file and holds a browser open."
+  },
+  {
+    "id": 12,
+    "question": "Why does break not work inside a forEach callback?",
+    "answer": "forEach is a function call, not a loop. break is only legal inside a loop or a switch statement, and the callback is neither, so the code fails to parse.\n\ncode:\nconst rows = [1, 2, 3, 4];\ntry {\n  rows.forEach((n) => { if (n === 3) break; console.log('printed', n); });\n} catch (e) {\n  console.log('break inside forEach is a', e.constructor.name);\n}\nfor (const n of rows) { if (n === 3) break; console.log('for...of printed', n); }\nconsole.log('use find for an early exit:', rows.find((n) => n > 2));\n\nreal example:\nA test helper tries to stop scanning rows as soon as it finds a match, and the parser fails with an illegal break statement instead of a test result."
+  },
+  {
+    "id": 13,
+    "question": "What does for...of produce when you iterate a string?",
+    "answer": "It walks the string one character at a time and each value is a one-character string. The index is not available, so you keep a counter yourself if you need it.\n\ncode:\nconst code = 'ab12';\nfor (const ch of code) console.log('char:', ch, typeof ch, 'code', ch.charCodeAt(0));\nconst paired = [];\nlet index = 0;\nfor (const ch of code) { paired.push(index + ':' + ch); index = index + 1; }\nconsole.log(paired.join(' '));\nconsole.log('spread turns a string into an array of chars:', [...code].length);\n\nreal example:\nA login helper validates a one-time code by walking the string with for...of and rejects the first character that is not a digit."
+  },
+  {
+    "id": 14,
+    "question": "Why is forEach awkward when you also need the index of each item?",
+    "answer": "forEach passes the index as a second argument, which works but reads badly and pushes your real work into the third parameter slot. A plain for loop makes the index a named variable.\n\ncode:\nconst rows = ['alpha', 'beta', 'gamma'];\nrows.forEach((row, i) => console.log('forEach second arg:', i, row));\nrows.forEach((row, i, list) => console.log('third arg is the list, length', list.length));\nconst pairs = [];\nfor (let i = 0; i < rows.length; i++) pairs.push([i, rows[i]]);\nconsole.log('plain for pairs:', JSON.stringify(pairs));\n\nreal example:\nA report builds row labels such as row-1 from the index, and doing it inside forEach means juggling extra parameters that most readers misread."
+  },
+  {
+    "id": 15,
+    "question": "What is an off-by-one error in a for loop and how do you avoid it?",
+    "answer": "It is using less-than-or-equal with an index, or stopping one item early. Array indexes run from 0 to length minus 1, so a strict less-than is the correct comparison.\n\ncode:\nconst items = ['a', 'b', 'c'];\nconst wrong = [];\nfor (let i = 0; i <= items.length; i++) wrong.push(items[i]);\nconsole.log('with <= the last value is', wrong[wrong.length - 1]);\nconst right = [];\nfor (let i = 0; i < items.length; i++) right.push(items[i]);\nconsole.log('with < the loop visits', right.length, 'items');\nconsole.log('the last valid index is', items.length - 1);\n\nreal example:\nA pagination loop written with less-than-or-equal requests one page too many, and the API returns a 400 that only happens on the very last page of the suite."
+  },
+  {
+    "id": 16,
+    "question": "What happens if a for loop has no update expression?",
+    "answer": "The condition stays true forever, so the loop never ends and the process hangs. Either add the update or build the safety net into the condition itself.\n\ncode:\nlet spins = 0;\nfor (let i = 0; i < 5;) { spins = spins + 1; i = i + 1; }\nconsole.log('fixed by updating inside the body, ran', spins, 'times');\nlet guard = 0;\nwhile (true) { guard = guard + 1; if (guard > 3) break; }\nconsole.log('while true is fine when you break out deliberately:', guard);\nfor (let k = 0; k < 3; k++) { if (k === 99) break; }\nconsole.log('a condition can never be true if nothing changes it');\n\nreal example:\nA polling helper waits for a status with a loop that has no update, the run never finishes, and somebody has to cancel the CI job by hand every time."
+  },
+  {
+    "id": 17,
+    "question": "What does a do-while loop do when its condition is false on the very first check?",
+    "answer": "It still runs the body once and then stops. That single guaranteed pass is the only difference from a while loop, and it is sometimes exactly what you want.\n\ncode:\nlet first = true;\nconst trace = [];\ndo { trace.push('body ran'); first = false; } while (first);\nconsole.log('trace:', trace.join(' | '), '| length', trace.length);\nlet attempts = 0;\ndo { attempts = attempts + 1; } while (attempts < 3);\nconsole.log('guaranteed one attempt, ended at', attempts);\nlet none = 0;\nwhile (none < 1) { none = none + 1; }\nconsole.log('while also ran', none, 'time here, the difference only shows on a false condition');\n\nreal example:\nA form helper renders the validation error block once even when the field is valid, because do-while always shows the message area before checking."
+  },
+  {
+    "id": 18,
+    "question": "How do you loop over a Map and get both the key and the value at the same time?",
+    "answer": "Iterate the Map with for...of. Each item is a two-element entry, so destructuring it in the loop header gives you a readable key name and value name.\n\ncode:\nconst users = new Map([['ana', 30], ['bo', 25]]);\nfor (const [name, age] of users) console.log(name, 'is', age);\nfor (const key of users.keys()) console.log('key only:', key);\nfor (const value of users.values()) console.log('value only:', value);\nconsole.log('get still works:', users.get('ana'), '| size', users.size);\n\nreal example:\nA fixture builder keeps expected counts in a Map and the loop that verifies them needs the test name and the number together in one pass."
+  },
+  {
+    "id": 19,
+    "question": "Why does forEach skip the holes in a sparse array while a plain for loop does not?",
+    "answer": "forEach has a rule to skip indexes that were never assigned. A plain for loop visits every index in the range and hands you undefined for the holes instead.\n\ncode:\nconst sparse = [1, , 3];\nconsole.log('length', sparse.length, '| index 1 is', sparse[1]);\nconst visited = [];\nsparse.forEach((v, i) => visited.push(i + '=' + String(v)));\nconsole.log('forEach visited:', visited.join(', '));\nconst all = [];\nfor (let i = 0; i < sparse.length; i++) all.push(i + '=' + String(sparse[i]));\nconsole.log('for loop visited:', all.join(', '));\nconsole.log('Array(3) has length', Array(3).length, 'and no own items');\n\nreal example:\nA loop starts from an Array(3) placeholder and calls forEach on it, so the loop body runs zero times and the three placeholders are never filled."
+  },
+  {
+    "id": 20,
+    "question": "When is a plain for loop measurably faster than forEach, and does it matter in a test suite?",
+    "answer": "A plain for loop skips one function call per item, so it wins on very large arrays. In a test suite the difference is tiny next to browser and network time.\n\ncode:\nconst big = Array.from({ length: 200000 }, (_, i) => i);\nlet start = Date.now();\nlet sum1 = 0;\nfor (let i = 0; i < big.length; i++) sum1 = sum1 + big[i];\nconst forMs = Date.now() - start;\nstart = Date.now();\nlet sum2 = 0;\nbig.forEach((n) => { sum2 = sum2 + n; });\nconst eachMs = Date.now() - start;\nconsole.log('for:', forMs + 'ms', '| forEach:', eachMs + 'ms', '| same total:', sum1 === sum2);\n\nreal example:\nA data-seeding step loops over 200000 records. Switching from forEach to a for loop shaves some milliseconds, but the API wait still dominates the run time."
+  },
+  {
+    "id": 21,
+    "question": "What happens to the value a forEach callback returns?",
+    "answer": "Nothing uses it. The return value is discarded, which is exactly why returning from a callback does not stop the iteration over the remaining items.\n\ncode:\nconst rows = [1, 2, 3];\nconst result = rows.forEach((n) => { if (n === 2) return 'stopped'; return n * 10; });\nconsole.log('forEach returned:', result);\nconsole.log('map keeps the values:', rows.map((n) => n * 10).join(','));\nlet stoppedAt = 0;\nfor (const n of rows) { if (n === 2) { stoppedAt = n; break; } }\nconsole.log('a for...of loop with break stopped at', stoppedAt);\n\nreal example:\nA helper returns true from a forEach callback expecting to signal success, and the caller always sees undefined, so the suite reports pass when it should report fail."
+  },
+  {
+    "id": 22,
+    "question": "How do you iterate an object without picking up junk from its prototype?",
+    "answer": "Use Object.keys, Object.values or Object.entries, all of which return only own keys. If you must use for...in, filter it with Object.hasOwn.\n\ncode:\nconst base = { noisy: 'inherited' };\nconst data = Object.assign(Object.create(base), { id: 1, name: 'Ana' });\nfor (const [key, value] of Object.entries(data)) console.log('entries:', key, '=', value);\nconsole.log('keys:', Object.keys(data).join(', '));\nconsole.log('every key is own:', Object.keys(data).every((k) => Object.hasOwn(data, k)));\n\nreal example:\nA fixture built with Object.create picks up a polluted prototype key, and a for...in loop adds that key as a test case with an undefined value."
+  },
+  {
+    "id": 23,
+    "question": "Why does iterating backwards work for deleting items when forward iteration skips some?",
+    "answer": "Deleting at index i shifts every later item one place left. A backwards loop visits the higher indexes first, so nothing it has already visited moves.\n\ncode:\nconst rows = ['a', 'b', 'c', 'd', 'e'];\nconst visited = [];\nfor (let i = rows.length - 1; i >= 0; i--) {\n  visited.push(rows[i]);\n  if (rows[i] === 'b' || rows[i] === 'd') rows.splice(i, 1);\n}\nconsole.log('visited backwards:', visited.join(', '));\nconsole.log('left behind:', rows.join(', '));\nconsole.log('every item was seen once:', visited.length === 5);\n\nreal example:\nRemoving tagged fixtures from a list backwards deletes every one, while the forward version leaves half of them behind and the next run reuses them."
+  },
+  {
+    "id": 24,
+    "question": "Does a forEach loop see items that are pushed into the array during the loop?",
+    "answer": "It reads the length once at the start and then checks each index against that number, so items pushed past the original length are never visited. A plain for loop reads the length every pass and does see them.\n\ncode:\nconst queue = ['first'];\nconst seen = [];\nqueue.forEach((item) => { seen.push(item); if (item === 'first') queue.push('second'); });\nconsole.log('forEach saw:', seen.join(', '), '| the snapshot was length 1');\nconst live = ['first'];\nconst seen2 = [];\nfor (let i = 0; i < live.length; i++) seen2.push(live[i]);\nconsole.log('plain for saw:', seen2.join(', '), '| list now', live.join(', '));\n\nreal example:\nA step queue pushes a follow-up action from inside its own loop. The plain for picks it up, and the forEach version silently drops a step the report expects."
+  },
+  {
+    "id": 25,
+    "question": "How do you loop exactly N times without writing a counter variable?",
+    "answer": "Use Array.from with a length, or iterate an array built with Array(N).fill(). You get N passes and a clean scope, with nothing leaking afterwards.\n\ncode:\nconst n = 4;\nconst seen = [];\nfor (const _ of Array.from({ length: n }, (_, i) => i)) seen.push('run');\nconsole.log('ran', seen.length, 'times');\nconsole.log('Array(3).fill(0):', Array(3).fill(0).join(','));\nlet sum = 0;\nfor (const _ of Array(n)) sum = sum + 2;\nconsole.log('sum of n twos:', sum);\n\nreal example:\nA fixture builder creates N unique rows with Array.from, so the row count comes straight from the test data instead of a counter that can drift."
+  },
+  {
+    "id": 26,
+    "question": "Is there a difference between i++ and ++i in the update expression of a for loop?",
+    "answer": "There is not, because the update expression is a statement on its own and its value is thrown away. Only the side effect matters, and both operators increase by one.\n\ncode:\nlet a = 0, b = 0;\nfor (let i = 0; i < 3; i++) a = a + 1;\nfor (let j = 0; j < 3; ++j) b = b + 1;\nconsole.log('post-increment loop ran', a, 'times | pre-increment loop ran', b, 'times');\nlet x = 5;\nconsole.log('as expressions they differ:', x++, '|', ++x);\n\nreal example:\nA reviewer asks you to change i++ to ++i in a for header for speed. The profiler shows no change, so the churn across forty files is not worth it."
+  },
+  {
+    "id": 27,
+    "question": "Why can for...of work on a Set but throw on a plain object?",
+    "answer": "A Set is iterable, so it has a next method and for...of can pull items from it. A plain object has no such method, so for...of fails before it produces a single value.\n\ncode:\nconst ids = new Set(['a', 'b', 'a']);\nconst out = [];\nfor (const id of ids) out.push(id);\nconsole.log('set iteration:', out.join(', '), '| size', ids.size);\nconst plain = { a: 1, b: 2 };\nconsole.log('a plain object has an iterator:', typeof plain[Symbol.iterator]);\nconsole.log('Object.entries is the iterable path:', [...Object.entries(plain)].length, 'pairs');\n\nreal example:\nA helper dedupes test ids in a Set and iterates it with for...of. A colleague passes a plain object and the run crashes on the missing iterator."
+  },
+  {
+    "id": 28,
+    "question": "What happens to a for...of loop if you change the array's length while iterating?",
+    "answer": "for...of pulls from the array iterator, which stops as soon as it reaches the end of the array. Removing items can end the loop early, while appending at the end is usually picked up.\n\ncode:\nconst rows = [1, 2, 3];\nconst seen = [];\nfor (const n of rows) { seen.push(n); rows.shift(); }\nconsole.log('shift inside for...of:', seen.join(', '), '| left', rows.length);\nconst grown = [1];\nconst seen2 = [];\nfor (const n of grown) { seen2.push(n); if (n === 1) grown.push(2); }\nconsole.log('push inside for...of:', seen2.join(', '));\nconsole.log('the forEach snapshot behaves differently:', [1, 2].length);\n\nreal example:\nA queue is drained with for...of while the body unshifts new work, and the loop ends before every queued item is processed, so two steps never run."
+  },
+  {
+    "id": 29,
+    "question": "How do you write a countdown that runs at least once even when the limit is zero?",
+    "answer": "Use a do-while loop. The body runs before the condition is checked, so a limit of zero still produces one pass.\n\ncode:\nlet n = 3;\nconst order = [];\ndo { order.push(n); n = n - 1; } while (n > 0);\nconsole.log('countdown:', order.join(' > '));\nlet m = 0;\nconst ticks = [];\ndo { ticks.push('tick ' + m); m = m + 1; } while (m < 0);\nconsole.log('a limit of zero still ticks once:', ticks.join(','));\nlet k = 2;\nconst guard = [];\ndo { guard.push(k); k = k - 1; } while (k >= 0);\nconsole.log('down to and including zero:', guard.join(','));\n\nreal example:\nA fixture builder writes at least one row even when the requested count is zero, which stops a test from skipping the write it needs to verify."
+  },
+  {
+    "id": 30,
+    "question": "Why is while (arr.length) a valid but risky way to empty an array?",
+    "answer": "The condition is true while the array has items, and the body removes one each pass, so it terminates. It hides what is happening, though, and popping an already empty array throws.\n\ncode:\nconst rows = ['a', 'b', 'c'];\nlet pops = 0;\nwhile (rows.length) { rows.pop(); pops = pops + 1; }\nconsole.log('emptied with', pops, 'pops | length now', rows.length);\nconst empty = [];\ntry { empty.pop(); } catch (e) { console.log('pop on empty throws', e.constructor.name + ':', e.message); }\nconsole.log('zero is falsy, so the loop never runs on an empty array');\n\nreal example:\nA helper pops entries off a shared list until it is empty, another test file clears the same list first, and the pop throws with no useful stack trace."
+  },
+  {
+    "id": 31,
+    "question": "What does a classic for loop over a string give you that for...of does not?",
+    "answer": "It gives you the index alongside each value. The catch is that a classic loop counts UTF-16 code units, so multi-byte characters can be cut in half.\n\ncode:\nconst word = 'cafe';\nfor (let i = 0; i < word.length; i++) console.log('index', i, 'char', word[i], 'code', word.charCodeAt(i));\nfor (const ch of word) console.log('for...of char:', ch, 'length', ch.length);\nconsole.log('a multi-byte char counts as two units:', '\\u00e9'.length);\n\nreal example:\nA test-name generator truncates a title with a classic loop and cuts a non-English character in half, so the report shows a replacement symbol."
+  },
+  {
+    "id": 32,
+    "question": "How do you iterate from the end of an array without mutating it during the loop?",
+    "answer": "Use a reverse for loop over indexes, which does not change the array. If you also need the original order afterwards, take a copy with slice first.\n\ncode:\nconst rows = ['x', 'y', 'z'];\nfor (let i = rows.length - 1; i >= 0; i--) console.log('reverse:', i, rows[i]);\nconst copy = rows.slice().reverse();\nconsole.log('slice then reverse:', copy.join(', '));\nconsole.log('the original is still:', rows.join(', '));\nconst lastIndex = rows.length - 1 - rows.slice().reverse().indexOf('y');\nconsole.log('index of y counting from the end:', lastIndex);\n\nreal example:\nA test asserts the last row is the summary row by scanning backwards from the end, because the row order coming from the API is not guaranteed."
+  },
+  {
+    "id": 33,
+    "question": "Why is for...in risky to use on an array when for...of is right there?",
+    "answer": "for...in over an array hands you index strings, not values, and it walks the prototype, so a patched Array prototype adds keys. for...of gives you the values directly.\n\ncode:\nconst rows = ['a', 'b'];\nfor (const key in rows) console.log('for...in key:', JSON.stringify(key), 'of type', typeof key);\nfor (const value of rows) console.log('for...of value:', value, 'of type', typeof value);\nArray.prototype.extra = 'patched';\nfor (const key in rows) console.log('a patched prototype adds the key:', key);\ndelete Array.prototype.extra;\n\nreal example:\nA shared library patches Array.prototype, a for...in loop over a results array picks up the extra key, and the test tries to read a method from a string."
+  }
+]

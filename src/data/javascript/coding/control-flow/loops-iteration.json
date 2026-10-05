@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "question": "Write a loop that prints the numbers from 1 to 10 one per line, then print the sum of those numbers on a final line labelled sum.",
+    "answer": "A simple for loop counts up from 1 to 10 inclusive. Keep a running total and log it once the loop has finished.\n\ncode:\nlet sum = 0;\nfor (let i = 1; i <= 10; i++) {\n  console.log(i);\n  sum += i;\n}\nconsole.log('sum:', sum); // sum: 55\n\noutput:\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\nsum: 55"
+  },
+  {
+    "id": 2,
+    "question": "Write the same range from 1 to 10 with a while loop, and print the sum of only the even numbers on the final line.",
+    "answer": "A while loop needs its counter declared outside the loop and moved at the bottom of the body. Only add to the total when the number is even.\n\ncode:\nlet i = 1;\nlet sumEven = 0;\nwhile (i <= 10) {\n  console.log(i);\n  if (i % 2 === 0) sumEven += i;\n  i++;\n}\nconsole.log('sum even:', sumEven); // sum even: 30\n\noutput:\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\nsum even: 30"
+  },
+  {
+    "id": 3,
+    "question": "Write the range from 1 to 10 with a do-while loop and print the product of the numbers divisible by 3 on the final line.",
+    "answer": "A do-while runs its body at least once, then tests the condition. Check for divisibility by 3 and multiply the running product.\n\ncode:\nlet i = 1;\nlet product3 = 1;\ndo {\n  console.log(i);\n  if (i % 3 === 0) product3 *= i;\n  i++;\n} while (i <= 10);\nconsole.log('product of multiples of 3:', product3); // product of multiples of 3: 162\n\noutput:\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\nproduct of multiples of 3: 162"
+  },
+  {
+    "id": 4,
+    "question": "Write a function range(start, end) that returns an array of every integer from start to end inclusive, then print the array joined by spaces and its length. Example: range(3, 8).",
+    "answer": "Push one value per turn of the loop. The length comes from the array itself, which proves the bounds were read correctly.\n\ncode:\nfunction range(start, end) {\n  const out = [];\n  for (let i = start; i <= end; i++) out.push(i);\n  return out;\n}\nconsole.log(range(3, 8).join(' ')); // 3 4 5 6 7 8\nconsole.log(range(3, 8).length); // 6\n\noutput:\n3 4 5 6 7 8\n6"
+  },
+  {
+    "id": 5,
+    "question": "Predict the output: print a countdown from 3 with a while loop, then the same countdown with a do-while loop, using a line label so you can tell them apart.",
+    "answer": "A while loop checks the condition first, so it prints 3, 2, 1. A do-while runs the body first, so it prints 3, 2, 1 and then 0, because the counter reaches 0 inside the body before the test.\n\ncode:\nlet a = 3;\nwhile (a > 0) {\n  console.log('while', a);\n  a--;\n}\nlet b = 3;\ndo {\n  console.log('do', b);\n  b--;\n} while (b > 0);\n\noutput:\nwhile 3\nwhile 2\nwhile 1\ndo 3\ndo 2\ndo 1"
+  },
+  {
+    "id": 6,
+    "question": "Predict the output: a do-while loop has the condition false. Show how many times its body runs compared with a while loop with the same condition.",
+    "answer": "The do-while body runs once because the test happens at the end. The while loop tests first, so its body never runs.\n\ncode:\nlet doRuns = 0;\nlet whileRuns = 0;\ndo {\n  doRuns++;\n} while (false);\nwhile (false) {\n  whileRuns++;\n}\nconsole.log('do-while ran', doRuns, 'time and while ran', whileRuns, 'times');\n\noutput:\ndo-while ran 1 time and while ran 0 times"
+  },
+  {
+    "id": 7,
+    "question": "Write a function factorial(n) that returns n multiplied by all the smaller numbers, using a for loop. Print factorial(7).",
+    "answer": "Start the result at 1 and multiply every number from 2 up to n. Starting at 2 skips the pointless multiply by 1.\n\ncode:\nfunction factorial(n) {\n  let result = 1;\n  for (let i = 2; i <= n; i++) {\n    result *= i;\n  }\n  return result;\n}\nconsole.log(factorial(7)); // 5040\n\noutput:\n5040"
+  },
+  {
+    "id": 8,
+    "question": "Write a function fibonacci(n) that returns the n-th Fibonacci number where F(0) is 0 and F(1) is 1, using a for loop, and print F(10).",
+    "answer": "Keep only the last two values in variables. No array is needed when the caller only wants the final number.\n\ncode:\nfunction fibonacci(n) {\n  if (n < 2) return n;\n  let a = 0;\n  let b = 1;\n  for (let i = 2; i <= n; i++) {\n    const next = a + b;\n    a = b;\n    b = next;\n  }\n  return b;\n}\nconsole.log(fibonacci(10)); // 55\n\noutput:\n55"
+  },
+  {
+    "id": 9,
+    "question": "Write a second Fibonacci function that builds the whole sequence into an array with a loop until it has 12 numbers, and print both F(10) from the two functions on one line.",
+    "answer": "The second version keeps every term in an array instead of only the last two. Two implementations of the same rule is a cheap cross-check.\n\ncode:\nfunction fibArray(count) {\n  const seq = [0, 1];\n  for (let i = 2; i < count; i++) seq.push(seq[i - 1] + seq[i - 2]);\n  return seq;\n}\nfunction fibAt(n) {\n  return fibArray(n + 1)[n];\n}\nconsole.log(fibArray(12).join(' '));\nconsole.log('both agree:', fibAt(10) === fibArray(11)[10]);\n\noutput:\n0 1 1 2 3 5 8 13 21 34 55 89\nboth agree: true"
+  },
+  {
+    "id": 10,
+    "question": "Find the first value that appears twice in the array [1, 2, 3, 2, 4, 5, 1] using a single loop and a plain object to track what has been seen. Print the value and the index where the repeat showed up.",
+    "answer": "One pass is enough because every value is looked up in the seen object before it is recorded. Return at the first repeat instead of carrying on.\n\ncode:\nconst arr = [1, 2, 3, 2, 4, 5, 1];\nconst seen = {};\nlet found = null;\nfor (let i = 0; i < arr.length; i++) {\n  if (seen[arr[i]] !== undefined) {\n    found = { value: arr[i], index: i };\n    break;\n  }\n  seen[arr[i]] = i;\n}\nconsole.log(found.value, 'repeats at index', found.index); // 2 repeats at index 3\n\noutput:\n2 repeats at index 3"
+  },
+  {
+    "id": 11,
+    "question": "Count how many times each character appears in the string banana using a loop and a plain object, with no Map and no array method. Print the object.",
+    "answer": "A missing key reads as undefined, so default it to 0 and add one. That is the whole counting pattern.\n\ncode:\nconst text = 'banana';\nconst counts = {};\nfor (let i = 0; i < text.length; i++) {\n  counts[text[i]] = (counts[text[i]] || 0) + 1;\n}\nconsole.log(counts); // { b: 1, a: 3, n: 2 }\n\noutput:\n{ b: 1, a: 3, n: 2 }"
+  },
+  {
+    "id": 12,
+    "question": "Print a 5 by 5 grid of asterisks, five lines of five stars each, using two nested loops and no join or repeat.",
+    "answer": "The outer loop is a row, the inner loop is a column inside that row. Collect the rows into an array and print them one by one.\n\ncode:\nconst lines = [];\nfor (let row = 0; row < 5; row++) {\n  let line = '';\n  for (let col = 0; col < 5; col++) {\n    line += '*';\n  }\n  lines.push(line);\n}\nlines.forEach((line) => console.log(line));\n\noutput:\n*****\n*****\n*****\n*****\n*****"
+  },
+  {
+    "id": 13,
+    "question": "Print a right-angled triangle of asterisks with 5 rows, where row n contains n stars, using nested loops.",
+    "answer": "For row n the inner loop runs from 0 up to n, which is one more step than the previous row.\n\ncode:\nfor (let row = 1; row <= 5; row++) {\n  let line = '';\n  for (let col = 0; col < row; col++) {\n    line += '*';\n  }\n  console.log(line);\n}\n\noutput:\n*\n**\n***\n****\n*****"
+  },
+  {
+    "id": 14,
+    "question": "Print a diamond of stars of size 5, meaning five lines growing from one star to nine and then shrinking back to one, with the stars centred. Use nested loops or repeat, and print the shape.",
+    "answer": "Each row is the same shape: some spaces then some stars. Build the top half going up, then the bottom half going down.\n\ncode:\nconst size = 5;\nconst lines = [];\nfor (let row = 1; row <= size; row++) {\n  lines.push(' '.repeat(size - row) + '*'.repeat(row * 2 - 1));\n}\nfor (let row = size - 1; row >= 1; row--) {\n  lines.push(' '.repeat(size - row) + '*'.repeat(row * 2 - 1));\n}\nlines.forEach((line) => console.log(line));\n\noutput:\n    *\n   ***\n  *****\n *******\n*********\n *******\n  *****\n   ***\n    *"
+  },
+  {
+    "id": 15,
+    "question": "Print a 5 by 5 multiplication table where row 2 shows 2 4 6 8 10 and so on. Use nested loops and print one row per line.",
+    "answer": "The outer loop picks the row factor, the inner loop walks the column factor, and the row is joined into one string before printing.\n\ncode:\nfor (let row = 1; row <= 5; row++) {\n  const parts = [];\n  for (let col = 1; col <= 5; col++) {\n    parts.push(row * col);\n  }\n  console.log(parts.join(' '));\n}\n\noutput:\n1 2 3 4 5\n2 4 6 8 10\n3 6 9 12 15\n4 8 12 16 20\n5 10 15 20 25"
+  },
+  {
+    "id": 16,
+    "question": "Write a function prefixSums(arr) that returns an array where each element is the total of everything up to that point. Example: prefixSums([1, 2, 3, 4]) returns [1, 3, 6, 10].",
+    "answer": "Keep one running total across the loop and push a copy of it on every turn. The array is the record of that total.\n\ncode:\nfunction prefixSums(arr) {\n  const out = [];\n  let running = 0;\n  for (const n of arr) {\n    running += n;\n    out.push(running);\n  }\n  return out;\n}\nconsole.log(prefixSums([1, 2, 3, 4])); // [ 1, 3, 6, 10 ]\n\noutput:\n[ 1, 3, 6, 10 ]"
+  },
+  {
+    "id": 17,
+    "question": "Write everyAtLeast(nums, limit) that returns false as soon as it meets a number below the limit and true when the loop finishes without one. Print it for [5, 6, 7] and for [5, 2].",
+    "answer": "Returning false early stops the scan on the first failure. Reaching the end of the loop means every number passed.\n\ncode:\nfunction everyAtLeast(nums, limit) {\n  for (const n of nums) {\n    if (n < limit) return false;\n  }\n  return true;\n}\nconsole.log(everyAtLeast([5, 6, 7], 5), everyAtLeast([5, 2], 5)); // true false\n\noutput:\ntrue false"
+  },
+  {
+    "id": 18,
+    "question": "Write someAbove(nums, limit) that returns the last number in the array that is above the limit, or null when there is none. Print it for [1, 9, 3, 11] and for [1, 2].",
+    "answer": "Keep assigning while the condition holds, so the final assignment is the last match. Report null when nothing ever matched.\n\ncode:\nfunction someAbove(nums, limit) {\n  let found = null;\n  for (const n of nums) {\n    if (n > limit) found = n;\n  }\n  return found;\n}\nconsole.log(someAbove([1, 9, 3, 11], 5), someAbove([1, 2], 5)); // 11 null\n\noutput:\n11 null"
+  },
+  {
+    "id": 19,
+    "question": "Sort the array [5, 1, 4, 2, 8] with a bubble sort written as nested loops and no Array.sort. Print the original array and the sorted one.",
+    "answer": "Bubble sort compares each neighbouring pair and swaps them when they are in the wrong order. Each full pass settles the largest remaining value at the end, so the inner loop gets shorter.\n\ncode:\nconst arr = [5, 1, 4, 2, 8];\nconst sorted = arr.slice();\nfor (let pass = 0; pass < sorted.length; pass++) {\n  for (let i = 0; i < sorted.length - pass - 1; i++) {\n    if (sorted[i] > sorted[i + 1]) {\n      const swap = sorted[i];\n      sorted[i] = sorted[i + 1];\n      sorted[i + 1] = swap;\n    }\n  }\n}\nconsole.log('before', arr.join(','));\nconsole.log('after', sorted.join(','));\n\noutput:\nbefore 5,1,4,2,8\nafter 1,2,4,5,8"
+  },
+  {
+    "id": 20,
+    "question": "Sort the array [5, 2, 4, 6, 1] with an insertion sort written as a loop and a while loop, then print the sorted array.",
+    "answer": "Take the next value, then shift every larger value one place to the right and drop the value into the gap. That is insertion sort.\n\ncode:\nconst arr = [5, 2, 4, 6, 1];\nfor (let i = 1; i < arr.length; i++) {\n  const value = arr[i];\n  let j = i - 1;\n  while (j >= 0 && arr[j] > value) {\n    arr[j + 1] = arr[j];\n    j--;\n  }\n  arr[j + 1] = value;\n}\nconsole.log(arr); // [ 1, 2, 4, 5, 6 ]\n\noutput:\n[ 1, 2, 4, 5, 6 ]"
+  },
+  {
+    "id": 21,
+    "question": "Write a function rotate(arr, k) that moves the first k values to the end without using Array.sort or a slice trick that copies. Print rotate([1, 2, 3, 4, 5], 2).",
+    "answer": "A loop repeats the same shift k times. Shifting pulls the front value off and pushes it on the end.\n\ncode:\nfunction rotate(arr, k) {\n  const out = arr.slice();\n  for (let i = 0; i < k; i++) {\n    out.push(out.shift());\n  }\n  return out;\n}\nconsole.log(rotate([1, 2, 3, 4, 5], 2).join(' ')); // 3 4 5 1 2\n\noutput:\n3 4 5 1 2"
+  },
+  {
+    "id": 22,
+    "question": "Split the array [1, 2, 3, 4, 5, 6, 7] into chunks of 3 with a loop that steps the index by the chunk size, and print the array of chunks.",
+    "answer": "Move the index by the chunk size on every turn. The last chunk is shorter because slice just runs off the end.\n\ncode:\nconst arr = [1, 2, 3, 4, 5, 6, 7];\nconst chunks = [];\nfor (let i = 0; i < arr.length; i += 3) {\n  chunks.push(arr.slice(i, i + 3));\n}\nconsole.log(chunks);\n\noutput:\n[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7 ] ]"
+  },
+  {
+    "id": 23,
+    "question": "Flatten the array [[1, 2], [3, 4], [5]] by exactly one level using nested loops and push. Print the result.",
+    "answer": "One level means the inner arrays disappear but their contents stay. Two loops express exactly that.\n\ncode:\nconst nested = [[1, 2], [3, 4], [5]];\nconst flat = [];\nfor (let i = 0; i < nested.length; i++) {\n  for (let j = 0; j < nested[i].length; j++) {\n    flat.push(nested[i][j]);\n  }\n}\nconsole.log(flat); // [ 1, 2, 3, 4, 5 ]\n\noutput:\n[ 1, 2, 3, 4, 5 ]"
+  },
+  {
+    "id": 24,
+    "question": "Merge the sorted arrays [1, 3, 5] and [2, 4, 6] into one sorted array using a while loop on two indices and no Array.sort. Print the merged array.",
+    "answer": "Compare the two front values, push the smaller one and move only that pointer. When one list runs dry, copy the rest of the other.\n\ncode:\nconst left = [1, 3, 5];\nconst right = [2, 4, 6];\nconst merged = [];\nlet i = 0;\nlet j = 0;\nwhile (i < left.length && j < right.length) {\n  if (left[i] <= right[j]) merged.push(left[i++]);\n  else merged.push(right[j++]);\n}\nwhile (i < left.length) merged.push(left[i++]);\nwhile (j < right.length) merged.push(right[j++]);\nconsole.log(merged); // [ 1, 2, 3, 4, 5, 6 ]\n\noutput:\n[ 1, 2, 3, 4, 5, 6 ]"
+  },
+  {
+    "id": 25,
+    "question": "Transpose the matrix [[1, 2, 3], [4, 5, 6]] with nested loops so rows become columns, then print the transposed matrix.",
+    "answer": "Element at row r column c goes to row c column r. Create the new grid with the swapped dimensions first, then fill it.\n\ncode:\nconst matrix = [[1, 2, 3], [4, 5, 6]];\nconst rows = matrix.length;\nconst cols = matrix[0].length;\nconst out = Array(cols).fill().map(() => Array(rows).fill(0));\nfor (let r = 0; r < rows; r++) {\n  for (let c = 0; c < cols; c++) {\n    out[c][r] = matrix[r][c];\n  }\n}\nconsole.log(out); // [ [ 1, 4 ], [ 2, 5 ], [ 3, 6 ] ]\n\noutput:\n[ [ 1, 4 ], [ 2, 5 ], [ 3, 6 ] ]"
+  },
+  {
+    "id": 26,
+    "question": "Write isPrime(n) with a loop that tests divisors up to the square root, and print the answers for 2, 9, 17 and 1.",
+    "answer": "Start at 2 because every number divides itself. Once the divisor passes the square root there is nothing left to test.\n\ncode:\nfunction isPrime(n) {\n  if (n < 2) return false;\n  for (let i = 2; i * i <= n; i++) {\n    if (n % i === 0) return false;\n  }\n  return true;\n}\nconsole.log([2, 9, 17, 1].map(isPrime).join(' ')); // true false true false\n\noutput:\ntrue false true false"
+  },
+  {
+    "id": 27,
+    "question": "Write nthPrime(n) that walks the positive integers with a while loop, tests each one with an inner loop, and prints the 7th prime number.",
+    "answer": "Count the primes as you find them and stop the outer loop once the count reaches n. Test divisors with the cheaper i times i limit.\n\ncode:\nfunction nthPrime(n) {\n  let count = 0;\n  let candidate = 1;\n  while (count < n) {\n    candidate++;\n    let prime = true;\n    for (let i = 2; i * i <= candidate; i++) {\n      if (candidate % i === 0) prime = false;\n    }\n    if (prime) count++;\n  }\n  return candidate;\n}\nconsole.log(nthPrime(7)); // 17\n\noutput:\n17"
+  },
+  {
+    "id": 28,
+    "question": "Write isPalindrome(s) that compares the characters from both ends inward with a while loop and no array method. Print the results for radar and for runner.",
+    "answer": "Two pointers walk towards each other. The first mismatch means it is not a palindrome, and meeting in the middle means it is.\n\ncode:\nfunction isPalindrome(s) {\n  let left = 0;\n  let right = s.length - 1;\n  while (left < right) {\n    if (s[left] !== s[right]) return false;\n    left++;\n    right--;\n  }\n  return true;\n}\nconsole.log(isPalindrome('radar'), isPalindrome('runner')); // true false\n\noutput:\ntrue false"
+  },
+  {
+    "id": 29,
+    "question": "Group the words listen, silent, google and enlist by their sorted letters using a loop and a plain object, then print how many groups there are and the members of the first group.",
+    "answer": "The sorted letters make a good group key. Every word with the same key belongs to the same group.\n\ncode:\nconst words = ['listen', 'silent', 'google', 'enlist'];\nconst groups = {};\nfor (const word of words) {\n  const key = word.split('').sort().join('');\n  if (groups[key]) groups[key].push(word);\n  else groups[key] = [word];\n}\nconsole.log('groups', Object.keys(groups).length); // groups 2\nconsole.log(Object.values(groups)[0].join(' ')); // listen silent enlist\n\noutput:\ngroups 2\nlisten silent enlist"
+  },
+  {
+    "id": 30,
+    "question": "Write reverse(s) that returns the string backwards using a loop, then print reverse('staging') and the length of the result.",
+    "answer": "Walk the string from the last index down to zero and append each character. The loop order is the whole trick.\n\ncode:\nfunction reverse(s) {\n  let out = '';\n  for (let i = s.length - 1; i >= 0; i--) {\n    out += s[i];\n  }\n  return out;\n}\nconst result = reverse('staging');\nconsole.log(result, result.length); // gnigats 7\n\noutput:\ngnigats 7"
+  },
+  {
+    "id": 31,
+    "question": "Sum the digits of the number 12345 using a loop over its string form and print the total.",
+    "answer": "Turn the number into a string, walk it, and turn each character back into a number before adding.\n\ncode:\nconst digits = String(12345);\nlet sum = 0;\nfor (let i = 0; i < digits.length; i++) {\n  sum += Number(digits[i]);\n}\nconsole.log(sum); // 15\n\noutput:\n15"
+  },
+  {
+    "id": 32,
+    "question": "Predict the output: a for loop over the numbers 0 to 7 prints each number, and when it prints 2 it adds 2 to the loop counter inside the body. Show the loop and its output.",
+    "answer": "Adding to the counter inside the body does not skip the update at the end of the turn, so after printing 2 the counter jumps 2 to 4 and then moves on to 5. That is why 3 and 4 never print.\n\ncode:\nfor (let i = 0; i < 8; i++) {\n  console.log(i);\n  if (i === 2) i += 2;\n}\n\noutput:\n0\n1\n2\n5\n6\n7"
+  },
+  {
+    "id": 33,
+    "question": "Predict the output: a for loop whose body is a single if statement with no curly braces, that pushes into an array instead of printing, followed by a console.log outside the loop. Show the code and the output.",
+    "answer": "Without braces a loop body is only the next single statement. The final console.log sits outside the loop, so it prints once instead of three times.\n\ncode:\nconst seen = [];\nfor (let i = 0; i < 3; i++)\n  if (i % 2 === 0) seen.push('even ' + i);\nconsole.log(seen.join(' | '));\nconsole.log('printed once after the loop');\n\noutput:\neven 0 | even 2\nprinted once after the loop"
+  },
+  {
+    "id": 34,
+    "question": "Predict the output: a for loop over 0 to 4 skips the number 2 with continue, collects the rest into an array and prints it. Show the code and the output.",
+    "answer": "continue ends the current turn early but the loop still runs its update, so the counter keeps moving and the other four numbers are collected.\n\ncode:\nconst kept = [];\nfor (let i = 0; i < 5; i++) {\n  if (i === 2) continue;\n  kept.push(i);\n}\nconsole.log(kept.join(' ')); // 0 1 3 4\n\noutput:\n0 1 3 4"
+  },
+  {
+    "id": 35,
+    "question": "Predict the output: store three arrow functions from a var loop and three from a let loop, call them all and print both results on separate lines.",
+    "answer": "One let loop variable is copied into a fresh binding on every turn, so each function remembers its own number. A var loop variable is shared, so all three functions see the final value.\n\ncode:\nconst withVar = [];\nconst withLet = [];\nfor (var v = 0; v < 3; v++) withVar.push(() => v);\nfor (let l = 0; l < 3; l++) withLet.push(() => l);\nconsole.log(withVar.map((fn) => fn()).join(' ')); // 3 3 3\nconsole.log(withLet.map((fn) => fn()).join(' ')); // 0 1 2\n\noutput:\n3 3 3\n0 1 2"
+  },
+  {
+    "id": 36,
+    "question": "Predict the output: write an endless for loop with no condition that adds 1, 2, 3 and so on to a total and breaks once the total is 10 or more. Print the counter and the total.",
+    "answer": "A for loop with no condition at all would run forever, so break is the only thing stopping it. The break happens on the turn where the total reaches 10.\n\ncode:\nlet i = 0;\nlet total = 0;\nfor (;;) {\n  i++;\n  total += i;\n  if (total >= 10) break;\n}\nconsole.log('i', i, 'total', total); // i 4 total 10\n\noutput:\ni 4 total 10"
+  },
+  {
+    "id": 37,
+    "question": "Write fizzbuzz(n) with one loop that builds an array of labels from 1 to n, using FizzBuzz for multiples of 15, Fizz for 3, Buzz for 5 and the number otherwise. Print the joined labels for n = 15.",
+    "answer": "Test the most specific rule first inside the loop. Building an array keeps the function easy to test and easy to read.\n\ncode:\nfunction fizzbuzz(n) {\n  const out = [];\n  for (let i = 1; i <= n; i++) {\n    if (i % 15 === 0) out.push('FizzBuzz');\n    else if (i % 3 === 0) out.push('Fizz');\n    else if (i % 5 === 0) out.push('Buzz');\n    else out.push(String(i));\n  }\n  return out;\n}\nconsole.log(fizzbuzz(15).join(' '));\n\noutput:\n1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz"
+  },
+  {
+    "id": 38,
+    "question": "Walk the test results [{ id: 1, passed: true }, { id: 2, passed: false }, { id: 3, passed: true }] with a for-of loop and print PASS or FAIL with the id on each line, then print how many passed.",
+    "answer": "for-of gives each object directly. A counter inside the loop gives you the total for free.\n\ncode:\nconst tests = [\n  { id: 1, passed: true },\n  { id: 2, passed: false },\n  { id: 3, passed: true },\n];\nlet passed = 0;\nfor (const test of tests) {\n  if (test.passed) passed++;\n  console.log(test.passed ? 'PASS' : 'FAIL', test.id);\n}\nconsole.log('passed', passed, 'of', tests.length); // passed 2 of 3\n\noutput:\nPASS 1\nFAIL 2\nPASS 3\npassed 2 of 3"
+  },
+  {
+    "id": 39,
+    "question": "Write sumDigitsOf(n) that keeps dividing the number by 10 with a while loop and adds the remainder each time, then print the result for 9875.",
+    "answer": "The remainder from the modulo operator is the last digit. Dividing by 10 drops that digit and moves on to the next one.\n\ncode:\nfunction sumDigitsOf(n) {\n  let total = 0;\n  while (n > 0) {\n    total += n % 10;\n    n = Math.floor(n / 10);\n  }\n  return total;\n}\nconsole.log(sumDigitsOf(9875)); // 29\n\noutput:\n29"
+  },
+  {
+    "id": 40,
+    "question": "Write countWords(text) that counts the words in a sentence using a loop over split words and no array methods, then print the count for a two word phrase and for an empty string.",
+    "answer": "Splitting gives an array of words. An empty string splits into one empty word, so filter that case with an if.\n\ncode:\nfunction countWords(text) {\n  const words = text.split(' ');\n  let count = 0;\n  for (const word of words) {\n    if (word !== '') count++;\n  }\n  return count;\n}\nconsole.log(countWords('ship it')); // 2\nconsole.log(countWords('')); // 0\n\noutput:\n2\n0"
+  },
+  {
+    "id": 41,
+    "question": "Print the numbers 10 down to 1 with a for loop using a decreasing counter, then print a final line that says the loop finished.",
+    "answer": "Change the update to decrement and flip the comparison so the loop stops at 1 rather than 0.\n\ncode:\nfor (let n = 10; n >= 1; n--) {\n  console.log(n);\n}\nconsole.log('loop finished'); // loop finished\n\noutput:\n10\n9\n8\n7\n6\n5\n4\n3\n2\n1\nloop finished"
+  },
+  {
+    "id": 42,
+    "question": "Walk the array [10, 20, 30, 40] with a standard for loop using an index and print index and value in the form 0: 10. Then walk the same array with a for-of loop and print just the values.",
+    "answer": "Use the plain for loop when you need the index, and for-of when you only need the values. Both print the same data in different shapes.\n\ncode:\nconst arr = [10, 20, 30, 40];\nfor (let i = 0; i < arr.length; i++) {\n  console.log(i + ':', arr[i]);\n}\nfor (const value of arr) {\n  console.log(value);\n}\n\noutput:\n0: 10\n1: 20\n2: 30\n3: 40\n10\n20\n30\n40"
+  }
+]

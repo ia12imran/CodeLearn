@@ -1,0 +1,192 @@
+[
+  {
+    "id": 1,
+    "question": "Write a function declaration named greet that takes a name and logs a greeting. Call it once with 'Ana'. Example: greet('Ana')",
+    "answer": "A function declaration is hoisted, so it can sit at the bottom of the file and still be called at the top. Put the log inside so the function returns nothing useful.\n\ncode:\nfunction greet(name) {\n  console.log('Hello, ' + name + '!');\n}\n\ngreet('Ana');\ngreet('Bob');\n\noutput:\nHello, Ana!\nHello, Bob!"
+  },
+  {
+    "id": 2,
+    "question": "Write a function expression assigned to a const called double that takes one number and returns it multiplied by two. Then log double(21).",
+    "answer": "A function expression is a value, so it needs a const to live in. It is not hoisted as a usable value, only the const name is.\n\ncode:\nconst double = function (n) {\n  return n * 2;\n};\n\nconsole.log(double(21));\n\noutput:\n42"
+  },
+  {
+    "id": 3,
+    "question": "Rewrite the add function below as an arrow function stored in a const, then log add(2, 3). Original: function add(a, b) { return a + b; }",
+    "answer": "An arrow function drops the function keyword and moves the parameter straight into the parentheses. The body stays the same.\n\ncode:\nconst add = (a, b) => {\n  return a + b;\n};\n\nconsole.log(add(2, 3));\nconsole.log(typeof add);\n\noutput:\n5\nfunction"
+  },
+  {
+    "id": 4,
+    "question": "Predict the output. Log three values: the call to logMe before its declaration, then the two logs after it. Use a function declaration named logMe.",
+    "answer": "Function declarations are hoisted to the top of the scope with their body attached, so calling logMe before the line that defines it works.\n\ncode:\nlogMe('first');\n\nfunction logMe(msg) {\n  console.log('logMe says ' + msg);\n}\n\nlogMe('second');\n\noutput:\nlogMe says first\nlogMe says second"
+  },
+  {
+    "id": 5,
+    "question": "Predict the output of this hoisting trap. Define const shout as a function expression that logs 'hi', call it before the definition, then define it and call it again.",
+    "answer": "A const is hoisted but starts in the temporal dead zone, so touching it before the line that assigns it throws. The second call works.\n\ncode:\ntry {\n  shout();\n} catch (err) {\n  console.log('caught: ' + err.constructor.name);\n}\n\nconst shout = function () {\n  console.log('hi');\n};\n\nshout();\n\noutput:\ncaught: ReferenceError\nhi"
+  },
+  {
+    "id": 6,
+    "question": "Write a multiplyAll function that takes an array of numbers and a factor, then returns a new array with every number multiplied. Log it for [1, 2, 3] and 10.",
+    "answer": "Map is a higher-order function: it takes a callback and hands it each item. The array literal lives inside the snippet so it is self-contained.\n\ncode:\nfunction multiplyAll(nums, factor) {\n  return nums.map((n) => n * factor);\n}\n\nconst nums = [1, 2, 3];\nconsole.log(multiplyAll(nums, 10));\nconsole.log(nums);\n\noutput:\n[ 10, 20, 30 ]\n[ 1, 2, 3 ]"
+  },
+  {
+    "id": 7,
+    "question": "Write a recursive function named factorial that returns the product of a number and all smaller numbers, and log factorial(6). Use the base case n <= 1 returning 1.",
+    "answer": "Recursion is a function calling itself with a smaller input. The base case stops the chain, and it must come before the recursive call.\n\ncode:\nfunction factorial(n) {\n  if (n <= 1) {\n    return 1;\n  }\n  return n * factorial(n - 1);\n}\n\nconsole.log(factorial(6));\nconsole.log(factorial(0));\n\noutput:\n720\n1"
+  },
+  {
+    "id": 8,
+    "question": "Write an iterative function named fib that takes n and returns the nth number of the sequence 0, 1, 1, 2, 3, 5 using a loop, then log fib(7).",
+    "answer": "Keep the last two values in variables and shift them each round. That turns the exponential recursion into linear work.\n\ncode:\nfunction fib(n) {\n  let a = 0;\n  let b = 1;\n  for (let i = 0; i < n; i++) {\n    const next = a + b;\n    a = b;\n    b = next;\n  }\n  return a;\n}\n\nconsole.log(fib(7));\nconsole.log(fib(1));\n\noutput:\n13\n1"
+  },
+  {
+    "id": 9,
+    "question": "Log the name property of three functions: an anonymous function expression, a named function expression called inner, and an arrow function assigned to a const.",
+    "answer": "The name property is read from the variable name when the function has no name of its own. A named function expression keeps its own name.\n\ncode:\nconst anon = function () {};\nconst inner = function inner() {};\nconst arrow = () => {};\n\nconsole.log(anon.name);\nconsole.log(inner.name);\nconsole.log(arrow.name);\n\noutput:\nanon\ninner\narrow"
+  },
+  {
+    "id": 10,
+    "question": "Log the length property of three functions: one with no parameters, one with two, and one with a default parameter plus a regular one.",
+    "answer": "The length property counts parameters before the first one with a default value. Defaults break the count, rest parameters are not counted at all.\n\ncode:\nfunction none() {}\nfunction two(a, b) {}\nfunction withDefault(a, b = 1) {}\nfunction withRest(...rest) {}\n\nconsole.log(none.length);\nconsole.log(two.length);\nconsole.log(withDefault.length);\nconsole.log(withRest.length);\n\noutput:\n0\n2\n1\n0"
+  },
+  {
+    "id": 11,
+    "question": "Wrap the code in an immediately invoked function expression so the two private helpers stay invisible outside, and log the returned report object with keys count and total.",
+    "answer": "An IIFE runs as soon as it is defined and its inner names never leak into the outer scope. The return value is the only public part.\n\ncode:\nconst report = (function () {\n  const items = [4, 8, 15];\n  const total = items.reduce((a, b) => a + b, 0);\n  return { count: items.length, total: total };\n})();\n\nconsole.log(report);\nconsole.log(typeof report.missing);\n\noutput:\n{ count: 3, total: 27 }\nundefined"
+  },
+  {
+    "id": 12,
+    "question": "Build an IIFE that returns an object with two methods: inc adds one to a private counter and get returns it. Log the counter after two inc calls.",
+    "answer": "The counter variable lives inside the IIFE, so each method closes over the same hidden number. That is module privacy without modules.\n\ncode:\nconst box = (function () {\n  let count = 0;\n  return {\n    inc() {\n      count = count + 1;\n      return count;\n    },\n    get() {\n      return count;\n    },\n  };\n})();\n\nbox.inc();\nconsole.log(box.inc());\nconsole.log(box.get());\n\noutput:\n2\n2"
+  },
+  {
+    "id": 13,
+    "question": "Write an object with a method describe that returns a string using this.name, then log it when called on the object. Also log what happens when the method is passed to a variable first.",
+    "answer": "A normal method gets its this from the dot before the call. Detaching the method loses that dot, so this falls back to undefined.\n\ncode:\nconst bot = {\n  name: 'unit-3',\n  describe() {\n    return 'I am ' + this.name;\n  },\n};\n\nconsole.log(bot.describe());\nconst detached = bot.describe;\nconsole.log(detached());\n\noutput:\nI am unit-3\nI am undefined"
+  },
+  {
+    "id": 14,
+    "question": "Write a named function greetUser that returns 'Hi ' + name, attach it to an object called api, then log both the direct call and a bound call using bind.",
+    "answer": "bind returns a new function with this and any first argument locked in. It is the cheap way to keep a method working after you move it.\n\ncode:\nfunction greetUser(name) {\n  return 'Hi ' + name + ' from ' + this.app;\n}\n\nconst api = { app: 'shop', greetUser: greetUser };\nconsole.log(api.greetUser('Ana'));\nconst bound = greetUser.bind(api);\nconsole.log(bound('Bob'));\n\noutput:\nHi Ana from shop\nHi Bob from shop"
+  },
+  {
+    "id": 15,
+    "question": "Write a function called makeAdder that takes a number and returns a function adding a second number to it. Log the results of makeAdder(5) called with 3 and with 10.",
+    "answer": "The returned function keeps a reference to the number passed to makeAdder. Each call of makeAdder makes a fresh, separate box.\n\ncode:\nfunction makeAdder(base) {\n  return function (extra) {\n    return base + extra;\n  };\n}\n\nconst addFive = makeAdder(5);\nconsole.log(addFive(3));\nconsole.log(addFive(10));\n\noutput:\n8\n15"
+  },
+  {
+    "id": 16,
+    "question": "Write a higher-order function named repeat that takes a count and a function, then runs that function count times passing it the step number. Log repeat(3) with a console.log callback.",
+    "answer": "Passing a function as an argument and calling it inside is what makes it higher-order. A for loop drives the calls.\n\ncode:\nfunction repeat(times, fn) {\n  for (let i = 1; i <= times; i++) {\n    fn(i);\n  }\n}\n\nrepeat(3, (step) => {\n  console.log('step ' + step);\n});\n\noutput:\nstep 1\nstep 2\nstep 3"
+  },
+  {
+    "id": 17,
+    "question": "Write applyAll that takes an array of numbers and a function, and returns a new array with that function applied to every item. Log applyAll([1, 2, 3], double).",
+    "answer": "Map does the looping for you and the callback does the work. Returning the array from map keeps the function pure.\n\ncode:\nfunction applyAll(nums, fn) {\n  return nums.map(fn);\n}\n\nconst double = (n) => n * 2;\nconsole.log(applyAll([1, 2, 3], double));\nconsole.log(applyAll([1, 2, 3], (n) => n + 100));\n\noutput:\n[ 2, 4, 6 ]\n[ 101, 102, 103 ]"
+  },
+  {
+    "id": 18,
+    "question": "Write a function sumAll that takes any number of numbers and returns their total, using a rest parameter and reduce. Log it with 1, 2, 3 and with nothing.",
+    "answer": "A rest parameter collects the leftover arguments into a real array, so reduce is available. Calling with no arguments gives an empty array.\n\ncode:\nfunction sumAll(...nums) {\n  return nums.reduce((a, b) => a + b, 0);\n}\n\nconsole.log(sumAll(1, 2, 3));\nconsole.log(sumAll());\nconsole.log(sumAll(10));\n\noutput:\n6\n0\n10"
+  },
+  {
+    "id": 19,
+    "question": "Write a function countChars that takes a string and returns how many times the letter a appears, using split and filter. Log it for 'banana'.",
+    "answer": "split turns the string into an array of single characters, then filter keeps the ones you want and length counts them.\n\ncode:\nfunction countChars(text, letter) {\n  return text.split('').filter((c) => c === letter).length;\n}\n\nconsole.log(countChars('banana', 'a'));\nconsole.log(countChars('test run', 't'));\n\noutput:\n3\n2"
+  },
+  {
+    "id": 20,
+    "question": "Write a function describe that logs the type of the value it gets and returns the string 'done'. Log describe(42) and describe('hi').",
+    "answer": "typeof gives a quick category for any value, including functions. Returning a separate value keeps the log and the result separate.\n\ncode:\nfunction describe(value) {\n  console.log('type is ' + typeof value);\n  return 'done';\n}\n\nconsole.log(describe(42));\nconsole.log(describe('hi'));\nconsole.log(describe(describe));\n\noutput:\ntype is number\ndone\ntype is string\ndone\ntype is function\ndone"
+  },
+  {
+    "id": 21,
+    "question": "Write a function assertPositive that throws an Error with the message 'value must be positive' when given zero or less, and logs 'ok' otherwise. Call it with 5 and with 0 inside try and catch.",
+    "answer": "throw stops the function immediately. A try and catch around the call lets the program print something useful instead of crashing.\n\ncode:\nfunction assertPositive(n) {\n  if (n <= 0) {\n    throw new Error('value must be positive');\n  }\n  return 'ok';\n}\n\nconsole.log(assertPositive(5));\ntry {\n  assertPositive(0);\n} catch (err) {\n  console.log('caught: ' + err.message);\n}\n\noutput:\nok\ncaught: value must be positive"
+  },
+  {
+    "id": 22,
+    "question": "Write a function toFahrenheit that converts Celsius using c * 9 / 5 + 32, and a table function that logs each temperature with its result. Log the table for 0 and 100.",
+    "answer": "Keeping the conversion pure and the printing separate makes both easy to test. ForEach drives the table.\n\ncode:\nfunction toFahrenheit(c) {\n  return (c * 9) / 5 + 32;\n}\n\nfunction table(celsius) {\n  celsius.forEach((c) => {\n    console.log(c + 'C = ' + toFahrenheit(c) + 'F');\n  });\n}\n\ntable([0, 100]);\n\noutput:\n0C = 32F\n100C = 212F"
+  },
+  {
+    "id": 23,
+    "question": "Write a logAll function using a rest parameter that logs 'n args' and then each argument prefixed with its index. Log it with 'a', 'b', 'c'.",
+    "answer": "Rest collects the arguments, then entries gives index and value pairs. This is a tiny stand-in for a real logging helper.\n\ncode:\nfunction logAll(...args) {\n  console.log(args.length + ' args');\n  args.forEach((arg, i) => {\n    console.log(i + ': ' + arg);\n  });\n}\n\nlogAll('a', 'b', 'c');\nlogAll();\n\noutput:\n3 args\n0: a\n1: b\n2: c\n0 args"
+  },
+  {
+    "id": 24,
+    "question": "Predict the output. Define a function expression named factorial that uses its own name for the recursive call, then log factorial(4).",
+    "answer": "A named function expression can call itself because the name lives in its own scope. This is why it is more than decoration.\n\ncode:\nconst factorial = function fact(n) {\n  return n <= 1 ? 1 : n * fact(n - 1);\n};\n\nconsole.log(factorial(4));\nconsole.log(factorial.name);\n\noutput:\n24\nfact"
+  },
+  {
+    "id": 25,
+    "question": "Write a curry function that turns add(a, b) into add(2)(3). Log the result of the curried add called with 2 then 3.",
+    "answer": "The outer function takes the first argument and returns a function waiting for the second. Nothing runs until both calls happen.\n\ncode:\nfunction curryAdd(fn) {\n  return function curried(a) {\n    return function (b) {\n      return fn(a, b);\n    };\n  };\n}\n\nconst add = (a, b) => a + b;\nconst curried = curryAdd(add);\nconsole.log(curried(2)(3));\nconsole.log(curried(10)(5));\n\noutput:\n5\n15"
+  },
+  {
+    "id": 26,
+    "question": "Write a function sortByKey that returns a comparator that sorts objects by the given key. Log objects sorted by age for [{n:'B',age:30},{n:'A',age:20}].",
+    "answer": "Returning a function from a function lets you configure sorting in two steps. Subtracting the values gives the ascending order.\n\ncode:\nfunction sortByKey(key) {\n  return function (a, b) {\n    return a[key] - b[key];\n  };\n}\n\nconst people = [\n  { name: 'B', age: 30 },\n  { name: 'A', age: 20 },\n];\n\nconsole.log(people.slice().sort(sortByKey('age')));\nconsole.log(people.slice().sort(sortByKey('age')).map((p) => p.name));\n\noutput:\n[ { name: 'A', age: 20 }, { name: 'B', age: 30 } ]\n[ 'A', 'B' ]"
+  },
+  {
+    "id": 27,
+    "question": "Write a function maxOf that takes any number of numbers and returns the largest without using Math.max. Log maxOf(3, 9, 4).",
+    "answer": "Reduce can carry the running best value as its accumulator. Starting from the first argument avoids the empty case being an infinite value.\n\ncode:\nfunction maxOf(...nums) {\n  return nums.reduce((best, n) => (n > best ? n : best), nums[0]);\n}\n\nconsole.log(maxOf(3, 9, 4));\nconsole.log(maxOf(-5, -2));\n\noutput:\n9\n-2"
+  },
+  {
+    "id": 28,
+    "question": "Write a function called pipeResult that runs a value through double and then through addOne, using reduce over the function list. Log pipeResult(5).",
+    "answer": "An array of functions plus reduce lets you chain them without nesting calls. The accumulator is the running value.\n\ncode:\nfunction pipeResult(value, fns) {\n  return fns.reduce((acc, fn) => fn(acc), value);\n}\n\nconst double = (n) => n * 2;\nconst addOne = (n) => n + 1;\n\nconsole.log(pipeResult(5, [double, addOne]));\nconsole.log(pipeResult(5, [addOne, double]));\n\noutput:\n11\n12"
+  },
+  {
+    "id": 29,
+    "question": "Write a function getOrDefault that takes an object and a key, and returns the value or a fallback when the value is undefined. Log it with a missing key and a present one.",
+    "answer": "Reading a missing key gives undefined rather than an error, so a simple comparison covers the default case.\n\ncode:\nfunction getOrDefault(obj, key, fallback) {\n  if (obj[key] === undefined) {\n    return fallback;\n  }\n  return obj[key];\n}\n\nconst user = { name: 'Cid' };\nconsole.log(getOrDefault(user, 'name', 'anonymous'));\nconsole.log(getOrDefault(user, 'email', 'none'));\nconsole.log(getOrDefault({ role: null }, 'role', 'user'));\n\noutput:\nCid\nnone\nnull"
+  },
+  {
+    "id": 30,
+    "question": "Predict the output. Make an object with a normal method sync that logs this.value, and an arrow method arrow that logs this.value, then detach both and call them.",
+    "answer": "A normal method builds its own this from the call site, while an arrow captures this from where it was written. Detaching hurts only the normal one.\n\ncode:\nconst timer = {\n  value: 5,\n  sync() {\n    console.log('sync ' + this.value);\n  },\n  arrow: () => {\n    console.log('arrow ' + this.value);\n  },\n};\n\ntimer.sync();\nconst loose = timer.sync;\nloose();\ntimer.arrow();\n\noutput:\nsync 5\nsync undefined\narrow undefined"
+  },
+  {
+    "id": 31,
+    "question": "Write a function called tag that returns a label built from a prefix and an id, and use it to log 'user-1' and 'user-2' from the same prefix.",
+    "answer": "Keeping the prefix outside and the id inside means the id stays local. Each returned function knows the prefix from creation time.\n\ncode:\nfunction tagger(prefix) {\n  return function (id) {\n    return prefix + '-' + id;\n  };\n}\n\nconst user = tagger('user');\nconsole.log(user(1));\nconsole.log(user(2));\nconsole.log(tagger('order')(7));\n\noutput:\nuser-1\nuser-2\norder-7"
+  },
+  {
+    "id": 32,
+    "question": "Write a function that takes a number and logs whether it is even, returning the string 'even' or 'odd'. Chain it with a second function that uppercases the result.",
+    "answer": "Small pure functions are easy to test one at a time. Chaining means the second function only handles the string.\n\ncode:\nfunction parity(n) {\n  const label = n % 2 === 0 ? 'even' : 'odd';\n  console.log(label);\n  return label;\n}\n\nfunction shout(text) {\n  return text.toUpperCase();\n}\n\nconsole.log(shout(parity(4)));\nconsole.log(shout(parity(7)));\n\noutput:\neven\nEVEN\nodd\nODD"
+  },
+  {
+    "id": 33,
+    "question": "Write a runAll function that takes an array of functions and runs each one, logging its index and return value. Log it with two functions that return numbers.",
+    "answer": "An array of functions is a tiny task list. forEach runs them in order and gives you the index for free.\n\ncode:\nfunction runAll(fns) {\n  fns.forEach((fn, i) => {\n    console.log(i + ' returned ' + fn());\n  });\n}\n\nrunAll([\n  () => 'first',\n  () => 'second',\n]);\n\noutput:\n0 returned first\n1 returned second"
+  },
+  {
+    "id": 34,
+    "question": "Write an isPrime function that returns true or false for a number, then a function primesUpTo that logs every prime below a limit using a loop. Log primesUpTo(12).",
+    "answer": "Test divisibility only up to the square root of the number. isPrime stays separate so you can reuse it elsewhere.\n\ncode:\nfunction isPrime(n) {\n  if (n < 2) return false;\n  for (let d = 2; d * d <= n; d++) {\n    if (n % d === 0) return false;\n  }\n  return true;\n}\n\nfunction primesUpTo(limit) {\n  const found = [];\n  for (let n = 2; n < limit; n++) {\n    if (isPrime(n)) found.push(n);\n  }\n  return found;\n}\n\nconsole.log(primesUpTo(12));\n\noutput:\n[ 2, 3, 5, 7, 11 ]"
+  },
+  {
+    "id": 35,
+    "question": "Write a function wordCount that takes a sentence and returns an object with words and longest. Log it for 'the quick brown fox'.",
+    "answer": "Split on spaces, then reduce once to find the longest word. Doing it in a single pass keeps it readable.\n\ncode:\nfunction wordCount(sentence) {\n  const words = sentence.split(' ');\n  return words.reduce(\n    (acc, w) => ({ words: acc.words + 1, longest: w.length > acc.longest.length ? w : acc.longest }),\n    { words: 0, longest: '' }\n  );\n}\n\nconsole.log(wordCount('the quick brown fox'));\n\noutput:\n{ words: 4, longest: 'quick' }"
+  },
+  {
+    "id": 36,
+    "question": "Write a function clamp that keeps a number inside a range using Math.min and Math.max, then log clamp(120, 0, 100) and clamp(-5, 0, 100).",
+    "answer": "Math.max with the lower bound first and Math.min with the upper bound second gives both ends in one line.\n\ncode:\nfunction clamp(n, low, high) {\n  return Math.min(Math.max(n, low), high);\n}\n\nconsole.log(clamp(120, 0, 100));\nconsole.log(clamp(-5, 0, 100));\nconsole.log(clamp(50, 0, 100));\n\noutput:\n100\n0\n50"
+  },
+  {
+    "id": 37,
+    "question": "Write a function withLogging that takes a function and returns a new function which logs the arguments, calls the original, and logs the result. Log it with a doubling function.",
+    "answer": "A rest parameter captures whatever was passed, so the wrapper works for any argument list. It returns the original result so behaviour is unchanged.\n\ncode:\nfunction withLogging(fn) {\n  return function (...args) {\n    console.log('calling with ' + args.join(','));\n    const result = fn(...args);\n    console.log('returned ' + result);\n    return result;\n  };\n}\n\nconst double = (n) => n * 2;\nconsole.log(withLogging(double)(21));\n\noutput:\ncalling with 21\nreturned 42\n42"
+  },
+  {
+    "id": 38,
+    "question": "Write a function flattenOnce that takes nested arrays one level deep and returns a single flat array. Log it for [1, [2, 3], [[4]]].",
+    "answer": "concat with an empty array adds each element, and it flattens one level only. Nested arrays deeper than that stay nested.\n\ncode:\nfunction flattenOnce(nested) {\n  return nested.reduce((acc, item) => acc.concat(item), []);\n}\n\nconsole.log(flattenOnce([1, [2, 3], [[4]]]));\nconsole.log(flattenOnce([]));\n\noutput:\n[ 1, 2, 3, [ 4 ] ]\n[]"
+  }
+]

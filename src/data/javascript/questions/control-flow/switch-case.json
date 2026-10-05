@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "question": "Why does a switch statement use strict equality, and what happens if you switch on two different object literals?",
+    "answer": "A switch compares the expression against each case with triple equals, so types must match exactly. Two object literals are always different objects, so they never match each other no matter how similar they look.\n\ncode:\nconst a = { type: 'card' };\nconst b = { type: 'card' };\nswitch (a) {\n  case b: console.log('never runs'); break;\n  default: console.log('no match, because the references differ');\n}\nswitch (a) { case a: console.log('same reference, so this matches'); break; }\nconsole.log('a === b is', a === b, '| a === a is', a === a, '| typeof both is', typeof a, typeof b);\n\nreal example:\nSwitching on a freshly parsed JSON object always falls to default, so a status router has to switch on a primitive like an id instead of on the parsed body."
+  },
+  {
+    "id": 2,
+    "question": "What is the fall-through bug, and how do you use fall-through on purpose?",
+    "answer": "Execution keeps going into the next case when a case body has no break. It is a bug when a case should have ended, and a feature when several values are meant to share one body.\n\ncode:\nfunction bad(action) {\n  let log = '';\n  switch (action) {\n    case 'save': log += 'saving;';\n    case 'quit': log += 'quitting';\n  }\n  return log;\n}\nfunction stacked(status) {\n  switch (status) {\n    case 400:\n    case 404:\n    case 500: return 'problem';\n    default: return 'ok';\n  }\n}\nconsole.log('bug:', bad('save'));\nconsole.log('intentional:', stacked(404), '|', stacked(200));\n\nreal example:\nA keyboard shortcut handler writes case save with no break and also runs the delete path, so one Playwright press both saves and deletes the record."
+  },
+  {
+    "id": 3,
+    "question": "What happens if a switch statement is written without a default clause?",
+    "answer": "Nothing runs when no case matches. Execution jumps straight past the closing brace to the code after the switch, and no error is thrown anywhere.\n\ncode:\nfunction route(state) {\n  switch (state) {\n    case 'ready': return 'start polling';\n    case 'done': return 'stop polling';\n  }\n  return 'no case matched, no error, we are after the switch';\n}\nconsole.log(route('ready'));\nconsole.log(route('weird'));\nlet hits = 0;\nswitch ('zzz') { case 'a': hits = 1; break; }\nconsole.log('hits after an unmatched switch:', hits);\n\nreal example:\nA state helper silently returns nothing for an unknown state, the test treats undefined as fine, and the real bug only surfaces weeks later in a nightly run."
+  },
+  {
+    "id": 4,
+    "question": "When is a switch statement clearer than a chain of if statements?",
+    "answer": "When you compare one value against several fixed constants. Switch groups all the candidates in one place instead of repeating the same variable name on every single line of an if chain.\n\ncode:\nfunction badge(role) {\n  switch (role) {\n    case 'admin': return 'A';\n    case 'editor': return 'E';\n    case 'viewer': return 'V';\n    default: return '?';\n  }\n}\n['admin', 'viewer', 'ghost'].forEach((r) => console.log(r, '->', badge(r)));\nconsole.log('the same four labels in one block is the whole point');\n\nreal example:\nA reporter maps the four test statuses to badge text. A switch keeps those four labels in one readable block, and an if chain would repeat the variable four times."
+  },
+  {
+    "id": 5,
+    "question": "Why does a case clause for NaN never match, no matter what you put in it?",
+    "answer": "NaN is not equal to anything, including itself, and the comparison inside a switch is strict equality. So the NaN case is unreachable and the value always reaches default.\n\ncode:\nconst n = Number('12px');\nswitch (n) {\n  case NaN: console.log('never runs'); break;\n  case 12: console.log('never runs either'); break;\n  default: console.log('NaN === NaN is', NaN === NaN, 'so it lands here');\n}\nconsole.log('the fix is Number.isNaN:', Number.isNaN(n));\n\nreal example:\nA helper switches on a parsed amount to build an error message. NaN never matches the NaN case, so the user sees the generic message and the test sees no explanation."
+  },
+  {
+    "id": 6,
+    "question": "Why can a const declaration inside a case clause cause a syntax error?",
+    "answer": "All the cases share one block scope, so the same const name in two cases collides. Wrapping a case body in braces gives each case its own scope and the file parses again.\n\ncode:\nfunction label(code) {\n  switch (code) {\n    case 200: {\n      const name = 'ok';\n      return name;\n    }\n    case 404: {\n      const name = 'missing';\n      return name;\n    }\n    default: return 'other';\n  }\n}\nconsole.log(label(200), '|', label(404), '|', label(500));\n\nreal example:\nA route handler declares a variable called body in two different cases and the whole file fails to parse, which is a confusing error because the two lines look unrelated."
+  },
+  {
+    "id": 7,
+    "question": "What does switch (true) do, and when is it actually useful?",
+    "answer": "It runs the first case whose expression is truthy. That turns a list of conditions into one readable column instead of repeating the same variable across several if branches.\n\ncode:\nfunction size(bytes) {\n  switch (true) {\n    case bytes === 0: return 'empty';\n    case bytes > 1000000: return 'too big to upload';\n    case bytes > 1000: return 'ok';\n    default: return 'tiny';\n  }\n}\n[0, 50, 5000, 2000000].forEach((b) => console.log(b, '->', size(b)));\nconsole.log('the order of the cases is the order of the checks');\n\nreal example:\nAn upload helper checks size limits with switch (true) so all the thresholds sit in one column and a reviewer can compare them without reading the syntax."
+  },
+  {
+    "id": 8,
+    "question": "Does the default clause have to be the last one in a switch?",
+    "answer": "No, it can go anywhere. It is still only reached when nothing else matched, so putting it first is legal and it still runs last at runtime.\n\ncode:\nfunction describe(code) {\n  switch (code) {\n    default: return 'unexpected: ' + code;\n    case 200: return 'ok';\n    case 500: return 'server error';\n  }\n}\nconsole.log(describe(200), '|', describe(500), '|', describe(302));\nlet order = [];\nswitch (7) { default: order.push('default'); break; case 7: order.push('case 7'); break; }\nconsole.log('default written first still ran last:', order.join(' then '));\n\nreal example:\nSome generated API clients put default first. It works, but every reader has to stop and check the ordering before they trust the cases above it."
+  },
+  {
+    "id": 9,
+    "question": "Why does switching on a status code from a JSON body need extra care?",
+    "answer": "JSON only carries strings, numbers, booleans, null, arrays and objects. A status that arrives as the text 200 will not match the case 200, because a switch compares with triple equals.\n\ncode:\nconst fromBody = { status: '200' };\nswitch (fromBody.status) {\n  case 200: console.log('matched as a number'); break;\n  case '200': console.log('matched as text, and this is the branch that runs'); break;\n  default: console.log('no match at all');\n}\nswitch (Number(fromBody.status)) {\n  case 200: console.log('Number() fixed it'); break;\n}\n\nreal example:\nAn API returns the status as a string, the switch falls into default, and the test reports a generic failure for a request that actually succeeded."
+  },
+  {
+    "id": 10,
+    "question": "What happens if two case clauses in the same switch have the same value?",
+    "answer": "The first one always wins and the second becomes unreachable. It is perfectly legal code, so no linter or error tells you that a branch was dropped.\n\ncode:\nconst n = 5;\nswitch (n) {\n  case 5: console.log('the first case 5 runs'); break;\n  case 5: console.log('this can never run'); break;\n  default: console.log('never');\n}\nconsole.log('two cases with an equal value:', 5 === 5);\nconst flag = true;\nswitch (flag) {\n  case 1: console.log('true and 1 differ under ==='); break;\n  case true: console.log('the boolean case is the one that runs'); break;\n}\n\nreal example:\nA switch that handles both delete and DELETE as separate cases keeps only the first, and the uppercase variant arriving from an API client is never handled at all."
+  },
+  {
+    "id": 11,
+    "question": "Why is a missing break on the last case clause usually harmless?",
+    "answer": "There is nothing after the last case, so falling out of it lands in exactly the same place as a break would. It becomes a bug the moment someone appends a new case below it.\n\ncode:\nfunction withBreak(n) {\n  switch (n) {\n    case 1: return 'one';\n    case 2: return 'two';\n  }\n  return 'fell out of the switch';\n}\nconsole.log(withBreak(1), '|', withBreak(2), '|', withBreak(9));\nlet trace = '';\nswitch (1) { case 1: trace += 'a'; break; default: trace += 'b'; }\nconsole.log('with break it stops at a:', trace);\n\nreal example:\nThe last case in a status switch works fine without a break, so it looks intentional until a new case is appended underneath and the handler starts double-reporting."
+  },
+  {
+    "id": 12,
+    "question": "How do you run some code after a switch no matter which case matched?",
+    "answer": "Put it after the closing brace rather than inside every case. Returning from a case leaves the function entirely, so the code after the switch is for the version that does not return.\n\ncode:\nfunction audit(event) {\n  let handled = 'no';\n  switch (event) {\n    case 'login': handled = 'auth'; break;\n    case 'logout': handled = 'auth'; break;\n    case 'click': handled = 'ui'; break;\n  }\n  console.log(event, 'was handled as', handled);\n  return handled;\n}\naudit('login');\naudit('click');\naudit('scroll');\n\nreal example:\nA helper sets a flag inside each case and logs once after the switch, instead of copying the same log line into four branches that have to be kept in sync."
+  },
+  {
+    "id": 13,
+    "question": "What happens if the matched case clause throws an error?",
+    "answer": "The throw leaves the switch straight away. Later cases are skipped, and the code after the switch only runs if something catches the error first.\n\ncode:\nfunction parse(kind) {\n  try {\n    switch (kind) {\n      case 'json': return JSON.parse('{ bad');\n      case 'num': return Number('nope');\n      case 'ok': return 'fine';\n    }\n    return 'no case matched';\n  } catch (e) {\n    return 'caught: ' + e.message.slice(0, 10);\n  }\n}\nconsole.log(parse('json'));\nconsole.log(parse('num'));\nconsole.log(parse('other'));\n\nreal example:\nA response parser throws inside the JSON case, so the fallback branch meant for HTML never runs and the error escapes to the test runner as an unhandled failure."
+  },
+  {
+    "id": 14,
+    "question": "When should you replace a switch statement with a lookup object or a Map?",
+    "answer": "When every case only returns a value and none of them needs a comparison, a break, or a shared body. The lookup then becomes plain data that you can extend without touching any logic.\n\ncode:\nconst handlers = {\n  login: () => 'auth step',\n  cart: () => 'checkout step',\n  help: () => 'support step',\n};\nfunction run(name) {\n  const handler = handlers[name];\n  return handler ? handler() : 'no handler for ' + name;\n}\n['login', 'help', 'nope'].forEach((n) => console.log(n, '->', run(n)));\n\nreal example:\nA page object maps button names to click actions. The map can be unit tested on its own, while a switch mixes the dispatch and the actions in one block."
+  },
+  {
+    "id": 15,
+    "question": "How do you group several values into a single case clause?",
+    "answer": "Write them one after another with no body and no break, so they all fall into the body that follows the last one in the group.\n\ncode:\nfunction kind(code) {\n  switch (code) {\n    case 400:\n    case 422: return 'bad request';\n    case 401:\n    case 403: return 'auth problem';\n    case 500:\n    case 503: return 'server problem';\n    default: return 'other';\n  }\n}\n[400, 403, 500, 418].forEach((c) => console.log(c, '->', kind(c)));\n\nreal example:\nA negative-path suite treats 401 and 403 as the same expected assertion, so listing them as stacked cases keeps the mapping obvious to whoever extends it later."
+  },
+  {
+    "id": 16,
+    "question": "Why does a switch evaluate its expression only once?",
+    "answer": "The expression is evaluated into a value before any comparison starts. So a function call inside it runs one time, not once per case, and the value cannot change mid-switch.\n\ncode:\nlet calls = 0;\nfunction read() { calls = calls + 1; return 'a'; }\nfunction pick(value) {\n  switch (value) {\n    case 'a': return 'first';\n    case 'b': return 'second';\n    default: return 'none';\n  }\n}\nconsole.log(pick(read()), '| read was called', calls, 'time');\nconsole.log(pick('b'), '| total calls', calls);\nconsole.log('a literal costs nothing:', pick('b'));\n\nreal example:\nswitch (page.locator(sel).innerText()) reads the element once and compares that snapshot to each case, so a re-render midway cannot change the outcome."
+  },
+  {
+    "id": 17,
+    "question": "What is the difference between switching on a value and switching on a comparison?",
+    "answer": "Switching on the value compares it to constants, so it can never express a range. Switching on a boolean with switch (true) lets each case hold any condition, including ranges and combinations.\n\ncode:\nfunction tier(score) {\n  switch (true) {\n    case score >= 800: return 'gold';\n    case score >= 600: return 'silver';\n    case score > 0: return 'bronze';\n    default: return 'none';\n  }\n}\nconsole.log(tier(820), '|', tier(650), '|', tier(100), '|', tier(0));\nconsole.log('case 600 to 800 is not valid JavaScript, that is why');\n\nreal example:\nA risk helper assigns a tier from a score range. You cannot write case 600 to 800 in a normal switch, so switch (true) is the honest way to express it."
+  },
+  {
+    "id": 18,
+    "question": "Why is switching on a character code useful when you write a small parser?",
+    "answer": "Switching on a character's number gives you one case per character, which is a fast and tidy way to read a simple format such as a date or a key press.\n\ncode:\nfunction typeOf(ch) {\n  switch (ch.charCodeAt(0)) {\n    case 48: case 49: case 50: case 51: case 52:\n    case 53: case 54: case 55: case 56: case 57:\n      return 'digit';\n    case 45: return 'minus';\n    case 46: return 'dot';\n    default: return 'other';\n  }\n}\n['4', '-', '.', 'a'].forEach((c) => console.log(c, '->', typeOf(c)));\n\nreal example:\nA fixture generator validates a date string by switching on each character code, so an unexpected letter is rejected before the test is even scheduled."
+  },
+  {
+    "id": 19,
+    "question": "Does a switch on null run the default clause, or does it match a case?",
+    "answer": "It runs default, unless you wrote a case for null. The same is true for undefined. Switch uses strict equality, so null and undefined are two different values there.\n\ncode:\nfunction where(value) {\n  switch (value) {\n    case null: return 'null case';\n    case undefined: return 'undefined case';\n    case '': return 'empty string';\n    default: return 'default';\n  }\n}\nconsole.log(where(null), '|', where(undefined), '|', where(''), '|', where(0));\n\nreal example:\nA helper that expects a missing filter value writes case null, and passing undefined falls through to default, so the friendly message never appears."
+  },
+  {
+    "id": 20,
+    "question": "How do you keep a switch statement safe when the value might be undefined?",
+    "answer": "Add an explicit case for undefined, or normalise the value with the nullish operator before the switch. Otherwise the missing value quietly takes the default path.\n\ncode:\nfunction action(value) {\n  switch (value ?? 'none') {\n    case 'save': return 'saving';\n    case 'drop': return 'dropping';\n    case 'none': return 'nothing requested';\n    default: return 'unknown: ' + value;\n  }\n}\nconsole.log(action('save'), '|', action(undefined), '|', action('fly'));\nlet calls = 0;\nfunction risky() { calls = calls + 1; return 'x'; }\nswitch (risky()) { case 'x': console.log('evaluated once, calls =', calls); break; }\n\nreal example:\nA keyboard handler switches on event.key with no guard. A synthetic event with no key falls into default and the test records a phantom step that never happened."
+  },
+  {
+    "id": 21,
+    "question": "Why does a switch on typeof still fail to catch NaN?",
+    "answer": "typeof NaN is the string number, so a case number matches it along with every real number. Only Number.isNaN can separate NaN from an ordinary numeric value.\n\ncode:\nconst values = [1, NaN, 'x', null, undefined, true];\nvalues.forEach((v) => {\n  switch (typeof v) {\n    case 'number': console.log(String(v), 'is a number, isNaN:', Number.isNaN(v)); break;\n    case 'string': console.log(String(v), 'string'); break;\n    case 'undefined': console.log(String(v), 'undefined'); break;\n    case 'boolean': console.log(String(v), 'boolean'); break;\n    default: console.log(String(v), 'object or null');\n  }\n});\n\nreal example:\nA number check written as typeof x === number passes for NaN, so a helper adds NaN to the cart and the order total becomes NaN with no error anywhere."
+  },
+  {
+    "id": 22,
+    "question": "What is the accidental break bug when a break sits inside an if that is inside a switch?",
+    "answer": "The break belongs to the switch, not to the if. So it leaves the whole switch and skips every case that was written below, which is rarely what the author meant.\n\ncode:\nfunction bad(n) {\n  let out = '';\n  switch (n) {\n    case 1:\n      if (n === 1) break;\n      out += 'one';\n      break;\n    case 2: out += 'two'; break;\n  }\n  return out;\n}\nfunction good(n) {\n  let out = '';\n  switch (n) {\n    case 1: if (n !== 1) out += 'one'; break;\n    case 2: out += 'two'; break;\n  }\n  return out;\n}\nconsole.log('bad:', JSON.stringify(bad(1)), '| good:', JSON.stringify(good(1)), JSON.stringify(good(2)));\n\nreal example:\nA case checks a flag and then breaks, so it leaves early and the reporting code under that case never runs. The report is missing a row and nobody knows why."
+  },
+  {
+    "id": 23,
+    "question": "Can a long switch statement be slower than an object lookup?",
+    "answer": "A long chain of strict comparisons is a linear scan, while an object lookup is close to constant time. It only matters with hundreds of cases or inside a hot loop, not with ten cases.\n\ncode:\nfunction bySwitch(n) {\n  switch (n) {\n    case 0: return 'zero';\n    case 1: return 'one';\n    case 2: return 'two';\n    case 3: return 'three';\n    case 4: return 'four';\n    default: return 'many';\n  }\n}\nconst table = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three', 4: 'four' };\nconst byLookup = (n) => table[n] ?? 'many';\nconsole.log([0, 4, 99].map((n) => bySwitch(n)).join(','));\nconsole.log([0, 4, 99].map((n) => byLookup(n)).join(','));\n\nreal example:\nA command router with two hundred commands is measurably faster as an object lookup. For ten commands the difference is noise and not worth the churn."
+  },
+  {
+    "id": 24,
+    "question": "What happens if you return from inside a switch case?",
+    "answer": "The function exits immediately, so the code after the switch never runs and any later cases are skipped. Return is stronger than break, because it leaves the function and not just the switch.\n\ncode:\nfunction describe(list) {\n  switch (list.length) {\n    case 0: return 'empty';\n    case 1: return 'one item';\n    default: return 'checking ' + list.length + ' items';\n  }\n}\nconsole.log(describe([]), '|', describe([1]), '|', describe([1, 2, 3]));\nconsole.log('nothing after the switch is reachable from inside a case');\n\nreal example:\nA validator returns on the first error, so the code after the switch that was meant to collect every remaining error never runs and you only see one problem."
+  },
+  {
+    "id": 25,
+    "question": "How would you build a small state machine for a test run using switch?",
+    "answer": "Give each state one case, return the next state, and keep the loop outside the switch. The switch becomes a transition table and the driving loop stays readable.\n\ncode:\nfunction next(state, event) {\n  switch (state) {\n    case 'idle': return event === 'start' ? 'running' : 'idle';\n    case 'running':\n      if (event === 'fail') return 'failed';\n      if (event === 'done') return 'passed';\n      return 'running';\n    case 'failed':\n    case 'passed': return 'idle';\n    default: return 'idle';\n  }\n}\nlet state = 'idle';\nfor (const event of ['start', 'fail', 'start', 'done', 'start']) {\n  const before = state;\n  state = next(state, event);\n  console.log(before, '--' + event + '-->', state);\n}\n\nreal example:\nA page object moves through idle, filling and submitted, so every Playwright action maps to one transition and an illegal sequence lands on idle instead of hanging."
+  },
+  {
+    "id": 26,
+    "question": "What is confusing about putting the default clause first in a switch?",
+    "answer": "Code reads top to bottom, so a reader meets default before any real case and may assume it runs first. It does not, and the surprise only shows up at runtime.\n\ncode:\nswitch (1) {\n  default: console.log('written first but runs last'); break;\n  case 1: console.log('case 1 runs first'); break;\n  case 2: console.log('case 2 is skipped'); break;\n}\nconsole.log('and default still catches an unknown value:');\nswitch (99) { default: console.log('default ran'); break; case 1: console.log('never'); }\n\nreal example:\nAn old generated switch has default first, so nobody can tell whether the fallback also runs for known values, and they add a second switch just to check."
+  },
+  {
+    "id": 27,
+    "question": "Why does switching on arrays of identical numbers work when switching on objects never does?",
+    "answer": "Numbers and strings are compared by value, so equal primitives match. Two objects are only ever equal when they are the same reference, and a literal creates a new object every time.\n\ncode:\nswitch ([1, 2]) {\n  case [1, 2]: console.log('never runs'); break;\n  default: console.log('each array literal is a different object');\n}\nswitch ('a' + 'b') {\n  case 'ab': console.log('the concatenation happens first, so this matches'); break;\n}\nconst shared = { id: 1 };\nswitch (shared) { case shared: console.log('same reference, so this matches'); break; }\n\nreal example:\nA switch on a freshly built array literal never matches, so a helper has to compare the elements one by one or switch on a joined string instead."
+  },
+  {
+    "id": 28,
+    "question": "How do you handle a switch over numbers when the values arrive as strings?",
+    "answer": "Normalise once before the switch with Number, or list both forms as stacked cases. Repeating the conversion inside every case is where the bugs hide.\n\ncode:\nconst raw = '404';\nswitch (Number(raw)) {\n  case 400: console.log('bad request'); break;\n  case 404: console.log('not found'); break;\n  case 500: console.log('server error'); break;\n  default: console.log('unknown status ' + raw);\n}\nconsole.log('Number of an empty string is', Number(''), 'so case 0 also matches blank values');\nconsole.log('Number of text that is not a number is', Number('x'));\n\nreal example:\nA client reads a status header as text, switch (Number(...)) handles it, and the default branch reports the raw value so the failure message stays useful."
+  },
+  {
+    "id": 29,
+    "question": "Why does a case without a break that mutates a shared variable give a wrong result?",
+    "answer": "The next case body runs with a value the first case already changed. The two branches are no longer independent, so the result depends on the order of the cases.\n\ncode:\nfunction apply(action, log) {\n  switch (action) {\n    case 'save':\n      log.count = log.count + 1;\n      log.saved = true;\n    case 'notify': log.notified = true; break;\n    case 'delete': log.deleted = true; break;\n  }\n  return log;\n}\nconst log = { count: 0, saved: false, notified: false, deleted: false };\nconsole.log(apply('save', log));\nconsole.log('saving also notified, because there was no break');\n\nreal example:\nA test helper's save case sends the notification too, and the mock server receives an unexpected request that a later assertion then fails on."
+  },
+  {
+    "id": 30,
+    "question": "Does a case for null also catch undefined in a switch statement?",
+    "answer": "No. Switch uses triple equals, and null === undefined is false, so they need separate cases unless you normalise with the nullish operator first.\n\ncode:\nfunction nameOf(value) {\n  switch (value) {\n    case null: return 'null case';\n    case undefined: return 'undefined case';\n    default: return 'value case';\n  }\n}\nconsole.log(nameOf(null), '|', nameOf(undefined), '|', nameOf(0));\nconst missing = undefined;\nswitch (missing ?? null) {\n  case null: console.log('with ?? both missing values hit the null case'); break;\n  default: console.log('never');\n}\n\nreal example:\nA helper is written with case null, a driver returns undefined, the case is skipped entirely, and the friendly message the author wrote is never shown."
+  },
+  {
+    "id": 31,
+    "question": "What is the difference between a switch and an if chain when the comparison is loose?",
+    "answer": "There is no difference if the if chain uses double equals, because a switch simply cannot do a loose comparison. That is the real reason to keep strict rules in both styles.\n\ncode:\nconst status = '200';\nif (status == 200) console.log('a loose if matched the text 200');\nswitch (status) {\n  case 200: console.log('a switch cannot do this'); break;\n  default: console.log('so it fell to default, because it uses ===');\n}\nconsole.log('and 0 == an empty string is', 0 == '', 'in a loose if');\n\nreal example:\nA legacy helper uses double equals for status codes and a switch for the same check elsewhere, so the two disagree on text values and only one path is ever tested."
+  },
+  {
+    "id": 32,
+    "question": "How do you make sure every branch of a switch statement is actually covered?",
+    "answer": "List every case you expect, then run the switch once per case and collect the ones that land on default. A default clause alone does not tell you which specific case is missing.\n\ncode:\nfunction expected(code) {\n  switch (code) {\n    case 200: return 'ok';\n    case 201: return 'created';\n    case 400: return 'bad request';\n    default: return 'unhandled';\n  }\n}\nconst codes = [200, 201, 400, 204, 404];\nconst missing = codes.filter((c) => expected(c) === 'unhandled');\nconsole.log('codes with no dedicated case:', missing.join(', '));\nmissing.forEach((c) => console.log('add a case for', c));\n\nreal example:\nA negative-path suite only ran 200 and 500. The missing list names 418 exactly, so the suite reports the gap instead of quietly passing."
+  },
+  {
+    "id": 33,
+    "question": "Why do some style guides ban the switch statement completely?",
+    "answer": "They prefer objects or Maps because the dispatch is data rather than logic. That rule is about readability, not about correctness, and it matters more as the case list grows.\n\ncode:\nconst commands = {\n  open: () => 'opening the file',\n  save: () => 'saving the file',\n  quit: () => 'closing the file',\n};\nfunction run(name) {\n  return commands[name] ? commands[name]() : 'unknown command: ' + name;\n}\nconsole.log(run('save'), '|', run('fly'));\nconsole.log('the command list is now data:', Object.keys(commands).join(', '));\n\nreal example:\nA lint rule bans switch inside a test utils folder so every command lives in one object, and reviewing a case list means reviewing a data table instead."
+  }
+]

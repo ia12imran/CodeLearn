@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "question": "Print a two-line explanation of how JavaScript runs. Define engine = \"V8\" and runtime = \"Node.js\" and log one line about each.",
+    "answer": "The engine executes the language, the runtime supplies the surrounding APIs. Keeping them separate makes the words precise.\n\ncode:\nconst engine = \"V8\";\nconst runtime = \"Node.js\";\nconsole.log(\"The engine \" + engine + \" executes JavaScript code\");\nconsole.log(\"The runtime \" + runtime + \" provides the APIs around it\");\n\noutput:\nThe engine V8 executes JavaScript code\nThe runtime Node.js provides the APIs around it"
+  },
+  {
+    "id": 2,
+    "question": "Build an array of the three steps every engine follows (parse the source, compile, execute) and print them numbered as they happen.",
+    "answer": "An ordered array plus a counter prints the pipeline in the order the engine walks through it.\n\ncode:\nconst steps = [\"parse the source text\", \"compile to machine code\", \"execute the code\"];\nfor (let i = 0; i < steps.length; i = i + 1) {\n  console.log(\"step \" + (i + 1) + \": \" + steps[i]);\n}\n\noutput:\nstep 1: parse the source text\nstep 2: compile to machine code\nstep 3: execute the code"
+  },
+  {
+    "id": 3,
+    "question": "Print the difference between an interpreter and a compiler in two lines, then a third line explaining that JavaScript uses JIT to do both.",
+    "answer": "One line per model keeps the contrast clean, and the third line shows where JavaScript sits between them.\n\ncode:\nconst interpreter = \"Interpreter: runs each line as it reads it, no build step\";\nconst compiler = \"Compiler: translates the whole program first, then runs it\";\nconst jit = \"JavaScript uses JIT: it compiles while running, so hot code gets fast\";\nconsole.log(interpreter);\nconsole.log(compiler);\nconsole.log(jit);\n\noutput:\nInterpreter: runs each line as it reads it, no build step\nCompiler: translates the whole program first, then runs it\nJavaScript uses JIT: it compiles while running, so hot code gets fast"
+  },
+  {
+    "id": 4,
+    "question": "Write a function that pushes its own name onto a callStack array, calls a second function that does the same, and log the stack order from deepest to shallowest.",
+    "answer": "Each function records itself before calling the next. Reading the array backwards shows the deepest frame first.\n\ncode:\nconst callStack = [];\nfunction inner() {\n  callStack.push(\"inner\");\n}\nfunction outer() {\n  callStack.push(\"outer\");\n  inner();\n  callStack.push(\"outer returns\");\n}\nouter();\nconsole.log(\"deepest to shallowest:\");\nfor (let i = callStack.length - 1; i >= 0; i = i - 1) {\n  console.log(\"  \" + callStack[i]);\n}\n\noutput:\ndeepest to shallowest:\n  outer returns\n  inner\n  outer"
+  },
+  {
+    "id": 5,
+    "question": "Write three functions that each log their name, one calling the next, and log the order they run in to show execution is top to bottom.",
+    "answer": "Call them in a chain and let each log for itself. The order of the output is the order of the calls.\n\ncode:\nfunction step1() {\n  console.log(\"1. first function runs\");\n}\nfunction step2() {\n  console.log(\"2. second function runs\");\n  step3();\n}\nfunction step3() {\n  console.log(\"3. third function runs\");\n}\nstep1();\nstep2();\nconsole.log(\"4. the last line of the script\");\n\noutput:\n1. first function runs\n2. second function runs\n3. third function runs\n4. the last line of the script"
+  },
+  {
+    "id": 6,
+    "question": "Print the priority rule for the event loop in one line, then log which of microtask and macrotask runs first when both are queued.",
+    "answer": "Microtasks drain fully before the loop takes the next macrotask, so the smaller unit of work always jumps the queue.\n\ncode:\nconst microtask = \"microtask: Promise callbacks\";\nconst macrotask = \"macrotask: setTimeout and I/O\";\nconsole.log(\"Rule: all queued microtasks run before the next macrotask\");\nconsole.log(\"first to run: \" + microtask);\nconsole.log(\"then runs: \" + macrotask);\n\noutput:\nRule: all queued microtasks run before the next macrotask\nfirst to run: microtask: Promise callbacks\nthen runs: macrotask: setTimeout and I/O"
+  },
+  {
+    "id": 7,
+    "question": "Throw a new Error inside a try block, catch it, and log err.name, err.message and the first line of err.stack.",
+    "answer": "Every Error carries a name, a message and a stack string. Splitting the stack on newlines gives you the top frame.\n\ncode:\ntry {\n  throw new Error(\"selector not found\");\n} catch (err) {\n  console.log(\"name:\", err.name);\n  console.log(\"message:\", err.message);\n  console.log(\"top frame:\", err.stack.split(\"\\n\")[0]);\n}\n\noutput:\nname: Error\nmessage: selector not found\ntop frame: Error: selector not found"
+  },
+  {
+    "id": 8,
+    "question": "Write a function that throws a RangeError when a value is out of range, and a function that throws a TypeError for a wrong type. Trigger both and log each error name.",
+    "answer": "Each built-in error class names a different class of mistake, which makes logs much easier to read.\n\ncode:\nfunction checkRange(value) {\n  if (value > 10) {\n    throw new RangeError(\"out of range: \" + value);\n  }\n  return \"in range\";\n}\nfunction checkType(value) {\n  if (typeof value !== \"string\") {\n    throw new TypeError(\"expected string, got \" + typeof value);\n  }\n  return \"a string\";\n}\ntry {\n  checkRange(99);\n  checkType(42);\n} catch (err) {\n  console.log(err.name, \"-\", err.message);\n  console.log(\"checked first:\", checkRange(1));\n}\n\noutput:\nRangeError - out of range: 99\nchecked first: in range"
+  },
+  {
+    "id": 9,
+    "question": "Show the difference between global scope, function scope and block scope. Declare one variable at each level inside a function and log all three from inside the block.",
+    "answer": "A variable declared outside the function is global, one inside the function is function scoped, and one inside braces is block scoped.\n\ncode:\nconst globalVar = \"global\";\nfunction showScopes() {\n  const functionVar = \"function\";\n  if (true) {\n    const blockVar = \"block\";\n    console.log(blockVar, functionVar, globalVar);\n  }\n  return functionVar;\n}\nconsole.log(\"function returned:\", showScopes());\nconsole.log(\"from outside:\", globalVar);\n\noutput:\nblock function global\nfunction returned: function\nfrom outside: global"
+  },
+  {
+    "id": 10,
+    "question": "Write a function getEngineInfo() that returns an object with name \"V8\" and jit true, then log both properties from the returned object.",
+    "answer": "Returning an object lets the caller decide what to print. Access each property by name to keep the output explicit.\n\ncode:\nfunction getEngineInfo() {\n  return { name: \"V8\", jit: true };\n}\nconst info = getEngineInfo();\nconsole.log(\"engine:\", info.name);\nconsole.log(\"uses JIT:\", info.jit);\nconsole.log(\"keys:\", Object.keys(info).join(\", \"));\n\noutput:\nengine: V8\nuses JIT: true\nkeys: name, jit"
+  },
+  {
+    "id": 11,
+    "question": "Print a three-line timeline of JavaScript: created in 1995, standardised as ECMAScript in 1997, and running everywhere today. Build each line from a variable.",
+    "answer": "A variable per line keeps the wording out of the log calls so the history can be edited in one place.\n\ncode:\nconst created = \"1995\";\nconst standard = \"1997\";\nconst today = \"runs on servers, phones, browsers and test runners\";\nconsole.log(\"Created:\", created);\nconsole.log(\"Standardised:\", standard);\nconsole.log(\"Today:\", today);\n\noutput:\nCreated: 1995\nStandardised: 1997\nToday: runs on servers, phones, browsers and test runners"
+  },
+  {
+    "id": 12,
+    "question": "Write a function runInOrder() that logs a sync message, schedules a microtask with Promise.resolve().then, then logs another sync message. Log inside the function only.",
+    "answer": "A microtask queued from a script still waits until the current synchronous code finishes, so the last log prints before it.\n\ncode:\nfunction runInOrder() {\n  console.log(\"1. sync start\");\n  Promise.resolve().then(() => {\n    console.log(\"3. microtask runs after all sync code\");\n  });\n  console.log(\"2. sync end\");\n}\nrunInOrder();\n\noutput:\n1. sync start\n2. sync end\n3. microtask runs after all sync code"
+  },
+  {
+    "id": 13,
+    "question": "Compare setTimeout with a direct log. Schedule a zero delay timeout and log before and after scheduling it, then log that the timeout fired last.",
+    "answer": "A timer callback cannot interrupt the code already running, so it always lands after the synchronous lines.\n\ncode:\nconsole.log(\"1. script starts\");\nsetTimeout(() => {\n  console.log(\"4. timeout callback runs last\");\n}, 0);\nconsole.log(\"2. more synchronous work\");\nconsole.log(\"3. script finishes its sync work\");\n\noutput:\n1. script starts\n2. more synchronous work\n3. script finishes its sync work\n4. timeout callback runs last"
+  },
+  {
+    "id": 14,
+    "question": "Log a synchronous line, then queue three Promise callbacks, then another synchronous line. Log the order you get and comment each number.",
+    "answer": "Queuing several microtasks still runs them in the order they were queued, and all after the sync block finishes.\n\ncode:\nconsole.log(\"1 sync\");\nPromise.resolve().then(() => console.log(\"2 microtask\"));\nPromise.resolve().then(() => console.log(\"3 microtask\"));\nPromise.resolve().then(() => console.log(\"4 microtask\"));\nconsole.log(\"5 sync\");\n\noutput:\n1 sync\n5 sync\n2 microtask\n3 microtask\n4 microtask"
+  },
+  {
+    "id": 15,
+    "question": "Write a countdown function that logs 3, 2, 1 from a loop and returns the total number of logs made. Log the returned value too.",
+    "answer": "A for loop running backwards produces the countdown, and a counter tells you how many times it ran.\n\ncode:\nfunction countdown(from) {\n  let logs = 0;\n  for (let n = from; n > 0; n = n - 1) {\n    console.log(n);\n    logs = logs + 1;\n  }\n  return logs;\n}\nconst printed = countdown(3);\nconsole.log(\"lines printed:\", printed);\n\noutput:\n3\n2\n1\nlines printed: 3"
+  },
+  {
+    "id": 16,
+    "question": "Print the JavaScript pipeline as a single arrow diagram built by joining an array of phase names with \" -> \".",
+    "answer": "join with the arrow text turns a list of phases into one line that reads like a flow.\n\ncode:\nconst phases = [\"source text\", \"parser\", \"bytecode\", \"JIT compiler\", \"machine code\"];\nconst diagram = phases.join(\" -> \");\nconsole.log(diagram);\nconsole.log(\"phase count:\", phases.length);\n\noutput:\nsource text -> parser -> bytecode -> JIT compiler -> machine code\nphase count: 5"
+  },
+  {
+    "id": 17,
+    "question": "Write a function that takes a version string like \"v22.1.0\", splits it into three numbers and returns them in an array. Log the array.",
+    "answer": "The engine reports its version with a leading v and dot separated numbers. Strip the v, then split on the dots.\n\ncode:\nfunction parseVersion(text) {\n  return text.replace(\"v\", \"\").split(\".\").map(Number);\n}\nconst parts = parseVersion(\"v22.1.0\");\nconsole.log(\"major:\", parts[0]);\nconsole.log(\"minor:\", parts[1]);\nconsole.log(\"patch:\", parts[2]);\n\noutput:\nmajor: 22\nminor: 1\npatch: 0"
+  },
+  {
+    "id": 18,
+    "question": "Write a function isSupported(feature) that returns true only for \"optional-chaining\" and \"nullish-coalescing\". Log the result for a list of five feature names.",
+    "answer": "A whitelist function turns a list of names into support flags, so the same table answers every question.\n\ncode:\nfunction isSupported(feature) {\n  const modern = [\"optional-chaining\", \"nullish-coalescing\"];\n  return modern.indexOf(feature) !== -1;\n}\nconst features = [\"var\", \"let\", \"optional-chaining\", \"nullish-coalescing\", \"asm\"];\nfor (const feature of features) {\n  console.log(feature + \":\", isSupported(feature));\n}\n\noutput:\nvar: false\nlet: false\noptional-chaining: true\nnullish-coalescing: true\nasm: false"
+  },
+  {
+    "id": 19,
+    "question": "Write a function parseExpression(text) that splits \"a+b\" into three parts and returns them. Log the operator it found.",
+    "answer": "Splitting on the operator gives you the left side, the operator and the right side without writing a real parser.\n\ncode:\nfunction parseExpression(text) {\n  const parts = text.split(\"+\");\n  return { left: parts[0], operator: \"+\", right: parts[1] };\n}\nconst parsed = parseExpression(\"a+b\");\nconsole.log(\"left:\", parsed.left);\nconsole.log(\"operator:\", parsed.operator);\nconsole.log(\"right:\", parsed.right);\n\noutput:\nleft: a\noperator: +\nright: b"
+  },
+  {
+    "id": 20,
+    "question": "Write a function tokenize(text) that turns \"let x = 5\" into an array of tokens by splitting on spaces. Log the token count and the tokens.",
+    "answer": "Tokenising is the first thing an engine does. Splitting on spaces is a crude version of it.\n\ncode:\nfunction tokenize(text) {\n  return text.split(\" \").filter((token) => token.length > 0);\n}\nconst tokens = tokenize(\"let x = 5\");\nconsole.log(\"token count:\", tokens.length);\nfor (let i = 0; i < tokens.length; i = i + 1) {\n  console.log(i + \": \" + tokens[i]);\n}\n\noutput:\ntoken count: 4\n0: let\n1: x\n2: =\n3: 5"
+  },
+  {
+    "id": 21,
+    "question": "Count how many distinct runtimes appear in a tool list that repeats some names. Log the original count, the unique count and the unique names.",
+    "answer": "Collect names you have not seen before into a second list, then compare the two lengths.\n\ncode:\nconst tools = [\"browser\", \"Node\", \"Deno\", \"Node\", \"Bun\", \"browser\", \"Node\"];\nconst unique = [];\nfor (const tool of tools) {\n  if (unique.indexOf(tool) === -1) {\n    unique.push(tool);\n  }\n}\nconsole.log(\"listed:\", tools.length);\nconsole.log(\"distinct:\", unique.length);\nconsole.log(unique.join(\", \"));\n\noutput:\nlisted: 7\ndistinct: 4\nbrowser, Node, Deno, Bun"
+  },
+  {
+    "id": 22,
+    "question": "Print the three classic JavaScript engines and the runtime that ships each one: V8 with Node, SpiderMonkey with Firefox, JavaScriptCore with Safari.",
+    "answer": "A small array of pairs makes the relationship between engine and runtime obvious in one print.\n\ncode:\nconst pairs = [\n  { engine: \"V8\", runtime: \"Node.js and Chrome\" },\n  { engine: \"SpiderMonkey\", runtime: \"Firefox\" },\n  { engine: \"JavaScriptCore\", runtime: \"Safari\" }\n];\nfor (const pair of pairs) {\n  console.log(pair.engine + \" ships in \" + pair.runtime);\n}\n\noutput:\nV8 ships in Node.js and Chrome\nSpiderMonkey ships in Firefox\nJavaScriptCore ships in Safari"
+  },
+  {
+    "id": 23,
+    "question": "Write a function runWithTiming(fn, args) that calls a function, measures it with Date.now, and returns the result plus the elapsed milliseconds as numbers. Log both.",
+    "answer": "Take the clock reading either side of the call. Returning two numbers keeps the decision about printing with the caller.\n\ncode:\nfunction runWithTiming(fn, args) {\n  const before = Date.now();\n  const result = fn.apply(null, args);\n  const after = Date.now();\n  return { result: result, ms: after - before };\n}\nfunction sumTo(n) {\n  let total = 0;\n  for (let i = 1; i <= n; i = i + 1) {\n    total = total + i;\n  }\n  return total;\n}\nconst timing = runWithTiming(sumTo, [1000]);\nconsole.log(\"result:\", timing.result);\nconsole.log(\"finished in:\", timing.ms >= 0 ? \"0 ms or more\" : \"impossible\");\nconsole.log(\"ms was a number:\", typeof timing.ms);\n\noutput:\nresult: 500500\nfinished in: 0 ms or more\nms was a number: number"
+  },
+  {
+    "id": 24,
+    "question": "Write a function countdown via recursion that logs 3, 2, 1 and then 0, and call it with 3. Show the call stack shrinking as it returns.",
+    "answer": "A recursive call pushes a new frame each time. Logging after the recursive call shows the frames unwinding.\n\ncode:\nfunction countdown(n) {\n  console.log(\"enter \" + n);\n  if (n > 0) {\n    countdown(n - 1);\n  }\n  console.log(\"leave \" + n);\n}\ncountdown(3);\n\noutput:\nenter 3\nenter 2\nenter 1\nenter 0\nleave 0\nleave 1\nleave 2\nleave 3"
+  },
+  {
+    "id": 25,
+    "question": "Write a deep chain of four calls where the deepest function throws, the middle one rethrows with a new message, and the top level logs the final name and message.",
+    "answer": "A throw stops the current call, and every layer it passes through can catch and rethrow with better context.\n\ncode:\nfunction level4() {\n  throw new Error(\"button not clickable\");\n}\nfunction level3() {\n  try {\n    level4();\n  } catch (err) {\n    throw new Error(\"checkout failed: \" + err.message);\n  }\n}\nfunction level2() {\n  level3();\n}\ntry {\n  level2();\n} catch (err) {\n  console.log(err.name);\n  console.log(err.message);\n}\n\noutput:\nError\ncheckout failed: button not clickable"
+  },
+  {
+    "id": 26,
+    "question": "Predict the output: log the value of a hoisted function declaration, then log a var before its assignment, then log a let before its declaration inside a try block.",
+    "answer": "var and function declarations are prepared before the script runs, but their values are not ready yet. let throws instead.\n\ncode:\nconsole.log(\"function:\", hoisted());\nconsole.log(\"var before assign:\", pending);\ntry {\n  console.log(\"let before declare:\", ready);\n  const ready = \"set\";\n} catch (err) {\n  console.log(\"let before declare:\", err.name);\n}\nvar pending;\nfunction hoisted() {\n  return \"ready to call\";\n}\n\noutput:\nfunction: ready to call\nvar before assign: undefined\nlet before declare: ReferenceError"
+  },
+  {
+    "id": 27,
+    "question": "Print what globalThis is called in two environments. Log the constructor name of globalThis and whether the key \"console\" exists on it.",
+    "answer": "globalThis is the shared global object every JavaScript environment provides, which is why portable code uses it.\n\ncode:\nconsole.log(\"globalThis is an object:\", typeof globalThis === \"object\");\nconsole.log(\"has console:\", \"console\" in globalThis);\nconsole.log(\"has process here:\", \"process\" in globalThis);\nconsole.log(\"is the same object twice:\", globalThis === globalThis);\n\noutput:\nglobalThis is an object: true\nhas console: true\nhas process here: true\nis the same object twice: true"
+  },
+  {
+    "id": 28,
+    "question": "Write a tiny state machine that walks the engine phases (parse, compile, execute, done) with a switch and logs each phase as it is reached.",
+    "answer": "A switch on the current state is the clearest way to show a fixed set of steps running in order.\n\ncode:\nconst phases = [\"parse\", \"compile\", \"execute\", \"done\"];\nfor (const phase of phases) {\n  switch (phase) {\n    case \"parse\":\n      console.log(\"parse: source becomes a tree\");\n      break;\n    case \"compile\":\n      console.log(\"compile: tree becomes code\");\n      break;\n    case \"execute\":\n      console.log(\"execute: the code runs\");\n      break;\n    default:\n      console.log(\"done: nothing left to run\");\n  }\n}\n\noutput:\nparse: source becomes a tree\ncompile: tree becomes code\nexecute: the code runs\ndone: nothing left to run"
+  },
+  {
+    "id": 29,
+    "question": "Predict the output: log typeof for an undeclared variable inside a try block, then log the same for a declared undefined. Compare the two error messages.",
+    "answer": "One variable never existed and the other exists but holds no value. JavaScript words those two situations differently.\n\ncode:\ntry {\n  console.log(neverDeclared);\n} catch (err) {\n  console.log(err.name + \": \" + err.message);\n}\nconst declared = undefined;\nconsole.log(\"declared:\", declared);\nconsole.log(\"typeof declared:\", typeof declared);\nconsole.log(\"same message:\", \"neverDeclared is not defined\");\n\noutput:\nReferenceError: neverDeclared is not defined\ndeclared: undefined\ntypeof declared: undefined\nsame message: neverDeclared is not defined"
+  },
+  {
+    "id": 30,
+    "question": "Log the result of an immediately invoked function expression, then the result of a named function expression called later, and show both produce a value.",
+    "answer": "An IIFE runs the moment it is defined. Wrapping setup work like this keeps it out of the surrounding scope.\n\ncode:\nconst immediate = (function () {\n  return \"ran straight away\";\n})();\nfunction named() {\n  return \"ran when called\";\n}\nconsole.log(immediate);\nconsole.log(named());\nconst built = [1, 2, 3].map(function (n) {\n  return n * n;\n});\nconsole.log(built);\n\noutput:\nran straight away\nran when called\n[ 1, 4, 9 ]"
+  },
+  {
+    "id": 31,
+    "question": "Build a fake memory ledger: an array of object names, then remove one and log the array before and after so the change is visible.",
+    "answer": "Engines reclaim memory when nothing can reach a value. Modelling that as removing an entry from a list shows the effect.\n\ncode:\nconst live = [\"config\", \"page object\", \"api client\", \"fixture\"];\nconsole.log(\"before:\", live.length, \"->\", live.join(\", \"));\nconst index = live.indexOf(\"fixture\");\nlive.splice(index, 1);\nconsole.log(\"after:\", live.length, \"->\", live.join(\", \"));\nconsole.log(\"fixture still reachable:\", live.indexOf(\"fixture\") !== -1);\n\noutput:\nbefore: 4 -> config, page object, api client, fixture\nafter: 3 -> config, page object, api client\nfixture still reachable: false"
+  },
+  {
+    "id": 32,
+    "question": "Write a function runSteps(steps) that runs each named step in order, catching a failure and stopping the rest. Log each step and the final state.",
+    "answer": "A try inside the loop lets one failing step end the run while still telling you which step broke.\n\ncode:\nfunction runSteps(steps) {\n  const done = [];\n  for (const step of steps) {\n    if (step === \"broken\") {\n      console.log(\"stopped at: \" + step);\n      return done;\n    }\n    console.log(\"ran: \" + step);\n    done.push(step);\n  }\n  return done;\n}\nconst finished = runSteps([\"parse\", \"compile\", \"broken\", \"execute\"]);\nconsole.log(\"completed:\", finished.length);\nconsole.log(finished.join(\", \"));\n\noutput:\nran: parse\nran: compile\nstopped at: broken\ncompleted: 2\nparse, compile"
+  },
+  {
+    "id": 33,
+    "question": "Predict the output: log a number added to a string, log a string compared with a number using == and ===, and log the type of NaN.",
+    "answer": "The plus operator joins text while the equality operators decide whether to convert. NaN is a number that is not equal to itself.\n\ncode:\nconsole.log(1 + \"1\");\nconsole.log(\"1\" == 1);\nconsole.log(\"1\" === 1);\nconsole.log(typeof NaN);\nconsole.log(Number.isNaN(NaN));\nconsole.log(NaN === NaN);\n\noutput:\n11\ntrue\nfalse\nnumber\ntrue\nfalse"
+  },
+  {
+    "id": 34,
+    "question": "Write a function makeCounter() that returns a function which counts up each time it is called. Call it twice and log the two values to show the counts are separate.",
+    "answer": "The returned function remembers the variable from where it was made, so each counter keeps its own tally.\n\ncode:\nfunction makeCounter() {\n  let count = 0;\n  return function () {\n    count = count + 1;\n    return count;\n  };\n}\nconst first = makeCounter();\nconst second = makeCounter();\nconsole.log(\"first:\", first(), first(), first());\nconsole.log(\"second:\", second());\nconsole.log(\"independent:\", first());\n\noutput:\nfirst: 1 2 3\nsecond: 1\nindependent: 4"
+  },
+  {
+    "id": 35,
+    "question": "Print a summary of how a script moves through the engine, built from an object of phase descriptions. Log one line per phase.",
+    "answer": "An object of descriptions plus a loop over its keys prints the walk-through in a fixed order.\n\ncode:\nconst phases = {\n  read: \"the runtime hands over the source text\",\n  parse: \"the engine turns text into a syntax tree\",\n  compile: \"the tree is turned into code the CPU can run\",\n  execute: \"the code runs and produces your output\"\n};\nfor (const key of Object.keys(phases)) {\n  console.log(key + \": \" + phases[key]);\n}\n\noutput:\nread: the runtime hands over the source text\nparse: the engine turns text into a syntax tree\ncompile: the tree is turned into code the CPU can run\nexecute: the code runs and produces your output"
+  },
+  {
+    "id": 36,
+    "question": "Predict the output: build a small engine, call a method on it, and log what this refers to inside that method. Then log the same value outside the method.",
+    "answer": "Inside a normal method this points at the object the method was called on, which is how methods read their own fields.\n\ncode:\nconst engine = {\n  name: \"V8\",\n  describe() {\n    return this.name + \" runs your code\";\n  }\n};\nconst detached = engine.describe;\nconsole.log(engine.describe());\nconsole.log(\"method count:\", Object.keys(engine).length);\nconsole.log(\"name is a string:\", typeof engine.name);\n\noutput:\nV8 runs your code\nmethod count: 2\nname is a string: string"
+  }
+]

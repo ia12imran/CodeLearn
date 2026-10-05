@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "question": "Print three reasons JavaScript suits automation testing. Keep them in an array (same language as the UI, huge tooling ecosystem, runs in browser and Node) and log each with a dash prefix.",
+    "answer": "Keep the reasons in an array and loop through it so the list can grow without rewriting the logs.\n\ncode:\nconst reasons = [\n  \"the same language that builds the UI\",\n  \"a huge ecosystem of test tools\",\n  \"it runs in the browser and on the server\"\n];\nfor (const reason of reasons) {\n  console.log(\"-\", reason);\n}\n\noutput:\n- the same language that builds the UI\n- a huge ecosystem of test tools\n- it runs in the browser and on the server"
+  },
+  {
+    "id": 2,
+    "question": "Build two objects, one for JavaScript and one for Python, each with name, bestFor and browserNative. Print one comparison line per language.",
+    "answer": "Model each language as an object with the same keys, then loop once to print an even comparison.\n\ncode:\nconst languages = [\n  { name: \"JavaScript\", bestFor: \"browser UI tests\", browserNative: true },\n  { name: \"Python\", bestFor: \"API and data work\", browserNative: false }\n];\nfor (const lang of languages) {\n  console.log(lang.name, \"|\", lang.bestFor, \"| browser native:\", lang.browserNative);\n}\n\noutput:\nJavaScript | browser UI tests | browser native: true\nPython | API and data work | browser native: false"
+  },
+  {
+    "id": 3,
+    "question": "Build a decision matrix of three tools (Playwright, Cypress, Vitest) with tool, useCase and runsIn. Print one pipe-separated line per tool.",
+    "answer": "Store each row as an object in an array and print the same fields in the same order for every row.\n\ncode:\nconst matrix = [\n  { tool: \"Playwright\", useCase: \"end to end\", runsIn: \"Node\" },\n  { tool: \"Cypress\", useCase: \"end to end\", runsIn: \"browser\" },\n  { tool: \"Vitest\", useCase: \"unit tests\", runsIn: \"Node\" }\n];\nfor (const row of matrix) {\n  console.log(row.tool + \" | \" + row.useCase + \" | \" + row.runsIn);\n}\n\noutput:\nPlaywright | end to end | Node\nCypress | end to end | browser\nVitest | unit tests | Node"
+  },
+  {
+    "id": 4,
+    "question": "Write a function isGoodForUiAutomation(language) that returns true only for \"JavaScript\" and \"TypeScript\". Call it for \"JavaScript\", \"Python\" and \"Java\" and log each result.",
+    "answer": "Compare the incoming value against a list of allowed languages and return the result of that comparison.\n\ncode:\nfunction isGoodForUiAutomation(language) {\n  return language === \"JavaScript\" || language === \"TypeScript\";\n}\nconst tried = [\"JavaScript\", \"Python\", \"Java\"];\nfor (const language of tried) {\n  console.log(language + \":\", isGoodForUiAutomation(language));\n}\n\noutput:\nJavaScript: true\nPython: false\nJava: false"
+  },
+  {
+    "id": 5,
+    "question": "Create an array of five automation tools and print how many there are plus the list joined by commas. Use Playwright, Cypress, WebdriverIO, Puppeteer and TestCafe.",
+    "answer": "The array length gives the count and join turns the array into readable text without manual commas.\n\ncode:\nconst tools = [\"Playwright\", \"Cypress\", \"WebdriverIO\", \"Puppeteer\", \"TestCafe\"];\nconst joined = tools.join(\", \");\nconsole.log(\"tool count:\", tools.length);\nconsole.log(\"tools:\", joined);\n\noutput:\ntool count: 5\ntools: Playwright, Cypress, WebdriverIO, Puppeteer, TestCafe"
+  },
+  {
+    "id": 6,
+    "question": "Build a test report object with passed 18, failed 2, skipped 1 and print a one-line summary that adds up the total and works out the pass rate.",
+    "answer": "Do the arithmetic in the code, not in your head, so the summary stays correct when the numbers change.\n\ncode:\nconst report = { passed: 18, failed: 2, skipped: 1 };\nconst total = report.passed + report.failed + report.skipped;\nconst rate = Math.round((report.passed / total) * 100);\nconsole.log(\"total:\", total);\nconsole.log(\"passed:\", report.passed, \"failed:\", report.failed, \"skipped:\", report.skipped);\nconsole.log(\"pass rate:\", rate + \"%\");\n\noutput:\ntotal: 21\npassed: 18 failed: 2 skipped: 1\npass rate: 86%"
+  },
+  {
+    "id": 7,
+    "question": "Print PASS or FAIL for three named checks: \"title is visible\" (true), \"submit button works\" (true), \"error toast hidden\" (false). Log the name and the status for each.",
+    "answer": "A ternary picks the word for you, so the printing code stays identical for passing and failing checks.\n\ncode:\nconst checks = [\n  { name: \"title is visible\", passed: true },\n  { name: \"submit button works\", passed: true },\n  { name: \"error toast hidden\", passed: false }\n];\nfor (const check of checks) {\n  console.log(check.name + \": \" + (check.passed ? \"PASS\" : \"FAIL\"));\n}\n\noutput:\ntitle is visible: PASS\nsubmit button works: PASS\nerror toast hidden: FAIL"
+  },
+  {
+    "id": 8,
+    "question": "Build a lookup object mapping test types to where they run fastest: unit, integration, e2e, visual. Print each key and value pair.",
+    "answer": "An object is a lookup table. Loop over its keys so new entries show up without another log line.\n\ncode:\nconst testMap = {\n  unit: \"Node, milliseconds\",\n  integration: \"Node, seconds\",\n  e2e: \"real browser, minutes\",\n  visual: \"real browser, minutes\"\n};\nfor (const key of Object.keys(testMap)) {\n  console.log(key + \" -> \" + testMap[key]);\n}\n\noutput:\nunit -> Node, milliseconds\nintegration -> Node, seconds\ne2e -> real browser, minutes\nvisual -> real browser, minutes"
+  },
+  {
+    "id": 9,
+    "question": "Write a function countReusablePieces() that returns how many pieces of code an app and its tests can share. Log the number plus one line naming a shared piece.",
+    "answer": "Return a number from a small function, then use it when printing so the value has one home.\n\ncode:\nfunction countReusablePieces() {\n  return 4;\n}\nconst pieces = [\"selectors\", \"helper functions\", \"test data builders\", \"API clients\"];\nconsole.log(\"shared pieces:\", countReusablePieces());\nconsole.log(\"example:\", pieces[0]);\n\noutput:\nshared pieces: 4\nexample: selectors"
+  },
+  {
+    "id": 10,
+    "question": "Print the strengths and the weaknesses of JavaScript automation in two labeled lines. Strengths: fast feedback, one language everywhere. Weakness: timing can make tests flaky.",
+    "answer": "Keep each group in its own array and print one line per group so the balance is obvious.\n\ncode:\nconst strengths = [\"fast feedback\", \"one language everywhere\"];\nconst weaknesses = [\"timing issues can make tests flaky\"];\nconsole.log(\"Strengths:\", strengths.join(\" + \"));\nconsole.log(\"Weakness:\", weaknesses[0]);\n\noutput:\nStrengths: fast feedback + one language everywhere\nWeakness: timing issues can make tests flaky"
+  },
+  {
+    "id": 11,
+    "question": "Write a function passRate(passed, total) that returns the percentage rounded to a whole number. Log the rate for 9 of 10 and for 47 of 50.",
+    "answer": "Divide, multiply, round. Return the number and let the caller add the percent sign.\n\ncode:\nfunction passRate(passed, total) {\n  return Math.round((passed / total) * 100);\n}\nconsole.log(\"9 of 10:\", passRate(9, 10) + \"%\");\nconsole.log(\"47 of 50:\", passRate(47, 50) + \"%\");\n\noutput:\n9 of 10: 90%\n47 of 50: 94%"
+  },
+  {
+    "id": 12,
+    "question": "Build a tiny test suite runner. Take a list of named checks with a passed flag, run them all, print PASS or FAIL per check, then print a summary with the totals.",
+    "answer": "Loop over the checks once printing each result, keep a counter, then print the summary after the loop.\n\ncode:\nconst checks = [\n  { name: \"loads the login page\", passed: true },\n  { name: \"rejects a bad password\", passed: true },\n  { name: \"shows the user menu\", passed: false }\n];\nlet passed = 0;\nfor (const check of checks) {\n  const status = check.passed ? \"PASS\" : \"FAIL\";\n  console.log(status + \" - \" + check.name);\n  if (check.passed) {\n    passed = passed + 1;\n  }\n}\nconst failed = checks.length - passed;\nconsole.log(\"---\");\nconsole.log(passed + \" passed, \" + failed + \" failed, \" + checks.length + \" total\");\n\noutput:\nPASS - loads the login page\nPASS - rejects a bad password\nFAIL - shows the user menu\n---\n2 passed, 1 failed, 3 total"
+  },
+  {
+    "id": 13,
+    "question": "Write a function pickTool(needsBrowser, needsParallel) that returns a tool name. It returns \"Playwright\" when a browser is needed and \"Vitest\" otherwise. Call it twice and log both.",
+    "answer": "A decision function keeps the tool choice out of the test files, so changing policy means editing one place.\n\ncode:\nfunction pickTool(needsBrowser, needsParallel) {\n  if (needsBrowser) {\n    return \"Playwright\";\n  }\n  return needsParallel ? \"Vitest\" : \"node:test\";\n}\nconsole.log(\"browser work:\", pickTool(true, true));\nconsole.log(\"pure logic:\", pickTool(false, true));\n\noutput:\nbrowser work: Playwright\npure logic: Vitest"
+  },
+  {
+    "id": 14,
+    "question": "Build a small test scenario list for a login page (four steps with expected results) and print how many steps there are plus each step name.",
+    "answer": "Count with the array length, then loop to print the steps in order so the total and the detail agree.\n\ncode:\nconst steps = [\n  \"open /login\",\n  \"type a valid email\",\n  \"type a valid password\",\n  \"expect the dashboard\"\n];\nconsole.log(\"step count:\", steps.length);\nfor (let i = 0; i < steps.length; i = i + 1) {\n  console.log((i + 1) + \". \" + steps[i]);\n}\n\noutput:\nstep count: 4\n1. open /login\n2. type a valid email\n3. type a valid password\n4. expect the dashboard"
+  },
+  {
+    "id": 15,
+    "question": "Predict the output: log a check that uses && with a string on the left, one that uses || with a number on the left, and one that uses ?? with 0 on the left.",
+    "answer": "The logical operators return a value, not necessarily a boolean. && and || decide on truthiness while ?? only reacts to null and undefined.\n\ncode:\nconsole.log(\"user\" && \"logged in\");\nconsole.log(0 || \"no items\");\nconsole.log(0 ?? \"no items\");\nconsole.log(null ?? \"fallback\");\nconsole.log(Boolean(\"false\"));\n\noutput:\nlogged in\nno items\n0\nfallback\ntrue"
+  },
+  {
+    "id": 16,
+    "question": "Predict the output: log an array plus an empty string, log an object plus an empty array, and log the result of String([1, 2]).",
+    "answer": "When either side of + is a string, JavaScript glues the values into text using their string form.\n\ncode:\nconsole.log([1, 2] + \"\");\nconsole.log({ a: 1 } + []);\nconsole.log(String([1, 2]));\nconsole.log([1, 2] == \"1,2\");\n\noutput:\n1,2\n[object Object]\n1,2\ntrue"
+  },
+  {
+    "id": 17,
+    "question": "Predict the output: log a variable used before its let declaration inside a try block, and log the error name and message you receive.",
+    "answer": "A let binding exists but cannot be read until its declaration runs. That gap is the temporal dead zone and reading inside it throws.\n\ncode:\ntry {\n  console.log(result);\n  let result = \"computed later\";\n} catch (err) {\n  console.log(err.name);\n  console.log(err.message);\n}\n\noutput:\nReferenceError\nCannot access 'result' before initialization"
+  },
+  {
+    "id": 18,
+    "question": "Predict the output: assign a const to 1, then try to reassign it, catch the error and log its name and message. Finish by logging the value that survived.",
+    "answer": "Catching the failed assignment lets the run continue, and the binding keeps the value it was given.\n\ncode:\nconst timeout = 1;\ntry {\n  timeout = 5;\n} catch (err) {\n  console.log(err.name);\n  console.log(err.message);\n}\nconsole.log(\"timeout is still\", timeout);\n\noutput:\nTypeError\nAssignment to constant variable.\ntimeout is still 1"
+  },
+  {
+    "id": 19,
+    "question": "Write a function reportJsVersion(major) that returns \"modern\" for versions 2020 or newer and \"legacy\" for anything older. Log the result for 2023 and for 2009.",
+    "answer": "Compare numbers with a boundary so the rule lives in one readable line.\n\ncode:\nfunction reportJsVersion(year) {\n  if (year >= 2020) {\n    return \"modern\";\n  }\n  return \"legacy\";\n}\nconsole.log(\"2023:\", reportJsVersion(2023));\nconsole.log(\"2009:\", reportJsVersion(2009));\n\noutput:\n2023: modern\n2009: legacy"
+  },
+  {
+    "id": 20,
+    "question": "Build a small API payload object (status, data array, total) and print the status, the first item name and the total as a readable three-line block.",
+    "answer": "Read the nested fields directly. The index inside the data array is zero based, so the first item is at 0.\n\ncode:\nconst response = {\n  status: 200,\n  data: [{ name: \"checkout\" }, { name: \"cart\" }],\n  total: 2\n};\nconsole.log(\"status:\", response.status);\nconsole.log(\"first item:\", response.data[0].name);\nconsole.log(\"total:\", response.total);\n\noutput:\nstatus: 200\nfirst item: checkout\ntotal: 2"
+  },
+  {
+    "id": 21,
+    "question": "Write a function flattenItems(items) that returns every test id from an array of nested arrays. Log the result for [[1,2],[3],[4,5]].",
+    "answer": "Loop over the outer array and push the contents of each inner array into one result list.\n\ncode:\nfunction flattenItems(groups) {\n  const all = [];\n  for (const group of groups) {\n    for (const id of group) {\n      all.push(id);\n    }\n  }\n  return all;\n}\nconsole.log(flattenItems([[1, 2], [3], [4, 5]]));\n\noutput:\n[ 1, 2, 3, 4, 5 ]"
+  },
+  {
+    "id": 22,
+    "question": "Build a coverage object (unit, e2e) with percentages, then write a function that returns \"ok\" when both are at least 80 and \"low\" otherwise. Log the result for unit 92 and e2e 61.",
+    "answer": "Check every value with &&, because one low number should fail the whole gate.\n\ncode:\nconst coverage = { unit: 92, e2e: 61 };\nfunction gate(cov) {\n  const ok = cov.unit >= 80 && cov.e2e >= 80;\n  return ok ? \"ok\" : \"low\";\n}\nconsole.log(\"unit:\", coverage.unit + \"%\", \"e2e:\", coverage.e2e + \"%\");\nconsole.log(\"coverage gate:\", gate(coverage));\n\noutput:\nunit: 92% e2e: 61%\ncoverage gate: low"
+  },
+  {
+    "id": 23,
+    "question": "Write a function shouldSkipTest(env) that returns true when the environment is \"ci\" or \"staging\", and false otherwise. Log the result for \"ci\", \"local\" and \"dev\".",
+    "answer": "Return true as soon as either condition matches, then log each environment you want to check.\n\ncode:\nfunction shouldSkipTest(env) {\n  return env === \"ci\" || env === \"staging\";\n}\nfor (const env of [\"ci\", \"local\", \"dev\"]) {\n  console.log(env + \" ->\", shouldSkipTest(env));\n}\n\noutput:\nci -> true\nlocal -> false\ndev -> false"
+  },
+  {
+    "id": 24,
+    "question": "Create a helper describeTool(name, runsIn, openSource) that returns a formatted one-line description, and log it for Playwright and Selenium.",
+    "answer": "A formatting function keeps the wording identical everywhere the description appears.\n\ncode:\nfunction describeTool(name, runsIn, openSource) {\n  const licence = openSource ? \"open source\" : \"paid\";\n  return name + \" runs in \" + runsIn + \" and is \" + licence;\n}\nconsole.log(describeTool(\"Playwright\", \"Node\", true));\nconsole.log(describeTool(\"TestCafe\", \"Node\", true));\n\noutput:\nPlaywright runs in Node and is open source\nTestCafe runs in Node and is open source"
+  },
+  {
+    "id": 25,
+    "question": "Build a list of four team requirements (browser tests, API tests, fast unit tests, CI pipeline) and write a function that returns the tools needed for each requirement. Log the tools for the browser requirement.",
+    "answer": "Look the requirement up in an object to find its tool, then log that single value.\n\ncode:\nconst toolFor = {\n  \"browser tests\": \"Playwright\",\n  \"API tests\": \"fetch + node:test\",\n  \"fast unit tests\": \"Vitest\",\n  \"CI pipeline\": \"GitHub Actions\"\n};\nconst requirement = \"browser tests\";\nconsole.log(\"requirement:\", requirement);\nconsole.log(\"tool:\", toolFor[requirement]);\nconsole.log(\"known requirements:\", Object.keys(toolFor).length);\n\noutput:\nrequirement: browser tests\ntool: Playwright\nknown requirements: 4"
+  },
+  {
+    "id": 26,
+    "question": "Write a function testTitle(area, action) that returns a test name like \"login - submits the form\". Log it for two different areas.",
+    "answer": "Build the name from the parts you were given, joined with a separator, so every title reads the same.\n\ncode:\nfunction testTitle(area, action) {\n  return area + \" - \" + action;\n}\nconsole.log(testTitle(\"login\", \"submits the form\"));\nconsole.log(testTitle(\"cart\", \"removes an item\"));\nconsole.log(\"title length:\", testTitle(\"login\", \"submits the form\").length);\n\noutput:\nlogin - submits the form\ncart - removes an item\ntitle length: 24"
+  },
+  {
+    "id": 27,
+    "question": "Predict the output: log the result of comparing 0 to \"\", log [] == 0, log \"0\" == false, and log [] === false. Explain which ones are true and why.",
+    "answer": "Loose equality converts both sides to numbers, so empty string, empty array and false all become 0. Strict equality refuses to convert.\n\ncode:\nconsole.log(0 == \"\");\nconsole.log([] == 0);\nconsole.log(\"0\" == false);\nconsole.log([] === false);\nconsole.log(null == undefined);\n\noutput:\ntrue\ntrue\ntrue\nfalse\ntrue"
+  },
+  {
+    "id": 28,
+    "question": "Predict the output: build an object with a method, call it, then log the array length after push, after pop, and after setting index 5 to a value.",
+    "answer": "push adds to the end and pop removes from it. Assigning past the end leaves holes, so the length grows but the values are empty.\n\ncode:\nconst tool = {\n  name: \"Playwright\",\n  label() {\n    return this.name.toUpperCase();\n  }\n};\nconsole.log(tool.label());\nconst list = [1, 2];\nlist.push(3);\nconsole.log(list.length, JSON.stringify(list));\nlist.pop();\nconsole.log(list.length, JSON.stringify(list));\nlist[5] = 9;\nconsole.log(list.length, JSON.stringify(list));\n\noutput:\nPLAYWRIGHT\n3 [1,2,3]\n2 [1,2]\n6 [1,2,null,null,null,9]"
+  },
+  {
+    "id": 29,
+    "question": "Predict the output: log the length and the contents of an array after a forEach, then after a map that doubles each value, showing the original is unchanged.",
+    "answer": "forEach visits values and returns nothing useful. map builds a brand new array, leaving the original alone.\n\ncode:\nconst steps = [1, 2, 3];\nconst doubled = steps.map((n) => n * 2);\nsteps.forEach((n) => {\n  console.log(\"saw\", n);\n});\nconsole.log(\"doubled:\", doubled);\nconsole.log(\"original:\", steps);\nconsole.log(\"original length:\", steps.length);\n\noutput:\nsaw 1\nsaw 2\nsaw 3\ndoubled: [ 2, 4, 6 ]\noriginal: [ 1, 2, 3 ]\noriginal length: 3"
+  },
+  {
+    "id": 30,
+    "question": "Write a function dedupe(list) that removes duplicate values and keeps the first occurrence. Log the result for a list of tool names that repeats three of them.",
+    "answer": "Keep a seen list and push a value only when it is not in the seen list yet.\n\ncode:\nfunction dedupe(list) {\n  const seen = [];\n  for (const item of list) {\n    if (seen.indexOf(item) === -1) {\n      seen.push(item);\n    }\n  }\n  return seen;\n}\nconst tools = [\"Playwright\", \"Cypress\", \"Playwright\", \"Vitest\", \"Cypress\", \"Playwright\"];\nconst unique = dedupe(tools);\nconsole.log(\"before:\", tools.length);\nconsole.log(\"after:\", unique.length);\nconsole.log(unique.join(\", \"));\n\noutput:\nbefore: 6\nafter: 3\nPlaywright, Cypress, Vitest"
+  },
+  {
+    "id": 31,
+    "question": "Build a summary object from a list of check results using a loop: total, passed and failed counts. Log each count on its own line.",
+    "answer": "A single loop can build several counters. Start them at zero and bump the right one per check.\n\ncode:\nconst results = [true, false, true, true, false];\nlet total = 0;\nlet passed = 0;\nlet failed = 0;\nfor (const result of results) {\n  total = total + 1;\n  if (result) {\n    passed = passed + 1;\n  } else {\n    failed = failed + 1;\n  }\n}\nconsole.log(\"total:\", total);\nconsole.log(\"passed:\", passed);\nconsole.log(\"failed:\", failed);\n\noutput:\ntotal: 5\npassed: 3\nfailed: 2"
+  },
+  {
+    "id": 32,
+    "question": "Write a function estimateDuration(count, msEach) that returns the estimated run time in seconds for a test run. Log the estimate for 24 tests at 1500 ms each.",
+    "answer": "Multiply then convert from milliseconds to seconds, and round down to a whole number of seconds.\n\ncode:\nfunction estimateDuration(count, msEach) {\n  return Math.floor((count * msEach) / 1000);\n}\nconst tests = 24;\nconst msEach = 1500;\nconsole.log(\"tests:\", tests);\nconsole.log(\"ms per test:\", msEach);\nconsole.log(\"estimated seconds:\", estimateDuration(tests, msEach));\n\noutput:\ntests: 24\nms per test: 1500\nestimated seconds: 36"
+  },
+  {
+    "id": 33,
+    "question": "Predict the output: log the result of a function that returns early inside a loop, then log the collected result. The loop stops before the last item.",
+    "answer": "return leaves the whole function immediately, so the rest of the loop never runs and the array stays short.\n\ncode:\nfunction firstFailure(checks) {\n  for (const check of checks) {\n    if (!check) {\n      return \"stopped early\";\n    }\n  }\n  return \"checked all\";\n}\nconsole.log(firstFailure([true, true, false, true]));\nconsole.log(firstFailure([true, true, true]));\n\noutput:\nstopped early\nchecked all"
+  },
+  {
+    "id": 34,
+    "question": "Predict the output: build an object where one property holds a nested object and another holds an array, then log the nested name and the array length using bracket access.",
+    "answer": "Brackets let you walk into nested structures. The length property tells you how many items an array holds.\n\ncode:\nconst suite = {\n  name: \"checkout\",\n  owner: { name: \"Ana\", team: \"payments\" },\n  tags: [\"smoke\", \"nightly\"]\n};\nconsole.log(\"suite:\", suite[\"name\"]);\nconsole.log(\"owner:\", suite[\"owner\"][\"name\"]);\nconsole.log(\"team:\", suite.owner.team);\nconsole.log(\"tags:\", suite[\"tags\"].length);\n\noutput:\nsuite: checkout\nowner: Ana\nteam: payments\ntags: 2"
+  },
+  {
+    "id": 35,
+    "question": "Write a function formatResult(name, passed) that returns a fixed-width line ending in PASS or FAIL, then log one for a passing and one for a failing check.",
+    "answer": "padEnd lines the columns up so a report of many checks stays readable.\n\ncode:\nfunction formatResult(name, passed) {\n  const status = passed ? \"PASS\" : \"FAIL\";\n  return name.padEnd(20) + status;\n}\nconsole.log(formatResult(\"login page loads\", true));\nconsole.log(formatResult(\"cart totals\", false));\nconsole.log(formatResult(\"checkout\", true));\n\noutput:\nlogin page loads    PASS\ncart totals         FAIL\ncheckout            PASS"
+  },
+  {
+    "id": 36,
+    "question": "Predict the output: log typeof for a function, a class, a symbol, a bigint and a regex, then log whether a symbol has a description.",
+    "answer": "typeof has a name for every modern value type. A symbol prints as symbol no matter what you put inside it.\n\ncode:\nconst id = Symbol(\"id\");\nconst big = 9007199254740993n;\nconst pattern = /abc/;\nconsole.log(typeof function () {});\nconsole.log(typeof id);\nconsole.log(typeof big);\nconsole.log(typeof pattern);\nconsole.log(id.description);\nconsole.log(String(id));\n\noutput:\nfunction\nsymbol\nbigint\nobject\nid\nSymbol(id)"
+  }
+]

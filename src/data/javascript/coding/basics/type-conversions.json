@@ -1,0 +1,232 @@
+[
+  {
+    "id": 1,
+    "question": "Write safeParseInt(str) that returns a whole number for text that really is a number and null for anything else. It must handle '12px', ' 7 ', '1e3', '', '42' and 'abc'.",
+    "answer": "Trim the text, reject an empty string, then use Number so the whole string has to be a number. Anything the engine cannot read becomes null instead of NaN.\n\ncode:\nfunction safeParseInt(str) {\n  const text = String(str).trim();\n  if (text === '') return null;\n  const value = Number(text);\n  return Number.isFinite(value) ? Math.trunc(value) : null;\n}\nconst inputs = ['12px', ' 7 ', '1e3', '', '42', 'abc'];\nconst results = inputs.map((value) => String(safeParseInt(value)));\nconsole.log(results.join(' | ')); // null | 7 | 1000 | null | 42 | null\nconsole.log(safeParseInt('8.9')); // 8\n\noutput:\nnull | 7 | 1000 | null | 42 | null\n8"
+  },
+  {
+    "id": 2,
+    "question": "Write toBool(value) that returns false for the empty string, the text 'false', the text '0', 0, null and undefined, and true for everything else including the text 'TRUE' and 'yes'. Print it over a list of nine inputs.",
+    "answer": "Handle text separately from other types, because the text 'false' is a long non-empty string and would be truthy on its own.\n\ncode:\nfunction toBool(value) {\n  if (typeof value === 'string') {\n    const text = value.trim().toLowerCase();\n    return !['', 'false', '0', 'null', 'undefined'].includes(text);\n  }\n  return Boolean(value);\n}\nconst inputs = ['', 'false', 'TRUE', '0', 0, 1, null, undefined, 'yes'];\nconsole.log(inputs.map((value) => String(toBool(value))).join(',')); // false,false,true,false,false,true,false,false,true\n\noutput:\nfalse,false,true,false,false,true,false,false,true"
+  },
+  {
+    "id": 3,
+    "question": "Write sumAsNumbers(list) that turns every entry into a number with Number and adds them up, skipping the entries that cannot be read. Run it on ['10', 20, 'abc', '5.5'] and print the total.",
+    "answer": "Convert one value at a time and test it with Number.isFinite, so one bad entry cannot poison the whole total.\n\ncode:\nfunction sumAsNumbers(list) {\n  let total = 0;\n  for (const value of list) {\n    const num = Number(value);\n    if (Number.isFinite(num)) total += num;\n  }\n  return total;\n}\nconsole.log(sumAsNumbers(['10', 20, 'abc', '5.5'])); // 35.5\nconsole.log(sumAsNumbers(['10', 20, 'abc', '5.5']).toFixed(2)); // 35.50\n\noutput:\n35.5\n35.50"
+  },
+  {
+    "id": 4,
+    "question": "Print Number() applied to '0x10', '12px', '', a single space, null and undefined, so you can see which surprising cases give zero and which give NaN.",
+    "answer": "The Number function trims the text first, and an empty or blank string becomes zero because there is nothing left to read.\n\ncode:\nconst inputs = ['0x10', '12px', '', ' ', null, undefined];\nconst numbers = inputs.map((value) => Number(value));\nconsole.log(numbers.join(' | ')); // 16 | NaN | 0 | 0 | 0 | NaN\nconsole.log(numbers.map((value) => Number.isFinite(value)).join(',')); // true,false,true,true,true,false\n\noutput:\n16 | NaN | 0 | 0 | 0 | NaN\ntrue,false,true,true,true,false"
+  },
+  {
+    "id": 5,
+    "question": "Print parseInt('08'), parseInt('0x10'), parseInt('10px') and parseInt(''), then print the same values with parseInt(text, 10) so the base is explicit.",
+    "answer": "parseInt reads digits from the left and stops at the first character it does not understand, so it never tells you that the tail was junk.\n\ncode:\nconst inputs = ['08', '0x10', '10px', ''];\nconsole.log(inputs.map((text) => String(parseInt(text))).join(' | ')); // 8 | 16 | 10 | NaN\nconsole.log(inputs.map((text) => String(parseInt(text, 10))).join(' | ')); // 8 | 0 | 10 | NaN\nconsole.log(parseInt('12abc') + 1); // 13\n\noutput:\n8 | 16 | 10 | NaN\n8 | 0 | 10 | NaN\n13"
+  },
+  {
+    "id": 6,
+    "question": "Write parseNumber(text) that uses parseFloat and reports the string NaN for values it cannot read at all. Run it on '3.14abc', '42', '1e3' and 'abc'.",
+    "answer": "parseFloat keeps going until a character stops making sense, so a trailing unit or word is ignored rather than rejected.\n\ncode:\nfunction parseNumber(text) {\n  const value = parseFloat(text);\n  return Number.isNaN(value) ? 'NaN' : value;\n}\nconsole.log(['3.14abc', '42', '1e3', 'abc'].map(parseNumber).join(' | ')); // 3.14 | 42 | 1000 | NaN\n\noutput:\n3.14 | 42 | 1000 | NaN"
+  },
+  {
+    "id": 7,
+    "question": "Print the result of the unary plus on '12', ' 7 ', '', true and null, then print typeof for two of the results so you can see the string ones became numbers.",
+    "answer": "A plus with nothing on its left is the shortest way to convert, and it follows the same rules as the Number function.\n\ncode:\nconst inputs = ['12', ' 7 ', '', true, null];\nconst numbers = inputs.map((value) => +value);\nconsole.log(numbers.join(' | ')); // 12 | 7 | 0 | 1 | 0\nconsole.log(typeof numbers[0], typeof numbers[3]); // number number\n\noutput:\n12 | 7 | 0 | 1 | 0\nnumber number"
+  },
+  {
+    "id": 8,
+    "question": "Print String(123), (123).toString(2), String(null), String(undefined) and String([1, 2]) so you can see how the string conversion differs from the number one.",
+    "answer": "The String function never throws and works on null and undefined, while toString on a number lets you pick the base.\n\ncode:\nconsole.log(String(123), String(null), String(undefined)); // 123 null undefined\nconsole.log((123).toString(2), (255).toString(16)); // 1111011 ff\nconsole.log(String([1, 2]), typeof String(123)); // 1,2 string\nconsole.log(String(true), String(NaN)); // true NaN\n\noutput:\n123 null undefined\n1111011 ff\n1,2 string\ntrue NaN"
+  },
+  {
+    "id": 9,
+    "question": "Predict and then print the results of [] + [], [] + {}, +[] and +{}, wrapping the first one in JSON.stringify so the empty text is visible. Comment each line with the reason.",
+    "answer": "The plus operator turns both sides into strings when either side is an object, and an empty array becomes an empty string. The unary plus converts instead, which is why the empty array reads as zero.\n\ncode:\nconsole.log(JSON.stringify([] + [])); // \"\"\nconsole.log([] + {}); // [object Object]\nconsole.log(+[], +{}); // 0 NaN\nconsole.log([1, 2] + [3]); // 1,23\n\noutput:\n\"\"\n[object Object]\n0 NaN\n1,23"
+  },
+  {
+    "id": 10,
+    "question": "Print String({}), ({ a: 1 }).toString(), String([1, [2, 3]]) and typeof String([1, 2]) so you can see what the default text conversion gives for objects and arrays.",
+    "answer": "Objects fall back to a generic tag while arrays join their items with commas, and nested arrays flatten one level into that text.\n\ncode:\nconsole.log(String({})); // [object Object]\nconsole.log(String({ a: 1 })); // [object Object]\nconsole.log(String([1, [2, 3]])); // 1,2,3\nconsole.log(typeof String([1, 2])); // string\n\noutput:\n[object Object]\n[object Object]\n1,2,3\nstring"
+  },
+  {
+    "id": 11,
+    "question": "Print the results of 'apple' < 'banana', 10 < '9', '10' < '9' and 10 == '10' so you can see when a comparison converts and when it compares text.",
+    "answer": "Relational operators convert a string operand to a number, but two strings are compared character by character instead.\n\ncode:\nconsole.log('apple' < 'banana', 10 < '9'); // true false\nconsole.log('10' < '9', '10' === '9'); // true false\nconsole.log(10 == '10', 10 === '10'); // true false\nconsole.log('b' > 'a', 'B' > 'a'); // true false\n\noutput:\ntrue false\ntrue false\ntrue false\ntrue false"
+  },
+  {
+    "id": 12,
+    "question": "Print Boolean() for the values '', 'false', '0', 0, -0, null, undefined and NaN, then print Boolean for an empty array, the text '0' and an empty function so you can see which ones the engine treats as true.",
+    "answer": "Only eight values are falsy in JavaScript, and the two text values in this list are not among them. Everything else, including empty arrays and objects, is truthy.\n\ncode:\nconst values = ['', 'false', '0', 0, -0, null, undefined, NaN];\nconsole.log(values.map((value) => String(Boolean(value))).join(',')); // false,true,true,false,false,false,false,false\nconsole.log(Boolean([]), Boolean('0')); // true true\nconsole.log(Boolean(function () {}), Boolean(new Date(0))); // true true\n\noutput:\nfalse,true,true,false,false,false,false,false\ntrue true\ntrue true"
+  },
+  {
+    "id": 13,
+    "question": "Write withNullish(value) that returns value when it is a number, using the nullish coalescing operator, and withOr(value) that does the same job with the OR operator. Print both for 0, null and 7.",
+    "answer": "Zero is a real value, so the nullish operator keeps it while the OR operator throws it away. That difference is the whole point of the pair.\n\ncode:\nfunction withNullish(value) {\n  return value ?? 'default';\n}\nfunction withOr(value) {\n  return value || 'default';\n}\nconsole.log([0, null, 7].map(withNullish).join(',')); // 0,default,7\nconsole.log([0, null, 7].map(withOr).join(',')); // default,default,7\n\noutput:\n0,default,7\ndefault,default,7"
+  },
+  {
+    "id": 14,
+    "question": "Write parseQuery(query) that turns the string a=1&b=2&c=hello into an object where the numeric values are numbers. Print the object as JSON.",
+    "answer": "Split on the ampersand and the equals sign, then try Number on each value and keep it only when the whole value converted cleanly.\n\ncode:\nfunction parseQuery(query) {\n  const result = {};\n  for (const pair of query.split('&')) {\n    const [key, value] = pair.split('=');\n    const num = Number(value);\n    result[key] = value !== '' && Number.isFinite(num) ? num : value;\n  }\n  return result;\n}\nconsole.log(JSON.stringify(parseQuery('a=1&b=2&c=hello'))); // {\"a\":1,\"b\":2,\"c\":\"hello\"}\n\noutput:\n{\"a\":1,\"b\":2,\"c\":\"hello\"}"
+  },
+  {
+    "id": 15,
+    "question": "Write formatPrice(value) that returns $10.00 for the number 10 and the same text for the string '10', then for '9.5'. Use Number plus toFixed and print all three.",
+    "answer": "Convert to a number first so a text price cannot break the arithmetic, then use toFixed to force exactly two decimals.\n\ncode:\nfunction formatPrice(value) {\n  return '$' + Number(value).toFixed(2);\n}\nconsole.log(formatPrice(10), formatPrice('10')); // $10.00 $10.00\nconsole.log(formatPrice('9.5')); // $9.50\nconsole.log(typeof formatPrice(10)); // string\n\noutput:\n$10.00 $10.00\n$9.50\nstring"
+  },
+  {
+    "id": 16,
+    "question": "Print 0.1 + 0.2, then print Number((0.1 + 0.2).toFixed(2)) and Number.EPSILON, so you can see why the first value is not exactly 0.3.",
+    "answer": "Decimal fractions cannot be stored exactly in binary, so the error is tiny but real. Rounding for display is the honest fix.\n\ncode:\nconsole.log(0.1 + 0.2); // 0.30000000000000004\nconsole.log(0.1 + 0.2 === 0.3); // false\nconsole.log(Number((0.1 + 0.2).toFixed(2))); // 0.3\nconsole.log(Number.EPSILON); // 2.220446049250313e-16\n\noutput:\n0.30000000000000004\nfalse\n0.3\n2.220446049250313e-16"
+  },
+  {
+    "id": 17,
+    "question": "Write roundTo2(n) that rounds a number to two decimals using multiply, round and divide, then print it for 1.005 and for 2.675 and print both again through toFixed. One of them will surprise you.",
+    "answer": "Multiplying by 100, rounding and dividing by 100 is the classic trick, but a value such as 2.675 is stored just below 2.675 in binary, so the rounding lands on 2.68.\n\ncode:\nfunction roundTo2(n) {\n  return Math.round(n * 100) / 100;\n}\nconsole.log(roundTo2(1.005), roundTo2(2.675)); // 1 2.68\nconsole.log(roundTo2(1.005).toFixed(2), roundTo2(2.675).toFixed(2)); // 1.00 2.68\n\noutput:\n1 2.68\n1.00 2.68"
+  },
+  {
+    "id": 18,
+    "question": "Write moneyFromCents(cents) that returns a two-decimal string such as 10.99 from 1099 and also 0.99 from the sum 10 + 20 + 33 + 36, then print (0.1 + 0.2).toFixed(2) to show the float problem you avoid.",
+    "answer": "Doing the arithmetic in whole cents and dividing once at the end keeps the values exact, which is how prices are usually handled.\n\ncode:\nfunction moneyFromCents(cents) {\n  return (cents / 100).toFixed(2);\n}\nconsole.log(moneyFromCents(1099)); // 10.99\nconsole.log(moneyFromCents(10 + 20 + 33 + 36)); // 0.99\nconsole.log((0.1 + 0.2).toFixed(2)); // 0.30\n\noutput:\n10.99\n0.99\n0.30"
+  },
+  {
+    "id": 19,
+    "question": "Write clampPercent(value) that converts the value to a number and keeps it between 0 and 100. Print it for '150', 42 and '-3'.",
+    "answer": "Convert first so a text value cannot slip past the comparisons, then clamp with two Math calls.\n\ncode:\nfunction clampPercent(value) {\n  const num = Number(value);\n  if (!Number.isFinite(num)) return 0;\n  return Math.min(100, Math.max(0, num));\n}\nconsole.log(clampPercent('150'), clampPercent(42), clampPercent('-3')); // 100 42 0\n\noutput:\n100 42 0"
+  },
+  {
+    "id": 20,
+    "question": "Write parseNumberList(text) that turns the string '1, 2, 3' into the array of numbers [1, 2, 3] and returns an empty array when there is nothing to read. Print both results.",
+    "answer": "Split the text, trim each piece and convert it, which keeps stray spaces in the data from turning into NaN.\n\ncode:\nfunction parseNumberList(text) {\n  if (String(text).trim() === '') return [];\n  return text.split(',').map((piece) => Number(piece.trim()));\n}\nconsole.log(parseNumberList('1, 2, 3').join('+')); // 1+2+3\nconsole.log(parseNumberList('').length); // 0\nconsole.log(parseNumberList('4, x')); // [ 4, NaN ]\n\noutput:\n1+2+3\n0\n[ 4, NaN ]"
+  },
+  {
+    "id": 21,
+    "question": "Write isNumericString(str) that returns true only when the whole string is a number, then run it over '12', '12px', ' 12 ', '1.5', '' and '-3'. Use the text that Number produces.",
+    "answer": "Let Number do the reading, then check that the original text is not empty and not just spaces, because those read as zero.\n\ncode:\nfunction isNumericString(str) {\n  if (typeof str !== 'string' || str.trim() === '') return false;\n  return Number.isFinite(Number(str));\n}\nconst inputs = ['12', '12px', ' 12 ', '1.5', '', '-3'];\nconsole.log(inputs.map(isNumericString).join(', ')); // true, false, true, true, false, true\n\noutput:\ntrue, false, true, true, false, true"
+  },
+  {
+    "id": 22,
+    "question": "Print Number('7'), '7' * 1, +'7' and parseInt('7', 10) for the same text, then print typeof for the first and the third so you can see the difference between a number and a string.",
+    "answer": "Multiplication and the unary plus both force a numeric conversion, while parseInt reads characters and stops early.\n\ncode:\nconsole.log(Number('7'), '7' * 1, +'7', parseInt('7', 10)); // 7 7 7 7\nconsole.log(typeof Number('7'), typeof +'7'); // number number\nconsole.log(Number('7px'), '7px' * 1); // NaN NaN\nconsole.log(parseInt('7px'), parseFloat('7px')); // 7 7\n\noutput:\n7 7 7 7\nnumber number\nNaN NaN\n7 7"
+  },
+  {
+    "id": 23,
+    "question": "Print the results of 1 / 0, -1 / 0 and 0 / 0 to show what JavaScript returns instead of throwing when you divide by zero.",
+    "answer": "Floating point division follows the maths standard: a non-zero number over zero is Infinity and zero over zero is NaN.\n\ncode:\nconsole.log(1 / 0, -1 / 0); // Infinity -Infinity\nconsole.log(0 / 0); // NaN\nconsole.log(Number.isFinite(1 / 0)); // false\nconsole.log(1 % 0); // NaN\n\noutput:\nInfinity -Infinity\nNaN\nfalse\nNaN"
+  },
+  {
+    "id": 24,
+    "question": "Write describeValue(value) that returns an object with the raw value, the string version and the number version, where the number version is NaN when the value cannot be read as a number. Print it for ' 42 '.",
+    "answer": "Keeping all three versions side by side is the fastest way to see exactly what a piece of loose data turns into.\n\ncode:\nfunction describeValue(value) {\n  const num = Number(value);\n  return {\n    raw: value,\n    text: String(value),\n    number: Number.isFinite(num) ? num : 'NaN',\n  };\n}\nconst info = describeValue(' 42 ');\nconsole.log('[' + info.text + ']'); // [ 42 ]\nconsole.log(info.number); // 42\nconsole.log(JSON.stringify(describeValue('abc').number)); // \"NaN\"\n\noutput:\n[ 42 ]\n42\n\"NaN\""
+  },
+  {
+    "id": 25,
+    "question": "Write parseFlag(raw) that turns the text true, 1 or yes into the boolean true, and false, 0, no, an empty string, null or undefined into false. Print the results for 'yes', '0', '' and null.",
+    "answer": "Convert to text and lowercase first, then check the small list of accepted words. Anything not on a list counts as false.\n\ncode:\nfunction parseFlag(raw) {\n  const text = String(raw).trim().toLowerCase();\n  return ['true', '1', 'yes'].includes(text);\n}\nconsole.log(parseFlag('TRUE'), parseFlag('no')); // true false\nconsole.log(['yes', '0', '', null].map((raw) => String(parseFlag(raw))).join(',')); // true,false,false,false\nconsole.log(parseFlag(undefined)); // false\n\noutput:\ntrue false\ntrue,false,false,false\nfalse"
+  },
+  {
+    "id": 26,
+    "question": "Write toList(value) that turns null and undefined into an empty array, a single value into an array with one item, and an array into itself. Print all three results.",
+    "answer": "Check for the two missing values first, then leave real arrays alone so you never end up with a nested array.\n\ncode:\nfunction toList(value) {\n  if (value === null || value === undefined) return [];\n  return Array.isArray(value) ? value : [value];\n}\nconsole.log(toList(null).length, toList('a').join(','), toList([1, 2]).join(',')); // 0 a 1,2\nconsole.log(JSON.stringify(toList(toList('x')))); // [\"x\"]\n\noutput:\n0 a 1,2\n[\"x\"]"
+  },
+  {
+    "id": 27,
+    "question": "Write safeDivide(a, b) that returns the result of a divided by b, or null when b is zero or when either value is not a number. Print it for 10 and 4, for 10 and 0, and for 10 and 'x'.",
+    "answer": "Convert both arguments, reject anything that is not finite, and treat a zero divisor as a missing answer rather than Infinity.\n\ncode:\nfunction safeDivide(a, b) {\n  const top = Number(a);\n  const bottom = Number(b);\n  if (!Number.isFinite(top) || !Number.isFinite(bottom) || bottom === 0) return null;\n  return top / bottom;\n}\nconsole.log(safeDivide(10, 4)); // 2.5\nconsole.log(safeDivide(10, 0), safeDivide(10, 'x')); // null null\n\noutput:\n2.5\nnull null"
+  },
+  {
+    "id": 28,
+    "question": "Write padId(value) that turns the value into a string and pads it on the left with zeros up to five characters. Print it for 42, '7' and 123456.",
+    "answer": "String first so a number and a text id behave the same, then padStart fills the front with the character you choose.\n\ncode:\nfunction padId(value) {\n  return String(value).padStart(5, '0');\n}\nconsole.log(padId(42), padId('7'), padId(123456)); // 00042 00007 123456\nconsole.log(padId(42).length, typeof padId(42)); // 5 string\n\noutput:\n00042 00007 123456\n5 string"
+  },
+  {
+    "id": 29,
+    "question": "Write percentOf(spent, total) that converts both values, returns 0 when the total is zero, and otherwise returns the percentage rounded to two decimals. Print it for '50' and 200 and for 10 and 0.",
+    "answer": "Multiply by 100, divide by the total, then round for display. Guard the zero total first so the division cannot produce Infinity.\n\ncode:\nfunction percentOf(spent, total) {\n  const part = Number(spent);\n  const whole = Number(total);\n  if (!Number.isFinite(part) || !Number.isFinite(whole) || whole === 0) return 0;\n  return Number(((part / whole) * 100).toFixed(2));\n}\nconsole.log(percentOf('50', 200)); // 25\nconsole.log(percentOf(10, 0)); // 0\nconsole.log(percentOf(1, 3)); // 33.33\n\noutput:\n25\n0\n33.33"
+  },
+  {
+    "id": 30,
+    "question": "Print typeof Number('7'), typeof +'7', typeof '7', typeof parseInt('7'), typeof JSON.parse('7'), typeof +true and typeof String(7) so you can see which conversions really produced numbers.",
+    "answer": "Every one of these looks like it should give a number, but only some of them actually hand back a number value.\n\ncode:\nconsole.log(typeof Number('7'), typeof +'7', typeof '7'); // number number string\nconsole.log(typeof parseInt('7'), typeof JSON.parse('7')); // number number\nconsole.log(JSON.parse('7') + 1); // 8\nconsole.log(typeof +true, typeof String(7)); // number string\n\noutput:\nnumber number string\nnumber number\n8\nnumber string"
+  },
+  {
+    "id": 31,
+    "question": "Write truthy(value) that returns the word truthy or falsy as a string instead of a boolean. Run it over 0, '0', '', null, undefined, NaN and 'hello'.",
+    "answer": "Double the not operator gives you a real boolean, and wrapping that in a ternary makes the result readable in a log line.\n\ncode:\nfunction truthy(value) {\n  return !!value ? 'truthy' : 'falsy';\n}\nconst values = [0, '0', '', null, undefined, NaN, 'hello'];\nconsole.log(values.map(truthy).join(', ')); // falsy, truthy, falsy, falsy, falsy, falsy, truthy\n\noutput:\nfalsy, truthy, falsy, falsy, falsy, falsy, truthy"
+  },
+  {
+    "id": 32,
+    "question": "Write convertAll(values) that returns an array of objects, each with the value, its String version, its Number version and its Boolean version. Run it on [1, '2', null] and print the JSON.",
+    "answer": "One pass produces all three conversions side by side, which is exactly the table you want when a payload arrives with mixed types.\n\ncode:\nfunction convertAll(values) {\n  return values.map((value) => ({\n    value: String(value),\n    number: String(Number(value)),\n    bool: String(Boolean(value)),\n  }));\n}\nconsole.log(JSON.stringify(convertAll([1, '2', null]))); // [{\"value\":\"1\",\"number\":\"1\",\"bool\":\"true\"},{\"value\":\"2\",\"number\":\"2\",\"bool\":\"true\"},{\"value\":\"null\",\"number\":\"0\",\"bool\":\"false\"}]\n\noutput:\n[{\"value\":\"1\",\"number\":\"1\",\"bool\":\"true\"},{\"value\":\"2\",\"number\":\"2\",\"bool\":\"true\"},{\"value\":\"null\",\"number\":\"0\",\"bool\":\"false\"}]"
+  },
+  {
+    "id": 33,
+    "question": "Write findBadNumbers(list) that returns the first entry that cannot be read as a finite number, or the word none when every entry is fine. Run it on ['5', 'x', '7'] and on ['5', '7'].",
+    "answer": "Number.isFinite is the honest check because it rejects NaN, Infinity and text in one go, so the first bad value is easy to report.\n\ncode:\nfunction findBadNumbers(list) {\n  for (const value of list) {\n    if (!Number.isFinite(Number(value))) return value;\n  }\n  return 'none';\n}\nconsole.log(findBadNumbers(['5', 'x', '7'])); // x\nconsole.log(findBadNumbers(['5', '7'])); // none\n\noutput:\nx\nnone"
+  },
+  {
+    "id": 34,
+    "question": "Write formatBytes(bytes) that converts the number of bytes into KB or MB with one decimal place. Print it for 1536 and for 1048576.",
+    "answer": "Divide by the unit, then pick the label with a ternary. Keeping the raw number until the last step avoids rounding too early.\n\ncode:\nfunction formatBytes(bytes) {\n  const num = Number(bytes);\n  if (!Number.isFinite(num)) return 'unknown';\n  if (num < 1024) return num + ' B';\n  if (num < 1024 * 1024) return (num / 1024).toFixed(1) + ' KB';\n  return (num / (1024 * 1024)).toFixed(1) + ' MB';\n}\nconsole.log(formatBytes(1536)); // 1.5 KB\nconsole.log(formatBytes(1048576)); // 1.0 MB\nconsole.log(formatBytes(512)); // 512 B\n\noutput:\n1.5 KB\n1.0 MB\n512 B"
+  },
+  {
+    "id": 35,
+    "question": "Print Number([]), Number([5]), Number([1, 2]), Number({}) and Number(['10']) so you can see how the number conversion reads arrays and objects.",
+    "answer": "An array becomes the text of its items joined by commas, so an empty array reads as zero and a single-item array becomes that number.\n\ncode:\nconst values = [[], [5], [1, 2], {}];\nconsole.log(values.map((value) => String(Number(value))).join(' | ')); // 0 | 5 | NaN | NaN\nconsole.log(JSON.stringify(String([])), String([5])); // \"\" 5\nconsole.log(Number(['10']), Number(['1', '0'])); // 10 NaN\n\noutput:\n0 | 5 | NaN | NaN\n\"\" 5\n10 NaN"
+  },
+  {
+    "id": 36,
+    "question": "Print '0' || 'default', 0 || 'default', '0' ?? 'default', '' ?? 'default' and null ?? 'default' so you can see which operator treats an empty value as missing.",
+    "answer": "The OR operator treats every falsy value as missing while the nullish operator only reacts to null and undefined.\n\ncode:\nconsole.log('0' || 'default', 0 || 'default'); // 0 default\nconsole.log('0' ?? 'default', JSON.stringify('' ?? 'default')); // 0 \"\"\nconsole.log(null ?? 'default', undefined ?? 'default'); // default default\nconsole.log(Boolean('' ?? 'default')); // false\n\noutput:\n0 default\n0 \"\"\ndefault default\nfalse"
+  },
+  {
+    "id": 37,
+    "question": "Write stripSpaces(text) that removes all spaces from a string with replace and a regular expression, then turns it into a number with Number. Print it for '1 2 3' and for '1 2 x'.",
+    "answer": "Cleaning the text first is often what a form does behind the scenes before it converts the value, so the conversion then succeeds.\n\ncode:\nfunction stripSpaces(text) {\n  const cleaned = String(text).replace(/\\s+/g, '');\n  const value = Number(cleaned);\n  return Number.isFinite(value) ? value : 'not a number';\n}\nconsole.log(stripSpaces('1 2 3')); // 123\nconsole.log(stripSpaces('1 2 x')); // not a number\n\noutput:\n123\nnot a number"
+  },
+  {
+    "id": 38,
+    "question": "Write toCelsius(fahrenheit) that converts a number or a text value into a Celsius number rounded to one decimal place. Print it for '68' and for 32.",
+    "answer": "Convert the input with Number, do the arithmetic, then round for display. The text input is the case that usually breaks.\n\ncode:\nfunction toCelsius(fahrenheit) {\n  const value = Number(fahrenheit);\n  if (!Number.isFinite(value)) return 'bad input';\n  return Number((((value - 32) * 5) / 9).toFixed(1));\n}\nconsole.log(toCelsius('68')); // 20\nconsole.log(toCelsius(32)); // 0\nconsole.log(toCelsius('abc')); // bad input\n\noutput:\n20\n0\nbad input"
+  },
+  {
+    "id": 39,
+    "question": "Print String(new Date(0).getTime() === 0), Number(new Date(0).getTime() > 0) and Boolean(new Date(0)) so you can see how a Date object converts to text, to a number and to a boolean.",
+    "answer": "The String conversion gives the readable date while Number turns the object into its timestamp, which is why the boolean check is simply true.\n\ncode:\nconst stamp = new Date(0);\nconsole.log(String(stamp.getTime() === 0)); // true\nconsole.log(Number(stamp.getTime() > 0), Number(stamp.getTime())); // 0 0\nconsole.log(Boolean(stamp), typeof stamp); // true object\n\noutput:\ntrue\n0 0\ntrue object"
+  },
+  {
+    "id": 40,
+    "question": "Write averageOfStrings(list) that converts every entry to a number, ignores the entries that fail, and returns the average rounded to two decimals. Run it on ['10', '20', 'oops', '30'].",
+    "answer": "Filter to the values that convert cleanly, then average only those. The length of the filtered list is the divisor, not the original length.\n\ncode:\nfunction averageOfStrings(list) {\n  const numbers = list.map(Number).filter(Number.isFinite);\n  if (numbers.length === 0) return 0;\n  return Number((numbers.reduce((sum, n) => sum + n, 0) / numbers.length).toFixed(2));\n}\nconsole.log(averageOfStrings(['10', '20', 'oops', '30'])); // 20\nconsole.log(averageOfStrings([])); // 0\n\noutput:\n20\n0"
+  },
+  {
+    "id": 41,
+    "question": "Write countTruthy(list) that counts the values JavaScript treats as true, and print it for [0, 'false', '', 1, null]. Then print the same list through Boolean so you can see which value surprised you.",
+    "answer": "Wrapping each value in Boolean is the honest way to see the engine's verdict. Counting the true results gives you the truthy count, and the text 'false' is one of them.\n\ncode:\nfunction countTruthy(list) {\n  return list.filter((value) => Boolean(value)).length;\n}\nconst list = [0, 'false', '', 1, null];\nconsole.log(countTruthy(list)); // 2\nconsole.log(list.map((value) => Boolean(value)).join(',')); // false,true,false,true,false\n\noutput:\n2\nfalse,true,false,true,false"
+  },
+  {
+    "id": 42,
+    "question": "Print JSON.parse(String(42)) + 1 and Number(JSON.stringify(42)) + 1, then print JSON.parse('42px') inside a try block and catch the error name it throws.",
+    "answer": "JSON only understands whole JSON text, so a trailing unit is a hard parse error rather than a quiet NaN.\n\ncode:\nconsole.log(JSON.parse(String(42)) + 1); // 43\nconsole.log(Number(JSON.stringify(42)) + 1); // 43\ntry {\n  console.log(JSON.parse('42px'));\n} catch (err) {\n  console.log(err.constructor.name); // SyntaxError\n}\n\noutput:\n43\n43\nSyntaxError"
+  },
+  {
+    "id": 43,
+    "question": "Write addValues(a, b) that adds two values whether they are numbers or numeric strings, and print it for 1 and '2', for '1' and 2 and for '1' and 'x'.",
+    "answer": "Convert both sides before adding, otherwise a single text operand silently turns the whole sum into joined text.\n\ncode:\nfunction addValues(a, b) {\n  const sum = Number(a) + Number(b);\n  return Number.isFinite(sum) ? sum : 'not numbers';\n}\nconsole.log(addValues(1, '2')); // 3\nconsole.log(addValues('1', 2)); // 3\nconsole.log(addValues('1', 'x')); // not numbers\n\noutput:\n3\n3\nnot numbers"
+  },
+  {
+    "id": 44,
+    "question": "Write toStatusText(code) that maps the number or text status code to passed for 200, failed for 400 and error for anything else. Print the results for '200', 400 and 500.",
+    "answer": "Convert the code to a number first so the text version from a query string behaves exactly like the real number.\n\ncode:\nfunction toStatusText(code) {\n  const value = Number(code);\n  if (value === 200) return 'passed';\n  if (value === 400) return 'failed';\n  return 'error';\n}\nconsole.log(toStatusText('200'), toStatusText(400), toStatusText(500)); // passed failed error\nconsole.log(toStatusText('abc')); // error\n\noutput:\npassed failed error\nerror"
+  },
+  {
+    "id": 45,
+    "question": "Print String(1 < 2), Number(true), Number('') and Number(' ') so you can see that a boolean and a blank string both become a number in different ways.",
+    "answer": "true becomes one and a blank string becomes zero, both through the Number function, which is the rule behind most surprising conversions.\n\ncode:\nconsole.log(String(1 < 2), Number(true), Number(false)); // true 1 0\nconsole.log(Number(''), Number(' ')); // 0 0\nconsole.log(Number('0'), Number('00')); // 0 0\nconsole.log(Number(1 < 2), Number('' === ' ')); // 1 0\n\noutput:\ntrue 1 0\n0 0\n0 0\n1 0"
+  },
+  {
+    "id": 46,
+    "question": "Write ageFromInput(raw) that returns a number for text digits, 0 for an empty value and the word invalid for anything else. Print it for '30', '' and 'thirty'.",
+    "answer": "Trim, reject the empty case, then let Number read the rest. Anything that is not finite is invalid rather than quietly zero.\n\ncode:\nfunction ageFromInput(raw) {\n  const text = String(raw).trim();\n  if (text === '') return 0;\n  const value = Number(text);\n  return Number.isFinite(value) ? value : 'invalid';\n}\nconsole.log(ageFromInput('30')); // 30\nconsole.log(ageFromInput('')); // 0\nconsole.log(ageFromInput('thirty')); // invalid\n\noutput:\n30\n0\ninvalid"
+  }
+]

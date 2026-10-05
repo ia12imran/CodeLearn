@@ -1,0 +1,197 @@
+[
+  {
+    "id": 1,
+    "question": "Print a welcome banner for a freshly set up JavaScript project. Build it from a project name and a Node version string held in variables, then log three lines.",
+    "answer": "A banner is a quick way to confirm the environment is the one you think it is. Build it from variables so it is easy to change.\n\ncode:\nconst project = \"test-runner\";\nconst runtime = \"Node.js\";\nconsole.log(\"==== setup check ====\");\nconsole.log(\"project:\", project);\nconsole.log(\"running on:\", runtime);\nconsole.log(\"status: ready\");\n\noutput:\n==== setup check ====\nproject: test-runner\nrunning on: Node.js\nstatus: ready"
+  },
+  {
+    "id": 2,
+    "question": "Write the smallest useful script. Log a message, then log the type of the value you logged so the output shows both the value and its type.",
+    "answer": "typeof tells you what kind of value you have. Logging both is the fastest way to see what a variable actually holds.\n\ncode:\nconst message = \"automation starts here\";\nconsole.log(message);\nconsole.log(typeof message);\nconst count = 3;\nconsole.log(count);\nconsole.log(typeof count);\n\noutput:\nautomation starts here\nstring\n3\nnumber"
+  },
+  {
+    "id": 3,
+    "question": "Print a report about the environment using typeof only: console is available, globalThis is an object, process.argv is an array. Log one line per check.",
+    "answer": "typeof is a safe way to probe for something existing without causing an error.\n\ncode:\nconsole.log(\"console is:\", typeof console);\nconsole.log(\"globalThis is:\", typeof globalThis);\nconsole.log(\"process is:\", typeof process);\nconsole.log(\"process.argv is an array:\", Array.isArray(process.argv));\n\noutput:\nconsole is: object\nglobalThis is: object\nprocess is: object\nprocess.argv is an array: true"
+  },
+  {
+    "id": 4,
+    "question": "Write a function parseEnv(text) that turns a KEY=value block into an object. For the text \"PORT=3000\\nHOST=localhost\" return { PORT: \"3000\", HOST: \"localhost\" } and log the result.",
+    "answer": "Split the text into lines, split each line on the first =, and use the two halves as a key and a value.\n\ncode:\nfunction parseEnv(text) {\n  const result = {};\n  const lines = text.split(\"\\n\");\n  for (const line of lines) {\n    const parts = line.split(\"=\");\n    result[parts[0]] = parts[1];\n  }\n  return result;\n}\nconst text = \"PORT=3000\\nHOST=localhost\";\nconst config = parseEnv(text);\nconsole.log(config);\nconsole.log(\"PORT is\", config[\"PORT\"]);\n\noutput:\n{ PORT: '3000', HOST: 'localhost' }\nPORT is 3000"
+  },
+  {
+    "id": 5,
+    "question": "Write a function parseEnv(text) that ignores blank lines and lines starting with #. For \"# a comment\\nPORT=3000\\n\\nHOST=localhost\" return an object with only PORT and HOST.",
+    "answer": "Trim each line first, then skip the ones that are empty or start with a hash before splitting on the equals sign.\n\ncode:\nfunction parseEnv(text) {\n  const result = {};\n  for (const raw of text.split(\"\\n\")) {\n    const line = raw.trim();\n    if (line === \"\" || line.startsWith(\"#\")) {\n      continue;\n    }\n    const parts = line.split(\"=\");\n    result[parts[0]] = parts[1];\n  }\n  return result;\n}\nconst text = \"# server config\\nPORT=3000\\n\\nHOST=localhost\";\nconsole.log(parseEnv(text));\n\noutput:\n{ PORT: '3000', HOST: 'localhost' }"
+  },
+  {
+    "id": 6,
+    "question": "Write a function parseEnv(text) that trims whitespace around keys and values and removes surrounding double quotes. For \" NAME = \\\"ana\\\" \" return { NAME: \"ana\" } and log it.",
+    "answer": "trim clears the edges, and a single pair of quote characters can be peeled off with slice once you have checked for them.\n\ncode:\nfunction clean(value) {\n  let out = value.trim();\n  if (out.startsWith(\"\\\"\") && out.endsWith(\"\\\"\")) {\n    out = out.slice(1, -1);\n  }\n  return out;\n}\nfunction parseEnv(text) {\n  const result = {};\n  for (const raw of text.split(\"\\n\")) {\n    const parts = raw.split(\"=\");\n    result[clean(parts[0])] = clean(parts[1]);\n  }\n  return result;\n}\nconsole.log(parseEnv(\" NAME = \\\"ana\\\" \\n ROLE = tester \"));\n\noutput:\n{ NAME: 'ana', ROLE: 'tester' }"
+  },
+  {
+    "id": 7,
+    "question": "Write a function getSetting(env, key, fallback) that returns env[key] when the key exists and the fallback otherwise. Log it for a missing key.",
+    "answer": "Check whether the key is one of the object keys before reading it, then return the fallback when it is not there.\n\ncode:\nfunction getSetting(env, key, fallback) {\n  if (Object.keys(env).indexOf(key) === -1) {\n    return fallback;\n  }\n  return env[key];\n}\nconst env = { PORT: \"3000\", DEBUG: \"true\" };\nconsole.log(\"PORT:\", getSetting(env, \"PORT\", \"8080\"));\nconsole.log(\"HOST:\", getSetting(env, \"HOST\", \"localhost\"));\nconsole.log(\"DEBUG:\", getSetting(env, \"DEBUG\", \"false\"));\n\noutput:\nPORT: 3000\nHOST: localhost\nDEBUG: true"
+  },
+  {
+    "id": 8,
+    "question": "Print a small project tree held in an object of file names, then log how many files it contains and each name with its size in bytes.",
+    "answer": "Model the folder as an object so the shape is visible, then loop over the keys to print name and size.\n\ncode:\nconst project = {\n  \"package.json\": 480,\n  \"index.js\": 1200,\n  \"tests/login.test.js\": 860\n};\nconst names = Object.keys(project);\nconsole.log(\"files:\", names.length);\nfor (const name of names) {\n  console.log(\"  \" + name + \" (\" + project[name] + \" bytes)\");\n}\n\noutput:\nfiles: 3\n  package.json (480 bytes)\n  index.js (1200 bytes)\n  tests/login.test.js (860 bytes)"
+  },
+  {
+    "id": 9,
+    "question": "Write a function printTree(node, indent) that prints a nested object as an indented tree, so a config object shows its shape. Log the result for a small config.",
+    "answer": "Recursion handles the unknown depth. Print the key, then walk into the value when it is itself an object.\n\ncode:\nfunction printTree(node, indent) {\n  for (const key of Object.keys(node)) {\n    const value = node[key];\n    if (typeof value === \"object\" && value !== null) {\n      console.log(indent + key + \":\");\n      printTree(value, indent + \"  \");\n    } else {\n      console.log(indent + key + \": \" + value);\n    }\n  }\n}\nconst config = { server: { port: 3000, host: \"localhost\" }, retries: 2 };\nprintTree(config, \"\");\n\noutput:\nserver:\n  port: 3000\n  host: localhost\nretries: 2"
+  },
+  {
+    "id": 10,
+    "question": "Build a lookup from file extension to runtime (.js to Node.js, .html to the browser, .py to Python) and print which of a list of file names you could run JavaScript on.",
+    "answer": "A lookup object plus a loop gives you the runtime for each file, and a filter collects only the JavaScript ones.\n\ncode:\nconst runtimeFor = {\n  \".js\": \"Node.js\",\n  \".html\": \"browser\",\n  \".py\": \"Python\",\n  \".mjs\": \"Node.js\"\n};\nconst files = [\"index.js\", \"page.html\", \"run.py\", \"tools.mjs\"];\nconst jsFiles = [];\nfor (const file of files) {\n  const ext = file.slice(file.lastIndexOf(\".\"));\n  console.log(file, \"->\", runtimeFor[ext]);\n  if (runtimeFor[ext] === \"Node.js\") {\n    jsFiles.push(file);\n  }\n}\nconsole.log(\"can run JS on:\", jsFiles.join(\", \"));\n\noutput:\nindex.js -> Node.js\npage.html -> browser\nrun.py -> Python\ntools.mjs -> Node.js\ncan run JS on: index.js, tools.mjs"
+  },
+  {
+    "id": 11,
+    "question": "Write a function isJsFile(name) that returns true when a file name ends in .js or .mjs. Log the result for index.js, notes.md and tool.mjs.",
+    "answer": "endsWith does the whole suffix check for you, so one call per extension is enough.\n\ncode:\nfunction isJsFile(name) {\n  return name.endsWith(\".js\") || name.endsWith(\".mjs\");\n}\nconst files = [\"index.js\", \"notes.md\", \"tool.mjs\", \"data.json\"];\nfor (const file of files) {\n  console.log(file, \"->\", isJsFile(file));\n}\n\noutput:\nindex.js -> true\nnotes.md -> false\ntool.mjs -> true\ndata.json -> false"
+  },
+  {
+    "id": 12,
+    "question": "Write a function countLines(text) that returns how many lines a piece of text has, and log it for a three-line config string.",
+    "answer": "Split on the newline character and read the length of the resulting array.\n\ncode:\nfunction countLines(text) {\n  return text.split(\"\\n\").length;\n}\nconst config = \"PORT=3000\\nHOST=localhost\\nDEBUG=true\";\nconsole.log(config);\nconsole.log(\"lines:\", countLines(config));\nconsole.log(\"empty text lines:\", countLines(\"\"));\n\noutput:\nPORT=3000\nHOST=localhost\nDEBUG=true\nlines: 3\nempty text lines: 1"
+  },
+  {
+    "id": 13,
+    "question": "Write a function stripBlankLines(lines) that removes empty entries from an array of strings and returns the count that survived. Log both the result and the count.",
+    "answer": "Filter out the entries that are only whitespace, then read the length of what is left.\n\ncode:\nfunction stripBlankLines(lines) {\n  return lines.filter((line) => line.trim() !== \"\");\n}\nconst raw = [\"PORT=3000\", \"   \", \"HOST=localhost\", \"\", \"DEBUG=true\"];\nconst clean = stripBlankLines(raw);\nconsole.log(\"before:\", raw.length);\nconsole.log(\"after:\", clean.length);\nconsole.log(clean.join(\" | \"));\n\noutput:\nbefore: 5\nafter: 3\nPORT=3000 | HOST=localhost | DEBUG=true"
+  },
+  {
+    "id": 14,
+    "question": "Simulate running a script from the terminal. Build the command string \"node app.js\" from variables and log it, then log the output the script would print.",
+    "answer": "Building the command from a runtime and a filename shows why scripts are portable between machines.\n\ncode:\nconst runtime = \"node\";\nconst file = \"app.js\";\nconst command = runtime + \" \" + file;\nconsole.log(\"$ \" + command);\nconsole.log(\"hello from app.js\");\nconsole.log(\"exit code: 0\");\n\noutput:\n$ node app.js\nhello from app.js\nexit code: 0"
+  },
+  {
+    "id": 15,
+    "question": "Write a function printUsage(script, description, example) that prints a three-line help block. Call it for a script named \"seed-db\" and log the block.",
+    "answer": "A usage block follows the same three-part shape every time, so build it in one function.\n\ncode:\nfunction printUsage(script, description, example) {\n  console.log(\"Usage: node \" + script);\n  console.log(\"What it does: \" + description);\n  console.log(\"Example: node \" + example);\n}\nprintUsage(\"seed-db\", \"insert test data\", \"seed-db --env local\");\n\noutput:\nUsage: node seed-db\nWhat it does: insert test data\nExample: node seed-db --env local"
+  },
+  {
+    "id": 16,
+    "question": "Build a package scripts lookup (test, lint, start) and write a function runScript(name) that logs the command for a named script or reports it is missing. Call it for \"test\" and \"deploy\".",
+    "answer": "One object holds the command text, and a lookup function decides what to print for the name you were given.\n\ncode:\nconst scripts = {\n  test: \"node --test\",\n  lint: \"eslint .\",\n  start: \"node server.js\"\n};\nfunction runScript(name) {\n  if (scripts[name] === undefined) {\n    console.log(\"no script called \" + name);\n    return;\n  }\n  console.log(\"$ npm run \" + name + \"  ->  \" + scripts[name]);\n}\nrunScript(\"test\");\nrunScript(\"start\");\nrunScript(\"deploy\");\n\noutput:\n$ npm run test  ->  node --test\n$ npm run start  ->  node server.js\nno script called deploy"
+  },
+  {
+    "id": 17,
+    "question": "Write a function isSupportedVersion(versionString) that returns true for Node major version 18 or higher. Log the result for \"v20.11.1\", \"v16.20.0\" and \"v18.0.0\".",
+    "answer": "Read the major number out of the version string, then compare it as a number rather than as text.\n\ncode:\nfunction majorOf(versionString) {\n  return Number(versionString.replace(\"v\", \"\").split(\".\")[0]);\n}\nfunction isSupportedVersion(versionString) {\n  return majorOf(versionString) >= 18;\n}\nfor (const version of [\"v20.11.1\", \"v16.20.0\", \"v18.0.0\"]) {\n  console.log(version, \"->\", isSupportedVersion(version));\n}\n\noutput:\nv20.11.1 -> true\nv16.20.0 -> false\nv18.0.0 -> true"
+  },
+  {
+    "id": 18,
+    "question": "Write a function checkEnv(required, present) that returns the list of required names that are missing from present. Log the result for required PORT and HOST with only PORT available.",
+    "answer": "Loop over what is required and collect the names that are not in the list you were given.\n\ncode:\nfunction checkEnv(required, present) {\n  const missing = [];\n  for (const name of required) {\n    if (present.indexOf(name) === -1) {\n      missing.push(name);\n    }\n  }\n  return missing;\n}\nconst required = [\"PORT\", \"HOST\", \"DB_URL\"];\nconst present = [\"PORT\"];\nconsole.log(\"required:\", required.length);\nconsole.log(\"present:\", present.length);\nconsole.log(\"missing:\", checkEnv(required, present));\n\noutput:\nrequired: 3\npresent: 1\nmissing: [ 'HOST', 'DB_URL' ]"
+  },
+  {
+    "id": 19,
+    "question": "Write a function validateEnv(env) that returns a list of problems: a missing BASE_URL and a PORT that is not a number. Log the problems for a given env object.",
+    "answer": "Check each rule separately and push a message per broken rule, so one env can fail in several ways.\n\ncode:\nfunction validateEnv(env) {\n  const problems = [];\n  if (env.BASE_URL === undefined) {\n    problems.push(\"BASE_URL is not set\");\n  }\n  if (isNaN(Number(env.PORT))) {\n    problems.push(\"PORT is not a number\");\n  }\n  return problems;\n}\nconst env = { PORT: \"3000\" };\nconsole.log(\"problems:\", validateEnv(env).length);\nconsole.log(validateEnv(env));\nconsole.log(\"with a URL:\", validateEnv({ PORT: \"3000\", BASE_URL: \"http://x\" }).length);\n\noutput:\nproblems: 1\n[ 'BASE_URL is not set' ]\nwith a URL: 0"
+  },
+  {
+    "id": 20,
+    "question": "Print the contents of a .gitignore file held as an array of lines, and log the line count. Use node_modules, .env and coverage.",
+    "answer": "Keep the file contents in an array so the script can print or count them without touching the disk.\n\ncode:\nconst gitignore = [\"node_modules/\", \".env\", \"coverage/\"];\nconsole.log(\"lines:\", gitignore.length);\nfor (const line of gitignore) {\n  console.log(line);\n}\nconsole.log(\"ignores env files:\", gitignore.indexOf(\".env\") !== -1);\n\noutput:\nlines: 3\nnode_modules/\n.env\ncoverage/\nignores env files: true"
+  },
+  {
+    "id": 21,
+    "question": "Build a project scaffold as an array of file paths and print how many files it creates plus each path numbered. Use package.json, src/index.js, tests/login.test.js and .env.example.",
+    "answer": "A scaffold is just a list of paths. Count it and print it so a setup script has something to work from.\n\ncode:\nconst scaffold = [\n  \"package.json\",\n  \"src/index.js\",\n  \"tests/login.test.js\",\n  \".env.example\"\n];\nconsole.log(\"creating\", scaffold.length, \"files\");\nfor (let i = 0; i < scaffold.length; i = i + 1) {\n  console.log((i + 1) + \" \" + scaffold[i]);\n}\nconsole.log(\"has a test file:\", scaffold.filter((f) => f.startsWith(\"tests/\")).length);\n\noutput:\ncreating 4 files\n1 package.json\n2 src/index.js\n3 tests/login.test.js\n4 .env.example\nhas a test file: 1"
+  },
+  {
+    "id": 22,
+    "question": "Write a function which(command, installed) that returns the tool name when it is installed and \"not found\" otherwise. Log the result for node, npm and docker.",
+    "answer": "Search the installed list and fall back to a clear message, which is the core of any PATH lookup.\n\ncode:\nfunction which(command, installed) {\n  if (installed.indexOf(command) === -1) {\n    return \"not found\";\n  }\n  return installed.filter((name) => name === command)[0];\n}\nconst installed = [\"node\", \"npm\", \"npx\"];\nfor (const command of [\"node\", \"docker\", \"npm\"]) {\n  console.log(command + \" -> \" + which(command, installed));\n}\n\noutput:\nnode -> node\ndocker -> not found\nnpm -> npm"
+  },
+  {
+    "id": 23,
+    "question": "Read a list of test cases from an in-memory array and report how many would pass a rule that the name must contain the word \"login\". Log each result and the totals.",
+    "answer": "Loop over the cases, test each name with includes, and keep one counter for the passes.\n\ncode:\nconst cases = [\n  \"login page loads\",\n  \"cart totals are right\",\n  \"login with a bad password\",\n  \"logout clears the session\"\n];\nlet passed = 0;\nfor (const name of cases) {\n  const ok = name.includes(\"login\");\n  if (ok) {\n    passed = passed + 1;\n  }\n  console.log((ok ? \"PASS\" : \"FAIL\") + \" \" + name);\n}\nconsole.log(\"would pass:\", passed, \"of\", cases.length);\n\noutput:\nPASS login page loads\nFAIL cart totals are right\nPASS login with a bad password\nFAIL logout clears the session\nwould pass: 2 of 4"
+  },
+  {
+    "id": 24,
+    "question": "Write a tiny test suite runner that takes named checks, runs each one, prints PASS or FAIL per check and finishes with a one-line summary of passed, failed and total.",
+    "answer": "A runner only needs a loop, a status string and a counter. That is enough to run a whole file of checks.\n\ncode:\nconst checks = [\n  { name: \"env is set up\", run: () => true },\n  { name: \"port is a number\", run: () => true },\n  { name: \"db is reachable\", run: () => false }\n];\nlet passed = 0;\nfor (const check of checks) {\n  const ok = check.run();\n  console.log((ok ? \"PASS\" : \"FAIL\") + \" \" + check.name);\n  if (ok) {\n    passed = passed + 1;\n  }\n}\nconst failed = checks.length - passed;\nconsole.log(passed + \" passed, \" + failed + \" failed, \" + checks.length + \" total\");\n\noutput:\nPASS env is set up\nPASS port is a number\nFAIL db is reachable\n2 passed, 1 failed, 3 total"
+  },
+  {
+    "id": 25,
+    "question": "Write a function splitArgs(line) that splits a command line into an array of arguments, keeping a double quoted value as one item. For \"--env \\\"local test\\\"\" return [\"--env\", \"local test\"].",
+    "answer": "A quoted value holds a space, so you have to find the quote positions and pull the inside out as one item.\n\ncode:\nfunction splitArgs(line) {\n  const first = line.indexOf(\" \");\n  const command = line.slice(0, first);\n  const rest = line.slice(first + 1);\n  const args = [];\n  for (const part of rest.split(\" \")) {\n    if (part.startsWith(\"\\\"\") && part.endsWith(\"\\\"\")) {\n      args.push(part.slice(1, -1));\n    } else {\n      args.push(part);\n    }\n  }\n  return { command: command, args: args };\n}\nconst parsed = splitArgs(\"seed --env \\\"local test\\\" --force\");\nconsole.log(\"command:\", parsed.command);\nconsole.log(\"args:\", parsed.args);\nconsole.log(\"arg count:\", parsed.args.length);\n\noutput:\ncommand: seed\nargs: [ '--env', '\"local', 'test\"', '--force' ]\narg count: 4"
+  },
+  {
+    "id": 26,
+    "question": "Write a function slugify(text) that turns a project name into a file name safe form. For \"My Test Project\" return \"my-test-project\" and log it.",
+    "answer": "Lower-case the text, swap every run of spaces for a dash, then clean up the ends.\n\ncode:\nfunction slugify(text) {\n  return text\n    .toLowerCase()\n    .trim()\n    .replace(/[^a-z0-9]+/g, \"-\")\n    .replace(/^-+|-+$/g, \"\");\n}\nconsole.log(slugify(\"My Test Project\"));\nconsole.log(slugify(\"  Playwright Suite v2  \"));\nconsole.log(\"no spaces left:\", !slugify(\"My Test Project\").includes(\" \"));\n\noutput:\nmy-test-project\nplaywright-suite-v2\nno spaces left: true"
+  },
+  {
+    "id": 27,
+    "question": "Predict the output: log Number(\"\"), log Number(\" \"), log parseInt(\"42px\"), and log the result of [1, 2] + 1. Two of them are not what people expect.",
+    "answer": "An empty or blank string turns into 0, and parseInt stops at the first character it cannot use.\n\ncode:\nconsole.log(Number(\"\"));\nconsole.log(Number(\" \"));\nconsole.log(parseInt(\"42px\"));\nconsole.log([1, 2] + 1);\nconsole.log(Number([]));\nconsole.log(parseInt(\"abc\"));\n\noutput:\n0\n0\n42\n1,21\n0\nNaN"
+  },
+  {
+    "id": 28,
+    "question": "Predict the output: log JSON.stringify of undefined, of a function, of NaN, and of an object with a toJSON method. Show what disappears.",
+    "answer": "JSON has no way to store undefined, functions or NaN, so those keys are simply left out of the text.\n\ncode:\nconsole.log(JSON.stringify(undefined));\nconsole.log(JSON.stringify(function () {}));\nconsole.log(JSON.stringify(NaN));\nconsole.log(JSON.stringify({ a: 1, b: undefined, c: function () {} }));\nconsole.log(JSON.stringify([1, undefined, 3]));\n\noutput:\nundefined\nundefined\nnull\n{\"a\":1}\n[1,null,3]"
+  },
+  {
+    "id": 29,
+    "question": "Predict the output: build an array with one item, assign to index 3, then log the length and the array. Show the holes.",
+    "answer": "Assigning past the end grows the array to fit, and the skipped positions read as undefined.\n\ncode:\nconst ports = [3000];\nports[3] = 8080;\nconsole.log(\"length:\", ports.length);\nconsole.log(ports);\nconsole.log(\"index 1 is:\", ports[1]);\nconsole.log(\"JSON:\", JSON.stringify(ports));\n\noutput:\nlength: 4\n[ 3000, <2 empty items>, 8080 ]\nindex 1 is: undefined\nJSON: [3000,null,null,8080]"
+  },
+  {
+    "id": 30,
+    "question": "Predict the output: log a template-free concatenation of a string and a boolean, log String(false) plus 1, and log the length of the number string \"12345\".",
+    "answer": "The plus operator joins when a string is involved, and String makes the conversion explicit when you want a boolean as text.\n\ncode:\nconsole.log(\"ready: \" + true);\nconsole.log(String(false) + 1);\nconsole.log(\"12345\".length);\nconsole.log(true + true);\nconsole.log(\"count: \" + 1 + 1);\nconsole.log(1 + 1 + \" count\");\n\noutput:\nready: true\nfalse1\n5\n2\ncount: 11\n2 count"
+  },
+  {
+    "id": 31,
+    "question": "Write a function compareVersions(a, b) that returns \"newer\", \"older\" or \"same\" for two dotted version strings. Log the result for \"v20.1.0\" against \"v18.3.0\" and for two identical versions.",
+    "answer": "Compare the version numbers one part at a time and return as soon as a part differs.\n\ncode:\nfunction compareVersions(a, b) {\n  const pa = a.replace(\"v\", \"\").split(\".\").map(Number);\n  const pb = b.replace(\"v\", \"\").split(\".\").map(Number);\n  for (let i = 0; i < pa.length; i = i + 1) {\n    if (pa[i] > pb[i]) {\n      return \"newer\";\n    }\n    if (pa[i] < pb[i]) {\n      return \"older\";\n    }\n  }\n  return \"same\";\n}\nconsole.log(\"v20.1.0 vs v18.3.0:\", compareVersions(\"v20.1.0\", \"v18.3.0\"));\nconsole.log(\"v18.3.0 vs v18.3.0:\", compareVersions(\"v18.3.0\", \"v18.3.0\"));\nconsole.log(\"v20.1.0 vs v20.0.9:\", compareVersions(\"v20.1.0\", \"v20.0.9\"));\n\noutput:\nv20.1.0 vs v18.3.0: newer\nv18.3.0 vs v18.3.0: same\nv20.1.0 vs v20.0.9: newer"
+  },
+  {
+    "id": 32,
+    "question": "Read a fake log file held in a string and print only the lines that contain \"ERROR\", plus how many there were. Example log has two ERROR lines and two INFO lines.",
+    "answer": "Split the text into lines, keep the ones that include the word you want, then report the count.\n\ncode:\nconst log = [\n  \"INFO server started on 3000\",\n  \"ERROR could not reach the database\",\n  \"INFO retrying in 2s\",\n  \"ERROR test run timed out\"\n].join(\"\\n\");\nconst errors = log.split(\"\\n\").filter((line) => line.includes(\"ERROR\"));\nconsole.log(\"errors found:\", errors.length);\nfor (const line of errors) {\n  console.log(line);\n}\nconsole.log(\"total lines:\", log.split(\"\\n\").length);\n\noutput:\nerrors found: 2\nERROR could not reach the database\nERROR test run timed out\ntotal lines: 4"
+  },
+  {
+    "id": 33,
+    "question": "Write a function getConfig(userConfig) that merges user settings over a set of defaults, without changing either input. Log the merged object and the original defaults.",
+    "answer": "Start from a copy of the defaults, then overwrite with the keys the user supplied.\n\ncode:\nconst defaults = { port: 3000, host: \"localhost\", retries: 2 };\nfunction getConfig(userConfig) {\n  const merged = { ...defaults };\n  for (const key of Object.keys(userConfig)) {\n    merged[key] = userConfig[key];\n  }\n  return merged;\n}\nconst config = getConfig({ port: 8080 });\nconsole.log(config);\nconsole.log(\"defaults untouched:\", JSON.stringify(defaults));\nconsole.log(\"keys:\", Object.keys(config).join(\", \"));\n\noutput:\n{ port: 8080, host: 'localhost', retries: 2 }\ndefaults untouched: {\"port\":3000,\"host\":\"localhost\",\"retries\":2}\nkeys: port, host, retries"
+  },
+  {
+    "id": 34,
+    "question": "Write a function createProject(name) that returns an object describing a new project: name, entry file and an array of test files. Log what it returns for \"shop\".",
+    "answer": "A factory function that returns an object keeps the naming logic in one place for every project you set up.\n\ncode:\nfunction createProject(name) {\n  return {\n    name: name,\n    entry: \"src/\" + name + \".js\",\n    tests: [\"tests/\" + name + \".test.js\", \"tests/setup.test.js\"]\n  };\n}\nconst project = createProject(\"shop\");\nconsole.log(\"name:\", project.name);\nconsole.log(\"entry:\", project.entry);\nconsole.log(\"tests:\", project.tests.length);\nconsole.log(\"total files:\", project.tests.length + 1);\n\noutput:\nname: shop\nentry: src/shop.js\ntests: 2\ntotal files: 3"
+  },
+  {
+    "id": 35,
+    "question": "Predict the output: log the length of process.argv, log whether the current directory path is a non-empty string, and log that the runtime is Node. All three must be true.",
+    "answer": "These checks stay the same on every machine, which is what you want from an environment smoke test.\n\ncode:\nconsole.log(\"argv has entries:\", process.argv.length >= 1);\nconsole.log(\"cwd is a non-empty string:\", typeof process.cwd() === \"string\" && process.cwd().length > 0);\nconsole.log(\"runtime is Node:\", typeof process === \"object\" && typeof process.cwd === \"function\");\nconsole.log(\"global console is a:\", typeof console);\n\noutput:\nargv has entries: true\ncwd is a non-empty string: true\nruntime is Node: true\nglobal console is a: object"
+  },
+  {
+    "id": 36,
+    "question": "Build an installed-tools table with name and version, and print it in aligned columns using padEnd. Include node, npm and playwright.",
+    "answer": "padEnd adds spaces so every column lines up, which is how you print a readable table from the console.\n\ncode:\nconst tools = [\n  { name: \"node\", version: \"20.11.1\" },\n  { name: \"npm\", version: \"10.2.4\" },\n  { name: \"playwright\", version: \"1.44.0\" }\n];\nconsole.log(\"tool\".padEnd(12) + \"version\");\nfor (const tool of tools) {\n  console.log(tool.name.padEnd(12) + tool.version);\n}\nconsole.log(\"installed:\", tools.length);\n\noutput:\ntool        version\nnode        20.11.1\nnpm         10.2.4\nplaywright  1.44.0\ninstalled: 3"
+  },
+  {
+    "id": 37,
+    "question": "Write a function findDuplicates(list) that returns the values that appear more than once. Log the result for a list of package names with three repeats.",
+    "answer": "Count each value in one pass, then collect the ones whose count is above one.\n\ncode:\nfunction findDuplicates(list) {\n  const counts = {};\n  for (const item of list) {\n    counts[item] = (counts[item] || 0) + 1;\n  }\n  const dupes = [];\n  for (const item of Object.keys(counts)) {\n    if (counts[item] > 1) {\n      dupes.push(item + \" x\" + counts[item]);\n    }\n  }\n  return dupes;\n}\nconst packages = [\"axios\", \"vitest\", \"axios\", \"eslint\", \"vitest\", \"axios\"];\nconst dupes = findDuplicates(packages);\nconsole.log(\"listed:\", packages.length);\nconsole.log(\"unique:\", Object.keys(packages.filter((p, i) => packages.indexOf(p) === i)).length);\nconsole.log(\"duplicates:\", dupes.join(\", \"));\n\noutput:\nlisted: 6\nunique: 3\nduplicates: axios x3, vitest x2"
+  },
+  {
+    "id": 38,
+    "question": "Write a function runStep(label, fn) that runs a setup step, catches any error and logs the label with PASS or FAIL. Run three steps where the last one fails.",
+    "answer": "A helper that wraps a step in try and catch keeps every setup step reported the same way.\n\ncode:\nfunction runStep(label, fn) {\n  try {\n    fn();\n    console.log(\"PASS \" + label);\n  } catch (err) {\n    console.log(\"FAIL \" + label + \" -> \" + err.message);\n  }\n}\nrunStep(\"create config\", () => {\n  console.log(\"  config written\");\n});\nrunStep(\"install browsers\", () => {\n  throw new Error(\"network blocked\");\n});\nrunStep(\"run smoke test\", () => {\n  console.log(\"  smoke test done\");\n});\n\noutput:\n  config written\nPASS create config\nFAIL install browsers -> network blocked\n  smoke test done\nPASS run smoke test"
+  },
+  {
+    "id": 39,
+    "question": "Predict the output: build an object with a getter-style method, call it twice, and log the returned values along with the counter behind it.",
+    "answer": "A method that changes its own object gives you state that persists between calls without a module level variable.\n\ncode:\nconst runner = {\n  runs: 0,\n  run() {\n    this.runs = this.runs + 1;\n    return \"run number \" + this.runs;\n  }\n};\nconsole.log(runner.run());\nconsole.log(runner.run());\nconsole.log(\"counter:\", runner.runs);\nconsole.log(\"own keys:\", Object.keys(runner).join(\", \"));\n\noutput:\nrun number 1\nrun number 2\ncounter: 2\nown keys: runs, run"
+  }
+]

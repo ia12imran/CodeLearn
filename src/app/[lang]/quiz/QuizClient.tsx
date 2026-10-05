@@ -69,12 +69,12 @@ export default function QuizClient({ lang }: { lang: Language }) {
   const getQuizByTopic = (topicSlug: string): QuizQuestion[] => {
     const topic = topics.find((t) => t.slug === topicSlug);
     if (!topic) return [];
-    return topic.lessons.flatMap((l) => [...l.quiz, ...(extraQuiz[`${topicSlug}/${l.slug}`] || [])]);
+    return topic.lessons.flatMap((l) => [...(l.quiz ?? []), ...(extraQuiz[`${topicSlug}/${l.slug}`] || [])]);
   };
 
   const getMixedQuiz = (count: number): QuizQuestion[] => {
     const allQuestions = topics.flatMap((t) =>
-      t.lessons.flatMap((l) => [...l.quiz, ...(extraQuiz[`${t.slug}/${l.slug}`] || [])])
+      t.lessons.flatMap((l) => [...(l.quiz ?? []), ...(extraQuiz[`${t.slug}/${l.slug}`] || [])])
     );
     return shuffleArray(allQuestions).slice(0, count);
   };
@@ -105,7 +105,7 @@ export default function QuizClient({ lang }: { lang: Language }) {
 
   const totalQuestions =
     topics.reduce(
-      (a, t) => a + t.lessons.reduce((b, l) => b + l.quiz.length + (extraQuiz[`${t.slug}/${l.slug}`]?.length || 0), 0),
+      (a, t) => a + t.lessons.reduce((b, l) => b + (l.quiz?.length ?? 0) + (extraQuiz[`${t.slug}/${l.slug}`]?.length || 0), 0),
       0
     ) + qaSections.reduce((a, s) => a + s.count, 0);
 
@@ -176,7 +176,7 @@ export default function QuizClient({ lang }: { lang: Language }) {
           <div className="grid sm:grid-cols-2 gap-4">
             {topics.map((topic) => {
               const questionCount = topic.lessons.reduce(
-                (a, l) => a + l.quiz.length + (extraQuiz[`${topic.slug}/${l.slug}`]?.length || 0),
+                (a, l) => a + (l.quiz?.length ?? 0) + (extraQuiz[`${topic.slug}/${l.slug}`]?.length || 0),
                 0
               );
               return (
