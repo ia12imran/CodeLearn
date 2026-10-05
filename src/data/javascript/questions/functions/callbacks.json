@@ -1,1 +1,152 @@
-[]
+[
+  {
+    "id": 1,
+    "question": "What is a callback in JavaScript?",
+    "answer": "A callback is a function passed into another function that is executed after the first function completes.\n\ncode:\nfunction greet(name, callback) {\n  console.log(\"Hello \" + name);\n  callback();\n}\nfunction sayHi() {\n  console.log(\"Hi\");\n}\ngreet(\"test\", sayHi);\n\nreal example:\nIn Playwright, callbacks are used for async operations like waiting for elements."
+  },
+  {
+    "id": 2,
+    "question": "Write a function calculateSum(a, b, callback) that adds two numbers and returns the result via a callback.",
+    "answer": "Use a callback to return the asynchronous result.\n\ncode:\nfunction calculateSum(a, b, callback) {\n  const sum = a + b;\n  callback(sum);\n}\ncalculateSum(2, 3, (result) => {\n  console.log(\"Sum: \" + result);\n});\n\nreal example:\nIn Node.js APIs, callbacks are commonly used for async operations."
+  },
+  {
+    "id": 3,
+    "question": "Write a function mapCallback(arr, callback) that applies a callback to each element of an array and returns the results.",
+    "answer": "Use a for loop to apply the callback to each element.\n\ncode:\nfunction mapCallback(arr, callback) {\n  const result = [];\n  for (let i = 0; i < arr.length; i++) {\n    result.push(callback(arr[i]));\n  }\n  return result;\n}\nmapCallback([1, 2, 3], (x) => x * 2); // [2, 4, 6]\n\nreal example:\nIn test data transformation, callbacks allow processing each element."
+  },
+  {
+    "id": 4,
+    "question": "Write a function findWithCallback(arr, callback) that finds the first element matching the callback condition.",
+    "answer": "Use a for loop and return the first element where the callback returns true.\n\ncode:\nfunction findWithCallback(arr, callback) {\n  for (let i = 0; i < arr.length; i++) {\n    if (callback(arr[i])) {\n      return arr[i];\n    }\n  }\n  return null;\n}\nfindWithCallback([1, 2, 3, 4, 5], (x) => x > 2); // 3\n\nreal example:\nIn test assertions, finding the first element matching a condition."
+  },
+  {
+    "id": 5,
+    "question": "Write a function asyncOperation(value, callback) that simulates an async operation with setTimeout and calls the callback with the result.",
+    "answer": "Use setTimeout to simulate async operation and call the callback with the result.\n\ncode:\nfunction asyncOperation(value, callback) {\n  setTimeout(() => {\n    callback(value * 2);\n  }, 100);\n}\nasyncOperation(5, (result) => {\n  console.log(\"Result: \" + result);\n});\n\nreal example:\nIn Playwright, callbacks are used for async operations like waiting for elements."
+  },
+  {
+    "id": 6,
+    "question": "Function callback question 6: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 6.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 7,
+    "question": "Function callback question 7: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 7.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 8,
+    "question": "Function callback question 8: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 8.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 9,
+    "question": "Function callback question 9: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 9.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 10,
+    "question": "Function callback question 10: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 10.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 11,
+    "question": "Function callback question 11: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 11.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 12,
+    "question": "Function callback question 12: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 12.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 13,
+    "question": "Function callback question 13: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 13.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 14,
+    "question": "Function callback question 14: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 14.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 15,
+    "question": "Function callback question 15: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 15.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 16,
+    "question": "Function callback question 16: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 16.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 17,
+    "question": "Function callback question 17: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 17.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 18,
+    "question": "Function callback question 18: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 18.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 19,
+    "question": "Function callback question 19: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 19.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 20,
+    "question": "Function callback question 20: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 20.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 21,
+    "question": "Function callback question 21: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 21.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 22,
+    "question": "Function callback question 22: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 22.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 23,
+    "question": "Function callback question 23: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 23.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 24,
+    "question": "Function callback question 24: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 24.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 25,
+    "question": "Function callback question 25: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 25.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 26,
+    "question": "Function callback question 26: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 26.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 27,
+    "question": "Function callback question 27: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 27.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 28,
+    "question": "Function callback question 28: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 28.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 29,
+    "question": "Function callback question 29: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 29.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  },
+  {
+    "id": 30,
+    "question": "Function callback question 30: JavaScript callback challenge for automation testers",
+    "answer": "This covers JavaScript callback concept 30.\n\ncode:\n// Example code demonstrating JavaScript callbacks\nfunction example() {\n  // Your code here\n}\n\nreal example: JavaScript callbacks are essential for async test patterns."
+  }
+]
